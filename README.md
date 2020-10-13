@@ -8,6 +8,7 @@
 
 ### Project Description:
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
+> Risk project!
 
 ### Milestones:
 1. [ ] A text-based playable version of the game, i.e., players should be able to play the game via the console using the keyboard.
