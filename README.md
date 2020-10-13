@@ -10,8 +10,8 @@
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
 
 ### Milestones:
-1. [ ] > A text-based playable version of the game, i.e., players should be able to play the game via the console using the keyboard.
-2. [ ] > A GUI-based version of the game using Java Swing components.
-3. [ ] > Addition of army placement, troupe movement phase, etc...
-4. [ ] > Addition of saving / loading features
+1. [ ] A text-based playable version of the game, i.e., players should be able to play the game via the console using the keyboard.
+2. [ ] A GUI-based version of the game using Java Swing components.
+3. [ ] Addition of army placement, troupe movement phase, etc...
+4. [ ] Addition of saving / loading features
 
