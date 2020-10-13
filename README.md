@@ -3,7 +3,7 @@
 ### Team Members:
 * Tony Abou-Zeidan
 * Anthony Dooley
-* Ethan Chase
+* Ethan Chase (legend)
 * Kyler Verge
 
 ### Project Description:
