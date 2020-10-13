@@ -4,7 +4,7 @@
 * Tony Abou-Zeidan
 * Anthony Dooley
 * Ethan Chase
-* Kyler Verge
+* Kyler Verge (The Game Master)
 
 ### Project Description:
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
