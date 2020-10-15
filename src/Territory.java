@@ -13,19 +13,12 @@ import java.util.ArrayList;
  */
 public class Territory {
 
-    /**
-     * The name of the territory.
-     */
-    private String name;
-    /**
-     * The units that occupy this territory.
-     */
-    private ArrayList<Unit> units;
-    /**
-     * The player that currently owns units in this territory.
-     */
-    private Player currentPlayer;
 
+    //The name of the territory
+    private String name;
+     //The player that currently owns units in this territory.
+    private Player currentPlayer;
+    private int units;
     /** Constructor for the territory object that contains a name and current player.
      *
      * @param name The name of the territory
@@ -33,8 +26,8 @@ public class Territory {
      */
     public Territory(String name, Player currentPlayer){
         this.name = name;
-        this.units = new ArrayList<>();
         this.currentPlayer = currentPlayer;
+        units =0;
     }
 
     /** Get the name of the territory.
@@ -47,13 +40,13 @@ public class Territory {
      *
      * @param aUnit Unit to be added to the territory
      */
-    public void addUnit(Unit aUnit){ units.add(aUnit); }
+    public void addUnit(int num){ units+=num;}
 
     /** Remove a unit from the territory.
      *
      * @param aUnit Unit to be removed from the territory
      */
-    public void removeUnit(Unit aUnit){ units.remove(aUnit); }
+    public void removeUnit(int num){ units-= num;}
 
     /** Get the player that occupies the territory.
      *
