@@ -86,7 +86,14 @@ public class Player {
      * @param atkUnits The number of units the attackers territory has
      * @param defUnits The number of units the defenders territory has
      */
-    public void attack(Territory territoryAtk, Territory territoryDef, int atkUnits, int defUnits){
-
+    public void attack(Territory territoryAtk, Territory territoryDef){
+       //Test Cases
+        if(territoryAtk.getOwner() == territoryDef.getOwner()){
+            //Cancel Action
+        }
+        else if (territoryAtk.getUnits() == 1) {
+            //Cancel Action
+        }
+        else if ()
     }
 }
