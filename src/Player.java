@@ -75,4 +75,16 @@ public class Player {
     public void setColour(Color colour) {
         this.colour = colour;
     }
+
+    /** The player has the ability to attack other territories owned
+     *  by other players
+     *
+     * @param territory1 The territory the current player is on and attacking from
+     * @param territory2 The territory the player wishes to attack
+     * @param attackerUnits The number of units the attackers territory has
+     * @param defenderUnits The number of units the defenders territory has
+     */
+    public void attack(Territory territory1, Territory territory2, int attackerUnits, int defenderUnits){
+
+    }
 }
