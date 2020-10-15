@@ -106,28 +106,36 @@ public class Player {
         int[] attackDice = new int[]{rand.nextInt(6) + 1, rand.nextInt(6) + 1, rand.nextInt(6) + 1};
         int[] defendDice = new int[]{rand.nextInt(6) + 1, rand.nextInt(6) + 1};
 
-        //sort both rolls by descending order
+        //sort both rolls in descending order
         Arrays.sort(attackDice);
         reverse(attackDice);
         Arrays.sort(defendDice);
         reverse(defendDice);
 
-        //printing
-
+        //Print both sets of rolls in descending order
         for (int i = 0; i < attackRolls; i++) {
             System.out.print(attackDice[i] + " | ");
         }
-        System.out.println("");
         for (int j = 0; j < defendRolls; j++) {
             System.out.print(defendDice[j] + " | ");
         }
-        System.out.println("");
 
+        //Set counter variables for lost units in the attack
         int attackLost = 0;
         int defendLost = 0;
 
+        //If attacker is rolling three dice, ignore the third (lowest) dice
         if (attackRolls==3) attackRolls = 2;
 
+        /*
+        If both attacking rolls are greater than both defending rolls, then defender loses two units.
+        If the top defender roll is equal/greater than the top attacking roll while the second defending roll
+            is less than the second attacking roll, then both players lose one unit.
+        If both defender rolls are equal to or greater than both attacking rolls, then the attacker loses two
+            units.
+        If the attacker rolls one dice, then check if that roll is greater than the top defender roll or not
+            and remove unit accordingly.
+         */
         for (int i = 0; i < attackRolls; i++) {
             for (int j = i; j < defendRolls; j++) {
                 if (attackDice[i] > defendDice[j]) {
@@ -139,8 +147,9 @@ public class Player {
                 }
             }
         }
-        //printing
+        //Print out the result of the attack with the number of units lost for each player
         System.out.println("Attack Lost: "+attackLost + "\nDefending Lost: " + defendLost);
+        //Return the result of the attack via units lost
         return new int[]{attackLost,defendLost};
     }
 

@@ -4,7 +4,7 @@ import java.util.List;
 /**
  * Class Game implements the main functionality of the RISK game.
  *
- * @author Tony Zeidan
+ * @author Tony Zeidan (Yo)
  * @author Ethan Chase
  * @author Anthony Dooley
  * @author Kyler Verge
