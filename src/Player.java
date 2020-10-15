@@ -23,6 +23,8 @@ public class Player {
 
     /**
      * The colour of the units that the player owns.
+     *
+     * Possible colours are Red, Green, Blue, Yellow, Black, Grey
      */
     private Color colour;
 
