@@ -23,7 +23,7 @@ public class Player {
      */
     private Color colour;
 
-    /** Constructor for the player object that contains a colour.
+    /** Constructor for the player object that contains a name and colour.
      *
      * @param colour The colour of units that the player owns
      */
@@ -32,13 +32,34 @@ public class Player {
         this.colour = colour;
     }
 
+
+
+    /**
+     * Constructor for instances of Player class.
+     *
+     * @param name The name of the player that this object represents
+     */
     public Player(String name) {
         this.name = name;
         colour = null;
     }
 
+    /**
+     * Retrieves the name of the player
+     *
+     * @return The player's name
+     */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Sets the name of this player instance.
+     *
+     * @param name The name of the player
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /** Get the colour of the units that the player owns.
