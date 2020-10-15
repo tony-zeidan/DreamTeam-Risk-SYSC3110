@@ -115,16 +115,18 @@ public class Player {
         //printing
 
         for (int i = 0; i < attackRolls; i++) {
-            System.out.print(attackDice[i] + " ");
+            System.out.print(attackDice[i] + " | ");
         }
         System.out.println("");
         for (int j = 0; j < defendRolls; j++) {
-            System.out.print(defendDice[j] + " ");
+            System.out.print(defendDice[j] + " | ");
         }
         System.out.println("");
 
         int attackLost = 0;
         int defendLost = 0;
+
+        if (attackRolls==3) attackRolls = 2;
 
         for (int i = 0; i < attackRolls; i++) {
             for (int j = i; j < defendRolls; j++) {
