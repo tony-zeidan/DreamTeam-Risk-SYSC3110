@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Class Game implements the main functionality of the RISK game.
  *
@@ -11,16 +15,13 @@
  */
 public class Game {
 
-    //private WorldMap<> worldMap
-    //private List<Player> players
+    private List<Player> players;
+    private WorldMap map;
 
-    public Game(){
-        //this.worldMap = new WorldMap<>();
-        //this.players = new ArrayList<>();
+    public Game() {
+        players = new ArrayList<>(6);
+
+        //fix mapping
+        map = null;
     }
-
-    public static void main(String[] args){
-        System.out.println("test");
-    }
-
 }
