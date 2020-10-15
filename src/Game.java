@@ -11,13 +11,16 @@
  */
 public class Game {
 
-    //private WorldMap<Params> worldMap
+    //private WorldMap<> worldMap
     //private List<Player> players
 
     public Game(){
         //this.worldMap = new WorldMap<>();
         //this.players = new ArrayList<>();
+    }
 
+    public static void main(String[] args){
+        System.out.println("test");
     }
 
 }
