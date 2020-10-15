@@ -10,7 +10,8 @@
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
 > Risk project!
 
-####Project Progress
+
+**Project Progress**
 
 ![5%](https://progress-bar.dev/5)
 
