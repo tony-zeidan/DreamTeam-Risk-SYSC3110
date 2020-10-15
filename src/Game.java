@@ -16,16 +16,16 @@ import java.util.Map;
 public class Game {
 
     private List<Player> players;
-    private WorldMap map;
+    //private WorldMap map;
 
     public Game() {
         players = new ArrayList<>(6);
 
         //player configs...
-        map.setUp(players);
+        //map.setUp(players);
 
         //fix mapping
-        map = null;
+        //map = null;
     }
 
     public void addPlayer(Player player) {
