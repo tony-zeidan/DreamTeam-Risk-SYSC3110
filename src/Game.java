@@ -21,7 +21,23 @@ public class Game {
     public Game() {
         players = new ArrayList<>(6);
 
+        //player configs...
+        map.setUp(players);
+
         //fix mapping
         map = null;
     }
+
+    public void addPlayer(Player player) {
+        players.add(player);
+    }
+
+    public void removePlayer(Player player) {
+        players.remove(player);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Works");
+    }
+
 }
