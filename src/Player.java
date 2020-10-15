@@ -23,9 +23,11 @@ public class Player {
      */
     private Color colour;
 
-    /** Constructor for the player object that contains a name and colour.
+
+    /** Constructor for instances of Player class with name and colour.
      *
-     * @param colour The colour of units that the player owns
+     * @param name The name of the player
+     * @param colour The colour of the units that the player owns
      */
     public Player(String name, Color colour){
         this.name = name;
