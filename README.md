@@ -1,10 +1,12 @@
 # **Dream Team Risk Project (SYSC 3110 - Software Design Project)**
 
 ### Team Members:
-* Tony Abou-Zeidan (@tony-zeidan)
-* Anthony Dooley (@Anthony Dooley)
-* Ethan Chase (@EChase-18)
-* Kyler Verge (@Kyler-Verge)
+Name | Contributions
+------------ | -------------
+Tony Abou-Zeidan | 
+Anthony Dooley | 
+Ethan Chase | 
+Kyler Verge | 
 
 ### Project Description:
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
