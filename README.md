@@ -18,7 +18,7 @@
 planning phase
 
 ### Milestones:
-- [ ] ####Milestone 1: A text-based playable version of the game, i.e., players should be able to play the game via the console using the keyboard.
+- [ ] Milestone 1: A text-based playable version of the game, i.e., players should be able to play the game via the console using the keyboard.
     >A text-based playable version of the game, i.e., players should be able to
      play the game via the console using the keyboard. There should be a command to print
      the state of the map (i.e., which player is in which country and with how many armies), a
@@ -34,7 +34,7 @@ planning phase
       a jar file) + UML diagrams + documentation, all in one zip file. 
     - Deadline: Friday Oct 23rd. Weight: 15% of the overall project grade.
     
-- [ ] ####Milestone 2: A GUI-based version of the game using Java Swing components.
+- [ ] Milestone 2: A GUI-based version of the game using Java Swing components.
     > GUI-based version (now you’re adding the View and the Controller!) of the
       game. Display must be in a JFrame, and user input is via the mouse. You have freedom
       for other GUI decisions. Also required: Unit tests for the Model. 
@@ -43,7 +43,7 @@ planning phase
       and data structures from Milestone 1 and explain why. 
     - Deadline: Monday November 9th. Weight: 20% of the overall project grade.
 
-- [ ] ####Milestone 3: Addition of army placement, troupe movement phase, etc...
+- [ ] Milestone 3: Addition of army placement, troupe movement phase, etc...
     >  Additional features: bonus army placement + troupe movement phase +
       “AI” player. As per the rules of Risk, at the beginning of a player’s turn, the player
       receives reinforcement armies proportional to the number of countries held (total
@@ -64,7 +64,7 @@ planning phase
       documentation. The program must work robustly, and the code must be “smellfree” (we will be hunting for smells!). Make sure that you document the changes
       since the last iteration, and the reason for those changes.
     - Deadline: Monday November 23rd. Weight: 30% of the overall project grade
-- [ ] ####Milestone 4: Addition of saving / loading features
+- [ ] Milestone 4: Addition of saving / loading features
     > Two more things: 1- Save/load features. You may use Java Serialization to
      achieve this. 2- Custom maps. The custom map may be defined in XML or JSON format.
      Upon loading of a custom map, the program should be able to reject invalid maps, e.g.
