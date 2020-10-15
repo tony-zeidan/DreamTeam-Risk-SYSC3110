@@ -20,7 +20,7 @@ public class Territory {
     /**
      * The units that occupy this territory.
      */
-    private ArrayList<Unit> units;
+    private int units;
     /**
      * The player that currently owns units in this territory.
      */
@@ -31,9 +31,9 @@ public class Territory {
      * @param name The name of the territory
      * @param currentPlayer The player that currently occupies the territory
      */
-    public Territory(String name, Player currentPlayer){
+    public Territory(String name, Player currentPlayer, int units){
         this.name = name;
-        this.units = new ArrayList<>();
+        this.units = units;
         this.currentPlayer = currentPlayer;
     }
 
@@ -42,18 +42,6 @@ public class Territory {
      * @return The name of the territory
      */
     public String getName() { return name; }
-
-    /** Add a unit to the territory.
-     *
-     * @param aUnit Unit to be added to the territory
-     */
-    public void addUnit(Unit aUnit){ units.add(aUnit); }
-
-    /** Remove a unit from the territory.
-     *
-     * @param aUnit Unit to be removed from the territory
-     */
-    public void removeUnit(Unit aUnit){ units.remove(aUnit); }
 
     /** Get the player that occupies the territory.
      *

@@ -32,8 +32,6 @@ public class Player {
         this.colour = colour;
     }
 
-
-
     /**
      * Constructor for instances of Player class.
      *
