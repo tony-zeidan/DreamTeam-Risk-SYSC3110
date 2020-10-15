@@ -87,13 +87,23 @@ public class Player {
      * @param defUnits The number of units the defenders territory has
      */
     public void attack(Territory territoryAtk, Territory territoryDef){
-       //Test Cases
+       //Test Cases for not being able to attack
+        //The attacker owns the defending territory
         if(territoryAtk.getOwner() == territoryDef.getOwner()){
-            //Cancel Action
+            //Cancel Attack
         }
+        //The attackers territory only has one unit
         else if (territoryAtk.getUnits() == 1) {
-            //Cancel Action
+            //Cancel Attack
         }
-        else if ()
+        //The defending territory isn't neighbouring the attacking
+        else if (){
+            //Cancel Attack
+        }
+        //Everything seems good to go, time to fight!
+        else{
+            //A lot of tedious checks on number of units and dices...
+
+        }
     }
 }
