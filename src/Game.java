@@ -11,4 +11,13 @@
  */
 public class Game {
 
+    //private WorldMap<Params> worldMap
+    //private List<Player> players
+
+    public Game(){
+        //this.worldMap = new WorldMap<>();
+        //this.players = new ArrayList<>();
+
+    }
+
 }
