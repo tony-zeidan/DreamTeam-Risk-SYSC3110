@@ -24,17 +24,16 @@ public class Territory {
     /**
      * The player that currently owns units in this territory.
      */
-    private Player currentPlayer;
+    private Player owner;
 
     /** Constructor for the territory object that contains a name and current player.
      *
      * @param name The name of the territory
-     * @param currentPlayer The player that currently occupies the territory
      */
-    public Territory(String name, Player currentPlayer, int units){
+    public Territory(String name){
         this.name = name;
-        this.units = units;
-        this.currentPlayer = currentPlayer;
+        this.units = 0;
+        this.owner = null;
     }
 
     /** Get the name of the territory.
@@ -47,12 +46,15 @@ public class Territory {
      *
      * @return The player that currently occupies the territory.
      */
-    public Player getCurrentPlayer() { return currentPlayer; }
+    public Player getOwner() {
+        return owner;
+    }
 
     /** Set new player as occupant of the territory.
      *
-     * @param currentPlayer The new player that now occupies the territory
+     * @param owner The new player that now occupies the territory
      */
-    public void setCurrentPlayer(Player currentPlayer) { this.currentPlayer = currentPlayer; }
-
+    public void setCurrentPlayer(Player owner) {
+        this.owner = owner;
+    }
 }
