@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Class Game implements the main functionality of the RISK game.
@@ -38,6 +37,16 @@ public class Game {
 
     public static void main(String[] args) {
         System.out.println("Works");
+    }
+
+    public void Battle(Player attacker,Territory attacking,Territory defending) {
+        String input = "";
+        boolean retreat = false;
+        while (!retreat) {
+            attacker.attack(3,2); //TODO: change inputs of attack to user inputs
+
+            if (input.equals("retreat")) retreat=true;
+        }
     }
 
 }
