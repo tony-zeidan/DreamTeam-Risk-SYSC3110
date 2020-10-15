@@ -1,10 +1,10 @@
 # **Dream Team Risk Project (SYSC 3110 - Software Design Project)**
 
 ### Team Members:
-* Tony Abou-Zeidan
-* Anthony Dooley
-* Ethan Chase
-* Kyler Verge
+* Tony Abou-Zeidan (@tony-zeidan)
+* Anthony Dooley (@Anthony Dooley)
+* Ethan Chase (@EChase-18)
+* Kyler Verge (@Kyler-Verge)
 
 ### Project Description:
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
@@ -16,6 +16,8 @@
 ![5%](https://progress-bar.dev/5)
 
 planning phase
+
+[UML Diagram](https://lucid.app/invitations/accept/fdd00eb0-1f04-4212-8db9-c9dd045a9c40)
 
 ### Milestones:
 - [ ] Milestone 1: A text-based playable version of the game, i.e., players should be able to play the game via the console using the keyboard.
