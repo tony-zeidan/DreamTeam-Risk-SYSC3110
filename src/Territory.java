@@ -22,11 +22,9 @@ public class Territory {
     /** Constructor for the territory object that contains a name and current player.
      *
      * @param name The name of the territory
-     * @param currentPlayer The player that currently occupies the territory
      */
-    public Territory(String name, Player currentPlayer){
+    public Territory(String name){
         this.name = name;
-        this.currentPlayer = currentPlayer;
         units =0;
     }
 
@@ -38,13 +36,11 @@ public class Territory {
 
     /** Add a unit to the territory.
      *
-     * @param aUnit Unit to be added to the territory
      */
     public void addUnit(int num){ units+=num;}
 
     /** Remove a unit from the territory.
      *
-     * @param aUnit Unit to be removed from the territory
      */
     public void removeUnit(int num){ units-= num;}
 
@@ -59,5 +55,5 @@ public class Territory {
      * @param currentPlayer The new player that now occupies the territory
      */
     public void setCurrentPlayer(Player currentPlayer) { this.currentPlayer = currentPlayer; }
-
+    public void addNeighbours(Territory nieghbour){}
 }
