@@ -51,7 +51,7 @@ public class Territory {
      * @return The territory if found otherwise null
      */
     public Territory searchNeighbours(String name) {
-        return (neighbours.containsKey(name))? neighbours.get(name) : null;
+        return neighbours.getOrDefault(name, null);
     }
 
     /**
@@ -103,11 +103,19 @@ public class Territory {
         this.owner = owner;
     }
 
+    /**
+     * Retrieves a string representation of the territory.
+     *
+     * @return A string representation of the territory
+     */
     @Override
     public String toString() {
         return name+" owned by " + owner.getName()+ " with " + units+" troops";
     }
 
+    /**
+     * print method for printing individual territories from toString().
+     */
     public void print(){
         System.out.println(toString());
     }
