@@ -102,4 +102,13 @@ public class Territory {
     public void setOwner(Player owner) {
         this.owner = owner;
     }
+
+    @Override
+    public String toString() {
+        return name+" owned by " + owner.getName()+ " with " + units+" troops";
+    }
+
+    public void print(){
+        System.out.println(toString());
+    }
 }
