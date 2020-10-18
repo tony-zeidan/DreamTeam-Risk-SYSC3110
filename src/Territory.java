@@ -56,4 +56,8 @@ public class Territory {
      */
     public void setCurrentPlayer(Player currentPlayer) { this.currentPlayer = currentPlayer; }
     public void addNeighbours(Territory nieghbour){}
+    public void print()
+    {
+        System.out.println(name+" owned by " + currentPlayer.getName()+ " with " + units+" troops");
+    }
 }

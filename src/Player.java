@@ -21,13 +21,13 @@ public class Player {
     /**
      * The colour of the units that the player owns.
      */
-    private Color colour;
+    private String colour;
 
     /** Constructor for the player object that contains a colour.
      *
      * @param colour The colour of units that the player owns
      */
-    public Player(String name, Color colour){
+    public Player(String name, String colour){
         this.name = name;
         this.colour = colour;
     }
@@ -45,7 +45,7 @@ public class Player {
      *
      * @return The colour of the units that the player owns.
      */
-    public Color getColour() {
+    public String getColour() {
         return colour;
     }
 
@@ -53,7 +53,7 @@ public class Player {
      *
      * @param colour The colour of the units that the player will own
      */
-    public void setColour(Color colour) {
+    public void setColour(String colour) {
         this.colour = colour;
     }
 }
