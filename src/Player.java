@@ -142,7 +142,6 @@ public class Player {
                 }
             }
         }
-
         //Return the result of the attack via units lost
         return new int[]{attackLost,defendLost};
     }
@@ -150,6 +149,6 @@ public class Player {
     //testing
     public static void main(String[] args) {
         Player p1 = new Player("");
-        p1.attack(3,2);
+        p1.attack(1,2);
     }
 }
