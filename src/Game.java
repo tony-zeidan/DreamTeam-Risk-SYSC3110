@@ -59,32 +59,73 @@ public class Game {
 
         Scanner aCommand = new Scanner(System.in);
 
-        String input = "";
+        String attInput;
+        String defInput;
 
         String attName = attacker.getName();
+        String defName = defending.getOwner().getName();
 
-        int numAttack = 0;
-        int numDefense = 0;
+        int attDice;
+        int defDice;
 
         boolean retreat = false;
         while (!retreat) {
 
             System.out.println(attName + " is attacking. "+attName+", would you like to attack or retreat?\n");
 
-            input = aCommand.nextLine();
+            attInput = aCommand.nextLine();
 
-            if(input.equalsIgnoreCase("attack")){
-                System.out.println("How many attacking dice would you like to use: ");
-                if(input.equalsIgnoreCase("3")){
-                    numAttack = 3;
-                }else if(input.equalsIgnoreCase("2")){
-                    numAttack = 2;
-                }else if(input.equalsIgnoreCase("1")){
-                    numAttack = 1;
+            if(attInput.equalsIgnoreCase("attack")){
+
+                if(attacking.getUnits() == 1){
+                    //Attack with 1 attacking dice
+                    attDice = 1;
+                    System.out.println("You are attacking with 1 attack dice!");
+                }else if(attacking.getUnits() == 2){
+                    /*If the attacking territory contains exactly two units, ask the attacker if he/she would
+                    like to use 1 or 2 attacking dice*/
+                    System.out.println(attName+ ", would you like to attack with 1 or 2 dice?\n");
+                    attInput = aCommand.nextLine();
+                    try{
+                        attDice = Integer.parseInt(attInput);
+                        attDice = (attDice > 2 || attDice < 1)? 2: attDice;
+                    } catch (NumberFormatException e){
+                        //Default choice is 2 attacking dice
+                        attDice = 2;
+                    }
+                }else{
+                    /*If the attacking territory contains three or more units, ask the attacker if he/she would
+                    like to use 1,2 or 3 attacking dice*/
+                    System.out.println(attName+ ", would you like to attack with 1, 2 or 3 dice?\n");
+                    attInput = aCommand.nextLine();
+                    try{
+                        attDice = Integer.parseInt(attInput);
+                        attDice = (attDice > 3 || attDice < 1)? 3: attDice;
+                    } catch (NumberFormatException e){
+                        //Default choice is 3 attacking dice
+                        attDice = 3;
+                    }
                 }
-                attack(numAttack,numDefense);
 
-            }else if(input.equalsIgnoreCase("retreat")){
+                if (defending.getUnits() == 1){
+                    defDice = 1;
+                    System.out.println("You are defending with 1 defense dice!");
+                }else{
+                    System.out.println(defName+ ", would you like to defend with 1 or 2 dice?\n");
+                    defInput = aCommand.nextLine();
+                    try{
+                        defDice = Integer.parseInt(defInput);
+                        defDice = (defDice > 2 || defDice < 1)? 2: defDice;
+                    } catch (NumberFormatException e){
+                        defDice = 2;
+                    }
+                }
+
+                //Attack!
+                attack(attDice,defDice);
+
+            }else if(attInput.equalsIgnoreCase("retreat")){
+                //Retreat from the battle
                 retreat = true;
             }
         }
