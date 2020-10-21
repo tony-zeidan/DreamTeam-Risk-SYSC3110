@@ -34,7 +34,24 @@ public class Game {
         players.remove(player);
     }
 
+    public Player[] getPlayers() {
+        Player[] pl = new Player[players.size()];
+        pl = players.toArray(pl);
+        return pl;
+    }
+
     public static void main(String[] args) {
+        Game g1 = new Game();
+        g1.addPlayer(new Player("Tony","RED"));
+        g1.addPlayer(new Player("Ethan","BLUE"));
+        g1.addPlayer(new Player("Anthony","YELLOW"));
+        g1.addPlayer(new Player("Verge","GREEN"));
+        WorldMap w1 = new WorldMap();
+        w1.setUp(g1.getPlayers());
+        w1.createTerritories();
+
+        w1.printMap();
+
         System.out.println("Works");
     }
 

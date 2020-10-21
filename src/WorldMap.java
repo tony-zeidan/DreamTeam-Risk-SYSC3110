@@ -137,11 +137,4 @@ public class WorldMap {
             t.print();
         }
     }
-    public static void main(String[] args)
-    {
-        WorldMap map = new WorldMap();
-        Player[] arr = {new Player("bob","red"), new Player("bill","blue"),new Player("jill","yellow"),new Player("jim","orange")};
-        map.setUp(arr);
-        map.printMap();
-    }
 }
