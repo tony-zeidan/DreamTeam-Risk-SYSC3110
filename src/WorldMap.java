@@ -45,7 +45,7 @@ public class WorldMap {
            Territory t = terrTemp.get(i);
            for (String terr: neighs.split(","))
            {
-               t.addNeighbours(new Territory(terr));
+               t.addNeighbour(new Territory(terr));
            }
            i++;
        }
@@ -104,8 +104,8 @@ public class WorldMap {
             playerInd = (playerInd +1)%players.length;
             Territory t = allTerritories.get(rand.nextInt(allTerritories.size()));
             //set current player to territory, add a unit and remove territory from free territories
-            t.setCurrentPlayer(players[playerInd]);
-            t.addUnit(1);
+            t.setOwner(players[playerInd]);
+            t.addUnits(1);
             allTerritories.remove(t);
             //add territory to each player specified by index
             playersTerritories.get(playerInd).add(t);
@@ -121,7 +121,7 @@ public class WorldMap {
             while(numOfTroops != max)
             {
                 //get the player's arraylist of territories and randomly select one to then add 1 unit to
-                (playerTerritories.get(rand.nextInt(playerTerritories.size()))).addUnit(1);
+                (playerTerritories.get(rand.nextInt(playerTerritories.size()))).addUnits(1);
                 numOfTroops++;
             }
         }

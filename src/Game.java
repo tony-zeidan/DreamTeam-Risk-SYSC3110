@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Class Game implements the main functionality of the RISK game.
@@ -67,7 +65,7 @@ public class Game {
                 }else if(input.equalsIgnoreCase("1")){
                     numAttack = 1;
                 }
-                attacker.attack(numAttack,numDefense);
+                attack(numAttack,numDefense);
 
             }else if(input.equalsIgnoreCase("retreat")){
                 retreat = true;
@@ -75,5 +73,66 @@ public class Game {
         }
 
         System.out.println("Battle is over between "+attName+ " and "+defending.getOwner().getName());
+    }
+
+    /**
+     * The player has the ability to attack other territories owned
+     * by other players
+     *
+     * @param attackRolls The number of dice the attacker is using for this attack
+     * @param defendRolls The number of dice the defender is using for this defence
+     */
+    public int[] attack(int attackRolls, int defendRolls) {
+
+        //random acts as die
+        Random rand = new Random();
+
+        //two primitive integer arrays to store random rolls
+        int[] attackDice = new int[attackRolls];
+        int[] defendDice = new int[defendRolls];
+
+        //roll dice (random integer) for both parties and display simultaneously
+        System.out.print("Attacking Rolls:   |");
+        for (int i = 0; i < attackRolls; i++) {
+            attackDice[i] = rand.nextInt(6)+1;
+            System.out.print(" " + attackDice[i] + " |");
+        }
+        System.out.print("\nDefending Rolls:  |");
+        for (int i = 0; i< defendRolls; i++) {
+            defendDice[i] = rand.nextInt(6)+1;
+            System.out.print(" " + defendDice[i] + " |");
+        }
+
+        //sort both rolls in descending order
+        Arrays.sort(attackDice);
+        Arrays.sort(defendDice);
+
+        //Set counter variables for lost units in the attack
+        int attackLost = 0;
+        int defendLost = 0;
+
+        /*
+        Logic:
+        If both attacking rolls are greater than both defending rolls, then defender loses two units.
+        If the top defender roll is equal/greater than the top attacking roll while the second defending roll
+            is less than the second attacking roll, then both players lose one unit.
+        If both defender rolls are equal to or greater than both attacking rolls, then the attacker loses two
+            units.
+        If the attacker rolls one dice, then check if that roll is greater than the top defender roll or not
+            and remove unit accordingly.
+         */
+        for (int i = attackRolls-1; i >= 0; i--) {
+            for (int j = defendRolls-(attackRolls-i); j >= 0; j--) {
+                if (attackDice[i] > defendDice[j]) {
+                    defendLost += 1;
+                    break;
+                } else {
+                    attackLost += 1;
+                    break;
+                }
+            }
+        }
+        //Return the result of the attack via units lost
+        return new int[]{attackLost,defendLost};
     }
 }
