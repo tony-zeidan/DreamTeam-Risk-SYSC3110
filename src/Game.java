@@ -48,7 +48,6 @@ public class Game {
         g1.addPlayer(new Player("Verge","GREEN"));
         WorldMap w1 = new WorldMap();
         w1.setUp(g1.getPlayers());
-        w1.createTerritories();
 
         w1.printMap();
 

@@ -15,7 +15,7 @@ public class WorldMap {
     /**
      * instantiate territories and make nieghbours
      */
-    public void createTerritories()
+    private void createTerritories()
     {
         //territories and neighbours are hardcoded, but will be done later with reading a xml
         ArrayList<Territory>terrTemp = new ArrayList<>();
@@ -66,6 +66,7 @@ public class WorldMap {
         {
             playersTerritories.add(new ArrayList<>());
         }
+
         assignTerritories(players, playersTerritories);
         //place remaining troops on eaches territories
         int max = 50;
