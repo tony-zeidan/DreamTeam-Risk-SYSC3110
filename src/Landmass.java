@@ -45,13 +45,17 @@ public class Landmass {
         return conqueror;
     }
 
+    public String toString() {
+        return String.format("Landmass of %s containing %s territories",name,territories.size());
+    }
+
     /**
      * Have a pretty version of the Landmass and its contained territories printed.
      */
-    public void print() {
-        System.out.println("Landmass of " + name + ": ");
+    public void print(String tabs) {
+        System.out.println(tabs + "Landmass of " + name + ": ");
         for (Territory t : territories) {
-            System.out.println("\t"+t);
+            t.print(tabs+"\t");
         }
     }
 }
