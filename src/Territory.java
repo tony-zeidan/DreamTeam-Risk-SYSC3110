@@ -121,13 +121,20 @@ public class Territory {
      */
     @Override
     public String toString() {
-        return name+" owned by " + owner.getName()+ " with " + units+" troops";
+        return String.format("The Territory of %s:\n\towner: %s \n\tunits: %s",name,owner,units);
     }
 
     /**
-     * print method for printing individual territories from toString().
+     * Prints the string representation of this territory without indentation.
      */
-    public void print(){
-        System.out.println(toString());
+    public void print() {
+        print("");
+    }
+
+    /**
+     * Prints the string representation of this territory, allowing indentation.
+     */
+    public void print(String tabs){
+        System.out.println(tabs+toString());
     }
 }
