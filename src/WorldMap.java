@@ -21,7 +21,7 @@ public class WorldMap {
         //territories and neighbours are hardcoded, but will be done later with reading a xml
         ArrayList<Territory>terrTemp = new ArrayList<>();
         String territoryNames ="Alaska,Northwest Territory,Greenland,Western Canada,Central Canada,Eastern Canada,Western United States,Eastern United States,Central America,Venezuela,Peru,Brazil,Argentina,North Africa,Egypt,East Africa,Congo,South Africa,Madagascar,Iceland,Scandinavia,Ukraine,Great Britain,Northern Europe,Southern Europe,Western Europe,Indonesia,New Guinea,Western Australia,Eastern Australia,Siam,India,China,Mongolia,Japan,Irkutsk,Yakutsk,Kamchatka,Siberia,Afghanistan,Ural,Middle East";
-        String nieghbours = "Kamchatka,Northwest Territory,Western Canada\n" + "GreenLand,Central Canada,Alaska,Western Canada\n" + "Central Canada,Eastern Canada,Northwest Territory,Iceland\n" +
+        String nieghbours = "Kamchatka,Northwest Territory,Western Canada\n" + "Greenland,Central Canada,Alaska,Western Canada\n" + "Central Canada,Eastern Canada,Northwest Territory,Iceland\n" +
                "Central Canada,Northwest Territory,Alaska,Western United States\n" + "Western Canada,Eastern Canada,Northwest Territory,Greenland,Western United States,Eastern United States\n" +
                "Greenland,Central Canada,Eastern United States\n" + "Western Canada,Central Canada,Eastern United States,Central America\n" + "Central Canada,Western United States,Eastern Canada,Central America\n" +
                "Western United States,Eastern United States,Venezuela\n" + "Central America, Brazil,Peru\n" + "Venezuela,Brazil,Argentina\n"+
@@ -46,7 +46,7 @@ public class WorldMap {
            Territory t = terrTemp.get(i);
            for (String terr: neighs.split(","))
            {
-               t.addNeighbour(new Territory(terr));
+               t.addNeighbour(territories.get(terr));
            }
            i++;
        }
