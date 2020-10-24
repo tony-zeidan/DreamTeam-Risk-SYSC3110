@@ -33,6 +33,11 @@ public class Player {
     private List<Territory> owned;
 
     /**
+     * True if person still contains units, false otherwise
+     */
+    private boolean active;
+
+    /**
      * Constructor for instances of Player class with name and colour.
      *
      * @param name   The name of the player
@@ -41,6 +46,7 @@ public class Player {
     public Player(String name, String colour) {
         this.name = name;
         this.colour = colour;
+        this.active = true;
     }
 
     /**
@@ -106,6 +112,24 @@ public class Player {
      */
     public void removeTerritory(Territory territory) {
         owned.remove(territory);
+    }
+
+    /**
+     * Determine if the player is out of the game or not.
+     *
+     * @return True if player is still active in the game, false otherwise.
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Set whether the player has been eliminated from the game or not.
+     *
+     * @param active The player's active status in the game
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     /**
