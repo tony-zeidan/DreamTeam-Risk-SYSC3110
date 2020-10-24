@@ -66,11 +66,47 @@ public class Game {
         g1.addPlayer(new Player("Anthony","YELLOW"));
         g1.addPlayer(new Player("Verge","GREEN"));
         g1.reorderPlayers();
+        List<Player> players = g1.getPlayers();
         WorldMap w1 = new WorldMap();
         w1.setUp(g1.getPlayers());
         w1.printMap();
 
+        //Create a scanner object that scans the current players action
+        Scanner myAction = new Scanner(System.in);
+
         System.out.println("Works");
+
+        //The games loop
+        boolean finished = false;
+        while (!finished){
+            for(int i = 0; i < players.size(); i++){
+                System.out.println("It is " + players.get(i).getName() +"'s turn.");
+                boolean playerTurn = false;
+                while(!playerTurn) {
+                    System.out.println("Commands: attack, fortify, end");
+                    String command = myAction.nextLine();
+                    System.out.println("Command put in:" + command);
+                    switch (command) {
+                        case "attack":
+                            System.out.println("you typed attack");
+                            playerTurn = true;
+                            break;
+                        case "fortify":
+                            System.out.println("you typed fortify");
+                            playerTurn = true;
+                            break;
+                        case "end":
+                            System.out.println("you typed end");
+                            playerTurn = true;
+                            break;
+                        default:
+                            System.out.println("Not a valid command");
+                            break;
+                    }
+                }
+            }
+        }
+        System.out.println("The game has ended.");
     }
 
     /** Simulates the battle sequence between a territory attacking an adjacent territory. The attacker
