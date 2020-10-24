@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class WorldMap {
@@ -55,40 +56,23 @@ public class WorldMap {
      * sets up the map, by assigning territories and populating randomly territories
      * @param players the players playing the game
      */
-    public void setUp(Player[] players)
+    public void setUp(List<Player> players)
     {
-        //reorder player array to make more random, despite what they input
-        getPlayerOrder(players);
         //ArrayList index specifying player, where each holds an arraylist of territories
         //**** may need to add arraylist of territories as a parameter in player** may be better design wise
         ArrayList<ArrayList<Territory>> playersTerritories = new ArrayList<>();
-        for(int i = 0; i<players.length;i++)
+        for(int i = 0; i<players.size();i++)
         {
+            //an arraylist of territories for each player
             playersTerritories.add(new ArrayList<>());
         }
 
         assignTerritories(players, playersTerritories);
         //place remaining troops on each of the territories
         int max = 50;
-        if (players.length != 2)
-            max = -5*players.length +50;
+        if (players.size() != 2)
+            max = -5*players.size() +50;
         placeTroops(playersTerritories,max);
-    }
-
-    /**
-     * generates a random order for the players
-     * @param players the players playing the game
-     */
-    private void getPlayerOrder(Player[] players)
-    {
-        for (int i = players.length; i >0;i--)
-        {
-            Player holder = players[players.length-i];
-            int chosen  = rand.nextInt(i);
-            players[players.length-i] = players[chosen];
-            players[chosen] = holder;
-        }
-        int[] arr = new int[2];
     }
 
     /**
@@ -96,16 +80,16 @@ public class WorldMap {
      * @param players the ordered players
      * @param playersTerritories territories of each player
      */
-    private void assignTerritories(Player[] players,ArrayList<ArrayList<Territory>> playersTerritories) {
+    private void assignTerritories(List<Player> players,ArrayList<ArrayList<Territory>> playersTerritories) {
         ArrayList<Territory> allTerritories = new ArrayList<>(territories.values());
         int playerInd = -1;
         while(allTerritories.size() != 0)
         {
             //rotate through players and randomly get a free territory
-            playerInd = (playerInd +1)%players.length;
+            playerInd = (playerInd +1)%players.size();
             Territory t = allTerritories.get(rand.nextInt(allTerritories.size()));
             //set current player to territory, add a unit and remove territory from free territories
-            t.setOwner(players[playerInd]);
+            t.setOwner(players.get(playerInd));
             t.addUnits(1);
             allTerritories.remove(t);
             //add territory to each player specified by index

@@ -34,10 +34,26 @@ public class Game {
         players.remove(player);
     }
 
-    public Player[] getPlayers() {
-        Player[] pl = new Player[players.size()];
-        pl = players.toArray(pl);
-        return pl;
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    /**
+     * generates a random order for the players
+     */
+    private void reorderPlayers()
+    {
+        //need to make a single random field in game class
+        Random rand = new Random();
+
+        for (int i = players.size(); i >0;i--)
+        {
+            Player holder = players.get(players.size()-i);
+            int chosen  = rand.nextInt(i);
+            players.set(players.size()-i, players.get(chosen));
+            players.set(chosen, holder);
+        }
+        int[] arr = new int[2];
     }
 
     public static void main(String[] args) {
@@ -50,9 +66,9 @@ public class Game {
         g1.addPlayer(new Player("Ethan","BLUE"));
         g1.addPlayer(new Player("Anthony","YELLOW"));
         g1.addPlayer(new Player("Verge","GREEN"));
+        g1.reorderPlayers();
         WorldMap w1 = new WorldMap();
         w1.setUp(g1.getPlayers());
-
         w1.printMap();
 
         System.out.println("Works");
