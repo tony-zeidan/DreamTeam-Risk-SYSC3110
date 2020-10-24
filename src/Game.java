@@ -7,9 +7,8 @@ import java.util.*;
  * @author Ethan Chase
  * @author Anthony Dooley
  * @author Kyler Verge
- *
- * @since 1.00
  * @version 1.00
+ * @since 1.00
  */
 public class Game {
 
@@ -41,16 +40,14 @@ public class Game {
     /**
      * generates a random order for the players
      */
-    private void reorderPlayers()
-    {
+    private void reorderPlayers() {
         //need to make a single random field in game class
         Random rand = new Random();
 
-        for (int i = players.size(); i >0;i--)
-        {
-            Player holder = players.get(players.size()-i);
-            int chosen  = rand.nextInt(i);
-            players.set(players.size()-i, players.get(chosen));
+        for (int i = players.size(); i > 0; i--) {
+            Player holder = players.get(players.size() - i);
+            int chosen = rand.nextInt(i);
+            players.set(players.size() - i, players.get(chosen));
             players.set(chosen, holder);
         }
     }
@@ -61,10 +58,10 @@ public class Game {
            The current player can fortify one territory only. Must be adjacent */
 
         Game g1 = new Game();
-        g1.addPlayer(new Player("Tony","RED"));
-        g1.addPlayer(new Player("Ethan","BLUE"));
-        g1.addPlayer(new Player("Anthony","YELLOW"));
-        g1.addPlayer(new Player("Verge","GREEN"));
+        g1.addPlayer(new Player("Tony", "RED"));
+        g1.addPlayer(new Player("Ethan", "BLUE"));
+        g1.addPlayer(new Player("Anthony", "YELLOW"));
+        g1.addPlayer(new Player("Verge", "GREEN"));
         g1.reorderPlayers();
         List<Player> players = g1.getPlayers();
         WorldMap w1 = new WorldMap();
@@ -74,34 +71,56 @@ public class Game {
         //Create a scanner object that scans the current players action
         Scanner myAction = new Scanner(System.in);
 
-        System.out.println("Works");
+        System.out.println("The order of players: ");
+
+        //Tells the Player order before starting the game
+        for (int i = 0; i < players.size(); i++){
+            System.out.println((i + 1) + " : " + players.get(i).getName() + " ; " + players.get(i).getColour());
+        }
 
         //The games loop
         boolean finished = false;
-        while (!finished){
-            for(int i = 0; i < players.size(); i++){
-                System.out.println("It is " + players.get(i).getName() +"'s turn.");
+        while (!finished) {
+            //Loop through each player, until the game is over.
+            for (int i = 0; i < players.size(); i++) {
+                if(players.size() == 1){
+                    finished = true;
+                }
+                System.out.println("Remaining Players: "+ players.size());
+                System.out.println("It is " + players.get(i).getName() + "'s turn.");
                 boolean playerTurn = false;
-                while(!playerTurn) {
-                    System.out.println("Commands: attack, fortify, end");
+                while (!playerTurn) {
+                    System.out.println("Commands: attack, fortify, check, end, kys");
                     String command = myAction.nextLine();
                     System.out.println("Command put in:" + command);
                     switch (command) {
                         case "attack":
                             System.out.println("you typed attack");
-                            playerTurn = true;
+                            /*TODO: Attacking process */
                             break;
                         case "fortify":
                             System.out.println("you typed fortify");
+                            /*TODO: Fortifying process */
                             playerTurn = true;
                             break;
                         case "end":
                             System.out.println("you typed end");
                             playerTurn = true;
                             break;
+                        case "check":
+                            w1.printMap();
+                            break;
+                        case "kys":
+                            players.remove(i);
+                            playerTurn = true;
+                            break;
                         default:
                             System.out.println("Not a valid command");
                             break;
+                    }
+                    //Only one is still alive, end the game.
+                    if(players.size() == 1){
+                        finished = true;
                     }
                 }
             }
@@ -109,13 +128,14 @@ public class Game {
         System.out.println("The game has ended.");
     }
 
-    /** Simulates the battle sequence between a territory attacking an adjacent territory. The attacker
+    /**
+     * Simulates the battle sequence between a territory attacking an adjacent territory. The attacker
      * is required to select a number of dice to attack with provided he/she meets the minimum unit requirements
      *
      * @param attacking The territory containing units that will be used in the attack
      * @param defending The territory being attacked
      */
-    private void Battle(Territory attacking,Territory defending) {
+    private void Battle(Territory attacking, Territory defending) {
 
         Scanner aCommand = new Scanner(System.in);
 
@@ -133,45 +153,45 @@ public class Game {
         //Continue the attack step until either side loses all of its units or the attacker decides to retreat
         while (!retreat) {
 
-            System.out.println(attName + " is attacking. "+attName+", would you like to attack or retreat?\n");
+            System.out.println(attName + " is attacking. " + attName + ", would you like to attack or retreat?\n");
             attInput = aCommand.nextLine();
 
             //If the command is to attack or retreat
-            if(attInput.equalsIgnoreCase("attack")){
+            if (attInput.equalsIgnoreCase("attack")) {
 
                 /*Check the number of units contained in the attacking territory. The attacker must have
                 at least two units in their territory; one unit attacks the defended territory while the
                 other unit continues to occupy the attacker's territory.
                  */
-                if(attacking.getUnits() == 2){
+                if (attacking.getUnits() == 2) {
                     //Attack with one attacking dice if the attacking territory contains exactly two units
                     attDice = 1;
                     System.out.println("You are attacking with 1 attack dice!");
-                }else if(attacking.getUnits() == 3){
+                } else if (attacking.getUnits() == 3) {
                     /*If the attacking territory contains exactly three units, ask the attacker if he/she would
                     like to use 1 or 2 attacking dice*/
-                    System.out.println(attName+ ", would you like to attack with 1 or 2 dice?\n");
+                    System.out.println(attName + ", would you like to attack with 1 or 2 dice?\n");
                     attInput = aCommand.nextLine();
 
                     //Check for invalid input
-                    try{
+                    try {
                         attDice = Integer.parseInt(attInput);
-                        attDice = (attDice > 3 || attDice < 1)? 2: attDice;
-                    } catch (NumberFormatException e){
+                        attDice = (attDice > 3 || attDice < 1) ? 2 : attDice;
+                    } catch (NumberFormatException e) {
                         //Default choice is two attacking dice if input is invalid
                         attDice = 2;
                     }
-                }else{
+                } else {
                     /*If the attacking territory contains four or more units before the next attack, ask the attacker
                     if he/she would like to use 1,2 or 3 attacking dice*/
-                    System.out.println(attName+ ", would you like to attack with 1, 2 or 3 dice?\n");
+                    System.out.println(attName + ", would you like to attack with 1, 2 or 3 dice?\n");
                     attInput = aCommand.nextLine();
 
                     //check for invalid input
-                    try{
+                    try {
                         attDice = Integer.parseInt(attInput);
-                        attDice = (attDice > 4 || attDice < 1)? 3: attDice;
-                    } catch (NumberFormatException e){
+                        attDice = (attDice > 4 || attDice < 1) ? 3 : attDice;
+                    } catch (NumberFormatException e) {
                         //Default choice is three attacking dice if input is invalid
                         attDice = 3;
                     }
@@ -182,36 +202,36 @@ public class Game {
                 one unit in the defending territory, the defender may chose to roll either one die or two dice
                 for the attack.
                  */
-                if (defending.getUnits() == 1){
+                if (defending.getUnits() == 1) {
                     //Defender must roll only one die
                     defDice = 1;
                     System.out.println("You are defending with 1 defense dice!");
-                }else{
+                } else {
                     //Defender choses to roll one die or two dice
-                    System.out.println(defName+ ", would you like to defend with 1 or 2 dice?\n");
+                    System.out.println(defName + ", would you like to defend with 1 or 2 dice?\n");
                     defInput = aCommand.nextLine();
 
                     //Check for invalid input
-                    try{
+                    try {
                         defDice = Integer.parseInt(defInput);
-                        defDice = (defDice > 2 || defDice < 1)? 2: defDice;
-                    } catch (NumberFormatException e){
+                        defDice = (defDice > 2 || defDice < 1) ? 2 : defDice;
+                    } catch (NumberFormatException e) {
                         //Default choice is two dice if input is invalid
                         defDice = 2;
                     }
                 }
 
                 //Proceed to the attack phase
-                Attack(attDice,defDice);
+                Attack(attDice, defDice);
 
-            }else if(attInput.equalsIgnoreCase("retreat")){
+            } else if (attInput.equalsIgnoreCase("retreat")) {
                 //Attacker choses to retreat from the battle
                 retreat = true;
             }
         }
 
         //Declare the battle to be officially resolved
-        System.out.println("Battle is over between "+attName+ " and "+defending.getOwner().getName());
+        System.out.println("Battle is over between " + attName + " and " + defending.getOwner().getName());
     }
 
     /**
@@ -233,12 +253,12 @@ public class Game {
         //roll dice (random integer) for both parties and display simultaneously
         System.out.print("Attacking Rolls:   |");
         for (int i = 0; i < attackRolls; i++) {
-            attackDice[i] = rand.nextInt(6)+1;
+            attackDice[i] = rand.nextInt(6) + 1;
             System.out.print(" " + attackDice[i] + " |");
         }
         System.out.print("\nDefending Rolls:  |");
-        for (int i = 0; i< defendRolls; i++) {
-            defendDice[i] = rand.nextInt(6)+1;
+        for (int i = 0; i < defendRolls; i++) {
+            defendDice[i] = rand.nextInt(6) + 1;
             System.out.print(" " + defendDice[i] + " |");
         }
 
@@ -260,8 +280,8 @@ public class Game {
         If the attacker rolls one dice, then check if that roll is greater than the top defender roll or not
             and remove unit accordingly.
          */
-        for (int i = attackRolls-1; i >= 0; i--) {
-            for (int j = defendRolls-(attackRolls-i); j >= 0; j--) {
+        for (int i = attackRolls - 1; i >= 0; i--) {
+            for (int j = defendRolls - (attackRolls - i); j >= 0; j--) {
                 if (attackDice[i] > defendDice[j]) {
                     defendLost += 1;
                     break;
@@ -272,31 +292,32 @@ public class Game {
             }
         }
         //Return the result of the attack via units lost
-        return new int[]{attackLost,defendLost};
+        return new int[]{attackLost, defendLost};
     }
 
-    /** Fortify more units into one territory from an adjacent territory, such
+    /**
+     * Fortify more units into one territory from an adjacent territory, such
      * that the current player owns both territories. At least one unit must
      * be left behind in the initial territory.
      *
      * @param initialT The territory that will move units out
-     * @param finalT The territory that will add units
+     * @param finalT   The territory that will add units
      */
-    private void fortifyPosition(Territory initialT, Territory finalT){
+    private void fortifyPosition(Territory initialT, Territory finalT) {
         Scanner command = new Scanner(System.in);
 
         String input;
 
         int numUnits;
 
-        System.out.println("How many troops would you like to move from "+initialT.getName()+" to "+finalT.getName()+"?");
+        System.out.println("How many troops would you like to move from " + initialT.getName() + " to " + finalT.getName() + "?");
         input = command.nextLine();
 
         //Check if input is a valid number of units to move
-        try{
+        try {
             numUnits = Integer.parseInt(input);
-            numUnits = (numUnits > initialT.getUnits() - 1 || numUnits < 1)? 1: numUnits;
-        } catch (NumberFormatException e){
+            numUnits = (numUnits > initialT.getUnits() - 1 || numUnits < 1) ? 1 : numUnits;
+        } catch (NumberFormatException e) {
             //Default is to move only one troop
             numUnits = 1;
         }
