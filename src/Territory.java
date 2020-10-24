@@ -123,6 +123,17 @@ public class Territory {
         this.owner = owner;
     }
 
+    public boolean isNeighbour(Territory territory) {
+        return neighbours.containsValue(territory);
+    }
+
+    public boolean ownsAllNeighbours() {
+        for (Territory t : neighbours.values()) {
+            if (!isNeighbour(t)) return false;
+        }
+        return true;
+    }
+
     /**
      * Retrieves a string representation of the territory.
      *
@@ -145,5 +156,11 @@ public class Territory {
      */
     public void print(String tabs){
         System.out.println(tabs+toString());
+    }
+
+    public void printNeighbours() {
+        for (Territory t : neighbours.values()) {
+            System.out.print(String.format("%s (%s), ",t.getName(),t.getOwner().getColour()));
+        }
     }
 }
