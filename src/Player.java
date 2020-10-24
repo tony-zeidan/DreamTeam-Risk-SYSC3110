@@ -155,4 +155,11 @@ public class Player {
     public void print(String tabs){
         System.out.println(tabs+toString());
     }
+
+    public void printOwned() {
+        System.out.println(String.format("%s owns the following territories:",name));
+        for (Territory t : owned) {
+            System.out.println(t.getName());
+        }
+    }
 }
