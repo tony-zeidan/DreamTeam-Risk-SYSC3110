@@ -14,16 +14,29 @@ import java.util.*;
 public class Game {
 
     private List<Player> players;
+    WorldMap world;
     //private WorldMap map;
 
     public Game() {
         players = new ArrayList<>(6);
-
-        //player configs...
-        //map.setUp(players);
-
-        //fix mapping
-        //map = null;
+        world = new WorldMap();
+        Scanner aCommand = new Scanner(System.in);
+        System.out.println("Please input the number of players (max-6 min-2):");
+        int numPlayers = Integer.parseInt(aCommand.nextLine());
+        while (numPlayers > 6 || numPlayers < 2)
+        {
+            System.out.println("Please input a correct amount of players (max-6 min-2):");
+            numPlayers = Integer.parseInt(aCommand.nextLine());
+        }
+        for (int i= 0; i<numPlayers;i++)
+        {
+            System.out.println("Player Name:");
+            String playerName = aCommand.nextLine();
+            System.out.println("Player color");
+            String color = aCommand.nextLine();
+            players.add(new Player(playerName, color));
+        }
+        world.setUp(players);
     }
 
     public void addPlayer(Player player) {
@@ -53,7 +66,6 @@ public class Game {
             players.set(players.size()-i, players.get(chosen));
             players.set(chosen, holder);
         }
-        int[] arr = new int[2];
     }
 
     public static void main(String[] args) {
@@ -67,10 +79,6 @@ public class Game {
         g1.addPlayer(new Player("Anthony","YELLOW"));
         g1.addPlayer(new Player("Verge","GREEN"));
         g1.reorderPlayers();
-        WorldMap w1 = new WorldMap();
-        w1.setUp(g1.getPlayers());
-        w1.printMap();
-
         System.out.println("Works");
     }
 
