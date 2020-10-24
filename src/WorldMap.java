@@ -112,6 +112,10 @@ public class WorldMap {
         }
     }
 
+    public Territory getTerritory(String name) {
+        return territories.getOrDefault(name,null);
+    }
+
     /**
      * prints the map
      */
