@@ -61,18 +61,17 @@ public class Game {
     /** Simulates the battle sequence between a territory attacking an adjacent territory. The attacker
      * is required to select a number of dice to attack with provided he/she meets the minimum unit requirements
      *
-     * @param attacker The player attacking an adjacent territory
      * @param attacking The territory containing units that will be used in the attack
      * @param defending The territory being attacked
      */
-    public void Battle(Player attacker,Territory attacking,Territory defending) {
+    public void Battle(Territory attacking,Territory defending) {
 
         Scanner aCommand = new Scanner(System.in);
 
         String attInput;
         String defInput;
 
-        String attName = attacker.getName();
+        String attName = attacking.getOwner().getName();
         String defName = defending.getOwner().getName();
 
         int attDice;
@@ -152,7 +151,7 @@ public class Game {
                 }
 
                 //Proceed to the attack phase
-                attack(attDice,defDice);
+                Attack(attDice,defDice);
 
             }else if(attInput.equalsIgnoreCase("retreat")){
                 //Attacker choses to retreat from the battle
@@ -171,7 +170,7 @@ public class Game {
      * @param attackRolls The number of dice the attacker is using for this attack
      * @param defendRolls The number of dice the defender is using for this defence
      */
-    public int[] attack(int attackRolls, int defendRolls) {
+    public int[] Attack(int attackRolls, int defendRolls) {
 
         //random acts as die
         Random rand = new Random();
@@ -223,5 +222,35 @@ public class Game {
         }
         //Return the result of the attack via units lost
         return new int[]{attackLost,defendLost};
+    }
+
+    /** Fortify more units into one territory from an adjacent territory, such
+     * that the current player owns both territories. At least one unit must
+     * be left behind in the initial territory.
+     *
+     * @param initialT The territory that will move units out
+     * @param finalT The territory that will add units
+     */
+    public void fortifyPosition(Territory initialT, Territory finalT){
+        Scanner command = new Scanner(System.in);
+
+        String input;
+
+        int numUnits;
+
+        System.out.println("How many troops would you like to move from "+initialT.getName()+" to "+finalT.getName());
+        input = command.nextLine();
+
+        //Check if input is a valid number of units to move
+        try{
+            numUnits = Integer.parseInt(input);
+            numUnits = (numUnits > initialT.getUnits() - 1 || numUnits < 1)? 1: numUnits;
+        } catch (NumberFormatException e){
+            //Default is to move only one troop
+            numUnits = 1;
+        }
+
+        initialT.setUnits(initialT.getUnits() - numUnits);
+        finalT.setUnits(finalT.getUnits() + numUnits);
     }
 }
