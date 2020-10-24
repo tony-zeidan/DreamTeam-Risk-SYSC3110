@@ -53,13 +53,12 @@ public class Game {
             players.set(players.size()-i, players.get(chosen));
             players.set(chosen, holder);
         }
-        int[] arr = new int[2];
     }
 
     public static void main(String[] args) {
 
         /*TODO: Remember to ask the current player if they would like to fortify his/her position.
-           The current player can only fortify one territory only. */
+           The current player can fortify one territory only. Must be adjacent */
 
         Game g1 = new Game();
         g1.addPlayer(new Player("Tony","RED"));
@@ -80,7 +79,7 @@ public class Game {
      * @param attacking The territory containing units that will be used in the attack
      * @param defending The territory being attacked
      */
-    public void Battle(Territory attacking,Territory defending) {
+    private void Battle(Territory attacking,Territory defending) {
 
         Scanner aCommand = new Scanner(System.in);
 
@@ -186,7 +185,7 @@ public class Game {
      * @param attackRolls The number of dice the attacker is using for this attack
      * @param defendRolls The number of dice the defender is using for this defence
      */
-    public int[] Attack(int attackRolls, int defendRolls) {
+    private int[] Attack(int attackRolls, int defendRolls) {
 
         //random acts as die
         Random rand = new Random();
@@ -247,7 +246,7 @@ public class Game {
      * @param initialT The territory that will move units out
      * @param finalT The territory that will add units
      */
-    public void fortifyPosition(Territory initialT, Territory finalT){
+    private void fortifyPosition(Territory initialT, Territory finalT){
         Scanner command = new Scanner(System.in);
 
         String input;
