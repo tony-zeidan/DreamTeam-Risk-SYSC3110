@@ -90,12 +90,21 @@ public class Territory {
     }
 
     /**
-     * Adds or removes units from the territory.
+     * Adds units from the territory.
      *
      * @param units The amount of units to add
      */
     public void addUnits(int units) {
         this.units += units;
+    }
+
+    /**
+     * Removes units from the territory.
+     *
+     * @param units The amount of units to remove
+     */
+    public void removeUnits(int units){
+        this.units -= units;
     }
 
     /** Get the player that occupies the territory.

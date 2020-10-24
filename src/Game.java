@@ -238,7 +238,7 @@ public class Game {
 
         int numUnits;
 
-        System.out.println("How many troops would you like to move from "+initialT.getName()+" to "+finalT.getName());
+        System.out.println("How many troops would you like to move from "+initialT.getName()+" to "+finalT.getName()+"?");
         input = command.nextLine();
 
         //Check if input is a valid number of units to move
@@ -250,7 +250,7 @@ public class Game {
             numUnits = 1;
         }
 
-        initialT.setUnits(initialT.getUnits() - numUnits);
-        finalT.setUnits(finalT.getUnits() + numUnits);
+        initialT.removeUnits(numUnits);
+        finalT.addUnits(numUnits);
     }
 }

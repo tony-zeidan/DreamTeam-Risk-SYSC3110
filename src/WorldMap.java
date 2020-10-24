@@ -68,7 +68,7 @@ public class WorldMap {
         }
 
         assignTerritories(players, playersTerritories);
-        //place remaining troops on eaches territories
+        //place remaining troops on each of the territories
         int max = 50;
         if (players.length != 2)
             max = -5*players.length +50;
