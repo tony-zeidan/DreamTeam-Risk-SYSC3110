@@ -43,16 +43,6 @@ public class Territory {
     }
 
     /**
-     * Searches the neighbouring territories for one with the specified name.
-     *
-     * @param name The name to search for
-     * @return The territory if found otherwise null
-     */
-    public Territory searchNeighbours(String name) {
-        return neighbours.getOrDefault(name, null);
-    }
-
-    /**
      * Add a territory to the list of territories neighbouring this territory.
      *
      * @param territory The new neighbouring territory
@@ -104,10 +94,7 @@ public class Territory {
     public void removeUnits(int units){
         this.units -= units;
     }
-    public ArrayList<Territory> getNieghbours()
-    {
-        return new ArrayList<Territory>(neighbours.values());
-    }
+
     /** Get the player that occupies the territory.
      *
      * @return The player that currently occupies the territory.
@@ -167,13 +154,6 @@ public class Territory {
 
     public boolean isAlly(Territory territory) {
         return (owner== territory.getOwner());
-    }
-
-    public void printNeighbours() {
-        System.out.println(String.format("%s's Neighbours\n",name));
-        for (Territory t : neighbours.values()) {
-            System.out.print(String.format("%s (%s), ",t.getName(),t.getOwner().getColour()));
-        }
     }
 
     public void printValidNeighbours(boolean ally) {
