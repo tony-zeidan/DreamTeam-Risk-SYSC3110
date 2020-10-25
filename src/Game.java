@@ -146,7 +146,7 @@ public class Game {
                                 }
                                 game.battle(attacking, defending);
                             } else {
-                                System.out.println("You can not attack as you have conquered all neighbouring territories");
+                                System.out.println("You can not attack as you have conquered all neighbouring territories.");
                             }
                             break;
 
