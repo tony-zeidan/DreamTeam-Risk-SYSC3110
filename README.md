@@ -1,28 +1,35 @@
 # **Dream Team Risk Project (SYSC 3110 - Software Design Project)**
 
 ### Team Members:
-Name | Contributions
+Name | Main Contributions
 ------------ | -------------
-Tony Abou-Zeidan | 
-Anthony Dooley | 
-Ethan Chase | 
-Kyler Verge | 
+Tony Abou-Zeidan | attacking logic, battling logic
+Anthony Dooley | game setup, map setup
+Ethan Chase | attacking logic, battling logic 
+Kyler Verge | user input queries, attacking conditions
 
 ### Project Description:
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
 > Risk project!
 
-
+### Since-Start Changes:
+ - implemented the "hard-coding" of the world map
+ - game setup (player input) implemented
+ - added functionality for the user input of player names
+ - added attacking functionalities
+ - main game loop implemented
+ - UML documentation updated
+ 
 **Project Progress**
 
-![5%](https://progress-bar.dev/5)
+![94%](https://progress-bar.dev/94)
 
-planning phase
+milestone 1 phase
 
 [UML Diagram](https://lucid.app/invitations/accept/fdd00eb0-1f04-4212-8db9-c9dd045a9c40)
 
 ### Milestones:
-- [ ] Milestone 1: A text-based playable version of the game, i.e., players should be able to play the game via the console using the keyboard.
+- [x] Milestone 1: A text-based playable version of the game, i.e., players should be able to play the game via the console using the keyboard.
     >A text-based playable version of the game, i.e., players should be able to
      play the game via the console using the keyboard. There should be a command to print
      the state of the map (i.e., which player is in which country and with how many armies), a
