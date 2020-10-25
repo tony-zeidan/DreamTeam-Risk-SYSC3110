@@ -13,8 +13,6 @@ public class WorldMap {
     private HashMap<String, Territory> territories;
     private Random rand;
 
-
-
     public WorldMap(String name)
     {
         this.name = name;
