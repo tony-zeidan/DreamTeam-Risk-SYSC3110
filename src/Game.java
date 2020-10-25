@@ -158,7 +158,7 @@ public class Game {
                             //keep asking for a territory until we get a valid one
                             while (fortifying==null) {
                                 System.out.print("attack from where? ");
-                                attacking = game.getTerritory(myAction.nextLine());
+                                fortifying = game.getTerritory(myAction.nextLine());
                                 if (fortifying==null) {
                                     System.out.println("That territory is not valid, try again.");
                                     fortifying = null;
