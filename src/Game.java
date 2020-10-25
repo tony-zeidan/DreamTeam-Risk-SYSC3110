@@ -329,6 +329,7 @@ public class Game {
             } else if (attInput.equals("retreat")) {
                 //Attacker chooses to retreat from the battle
                 retreat = true;
+                System.out.println(String.format(end,"Over",attacking.getName()+" Retreated"));
             }
         }
     }
