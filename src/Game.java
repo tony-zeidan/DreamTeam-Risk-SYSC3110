@@ -153,7 +153,36 @@ public class Game {
                             break;
                         case "fortify":
                             System.out.println("you typed fortify");
-                            /*TODO: Fortifying process */
+                            Territory fortifying = null;
+
+                            //keep asking for a territory until we get a valid one
+                            while (fortifying==null) {
+                                System.out.print("attack from where? ");
+                                attacking = game.getTerritory(myAction.nextLine());
+                                if (fortifying==null) {
+                                    System.out.println("That territory is not valid, try again.");
+                                    fortifying = null;
+                                }
+                            }
+
+                            if (!fortifying.ownsAllNeighbours()) {
+                                System.out.println(String.format("%s's Neighbours", fortifying.getName()));
+                                fortifying.printNeighbours();
+
+                                Territory fortified = null;
+                                while (fortified == null) {
+                                    System.out.print("who to attack? ");
+                                    fortified = game.getTerritory(myAction.nextLine());
+                                    if (fortified == null) {
+                                        System.out.println("That territory is not valid, try again.");
+                                        fortified = null;
+                                    } else if (!fortifying.isNeighbour(fortified)) {
+                                        System.out.println("That territory is not a neighbour, try again.");
+                                        fortified = null;
+                                    }
+                                }
+                                game.fortifyPosition(fortifying, fortified, 0);
+                            }
                             playerTurn = true;
                             break;
                         case "end":
@@ -203,8 +232,6 @@ public class Game {
      */
     private void battle(Territory attacking, Territory defending) {
 
-
-
         Scanner aCommand = new Scanner(System.in);
 
         String attInput;
@@ -213,7 +240,7 @@ public class Game {
         String attName = attacking.getOwner().getName();
         String defName = defending.getOwner().getName();
 
-        int attDice;
+        int attDice = 0;
         int defDice;
 
         boolean retreat = false;
@@ -225,7 +252,7 @@ public class Game {
             if (defending.getUnits()==0) {
                 System.out.println(String.format("%s dominates over %s!",attacking.getName(),defending.getName()));
                 defending.setOwner(attacking.getOwner());
-                fortifyPosition(attacking,defending);
+                fortifyPosition(attacking,defending,attDice);
                 break;
             } else if (attacking.getUnits()==1) {
                 System.out.println(String.format("%s drives off the attacker!",defName));
@@ -306,7 +333,7 @@ public class Game {
                 System.out.println("");
 
             } else if (attInput.equalsIgnoreCase("retreat")) {
-                //Attacker choses to retreat from the battle
+                //Attacker chooses to retreat from the battle
                 retreat = true;
             }
         }
@@ -384,24 +411,29 @@ public class Game {
      * @param initialT The territory that will move units out
      * @param finalT   The territory that will add units
      */
-    private void fortifyPosition(Territory initialT, Territory finalT) {
+    private void fortifyPosition(Territory initialT, Territory finalT, int attDice) {
         Scanner command = new Scanner(System.in);
 
         String input;
 
-        int numUnits;
+        int numUnits = 0;
 
-        System.out.println("How many troops would you like to move from " + initialT.getName() + " to " + finalT.getName() + "?");
-        input = command.nextLine();
-
-        //Check if input is a valid number of units to move
-        try {
-            //TODO: Change default to while loop parsing
-            numUnits = Integer.parseInt(input);
-            numUnits = (numUnits > initialT.getUnits() - 1 || numUnits < 1) ? 1 : numUnits;
-        } catch (NumberFormatException e) {
-            //Default is to move only one troop
-            numUnits = 1;
+        boolean fortifyCommand = false;
+        while(!fortifyCommand){
+            System.out.println("How many troops would you like to move from " + initialT.getName() + " to " + finalT.getName() + "?");
+            input = command.nextLine();
+            //Check if input is a valid number of units to move
+            try {
+                numUnits = Integer.parseInt(input);
+                fortifyCommand = true;
+                if (numUnits > initialT.getUnits()-1 || numUnits < 1){
+                    fortifyCommand = false;
+                    System.out.println("Invalid number of units! Please enter a valid number of units");
+                }
+            } catch (NumberFormatException e) {
+                fortifyCommand = false;
+                System.out.println("Invalid number of units! Please enter a valid number of units");
+            }
         }
 
         initialT.removeUnits(numUnits);
