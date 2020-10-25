@@ -214,9 +214,6 @@ public class Game {
                                     } else if (attacking.getOwner() != players.get(i)) {
                                         System.out.println("\nYou do not own that territory, try again.");
                                         attacking = null;
-                                    } else if (attacking.getUnits() == 1) {
-                                        System.out.println(String.format("\nYou can not commence a battle (1 unit on %s), try again", attacking.getName()));
-                                        attacking = null;
                                     }
                                 }
 
@@ -578,8 +575,8 @@ public class Game {
      */
     public static void main(String[] args) {
 
-        //Game g1 = new Game();
-        Game g1 = new Game("test");
+        Game g1 = new Game();
+        //Game g1 = new Game("test");
         g1.runGame();
     }
 }
