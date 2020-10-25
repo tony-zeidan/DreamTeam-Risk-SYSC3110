@@ -1,4 +1,6 @@
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Class Game implements the main functionality of the RISK game.
@@ -13,7 +15,6 @@ import java.util.*;
  */
 public class Game {
 
-
     /**
      * The list of players that may or may not be active throughout the game.
      * @see Player
@@ -25,6 +26,10 @@ public class Game {
      * @see WorldMap
      */
     private WorldMap world;
+
+    /**
+     * Contains the current number of active players.
+     */
     private int numActivePlayer;
 
     /**
@@ -38,28 +43,74 @@ public class Game {
      * the user inputs.
      */
     public Game() {
+
+        //initialize map, player list, and scanner
         players = new ArrayList<>(6);
         world = new WorldMap("Earth");
         myAction = new Scanner(System.in);
-        System.out.println("Please input the number of players (max-6 min-2):");
-        int numPlayers = Integer.parseInt(myAction.nextLine());
-        numActivePlayer = numPlayers;
-        while (numPlayers > 6 || numPlayers < 2)
-        {
-            System.out.println("Please input a correct amount of players (max-6 min-2):");
-            numPlayers = Integer.parseInt(myAction.nextLine());
+
+        /*
+        We must get the amount of people playing the game.
+        Continuously prompt the user for valid information.
+         */
+        String input;
+        int numOfPlayers = 0;
+        boolean validNumEntered = false;
+        while(!validNumEntered){
+            System.out.println("Please input the number of players (max-6 min-2):");
+            input = myAction.nextLine();
+
+            //attempt to parse an integer value from the user's input
+            try {
+                numOfPlayers = Integer.parseInt(input);
+                validNumEntered = true;
+
+                //check if the number parsed is invalid
+                if (numOfPlayers > 6 || numOfPlayers < 2){
+                    validNumEntered = false;
+                    System.out.println("You input an invalid number, try again.");
+                }
+
+            //catch the exception (most commonly thrown when an integer can't be parsed)
+            } catch (NumberFormatException e) {
+                validNumEntered = false;
+                System.out.println("You input an invalid number, try again.");
+            }
         }
-        for (int i= 0; i<numPlayers;i++)
+        //set the initial amount of active players accordingly
+        numActivePlayer = numOfPlayers;
+
+        //six random colors for players
+        List<String> randomColors = Arrays.asList("RED", "GREEN", "BLUE", "YELLOW", "WHITE", "BLACK");
+        Random rand = new Random();
+
+        /*
+        We must get all player names and generate colours.
+        Loop through players and obtain names through user input.
+        Randomly assign colours.
+         */
+        for (int i= 0; i<numOfPlayers;i++)
         {
-            System.out.println(String.format("Player %s Name:",i+1));
+            //get this players name
+            System.out.print(String.format("Player %s Name:",i+1));
             String playerName = myAction.nextLine();
-            System.out.println(String.format("Player %s Colour:",i+1));
-            String color = myAction.nextLine();
-            players.add(new Player(playerName, color));
+
+            //generate and assign random colours
+            String colour = randomColors.get(rand.nextInt(randomColors.size()));
+            System.out.println(String.format("Player %s Colour is: %s\n",i+1,colour));
+            players.add(new Player(playerName, colour));
         }
-        reorderPlayers();
+        //shuffle the order of the players
+        shufflePlayers();
         world.setUp(players);
     }
+
+    /**
+     * Testing constructor of Game.
+     * Creates a new game with two territories.
+     *
+     * @param test
+     */
     public Game(String test) {
         players = new ArrayList<>(2);
         players.add(new Player("Jim", "red"));
@@ -90,7 +141,7 @@ public class Game {
     /**
      * generates a random order for the players
      */
-    private void reorderPlayers()
+    private void shufflePlayers()
     {
         //need to make a single random field in game class
         Random rand = new Random();
@@ -117,6 +168,8 @@ public class Game {
             System.out.println((i + 1) + " : " + players.get(i).getName() + " ; " + players.get(i).getColour());
         }
 
+        String endStart = "|*----------------------------------------{%s's Turn %s}----------------------------------------*|";
+
         //The games loop
         boolean finished = false;
         while (!finished) {
@@ -124,8 +177,14 @@ public class Game {
             for (int i = 0; i < players.size(); i++) {
                 if(players.get(i).isActive())
                 {
-                    //Print out number of remaining players and whose turn it is
+                    Player currentPlayer = players.get(i);
+
+                    //print out number of remaining players and whose turn it is
                     System.out.println(String.format("Remaining Players: %s\n",numActivePlayer));
+
+                    //beginning of turn print
+                    System.out.println(String.format(endStart,currentPlayer.getName(),"Begins!"));
+
                     //While loop for current players turn
                     boolean playerTurn = false;
                     while (!playerTurn) {
@@ -136,6 +195,7 @@ public class Game {
                         String command = myAction.nextLine().toLowerCase();
                         System.out.println(String.format("Selected command: %s\n",command));
                         switch (command) {
+
                             //Current player selected 'attack' : Begin attack protocol
                             case "attack":
                             /*
@@ -187,13 +247,19 @@ public class Game {
                             }
                             break;
 
-                        //Current player selected 'end' : Ends Players turn.
+                       /*
+                       The current player had ended their turn.
+                       1) Print a turn ended message.
+                       2) Break the current turn loop and move on to the next player.
+                        */
                         case "end":
                             System.out.println("you typed end");
                             playerTurn = true;
+
+                            //end of turn print
+                            System.out.println(String.format(endStart,currentPlayer.getName(),"Ends!"));
                             break;
 
-                            //Current player selected 'check' : Prints current state of the world map
                             case "check":
                                 checkWorld();
                                 break;
@@ -213,9 +279,14 @@ public class Game {
                 }
             }
         }
-
-        //The game has ended
-        System.out.println("The game has ended.");
+        /*
+        The game has now ended.
+        1) Print the winner of the game
+         */
+        Player winner=null;
+        for (Player p : players) { if (p.isActive()) winner = p;}
+        System.out.println("|*----------------------------------------{GAME OVER}----------------------------------------*|");
+        System.out.println(String.format("%s of %s has conquered all of %s! Hooray!",winner.getName(),winner.getColour(),world.getName()));
     }
 
     /**
@@ -476,7 +547,8 @@ public class Game {
      */
     public static void main(String[] args) {
 
-        Game g1 = new Game("test");
+        Game g1 = new Game();
+        //Game g1 = new Game("test");
         g1.runGame();
     }
 }
