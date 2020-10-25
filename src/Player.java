@@ -116,7 +116,7 @@ public class Player {
      */
     @Override
     public String toString() {
-        return String.format("%s of %s clan",name,colour);
+        return String.format("%s of %s",name,colour);
     }
 
     /**
