@@ -59,30 +59,12 @@ public class Player {
     }
 
     /**
-     * Sets the name of this player instance.
-     *
-     * @param name The name of the player
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * Get the colour of the units that the player owns.
      *
      * @return The colour of the units that the player owns.
      */
     public String getColour() {
         return colour;
-    }
-
-    /**
-     * Set the colour of the units that the player will own.
-     *
-     * @param colour The colour of the units that the player will own
-     */
-    public void setColour(String colour) {
-        this.colour = colour;
     }
 
     /**
@@ -132,20 +114,6 @@ public class Player {
     @Override
     public String toString() {
         return String.format("%s of %s clan",name,colour);
-    }
-
-    /**
-     * Prints the string representation of this player without indentation.
-     */
-    public void print() {
-        print("");
-    }
-
-    /**
-     * Prints the string representation of this player, allowing indentation.
-     */
-    public void print(String tabs){
-        System.out.println(tabs+toString());
     }
 
     public void printOwned() {
