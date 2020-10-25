@@ -13,10 +13,23 @@ import java.util.*;
  */
 public class Game {
 
+    /**
+     * The list of players that may or may not be active throughout the game.
+     * @see Player
+     */
     private List<Player> players;
-    WorldMap world;
-    //private WorldMap map;
 
+    /**
+     * The world that the players will be playing on.
+     * @see WorldMap
+     */
+    private WorldMap world;
+
+    /**
+     * Default constructor for instances of Game class.
+     * (For now) Creates a new game with the hardcoded map and the players that
+     * the user inputs.
+     */
     public Game() {
         players = new ArrayList<>(6);
         world = new WorldMap();
@@ -40,22 +53,21 @@ public class Game {
         world.setUp(players);
     }
 
-    public void addPlayer(Player player) {
-        players.add(player);
-    }
-
-    public void removePlayer(Player player) {
-        players.remove(player);
-    }
-
-    public List<Player> getPlayers() {
-        return players;
-    }
-
+    /**
+     * Retrieves a territory from the map (or null).
+     * {@link WorldMap#getTerritory(String)}
+     *
+     * @param name The name of the territory to search for
+     * @return The requested territory (null if not found)
+     */
     public Territory getTerritory(String name) {
         return world.getTerritory(name);
     }
 
+    /**
+     * Asks the current world to print itself.
+     * {@link WorldMap#printMap}
+     */
     public void printMap() {
         world.printMap();
     }
@@ -77,10 +89,11 @@ public class Game {
         }
     }
 
-    public static void main(String[] args) {
-
-        Game game = new Game();
-        List<Player> players = game.getPlayers();
+    /**
+     * Runs the current session corresponding to all the setup that has been done.
+     * (Main Game Loop)
+     */
+    public void runGame() {
 
         //Create a scanner object that scans the current players action
         Scanner myAction = new Scanner(System.in);
@@ -98,16 +111,16 @@ public class Game {
             //Loop through each player (Turns), until the game is over.
             for (int i = 0; i < players.size(); i++) {
                 //Print out number of remaining players and whose turn it is
-                System.out.println("Remaining Players: "+ players.size() + "\n");
-                System.out.println("It is " + players.get(i).getName() + "'s turn.");
+                System.out.println(String.format("Remaining Players: %s\n",players.size()));    //TODO: change this to amount of active players
                 //While loop for current players turn
                 boolean playerTurn = false;
                 while (!playerTurn) {
+                    System.out.println(String.format("It is %s of %s's turn.",players.get(i).getName(),players.get(i).getColour()));
                     //Print out the available commands and asks for a command
                     System.out.println("Commands: attack, check, end, kys");
                     System.out.println("What do you want to do?");
                     String command = myAction.nextLine();
-                    System.out.println("Selected command: " + command);
+                    System.out.println(String.format("Selected command: %s\n",command));
                     switch (command) {
                         //Current player selected 'attack' : Begin attack protocol
                         case "attack":
@@ -122,7 +135,7 @@ public class Game {
                             //keep asking for a territory until we get a valid one
                             while (attacking==null) {
                                 System.out.print("attack from where? ");
-                                attacking = game.getTerritory(myAction.nextLine());
+                                attacking = getTerritory(myAction.nextLine());
                                 if (attacking==null) {
                                     System.out.println("That territory is not valid, try again.");
                                     attacking = null;
@@ -136,7 +149,7 @@ public class Game {
                                 Territory defending = null;
                                 while (defending == null) {
                                     System.out.print("who to attack? ");
-                                    defending = game.getTerritory(myAction.nextLine());
+                                    defending = getTerritory(myAction.nextLine());
                                     if (defending == null) {
                                         System.out.println("That territory is not valid, try again.");
                                         defending = null;
@@ -145,7 +158,7 @@ public class Game {
                                         defending = null;
                                     }
                                 }
-                                game.battle(attacking, defending);
+                                battle(attacking, defending);
                             } else {
                                 System.out.println("You can not attack as you have conquered all neighbouring territories.");
                             }
@@ -159,7 +172,7 @@ public class Game {
 
                         //Current player selected 'check' : Prints current state of the world map
                         case "check":
-                            game.printMap();
+                            printMap();
                             break;
 
                         //Not for submission. please delete this.
@@ -187,13 +200,22 @@ public class Game {
     }
 
     /**
+     * This main method represents the main game loop.
+     */
+    public static void main(String[] args) {
+
+        Game g1 = new Game();
+        g1.runGame();
+    }
+
+    /**
      * Simulates the battle sequence between a territory attacking an adjacent territory. The attacker
      * is required to select a number of dice to attack with provided he/she meets the minimum unit requirements
      *
      * @param attacking The territory containing units that will be used in the attack
      * @param defending The territory being attacked
      */
-    private void battle(Territory attacking, Territory defending) {
+    private static void battle(Territory attacking, Territory defending) {
 
         Scanner aCommand = new Scanner(System.in);
 
@@ -312,7 +334,7 @@ public class Game {
      * @param attackRolls The number of dice the attacker is using for this attack
      * @param defendRolls The number of dice the defender is using for this defence
      */
-    private int[] attack(int attackRolls, int defendRolls) {
+    private static int[] attack(int attackRolls, int defendRolls) {
 
         //random acts as die
         Random rand = new Random();
@@ -375,7 +397,7 @@ public class Game {
      * @param initialT The territory that will move units out
      * @param finalT   The territory that will add units
      */
-    private void fortifyPosition(Territory initialT, Territory finalT, int attDice) {
+    private static void fortifyPosition(Territory initialT, Territory finalT, int attDice) {
         Scanner command = new Scanner(System.in);
 
         String input;
