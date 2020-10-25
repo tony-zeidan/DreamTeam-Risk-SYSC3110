@@ -41,8 +41,9 @@ public class WorldMap {
         //create territories and put in territories map
        for (String name:territoryNames.split(","))
        {
-           territories.put(name,new Territory(name));
-           terrTemp.add(new Territory(name));
+           Territory t = new Territory(name);
+           territories.put(name,t);
+           terrTemp.add(t);
        }
        //make neighbours, format right now is \n specifies new territory and ',' a new neighbour
        int i =0;
