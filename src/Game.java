@@ -181,8 +181,7 @@ public class Game {
 
                         //Current player selected 'check' : Prints current state of the world map
                         case "check":
-
-                            printMap();
+                            checkWorld();
                             break;
 
                         //Not for submission. please delete this.
