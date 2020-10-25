@@ -78,9 +78,6 @@ public class Game {
 
     public static void main(String[] args) {
 
-        /*TODO: Remember to ask the current player if they would like to fortify his/her position.
-           The current player can fortify one territory only. Must be adjacent */
-
         Game game = new Game();
         List<Player> players = game.getPlayers();
 
@@ -149,41 +146,6 @@ public class Game {
                             } else {
                                 System.out.println("You can not attack as you have conquered all neighbouring territories");
                             }
-                            /*TODO: Attacking process */
-                            break;
-                        case "fortify":
-                            System.out.println("you typed fortify");
-                            Territory fortifying = null;
-
-                            //keep asking for a territory until we get a valid one
-                            while (fortifying==null) {
-                                System.out.print("attack from where? ");
-                                fortifying = game.getTerritory(myAction.nextLine());
-                                if (fortifying==null) {
-                                    System.out.println("That territory is not valid, try again.");
-                                    fortifying = null;
-                                }
-                            }
-
-                            if (!fortifying.ownsAllNeighbours()) {
-                                System.out.println(String.format("%s's Neighbours", fortifying.getName()));
-                                fortifying.printNeighbours();
-
-                                Territory fortified = null;
-                                while (fortified == null) {
-                                    System.out.print("who to attack? ");
-                                    fortified = game.getTerritory(myAction.nextLine());
-                                    if (fortified == null) {
-                                        System.out.println("That territory is not valid, try again.");
-                                        fortified = null;
-                                    } else if (!fortifying.isNeighbour(fortified)) {
-                                        System.out.println("That territory is not a neighbour, try again.");
-                                        fortified = null;
-                                    }
-                                }
-                                game.fortifyPosition(fortifying, fortified, 0);
-                            }
-                            playerTurn = true;
                             break;
                         case "end":
                             System.out.println("you typed end");
@@ -406,7 +368,8 @@ public class Game {
     /**
      * Fortify more units into one territory from an adjacent territory, such
      * that the current player owns both territories. At least one unit must
-     * be left behind in the initial territory.
+     * be left behind in the initial territory. Used after an attack once the
+     * territory has been claimed.
      *
      * @param initialT The territory that will move units out
      * @param finalT   The territory that will add units
@@ -426,9 +389,10 @@ public class Game {
             try {
                 numUnits = Integer.parseInt(input);
                 fortifyCommand = true;
-                if (numUnits > initialT.getUnits()-1 || numUnits < 1){
+                if (numUnits > initialT.getUnits()-1 || numUnits < attDice){
                     fortifyCommand = false;
-                    System.out.println("Invalid number of units! Please enter a valid number of units");
+                    System.out.println("Invalid number of units! Please enter a valid number of units" +
+                            "(remember, after winning an attack, you must move units at least the number of attack dice you rolled");
                 }
             } catch (NumberFormatException e) {
                 fortifyCommand = false;
