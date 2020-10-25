@@ -403,31 +403,30 @@ public class Game {
         initialT.removeUnits(numUnits);
         finalT.addUnits(numUnits);
     }
+
+    /**
+     *
+     * @return int the number of active players left
+     */
     public int updateIsInactive()
     {
-        int numInactive = 0;
+        int numActive = 0;
         ArrayList<Territory> territories = world.getTerritories();
         for(Player player:players)
         {
             if (player.isActive())
             {
-                boolean isActive = false;
-                for(int i =0;i<territories.size();i++)
+                if(player.getOwnedTerritories().size()>0)
                 {
-                    if(player == territories.get(i).getOwner())
-                    {
-                        isActive = true;
-                        i = territories.size();
-                    }
-
+                    numActive += 1;
+                }
+                else
+                {
+                    //update
+                    player.setActive(false);
                 }
             }
-            else
-            {
-                player.setActive(false);
-                numInactive += 1;
-            }
         }
-        return numInactive;
+        return numActive;
     }
 }
