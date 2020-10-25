@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,14 +14,12 @@ import java.util.List;
 public class Player {
 
     /**
-     * The name of the player that this object represents
+     * The name of the player that this object represents.
      */
     private String name;
 
     /**
      * The colour of the units that the player owns.
-     *
-     * Possible colours are Red, Green, Blue, Yellow, Black, Grey
      */
     private String colour;
 
@@ -32,7 +29,7 @@ public class Player {
     private List<Territory> owned;
 
     /**
-     * True if person still contains units, false otherwise
+     * Contains whether the player is still active in the game.
      */
     private boolean active;
 
@@ -50,7 +47,7 @@ public class Player {
     }
 
     /**
-     * Retrieves the name of the player
+     * Retrieves the name of the player.
      *
      * @return The player's name
      */

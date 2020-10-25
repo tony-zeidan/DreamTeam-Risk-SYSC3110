@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -141,7 +140,7 @@ public class Game {
     }
 
     /**
-     * generates a random order for the players
+     * Generates a random order for the players.
      */
     private void shufflePlayers() {
         //need to make a single random field in game class
@@ -445,8 +444,8 @@ public class Game {
     }
 
     /**
-     * The player has the ability to attack other territories owned
-     * by other players
+     * Represents one smaller conflict between two territories.
+     * This method represents the rolling of dice on both parties and the outcome of those rolls.
      *
      * @param attackRolls The number of dice the attacker is using for this attack
      * @param defendRolls The number of dice the defender is using for this defence
