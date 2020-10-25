@@ -121,7 +121,13 @@ public class Territory {
      * @param owner The new player that now occupies the territory
      */
     public void setOwner(Player owner) {
+        Player oldOwner= this.owner;
+        if(oldOwner != null)
+        {
+            oldOwner.removeTerritory(this);
+        }
         this.owner = owner;
+        this.owner.addTerritory(this);
     }
 
     public boolean isNeighbour(Territory territory) {

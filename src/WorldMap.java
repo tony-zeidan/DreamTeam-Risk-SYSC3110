@@ -73,15 +73,6 @@ public class WorldMap {
      */
     public void setUp(List<Player> players)
     {
-//        //ArrayList index specifying player, where each holds an arraylist of territories
-//        //**** may need to add arraylist of territories as a parameter in player** may be better design wise
-//        ArrayList<ArrayList<Territory>> playersTerritories = new ArrayList<>();
-//        for(int i = 0; i<players.size();i++)
-//        {
-//            //an arraylist of territories for each player
-//            playersTerritories.add(new ArrayList<>());
-//        }
-
         assignTerritories(players);
         //place remaining troops on each of the territories
         int max = 50;
@@ -107,8 +98,6 @@ public class WorldMap {
             t.setOwner(players.get(playerInd));
             t.addUnits(1);
             allTerritories.remove(t);
-            //add territory to each player
-            players.get(playerInd).addTerritory(t);
         }
     }
 
