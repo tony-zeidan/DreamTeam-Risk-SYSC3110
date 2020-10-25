@@ -117,10 +117,32 @@ public class Territory {
         this.owner.addTerritory(this);
     }
 
+    /**
+     * Determines if a territory is a neighbour to this one.
+     *
+     * @param territory The territory to check
+     * @return Whether the given territory is a neighbour
+     */
     public boolean isNeighbour(Territory territory) {
         return neighbours.containsValue(territory);
     }
 
+    /**
+     * Determines if another territory is allied (same owner) as this one.
+     *
+     * @param territory The territory to check
+     * @return Whether the same person owns both territories
+     */
+    public boolean isAlly(Territory territory) {
+        return (owner== territory.getOwner());
+    }
+
+    /**
+     * Determines if this territory and all ones around it are conquered by
+     * the same player.
+     *
+     * @return Whether the player has conquered all neighbouring territories
+     */
     public boolean ownsAllNeighbours() {
         for (Territory t : neighbours.values()) {
             if (owner!=t.getOwner()) return false;
@@ -147,15 +169,21 @@ public class Territory {
 
     /**
      * Prints the string representation of this territory, allowing indentation.
+     *
+     * @param tabs A string representing the tabulation (\t)
      */
     public void print(String tabs){
         System.out.println(tabs+toString());
     }
 
-    public boolean isAlly(Territory territory) {
-        return (owner== territory.getOwner());
-    }
-
+    /**
+     * Prints the neighbours of this territory according to the ally boolean.
+     * If true, the method will print only allied neighbours.
+     * If false, the method will print only enemy neighbours.
+     * {@link Territory#isAlly(Territory)}
+     *
+     * @param ally Whether to print allies (true) or enemies (false)
+     */
     public void printValidNeighbours(boolean ally) {
         System.out.println(String.format("%s's Neighbours (ally=%s):",name,ally));
         for (Territory t : neighbours.values()) {

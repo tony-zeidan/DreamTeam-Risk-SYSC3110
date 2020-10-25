@@ -110,13 +110,13 @@ public class Game {
      * Testing constructor of Game.
      * Creates a new game with two territories.
      *
-     * @param test
+     * @param test Does nothing
      */
     public Game(String test) {
         players = new ArrayList<>(2);
-        players.add(new Player("Jim", "red"));
-        players.add(new Player("Fred", "blue"));
-        world = new WorldMap("Earth",players);
+        players.add(new Player("Jim", "RED"));
+        players.add(new Player("Fred", "BLUE"));
+        world = new WorldMap("Solar System",players);
         myAction = new Scanner(System.in);
         numActivePlayer = 2;
     }
@@ -188,7 +188,7 @@ public class Game {
                     //While loop for current players turn
                     boolean playerTurn = false;
                     while (!playerTurn) {
-                        System.out.println(String.format("It is %s of %s's turn.",players.get(i).getName(),players.get(i).getColour()));
+                        System.out.println(String.format("\nIt is %s of %s's turn.",players.get(i).getName(),players.get(i).getColour()));
                         //Print out the available commands and asks for a command
                         System.out.println("Commands: attack, check, end, kys");
                         System.out.println("What do you want to do?");
@@ -263,7 +263,7 @@ public class Game {
                             System.out.println(String.format(endStart,currentPlayer.getName(),"Ends!"));
                             break;
 
-                            case "check":
+                            case "worldstate":
                                 checkWorld();
                                 break;
                             //Current player selected an invalid command, lets player know this and asks for a command again.
@@ -296,7 +296,7 @@ public class Game {
      * Prints the current state of the world.
      */
     private void checkWorld() {
-        System.out.println(String.format("|----------(Checking the World of %s)----------|",world.getName()));
+        System.out.println(String.format("|--------------------(World State: %s)--------------------|",world.getName()));
         printMap();
     }
 
@@ -549,7 +549,7 @@ public class Game {
     public void updateIsInactive()
     {
         int numActive = 0;
-        ArrayList<Territory> territories = world.getTerritories();
+        List<Territory> territories = world.getTerritories();
         for(Player player:players)
         {
             if (player.isActive())

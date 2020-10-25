@@ -7,12 +7,31 @@ import java.util.Random;
  * WorldMap represents the entire map of that the Game contains.
  *
  * @author Anthony Dooley
+ * @author Tony Zeidan
  */
 public class WorldMap {
-    private String name;
-    private HashMap<String, Territory> territories;
-    private Random rand;
 
+    /**
+     * The name of the world.
+     */
+    private String name;
+
+    /**
+     * The map containing all territories (used to implement graph).
+     */
+    private HashMap<String, Territory> territories;
+
+    /**
+     * Random variable for assigning territories in setup.
+     */
+    private static Random rand;
+
+    /**'
+     * Constructor for instances of WorldMap.
+     * Creates a new World with the name given (hardcoded map).
+     *
+     * @param name The name of the World
+     */
     public WorldMap(String name)
     {
         this.name = name;
@@ -20,6 +39,14 @@ public class WorldMap {
         territories = new HashMap<>();
         createTerritories();
     }
+
+    /**
+     * Testing constructor for WorldMap.
+     * {@link Game#Game(String)}
+     *
+     * @param name The name of the world
+     * @param players A list of pre-made players
+     */
     public WorldMap(String name,List<Player> players)
     {
         this.name = name;
@@ -37,12 +64,18 @@ public class WorldMap {
         earth.setUnits(1);
     }
 
+    /**
+     * Retrieves the name of the world.
+     *
+     * @return The world's name
+     */
     public String getName() {
         return name;
     }
 
     /**
-     * instantiate territories and make nieghbours
+     * Instantiates all territories through the use of a hard-coded string (for now).
+     * Parses the String representing the map, and adds the territories within to the map.
      */
     private void createTerritories()
     {
@@ -82,7 +115,8 @@ public class WorldMap {
     }
 
     /**
-     * sets up the map, by assigning territories and populating randomly territories
+     * Sets up the map, by assigning territories and populating randomly territories.
+     *
      * @param players the players playing the game
      */
     public void setUp(List<Player> players)
@@ -96,7 +130,8 @@ public class WorldMap {
     }
 
     /**
-     * assigns the territories to each player and puts one unit on it.
+     * Assigns the territories to each player and puts one unit on it.
+     *
      * @param players the ordered players
      */
     private void assignTerritories(List<Player> players) {
@@ -120,7 +155,7 @@ public class WorldMap {
         for (Player player: players)
         {
             //numOfTroops depends on how many territories each player got, as there can be a 1 difference
-            ArrayList<Territory> playerTerritories = player.getOwnedTerritories();
+            List<Territory> playerTerritories = player.getOwnedTerritories();
             int numOfTroops =playerTerritories.size();
             while(numOfTroops != max)
             {
@@ -131,20 +166,30 @@ public class WorldMap {
         }
     }
 
+    /**
+     * Retrieves the territory with the given name (or null if nonexistent).
+     *
+     * @param name The name of the territory
+     * @return The territory with the name
+     */
     public Territory getTerritory(String name) {
         return territories.getOrDefault(name,null);
     }
-    public ArrayList<Territory> getTerritories()
-    {
+
+    /**
+     * Retrieves a list of territories within the map.
+     *
+     * @return A complete list of territories
+     */
+    public List<Territory> getTerritories() {
         return new ArrayList<>(territories.values());
     }
+
     /**
-     * prints the map
+     * Prints the map (through delegation of printing).
      */
-    public void printMap()
-    {
-        for (Territory t: territories.values())
-        {
+    public void printMap() {
+        for (Territory t: territories.values()) {
             t.print();
         }
     }

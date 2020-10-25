@@ -84,9 +84,15 @@ public class Player {
     public void removeTerritory(Territory territory) {
         owned.remove(territory);
     }
-    public ArrayList<Territory> getOwnedTerritories()
+
+    /**
+     * Retrieves a list of all territories owned by the player.
+     *
+     * @return The list of owned territories
+     */
+    public List<Territory> getOwnedTerritories()
     {
-        return (ArrayList)owned;
+        return owned;
     }
     /**
      * Determine if the player is out of the game or not.
@@ -116,6 +122,9 @@ public class Player {
         return String.format("%s of %s clan",name,colour);
     }
 
+    /**
+     * Prints all of the territories that this player owns.
+     */
     public void printOwned() {
         System.out.println(String.format("%s owns the following territories:",name));
         for (Territory t : owned) {
