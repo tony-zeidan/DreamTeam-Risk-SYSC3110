@@ -26,6 +26,9 @@ public class Game {
      */
     private WorldMap world;
 
+    /**
+     * Scanner for user input.
+     */
     private static Scanner myAction;
 
     /**
@@ -180,7 +183,7 @@ public class Game {
                             break;
 
                         //Current player selected 'check' : Prints current state of the world map
-                        case "check":
+                        case "world":
                             checkWorld();
                             break;
 
@@ -208,12 +211,13 @@ public class Game {
         System.out.println("The game has ended.");
     }
 
+    /**
+     * Prints the current state of the world.
+     */
     private void checkWorld() {
         System.out.println(String.format("|----------(Checking the World of %s)----------|",world.getName()));
         printMap();
     }
-
-
 
     /**
      * Simulates the battle sequence between a territory attacking an adjacent territory. The attacker
@@ -427,7 +431,6 @@ public class Game {
                 System.out.println("Invalid number of units! Please enter a valid number of units");
             }
         }
-
         initialT.removeUnits(numUnits);
         finalT.addUnits(numUnits);
     }
@@ -462,7 +465,6 @@ public class Game {
      * This main method represents the main game loop.
      */
     public static void main(String[] args) {
-
         Game g1 = new Game();
         g1.runGame();
     }
