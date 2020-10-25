@@ -9,7 +9,6 @@ import java.util.List;
  * @author Ethan Chase
  * @author Anthony Dooley
  * @author Kyler Verge
- *
  * @version 1.00
  * @since 1.00
  */
@@ -17,12 +16,14 @@ public class Game {
 
     /**
      * The list of players that may or may not be active throughout the game.
+     *
      * @see Player
      */
     private List<Player> players;
 
     /**
      * The world that the players will be playing on.
+     *
      * @see WorldMap
      */
     private WorldMap world;
@@ -56,7 +57,7 @@ public class Game {
         String input;
         int numOfPlayers = 0;
         boolean validNumEntered = false;
-        while(!validNumEntered){
+        while (!validNumEntered) {
             System.out.println("Please input the number of players (max-6 min-2):");
             input = myAction.nextLine();
 
@@ -66,12 +67,12 @@ public class Game {
                 validNumEntered = true;
 
                 //check if the number parsed is invalid
-                if (numOfPlayers > 6 || numOfPlayers < 2){
+                if (numOfPlayers > 6 || numOfPlayers < 2) {
                     validNumEntered = false;
                     System.out.println("You input an invalid number, try again.");
                 }
 
-            //catch the exception (most commonly thrown when an integer can't be parsed)
+                //catch the exception (most commonly thrown when an integer can't be parsed)
             } catch (NumberFormatException e) {
                 validNumEntered = false;
                 System.out.println("You input an invalid number, try again.");
@@ -89,15 +90,14 @@ public class Game {
         Loop through players and obtain names through user input.
         Randomly assign colours.
          */
-        for (int i= 0; i<numOfPlayers;i++)
-        {
+        for (int i = 0; i < numOfPlayers; i++) {
             //get this players name
-            System.out.print(String.format("Player %s Name:",i+1));
+            System.out.print(String.format("Player %s Name:", i + 1));
             String playerName = myAction.nextLine();
 
             //generate and assign random colours
             String colour = randomColors.get(rand.nextInt(randomColors.size()));
-            System.out.println(String.format("Player %s Colour is: %s\n",i+1,colour));
+            System.out.println(String.format("Player %s Colour is: %s\n", i + 1, colour));
             randomColors.remove(colour);
             players.add(new Player(playerName, colour));
         }
@@ -116,10 +116,11 @@ public class Game {
         players = new ArrayList<>(2);
         players.add(new Player("Jim", "RED"));
         players.add(new Player("Fred", "BLUE"));
-        world = new WorldMap("Solar System",players);
+        world = new WorldMap("Solar System", players);
         myAction = new Scanner(System.in);
         numActivePlayer = 2;
     }
+
     /**
      * Retrieves a territory from the map (or null).
      * {@link WorldMap#getTerritory(String)}
@@ -142,16 +143,14 @@ public class Game {
     /**
      * generates a random order for the players
      */
-    private void shufflePlayers()
-    {
+    private void shufflePlayers() {
         //need to make a single random field in game class
         Random rand = new Random();
 
-        for (int i = players.size(); i >0;i--)
-        {
-            Player holder = players.get(players.size()-i);
-            int chosen  = rand.nextInt(i);
-            players.set(players.size()-i, players.get(chosen));
+        for (int i = players.size(); i > 0; i--) {
+            Player holder = players.get(players.size() - i);
+            int chosen = rand.nextInt(i);
+            players.set(players.size() - i, players.get(chosen));
             players.set(chosen, holder);
         }
     }
@@ -164,7 +163,7 @@ public class Game {
 
         //print player order at the start of the game.
         System.out.println("The order of players: ");
-        for (int i = 0; i < players.size(); i++){
+        for (int i = 0; i < players.size(); i++) {
             System.out.println((i + 1) + " : " + players.get(i).getName() + " ; " + players.get(i).getColour());
         }
 
@@ -175,25 +174,24 @@ public class Game {
         while (!finished) {
             //loop through each player (Turns), until the game is over.
             for (int i = 0; i < players.size(); i++) {
-                if(players.get(i).isActive())
-                {
+                if (players.get(i).isActive()) {
                     Player currentPlayer = players.get(i);
 
                     //print out number of remaining players and whose turn it is
-                    System.out.println(String.format("Remaining Players: %s\n",numActivePlayer));
+                    System.out.println(String.format("Remaining Players: %s\n", numActivePlayer));
 
                     //beginning of turn print
-                    System.out.println(String.format(endStart,currentPlayer.getName(),"Begins!"));
+                    System.out.println(String.format(endStart, currentPlayer.getName(), "Begins!"));
 
                     //While loop for current players turn
                     boolean playerTurn = false;
                     while (!playerTurn) {
-                        System.out.println(String.format("\nIt is %s of %s's turn.",players.get(i).getName(),players.get(i).getColour()));
+                        System.out.println(String.format("\nIt is %s of %s's turn.", players.get(i).getName(), players.get(i).getColour()));
                         //Print out the available commands and asks for a command
                         System.out.println("Commands: attack, check, end, kys");
                         System.out.println("What do you want to do?");
                         String command = myAction.nextLine().toLowerCase();
-                        System.out.println(String.format("Selected command: %s\n",command));
+                        System.out.println(String.format("Selected command: %s\n", command));
                         switch (command) {
 
                             //Current player selected 'attack' : Begin attack protocol
@@ -204,64 +202,64 @@ public class Game {
                             2) There are 2 units on the attacking territory (taken care of in implementation)
                             3) Attacking owner does not own Defending territory
                             */
-                            Territory attacking = null;
+                                Territory attacking = null;
 
-                            //keep asking for a territory until we get a valid one
-                            while (attacking==null) {
-                                players.get(i).printOwned();
-                                System.out.print("\nattack from where? ");
-                                attacking = getTerritory(myAction.nextLine());
-                                if (attacking==null) {
-                                    System.out.println("\nThat territory is not valid, try again.");
-                                    attacking = null;
-                                } else if (attacking.getOwner()!=players.get(i)) {
-                                    System.out.println("\nYou do not own that territory, try again.");
-                                    attacking = null;
-                                } else if (attacking.getUnits()==1) {
-                                    System.out.println(String.format("\nYou can not commence a battle (1 unit on %s), try again",attacking.getName()));
-                                    attacking = null;
-                                }
-                            }
-
-                            //we can use this method if we have conquered all neighbouring territories
-                            if (!attacking.ownsAllNeighbours()) {
-                                System.out.println("");
-
-                                Territory defending = null;
-                                while (defending == null) {
-                                    attacking.printValidNeighbours(false);
-                                    System.out.print("\nwho to attack? ");
-                                    defending = getTerritory(myAction.nextLine());
-                                    if (defending == null) {
+                                //keep asking for a territory until we get a valid one
+                                while (attacking == null) {
+                                    players.get(i).printOwned();
+                                    System.out.print("\nattack from where? ");
+                                    attacking = getTerritory(myAction.nextLine());
+                                    if (attacking == null) {
                                         System.out.println("\nThat territory is not valid, try again.");
-                                        defending = null;
-                                    } else if (!attacking.isNeighbour(defending)) {
-                                        System.out.println("\nThat territory is not a neighbour, try again.");
-                                        defending = null;
-                                    } else if (attacking.getOwner()==defending.getOwner()) {
-                                        System.out.println("\nYou can not attack yourself!");
-                                        defending = null;
+                                        attacking = null;
+                                    } else if (attacking.getOwner() != players.get(i)) {
+                                        System.out.println("\nYou do not own that territory, try again.");
+                                        attacking = null;
+                                    } else if (attacking.getUnits() == 1) {
+                                        System.out.println(String.format("\nYou can not commence a battle (1 unit on %s), try again", attacking.getName()));
+                                        attacking = null;
                                     }
                                 }
-                                battle(attacking, defending);
-                                System.out.println("");
-                            } else {
-                                System.out.println("You can not attack as you have conquered all neighbouring territories.\n");
-                            }
-                            break;
+
+                                //we can use this method if we have conquered all neighbouring territories
+                                if (!attacking.ownsAllNeighbours()) {
+                                    System.out.println("");
+
+                                    Territory defending = null;
+                                    while (defending == null) {
+                                        attacking.printValidNeighbours(false);
+                                        System.out.print("\nwho to attack? ");
+                                        defending = getTerritory(myAction.nextLine());
+                                        if (defending == null) {
+                                            System.out.println("\nThat territory is not valid, try again.");
+                                            defending = null;
+                                        } else if (!attacking.isNeighbour(defending)) {
+                                            System.out.println("\nThat territory is not a neighbour, try again.");
+                                            defending = null;
+                                        } else if (attacking.getOwner() == defending.getOwner()) {
+                                            System.out.println("\nYou can not attack yourself!");
+                                            defending = null;
+                                        }
+                                    }
+                                    battle(attacking, defending);
+                                    System.out.println("");
+                                } else {
+                                    System.out.println("You can not attack as you have conquered all neighbouring territories.\n");
+                                }
+                                break;
 
                        /*
                        The current player had ended their turn.
                        1) Print a turn ended message.
                        2) Break the current turn loop and move on to the next player.
                         */
-                        case "end":
-                            System.out.println("you typed end");
-                            playerTurn = true;
+                            case "end":
+                                System.out.println("you typed end");
+                                playerTurn = true;
 
-                            //end of turn print
-                            System.out.println(String.format(endStart,currentPlayer.getName(),"Ends!"));
-                            break;
+                                //end of turn print
+                                System.out.println(String.format(endStart, currentPlayer.getName(), "Ends!"));
+                                break;
 
                             case "worldstate":
                                 checkWorld();
@@ -274,7 +272,7 @@ public class Game {
                         }
                         updateIsInactive();
                         //Only one player remains, end the game.
-                        if(numActivePlayer== 1){
+                        if (numActivePlayer == 1) {
                             finished = true;
                             playerTurn = true;
                         }
@@ -286,17 +284,19 @@ public class Game {
         The game has now ended.
         1) Print the winner of the game
          */
-        Player winner=null;
-        for (Player p : players) { if (p.isActive()) winner = p;}
+        Player winner = null;
+        for (Player p : players) {
+            if (p.isActive()) winner = p;
+        }
         System.out.println("|*----------------------------------------{GAME OVER}----------------------------------------*|");
-        System.out.println(String.format("%s of %s has conquered all of %s! Hooray!",winner.getName(),winner.getColour(),world.getName()));
+        System.out.println(String.format("%s of %s has conquered all of %s! Hooray!", winner.getName(), winner.getColour(), world.getName()));
     }
 
     /**
      * Prints the current state of the world.
      */
     private void checkWorld() {
-        System.out.println(String.format("|--------------------(World State: %s)--------------------|",world.getName()));
+        System.out.println(String.format("|--------------------(World State: %s)--------------------|", world.getName()));
         printMap();
     }
 
@@ -309,7 +309,7 @@ public class Game {
      */
     private static void battle(Territory attacking, Territory defending) {
 
-        System.out.println(String.format("|------------------(Battle Commenced - %s vs. %s)------------------|",attacking.getName(),defending.getName()));
+        System.out.println(String.format("|------------------(Battle Commenced - %s vs. %s)------------------|", attacking.getName(), defending.getName()));
         String end = "|------------------(Battle %s - %s)------------------|";
         String attInput;
         String defInput;
@@ -326,22 +326,22 @@ public class Game {
         while (!retreat) {
 
             //display the units on both sides of the battle
-            System.out.println(String.format("%s's Units: %s\n%s's Units: %s",attName,attacking.getUnits(),defName,defending.getUnits()));
+            System.out.println(String.format("%s's Units: %s\n%s's Units: %s", attName, attacking.getUnits(), defName, defending.getUnits()));
 
             /*
             Logic:
             1) If the defenders units are equal to zero at the start of another attack, this battle is over.
             2) If the attackers units are equal to one at the start of another attack, this battle is over.
              */
-            if (defending.getUnits()==0) {
-                System.out.println(String.format("%s dominates over %s!",attacking.getName(),defending.getName()));
-                System.out.println(String.format(end,"Ended",attacking.getName()+" Wins!"));
+            if (defending.getUnits() == 0) {
+                System.out.println(String.format("%s dominates over %s!", attacking.getName(), defending.getName()));
+                System.out.println(String.format(end, "Ended", attacking.getName() + " Wins!"));
                 defending.setOwner(attacking.getOwner());
-                fortifyPosition(attacking,defending,attDice);
+                fortifyPosition(attacking, defending, attDice);
                 break;
-            } else if (attacking.getUnits()==1) {
-                System.out.println(String.format("%s drives off the attacker!",defName));
-                System.out.println(String.format(end,"Ended",defending.getName()+" Wins!"));
+            } else if (attacking.getUnits() == 1) {
+                System.out.println(String.format("%s drives off the attacker!", defName));
+                System.out.println(String.format(end, "Ended", defending.getName() + " Wins!"));
                 break;
             }
 
@@ -350,11 +350,11 @@ public class Game {
             Continuously prompt the user for valid information until it is entered.
              */
             String battleCommand = null;
-            while (battleCommand==null) {
+            while (battleCommand == null) {
                 attacking.printValidNeighbours(false);
-                System.out.println(String.format("\n%s is attacking. %s, would you like to attack or retreat?",attName,attName));
+                System.out.println(String.format("\n%s is attacking. %s, would you like to attack or retreat?", attName, attName));
                 battleCommand = myAction.nextLine().toLowerCase();
-                if (!battleCommand.equals("attack")&&!battleCommand.equals("retreat")) {
+                if (!battleCommand.equals("attack") && !battleCommand.equals("retreat")) {
                     System.out.println("\nYou need to select either attack or retreat, try again.");
                     battleCommand = null;
                 }
@@ -439,7 +439,7 @@ public class Game {
             } else if (battleCommand.equals("retreat")) {
                 //Attacker chooses to retreat from the battle
                 retreat = true;
-                System.out.println(String.format(end,"Over",attacking.getName()+" Retreated"));
+                System.out.println(String.format(end, "Over", attacking.getName() + " Retreated"));
             }
         }
     }
@@ -450,6 +450,7 @@ public class Game {
      *
      * @param attackRolls The number of dice the attacker is using for this attack
      * @param defendRolls The number of dice the defender is using for this defence
+     * @return A pair of integers (position 0: how many units attacker lost, position 1: how many units defender lost)
      */
     private static int[] attack(int attackRolls, int defendRolls) {
 
@@ -512,7 +513,8 @@ public class Game {
      * territory has been claimed.
      *
      * @param initialT The territory that will move units out
-     * @param finalT   The territory that will add units
+     * @param finalT The territory that will add units
+     * @param attDice The number of dice that the attacker used (if applicable)
      */
     private static void fortifyPosition(Territory initialT, Territory finalT, int attDice) {
 
@@ -525,7 +527,7 @@ public class Game {
         boolean fortifyCommand = false;
 
         //Keep looping until player enters a valid number of units to fortify
-        while(!fortifyCommand){
+        while (!fortifyCommand) {
             System.out.println("How many troops would you like to move from " + initialT.getName() + " to " + finalT.getName() + "?");
             input = myAction.nextLine();
 
@@ -534,7 +536,7 @@ public class Game {
                 numUnits = Integer.parseInt(input);
                 fortifyCommand = true;
                 //Check if number inputted is valid
-                if (numUnits > initialT.getUnits()-1 || numUnits < attDice){
+                if (numUnits > initialT.getUnits() - 1 || numUnits < attDice) {
                     fortifyCommand = false;
                     System.out.println("Invalid number of units! Please enter a valid number of units" +
                             "(remember, after winning an attack, you must move units at least the number of attack dice you rolled");
@@ -552,33 +554,28 @@ public class Game {
     }
 
     /**
-     *
-     * @return int the number of active players left
+     * Update the number of players active.
      */
-    public void updateIsInactive()
-    {
+    public void updateIsInactive() {
         int numActive = 0;
         List<Territory> territories = world.getTerritories();
-        for(Player player:players)
-        {
-            if (player.isActive())
-            {
-                if(player.getOwnedTerritories().size()>0)
-                {
+        for (Player player : players) {
+            if (player.isActive()) {
+                if (player.getOwnedTerritories().size() > 0) {
                     numActive += 1;
-                }
-                else
-                {
+                } else {
                     //update
                     player.setActive(false);
                 }
             }
         }
-        numActivePlayer=numActive;
+        numActivePlayer = numActive;
     }
 
     /**
      * This main method represents the main game loop.
+     *
+     * @param args nothing
      */
     public static void main(String[] args) {
 

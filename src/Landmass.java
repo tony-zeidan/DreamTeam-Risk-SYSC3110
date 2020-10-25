@@ -50,6 +50,8 @@ public class Landmass {
 
     /**
      * Have a pretty version of the Landmass and its contained territories printed.
+     *
+     * @param tabs A string representing tabulation (\t)
      */
     public void print(String tabs) {
         System.out.println(tabs + "Landmass of " + name + ": ");

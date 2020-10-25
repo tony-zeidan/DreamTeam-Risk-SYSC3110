@@ -150,6 +150,12 @@ public class WorldMap {
         }
     }
 
+    /**
+     * Randomly places the troops for each player on each territory.
+     *
+     * @param players The list of players in the world
+     * @param max The amount of units for each player
+     */
     private void placeTroops(List<Player> players,int max)
     {
         for (Player player: players)
