@@ -132,7 +132,7 @@ public class Territory {
 
     public boolean ownsAllNeighbours() {
         for (Territory t : neighbours.values()) {
-            if (!isNeighbour(t)) return false;
+            if (owner!=t.getOwner()) return false;
         }
         return true;
     }
