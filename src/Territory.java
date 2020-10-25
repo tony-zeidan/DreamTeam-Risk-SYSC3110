@@ -106,7 +106,10 @@ public class Territory {
     public void removeUnits(int units){
         this.units -= units;
     }
-
+    public ArrayList<Territory> getNieghbours()
+    {
+        return new ArrayList<Territory>(neighbours.values());
+    }
     /** Get the player that occupies the territory.
      *
      * @return The player that currently occupies the territory.

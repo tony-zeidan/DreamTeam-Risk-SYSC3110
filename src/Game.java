@@ -439,4 +439,31 @@ public class Game {
         initialT.removeUnits(numUnits);
         finalT.addUnits(numUnits);
     }
+    public int updateIsInactive()
+    {
+        int numInactive = 0;
+        ArrayList<Territory> territories = world.getTerritories();
+        for(Player player:players)
+        {
+            if (player.isActive())
+            {
+                boolean isActive = false;
+                for(int i =0;i<territories.size();i++)
+                {
+                    if(player == territories.get(i).getOwner())
+                    {
+                        isActive = true;
+                        i = territories.size();
+                    }
+
+                }
+            }
+            else
+            {
+                player.setActive(false);
+                numInactive += 1;
+            }
+        }
+        return numInactive;
+    }
 }
