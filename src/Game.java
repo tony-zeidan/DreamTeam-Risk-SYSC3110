@@ -98,6 +98,7 @@ public class Game {
             //generate and assign random colours
             String colour = randomColors.get(rand.nextInt(randomColors.size()));
             System.out.println(String.format("Player %s Colour is: %s\n",i+1,colour));
+            randomColors.remove(colour);
             players.add(new Player(playerName, colour));
         }
         //shuffle the order of the players
@@ -161,19 +162,18 @@ public class Game {
      */
     public void runGame() {
 
+        //print player order at the start of the game.
         System.out.println("The order of players: ");
-
-        //Tells the Player order before starting the game
         for (int i = 0; i < players.size(); i++){
             System.out.println((i + 1) + " : " + players.get(i).getName() + " ; " + players.get(i).getColour());
         }
 
         String endStart = "|*----------------------------------------{%s's Turn %s}----------------------------------------*|";
 
-        //The games loop
+        //main game loop
         boolean finished = false;
         while (!finished) {
-            //Loop through each player (Turns), until the game is over.
+            //loop through each player (Turns), until the game is over.
             for (int i = 0; i < players.size(); i++) {
                 if(players.get(i).isActive())
                 {
@@ -216,6 +216,9 @@ public class Game {
                                     attacking = null;
                                 } else if (attacking.getOwner()!=players.get(i)) {
                                     System.out.println("\nYou do not own that territory, try again.");
+                                    attacking = null;
+                                } else if (attacking.getUnits()==1) {
+                                    System.out.println(String.format("\nYou can not commence a battle (1 unit on %s), try again",attacking.getName()));
                                     attacking = null;
                                 }
                             }
@@ -297,8 +300,6 @@ public class Game {
         printMap();
     }
 
-
-
     /**
      * Simulates the battle sequence between a territory attacking an adjacent territory. The attacker
      * is required to select a number of dice to attack with provided he/she meets the minimum unit requirements
@@ -324,7 +325,14 @@ public class Game {
         //Continue the attack step until either side loses all of its units or the attacker decides to retreat
         while (!retreat) {
 
+            //display the units on both sides of the battle
             System.out.println(String.format("%s's Units: %s\n%s's Units: %s",attName,attacking.getUnits(),defName,defending.getUnits()));
+
+            /*
+            Logic:
+            1) If the defenders units are equal to zero at the start of another attack, this battle is over.
+            2) If the attackers units are equal to one at the start of another attack, this battle is over.
+             */
             if (defending.getUnits()==0) {
                 System.out.println(String.format("%s dominates over %s!",attacking.getName(),defending.getName()));
                 System.out.println(String.format(end,"Ended",attacking.getName()+" Wins!"));
@@ -337,51 +345,70 @@ public class Game {
                 break;
             }
 
-            System.out.println(String.format("\n%s is attacking. %s, would you like to attack or retreat?",attName,attName));
-            attInput = myAction.nextLine().toLowerCase();
+            /*
+            We need to obtain either an attack or retreat from the user.
+            Continuously prompt the user for valid information until it is entered.
+             */
+            String battleCommand = null;
+            while (battleCommand==null) {
+                attacking.printValidNeighbours(false);
+                System.out.println(String.format("\n%s is attacking. %s, would you like to attack or retreat?",attName,attName));
+                battleCommand = myAction.nextLine().toLowerCase();
+                if (!battleCommand.equals("attack")&&!battleCommand.equals("retreat")) {
+                    System.out.println("\nYou need to select either attack or retreat, try again.");
+                    battleCommand = null;
+                }
+            }
 
-            //If the command is to attack or retreat
-            if (attInput.equals("attack")) {
+            //if the command is to attack or retreat
+            if (battleCommand.equals("attack")) {
 
-                /*Check the number of units contained in the attacking territory. The attacker must have
+                /*
+                Logic:
+                Check the number of units contained in the attacking territory. The attacker must have
                 at least two units in their territory; one unit attacks the defended territory while the
                 other unit continues to occupy the attacker's territory.
                  */
                 if (attacking.getUnits() == 2) {
-                    //Attack with one attacking dice if the attacking territory contains exactly two units
+                    //attack with one attacking dice if the attacking territory contains exactly two units
                     attDice = 1;
                     System.out.println("You are attacking with 1 attack dice!");
                 } else if (attacking.getUnits() == 3) {
-                    /*If the attacking territory contains exactly three units, ask the attacker if he/she would
-                    like to use 1 or 2 attacking dice*/
+                    /*
+                    If the attacking territory contains exactly three units, ask the attacker if he/she would
+                    like to use 1 or 2 attacking dice.
+                    */
                     System.out.println(attName + ", would you like to attack with 1 or 2 dice?");
                     attInput = myAction.nextLine();
 
-                    //Check for invalid input
+                    //check for invalid input (default to 2 dice if invalid)
                     try {
                         attDice = Integer.parseInt(attInput);
                         attDice = (attDice > 3 || attDice < 1) ? 2 : attDice;
                     } catch (NumberFormatException e) {
-                        //Default choice is two attacking dice if input is invalid
+                        //default choice is two attacking dice if input is invalid
                         attDice = 2;
                     }
                 } else {
-                    /*If the attacking territory contains four or more units before the next attack, ask the attacker
-                    if he/she would like to use 1,2 or 3 attacking dice*/
+                    /*
+                    If the attacking territory contains four or more units before the next attack, ask the attacker
+                    if he/she would like to use 1, 2 or 3 attacking dice.
+                    */
                     System.out.println(attName + ", would you like to attack with 1, 2 or 3 dice?");
                     attInput = myAction.nextLine();
 
-                    //check for invalid input
+                    //check for invalid input (default to 3 dice)
                     try {
                         attDice = Integer.parseInt(attInput);
                         attDice = (attDice > 4 || attDice < 1) ? 3 : attDice;
                     } catch (NumberFormatException e) {
-                        //Default choice is three attacking dice if input is invalid
                         attDice = 3;
                     }
                 }
 
-                /*Check the number of units contained in the defending territory. If there is only one unit in
+                /*
+                Logic:
+                Check the number of units contained in the defending territory. If there is only one unit in
                 the defending territory, the defender only has the option to roll one die. If there is more than
                 one unit in the defending territory, the defender may chose to roll either one die or two dice
                 for the attack.
@@ -391,16 +418,15 @@ public class Game {
                     defDice = 1;
                     System.out.println("You are defending with 1 defense dice!");
                 } else {
-                    //Defender choses to roll one die or two dice
+                    //defender chooses to roll one die or two dice
                     System.out.println(defName + ", would you like to defend with 1 or 2 dice?");
                     defInput = myAction.nextLine();
 
-                    //Check for invalid input
+                    //check for invalid input (default to 2 dice)
                     try {
                         defDice = Integer.parseInt(defInput);
                         defDice = (defDice > 2 || defDice < 1) ? 2 : defDice;
                     } catch (NumberFormatException e) {
-                        //Default choice is two dice if input is invalid
                         defDice = 2;
                     }
                 }
@@ -410,7 +436,7 @@ public class Game {
                 defending.removeUnits(lost[1]);
                 System.out.println("");
 
-            } else if (attInput.equals("retreat")) {
+            } else if (battleCommand.equals("retreat")) {
                 //Attacker chooses to retreat from the battle
                 retreat = true;
                 System.out.println(String.format(end,"Over",attacking.getName()+" Retreated"));
@@ -547,8 +573,8 @@ public class Game {
      */
     public static void main(String[] args) {
 
-        Game g1 = new Game();
-        //Game g1 = new Game("test");
+        //Game g1 = new Game();
+        Game g1 = new Game("test");
         g1.runGame();
     }
 }
