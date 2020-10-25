@@ -13,6 +13,7 @@ import java.util.*;
  */
 public class Game {
 
+
     /**
      * The list of players that may or may not be active throughout the game.
      * @see Player
@@ -25,6 +26,8 @@ public class Game {
      */
     private WorldMap world;
 
+    private static Scanner myAction;
+
     /**
      * Default constructor for instances of Game class.
      * (For now) Creates a new game with the hardcoded map and the players that
@@ -33,20 +36,20 @@ public class Game {
     public Game() {
         players = new ArrayList<>(6);
         world = new WorldMap();
-        Scanner aCommand = new Scanner(System.in);
+        myAction = new Scanner(System.in);
         System.out.println("Please input the number of players (max-6 min-2):");
-        int numPlayers = Integer.parseInt(aCommand.nextLine());
+        int numPlayers = Integer.parseInt(myAction.nextLine());
         while (numPlayers > 6 || numPlayers < 2)
         {
             System.out.println("Please input a correct amount of players (max-6 min-2):");
-            numPlayers = Integer.parseInt(aCommand.nextLine());
+            numPlayers = Integer.parseInt(myAction.nextLine());
         }
         for (int i= 0; i<numPlayers;i++)
         {
             System.out.println(String.format("Player %s Name:",i+1));
-            String playerName = aCommand.nextLine();
+            String playerName = myAction.nextLine();
             System.out.println(String.format("Player %s Colour:",i+1));
-            String color = aCommand.nextLine();
+            String color = myAction.nextLine();
             players.add(new Player(playerName, color));
         }
         reorderPlayers();
@@ -119,7 +122,7 @@ public class Game {
                     //Print out the available commands and asks for a command
                     System.out.println("Commands: attack, check, end, kys");
                     System.out.println("What do you want to do?");
-                    String command = myAction.nextLine();
+                    String command = myAction.nextLine().toLowerCase();
                     System.out.println(String.format("Selected command: %s\n",command));
                     switch (command) {
                         //Current player selected 'attack' : Begin attack protocol
@@ -130,25 +133,31 @@ public class Game {
                             2) There are 2 units on the attacking territory (taken care of in implementation)
                             3) Attacking owner does not own Defending territory
                             */
+                            players.get(i).printOwned();
+
                             Territory attacking = null;
 
                             //keep asking for a territory until we get a valid one
                             while (attacking==null) {
-                                System.out.print("attack from where? ");
+                                System.out.print("\nattack from where? ");
                                 attacking = getTerritory(myAction.nextLine());
                                 if (attacking==null) {
                                     System.out.println("That territory is not valid, try again.");
                                     attacking = null;
+                                } else if (attacking.getOwner()!=players.get(i)) {
+                                    System.out.println("You do not own that territory, try again.");
+                                    attacking = null;
                                 }
                             }
 
+                            //we can use this method if we have conquered all neighbouring territories
                             if (!attacking.ownsAllNeighbours()) {
-                                System.out.println(String.format("%s's Neighbours", attacking.getName()));
-                                attacking.printNeighbours();
+                                System.out.println("");
+                                attacking.printValidNeighbours(false);
 
                                 Territory defending = null;
                                 while (defending == null) {
-                                    System.out.print("who to attack? ");
+                                    System.out.print("\nwho to attack? ");
                                     defending = getTerritory(myAction.nextLine());
                                     if (defending == null) {
                                         System.out.println("That territory is not valid, try again.");
@@ -156,11 +165,14 @@ public class Game {
                                     } else if (!attacking.isNeighbour(defending)) {
                                         System.out.println("That territory is not a neighbour, try again.");
                                         defending = null;
+                                    } else if (attacking.getOwner()==defending.getOwner()) {
+                                        System.out.println("You can not attack yourself!");
+                                        defending = null;
                                     }
                                 }
                                 battle(attacking, defending);
                             } else {
-                                System.out.println("You can not attack as you have conquered all neighbouring territories.");
+                                System.out.println("You can not attack as you have conquered all neighbouring territories.\n");
                             }
                             break;
 
@@ -199,14 +211,7 @@ public class Game {
         System.out.println("The game has ended.");
     }
 
-    /**
-     * This main method represents the main game loop.
-     */
-    public static void main(String[] args) {
 
-        Game g1 = new Game();
-        g1.runGame();
-    }
 
     /**
      * Simulates the battle sequence between a territory attacking an adjacent territory. The attacker
@@ -217,8 +222,8 @@ public class Game {
      */
     private static void battle(Territory attacking, Territory defending) {
 
-        Scanner aCommand = new Scanner(System.in);
-
+        System.out.println(String.format("|------------------(Battle Commenced - %s vs. %s)------------------|",attacking.getName(),defending.getName()));
+        String end = "|------------------(Battle %s - %s)------------------|";
         String attInput;
         String defInput;
 
@@ -236,19 +241,21 @@ public class Game {
             System.out.println(String.format("%s's Units: %s\n%s's Units: %s",attName,attacking.getUnits(),defName,defending.getUnits()));
             if (defending.getUnits()==0) {
                 System.out.println(String.format("%s dominates over %s!",attacking.getName(),defending.getName()));
+                System.out.println(String.format(end,"Ended",attacking.getName()+" Wins!"));
                 defending.setOwner(attacking.getOwner());
                 fortifyPosition(attacking,defending,attDice);
                 break;
             } else if (attacking.getUnits()==1) {
                 System.out.println(String.format("%s drives off the attacker!",defName));
+                System.out.println(String.format(end,"Ended",defending.getName()+" Wins!"));
                 break;
             }
 
             System.out.println(String.format("\n%s is attacking. %s, would you like to attack or retreat?",attName,attName));
-            attInput = aCommand.nextLine();
+            attInput = myAction.nextLine().toLowerCase();
 
             //If the command is to attack or retreat
-            if (attInput.equalsIgnoreCase("attack")) {
+            if (attInput.equals("attack")) {
 
                 /*Check the number of units contained in the attacking territory. The attacker must have
                 at least two units in their territory; one unit attacks the defended territory while the
@@ -262,7 +269,7 @@ public class Game {
                     /*If the attacking territory contains exactly three units, ask the attacker if he/she would
                     like to use 1 or 2 attacking dice*/
                     System.out.println(attName + ", would you like to attack with 1 or 2 dice?");
-                    attInput = aCommand.nextLine();
+                    attInput = myAction.nextLine();
 
                     //Check for invalid input
                     try {
@@ -276,7 +283,7 @@ public class Game {
                     /*If the attacking territory contains four or more units before the next attack, ask the attacker
                     if he/she would like to use 1,2 or 3 attacking dice*/
                     System.out.println(attName + ", would you like to attack with 1, 2 or 3 dice?");
-                    attInput = aCommand.nextLine();
+                    attInput = myAction.nextLine();
 
                     //check for invalid input
                     try {
@@ -300,7 +307,7 @@ public class Game {
                 } else {
                     //Defender choses to roll one die or two dice
                     System.out.println(defName + ", would you like to defend with 1 or 2 dice?");
-                    defInput = aCommand.nextLine();
+                    defInput = myAction.nextLine();
 
                     //Check for invalid input
                     try {
@@ -317,7 +324,7 @@ public class Game {
                 defending.removeUnits(lost[1]);
                 System.out.println("");
 
-            } else if (attInput.equalsIgnoreCase("retreat")) {
+            } else if (attInput.equals("retreat")) {
                 //Attacker chooses to retreat from the battle
                 retreat = true;
             }
@@ -398,16 +405,14 @@ public class Game {
      * @param finalT   The territory that will add units
      */
     private static void fortifyPosition(Territory initialT, Territory finalT, int attDice) {
-        Scanner command = new Scanner(System.in);
 
         String input;
-
         int numUnits = 0;
 
         boolean fortifyCommand = false;
         while(!fortifyCommand){
             System.out.println("How many troops would you like to move from " + initialT.getName() + " to " + finalT.getName() + "?");
-            input = command.nextLine();
+            input = myAction.nextLine();
             //Check if input is a valid number of units to move
             try {
                 numUnits = Integer.parseInt(input);
@@ -451,5 +456,14 @@ public class Game {
             }
         }
         return numActive;
+    }
+
+    /**
+     * This main method represents the main game loop.
+     */
+    public static void main(String[] args) {
+
+        Game g1 = new Game();
+        g1.runGame();
     }
 }
