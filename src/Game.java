@@ -25,7 +25,7 @@ public class Game {
      * @see WorldMap
      */
     private WorldMap world;
-
+    private int numActivePlayer;
     private static Scanner myAction;
 
     /**
@@ -39,6 +39,7 @@ public class Game {
         myAction = new Scanner(System.in);
         System.out.println("Please input the number of players (max-6 min-2):");
         int numPlayers = Integer.parseInt(myAction.nextLine());
+        numActivePlayer = numPlayers;
         while (numPlayers > 6 || numPlayers < 2)
         {
             System.out.println("Please input a correct amount of players (max-6 min-2):");
@@ -55,7 +56,14 @@ public class Game {
         reorderPlayers();
         world.setUp(players);
     }
-
+    public Game(String test) {
+        players = new ArrayList<>(2);
+        players.add(new Player("Jim", "red"));
+        players.add(new Player("Fred", "blue"));
+        world = new WorldMap("Earth",players);
+        myAction = new Scanner(System.in);
+        numActivePlayer = 2;
+    }
     /**
      * Retrieves a territory from the map (or null).
      * {@link WorldMap#getTerritory(String)}
@@ -110,95 +118,93 @@ public class Game {
         while (!finished) {
             //Loop through each player (Turns), until the game is over.
             for (int i = 0; i < players.size(); i++) {
-                //Print out number of remaining players and whose turn it is
-                System.out.println(String.format("Remaining Players: %s\n",players.size()));    //TODO: change this to amount of active players
-                //While loop for current players turn
-                boolean playerTurn = false;
-                while (!playerTurn) {
-                    System.out.println(String.format("It is %s of %s's turn.",players.get(i).getName(),players.get(i).getColour()));
-                    //Print out the available commands and asks for a command
-                    System.out.println("Commands: attack, check, end, kys");
-                    System.out.println("What do you want to do?");
-                    String command = myAction.nextLine().toLowerCase();
-                    System.out.println(String.format("Selected command: %s\n",command));
-                    switch (command) {
-                        //Current player selected 'attack' : Begin attack protocol
-                        case "attack":
+                if(players.get(i).isActive())
+                {
+                    //Print out number of remaining players and whose turn it is
+                    System.out.println(String.format("Remaining Players: %s\n",numActivePlayer));
+                    //While loop for current players turn
+                    boolean playerTurn = false;
+                    while (!playerTurn) {
+                        System.out.println(String.format("It is %s of %s's turn.",players.get(i).getName(),players.get(i).getColour()));
+                        //Print out the available commands and asks for a command
+                        System.out.println("Commands: attack, check, end, kys");
+                        System.out.println("What do you want to do?");
+                        String command = myAction.nextLine().toLowerCase();
+                        System.out.println(String.format("Selected command: %s\n",command));
+                        switch (command) {
+                            //Current player selected 'attack' : Begin attack protocol
+                            case "attack":
                             /*
                             Attacking Conditions:
                             1) Defending territory must be a neighbour to Attacking territory
                             2) There are 2 units on the attacking territory (taken care of in implementation)
                             3) Attacking owner does not own Defending territory
                             */
-                            Territory attacking = null;
+                                Territory attacking = null;
 
-                            //keep asking for a territory until we get a valid one
-                            while (attacking==null) {
-                                players.get(i).printOwned();
-                                System.out.print("\nattack from where? ");
-                                attacking = getTerritory(myAction.nextLine());
-                                if (attacking==null) {
-                                    System.out.println("\nThat territory is not valid, try again.");
-                                    attacking = null;
-                                } else if (attacking.getOwner()!=players.get(i)) {
-                                    System.out.println("\nYou do not own that territory, try again.");
-                                    attacking = null;
-                                }
-                            }
-
-                            //we can use this method if we have conquered all neighbouring territories
-                            if (!attacking.ownsAllNeighbours()) {
-                                System.out.println("");
-
-                                Territory defending = null;
-                                while (defending == null) {
-                                    attacking.printValidNeighbours(false);
-                                    System.out.print("\nwho to attack? ");
-                                    defending = getTerritory(myAction.nextLine());
-                                    if (defending == null) {
+                                //keep asking for a territory until we get a valid one
+                                while (attacking==null) {
+                                    players.get(i).printOwned();
+                                    System.out.print("\nattack from where? ");
+                                    attacking = getTerritory(myAction.nextLine());
+                                    if (attacking==null) {
                                         System.out.println("\nThat territory is not valid, try again.");
-                                        defending = null;
-                                    } else if (!attacking.isNeighbour(defending)) {
-                                        System.out.println("\nThat territory is not a neighbour, try again.");
-                                        defending = null;
-                                    } else if (attacking.getOwner()==defending.getOwner()) {
-                                        System.out.println("\nYou can not attack yourself!");
-                                        defending = null;
+                                        attacking = null;
+                                    } else if (attacking.getOwner()!=players.get(i)) {
+                                        System.out.println("\nYou do not own that territory, try again.");
+                                        attacking = null;
                                     }
                                 }
-                                battle(attacking, defending);
-                                System.out.println("");
-                            } else {
-                                System.out.println("You can not attack as you have conquered all neighbouring territories.\n");
-                            }
-                            break;
 
-                        //Current player selected 'end' : Ends Players turn.
-                        case "end":
-                            System.out.println("you typed end");
+                                //we can use this method if we have conquered all neighbouring territories
+                                if (!attacking.ownsAllNeighbours()) {
+                                    System.out.println("");
+
+                                    Territory defending = null;
+                                    while (defending == null) {
+                                        attacking.printValidNeighbours(false);
+                                        System.out.print("\nwho to attack? ");
+                                        defending = getTerritory(myAction.nextLine());
+                                        if (defending == null) {
+                                            System.out.println("\nThat territory is not valid, try again.");
+                                            defending = null;
+                                        } else if (!attacking.isNeighbour(defending)) {
+                                            System.out.println("\nThat territory is not a neighbour, try again.");
+                                            defending = null;
+                                        } else if (attacking.getOwner()==defending.getOwner()) {
+                                            System.out.println("\nYou can not attack yourself!");
+                                            defending = null;
+                                        }
+                                    }
+                                    battle(attacking, defending);
+                                    System.out.println("");
+                                } else {
+                                    System.out.println("You can not attack as you have conquered all neighbouring territories.\n");
+                                }
+                                break;
+
+                            //Current player selected 'end' : Ends Players turn.
+                            case "end":
+                                System.out.println("you typed end");
+                                playerTurn = true;
+                                break;
+
+                            //Current player selected 'check' : Prints current state of the world map
+                            case "check":
+                                checkWorld();
+                                break;
+                            //Current player selected an invalid command, lets player know this and asks for a command again.
+                            default:
+                                System.out.println("Not a valid command");
+                                break;
+
+                        }
+                        updateIsInactive();
+                        //Only one player remains, end the game.
+                        if(numActivePlayer== 1){
+                            finished = true;
                             playerTurn = true;
-                            break;
-
-                        //Current player selected 'check' : Prints current state of the world map
-                        case "check":
-                            checkWorld();
-                            break;
-
-                        //Not for submission. please delete this.
-                        case "kys":
-                            players.remove(i);
-                            playerTurn = true;
-                            break;
-
-                        //Current player selected an invalid command, lets player know this and asks for a command again.
-                        default:
-                            System.out.println("Not a valid command");
-                            break;
-
-                    }
-                    //Only one player remains, end the game.
-                    if(players.size() == 1){
-                        finished = true;
+                        }
                     }
                 }
             }
@@ -435,7 +441,7 @@ public class Game {
      *
      * @return int the number of active players left
      */
-    public int updateIsInactive()
+    public void updateIsInactive()
     {
         int numActive = 0;
         ArrayList<Territory> territories = world.getTerritories();
@@ -454,7 +460,7 @@ public class Game {
                 }
             }
         }
-        return numActive;
+        numActivePlayer=numActive;
     }
 
     /**
@@ -462,7 +468,7 @@ public class Game {
      */
     public static void main(String[] args) {
 
-        Game g1 = new Game();
+        Game g1 = new Game("test");
         g1.runGame();
     }
 }

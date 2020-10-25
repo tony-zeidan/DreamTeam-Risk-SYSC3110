@@ -22,6 +22,22 @@ public class WorldMap {
         territories = new HashMap<>();
         createTerritories();
     }
+    public WorldMap(String name,List<Player> players)
+    {
+        this.name = name;
+        rand = new Random();
+        territories = new HashMap<>();
+        Territory mars = new Territory("Mars");
+        Territory earth = new Territory("Earth");
+        mars.addNeighbour(earth);
+        earth.addNeighbour(mars);
+        mars.setOwner(players.get(0));
+        earth.setOwner(players.get(1));
+        territories.put("Earth",earth);
+        territories.put("Mars",mars);
+        mars.setUnits(10);
+        earth.setUnits(1);
+    }
 
     public String getName() {
         return name;
