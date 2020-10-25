@@ -187,7 +187,7 @@ public class Game {
                     while (!playerTurn) {
                         System.out.println(String.format("\nIt is %s of %s's turn.", players.get(i).getName(), players.get(i).getColour()));
                         //Print out the available commands and asks for a command
-                        System.out.println("Commands: attack, check, end, kys");
+                        System.out.println("Commands: attack, worldstate, end");
                         System.out.println("What do you want to do?");
                         String command = myAction.nextLine().toLowerCase();
                         System.out.println(String.format("Selected command: %s\n", command));
