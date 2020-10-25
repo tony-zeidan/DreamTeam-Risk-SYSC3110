@@ -9,13 +9,22 @@ import java.util.Random;
  * @author Anthony Dooley
  */
 public class WorldMap {
+    private String name;
     private HashMap<String, Territory> territories;
     private Random rand;
-    public WorldMap()
+
+
+
+    public WorldMap(String name)
     {
+        this.name = name;
         rand = new Random();
         territories = new HashMap<>();
         createTerritories();
+    }
+
+    public String getName() {
+        return name;
     }
 
     /**

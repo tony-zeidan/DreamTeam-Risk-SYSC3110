@@ -35,7 +35,7 @@ public class Game {
      */
     public Game() {
         players = new ArrayList<>(6);
-        world = new WorldMap();
+        world = new WorldMap("Earth");
         myAction = new Scanner(System.in);
         System.out.println("Please input the number of players (max-6 min-2):");
         int numPlayers = Integer.parseInt(myAction.nextLine());
@@ -98,9 +98,6 @@ public class Game {
      */
     public void runGame() {
 
-        //Create a scanner object that scans the current players action
-        Scanner myAction = new Scanner(System.in);
-
         System.out.println("The order of players: ");
 
         //Tells the Player order before starting the game
@@ -133,19 +130,18 @@ public class Game {
                             2) There are 2 units on the attacking territory (taken care of in implementation)
                             3) Attacking owner does not own Defending territory
                             */
-                            players.get(i).printOwned();
-
                             Territory attacking = null;
 
                             //keep asking for a territory until we get a valid one
                             while (attacking==null) {
+                                players.get(i).printOwned();
                                 System.out.print("\nattack from where? ");
                                 attacking = getTerritory(myAction.nextLine());
                                 if (attacking==null) {
-                                    System.out.println("That territory is not valid, try again.");
+                                    System.out.println("\nThat territory is not valid, try again.");
                                     attacking = null;
                                 } else if (attacking.getOwner()!=players.get(i)) {
-                                    System.out.println("You do not own that territory, try again.");
+                                    System.out.println("\nYou do not own that territory, try again.");
                                     attacking = null;
                                 }
                             }
@@ -153,24 +149,25 @@ public class Game {
                             //we can use this method if we have conquered all neighbouring territories
                             if (!attacking.ownsAllNeighbours()) {
                                 System.out.println("");
-                                attacking.printValidNeighbours(false);
 
                                 Territory defending = null;
                                 while (defending == null) {
+                                    attacking.printValidNeighbours(false);
                                     System.out.print("\nwho to attack? ");
                                     defending = getTerritory(myAction.nextLine());
                                     if (defending == null) {
-                                        System.out.println("That territory is not valid, try again.");
+                                        System.out.println("\nThat territory is not valid, try again.");
                                         defending = null;
                                     } else if (!attacking.isNeighbour(defending)) {
-                                        System.out.println("That territory is not a neighbour, try again.");
+                                        System.out.println("\nThat territory is not a neighbour, try again.");
                                         defending = null;
                                     } else if (attacking.getOwner()==defending.getOwner()) {
-                                        System.out.println("You can not attack yourself!");
+                                        System.out.println("\nYou can not attack yourself!");
                                         defending = null;
                                     }
                                 }
                                 battle(attacking, defending);
+                                System.out.println("");
                             } else {
                                 System.out.println("You can not attack as you have conquered all neighbouring territories.\n");
                             }
@@ -184,6 +181,7 @@ public class Game {
 
                         //Current player selected 'check' : Prints current state of the world map
                         case "check":
+
                             printMap();
                             break;
 
@@ -209,6 +207,11 @@ public class Game {
 
         //The game has ended
         System.out.println("The game has ended.");
+    }
+
+    private void checkWorld() {
+        System.out.println(String.format("|----------(Checking the World of %s)----------|",world.getName()));
+        printMap();
     }
 
 
@@ -329,9 +332,6 @@ public class Game {
                 retreat = true;
             }
         }
-
-        //Declare the battle to be officially resolved
-        System.out.println("Battle is over between " + attName + " and " + defending.getOwner().getName());
     }
 
     /**
