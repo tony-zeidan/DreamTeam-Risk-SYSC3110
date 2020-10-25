@@ -46,16 +46,6 @@ public class Player {
         this.name = name;
         this.colour = colour;
         this.active = true;
-    }
-
-    /**
-     * Constructor for instances of Player class.
-     *
-     * @param name The name of the player that this object represents
-     */
-    public Player(String name) {
-        this.name = name;
-        colour = null;
         owned = new ArrayList<>();
     }
 
@@ -112,7 +102,10 @@ public class Player {
     public void removeTerritory(Territory territory) {
         owned.remove(territory);
     }
-
+    public ArrayList<Territory> getOwnedTerritories()
+    {
+        return (ArrayList)owned;
+    }
     /**
      * Determine if the player is out of the game or not.
      *
