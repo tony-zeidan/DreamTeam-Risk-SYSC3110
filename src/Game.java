@@ -94,19 +94,21 @@ public class Game {
         //The games loop
         boolean finished = false;
         while (!finished) {
-            //Loop through each player, until the game is over.
+            //Loop through each player (Turns), until the game is over.
             for (int i = 0; i < players.size(); i++) {
-                if(players.size() == 1){
-                    finished = true;
-                }
+                //Print out number of remaining players and whose turn it is
                 System.out.println("Remaining Players: "+ players.size() + "\n");
                 System.out.println("It is " + players.get(i).getName() + "'s turn.");
+                //While loop for current players turn
                 boolean playerTurn = false;
                 while (!playerTurn) {
-                    System.out.println("Commands: attack, fortify, check, end, kys");
+                    //Print out the available commands and asks for a command
+                    System.out.println("Commands: attack, check, end, kys");
+                    System.out.println("What do you want to do?");
                     String command = myAction.nextLine();
-                    System.out.println("Command put in:" + command);
+                    System.out.println("Selected command: " + command);
                     switch (command) {
+                        //Current player selected 'attack' : Begin attack protocol
                         case "attack":
                             /*
                             Attacking Conditions:
@@ -147,42 +149,40 @@ public class Game {
                                 System.out.println("You can not attack as you have conquered all neighbouring territories");
                             }
                             break;
+
+                        //Current player selected 'end' : Ends Players turn.
                         case "end":
                             System.out.println("you typed end");
                             playerTurn = true;
                             break;
+
+                        //Current player selected 'check' : Prints current state of the world map
                         case "check":
                             game.printMap();
                             break;
+
+                        //Not for submission. please delete this.
                         case "kys":
                             players.remove(i);
                             playerTurn = true;
                             break;
+
+                        //Current player selected an invalid command, lets player know this and asks for a command again.
                         default:
                             System.out.println("Not a valid command");
                             break;
+
                     }
-                    //Only one is still alive, end the game.
+                    //Only one player remains, end the game.
                     if(players.size() == 1){
                         finished = true;
                     }
                 }
             }
         }
+
+        //The game has ended
         System.out.println("The game has ended.");
-
-        Game g1 = new Game();
-        g1.addPlayer(new Player("Tony","RED"));
-        g1.addPlayer(new Player("Ethan","BLUE"));
-        g1.addPlayer(new Player("Anthony","YELLOW"));
-        g1.addPlayer(new Player("Verge","GREEN"));
-        WorldMap w1 = new WorldMap();
-        w1.setUp(g1.getPlayers());
-
-        w1.printMap();
-
-        System.out.println("Works");
-
     }
 
     /**
