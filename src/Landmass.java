@@ -5,7 +5,6 @@ import java.util.List;
  * Landmass represents a region in which smaller territories are contained (ex. Continents)
  *
  * @author Tony Zeidan
- *
  */
 public class Landmass {
 

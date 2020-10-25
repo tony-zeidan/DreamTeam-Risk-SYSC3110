@@ -3,6 +3,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * WorldMap represents the entire map of that the Game contains.
+ *
+ * @author Anthony Dooley
+ */
 public class WorldMap {
     private HashMap<String, Territory> territories;
     private Random rand;

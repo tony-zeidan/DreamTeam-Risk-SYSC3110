@@ -8,7 +8,6 @@ import java.util.List;
  * @author Tony Zeidan
  * @author Ethan Chase
  * @author Anthony Dooley
- * @author Kyler Verge
  *
  * @since 1.00
  * @version 1.01
