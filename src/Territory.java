@@ -159,9 +159,23 @@ public class Territory {
         System.out.println(tabs+toString());
     }
 
+    public boolean isAlly(Territory territory) {
+        return (owner== territory.getOwner());
+    }
+
     public void printNeighbours() {
+        System.out.println(String.format("%s's Neighbours\n",name));
         for (Territory t : neighbours.values()) {
             System.out.print(String.format("%s (%s), ",t.getName(),t.getOwner().getColour()));
+        }
+    }
+
+    public void printValidNeighbours(boolean ally) {
+        System.out.println(String.format("%s's Neighbours (ally=%s):",name,ally));
+        for (Territory t : neighbours.values()) {
+            if (isAlly(t)==ally) {
+                System.out.print(String.format("%s (%s), ",t.getName(),t.getOwner().getColour()));
+            }
         }
     }
 }
