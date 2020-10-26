@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * @author Anthony Dooley
  *
  * @since 1.00
- * @version 1.01
+ * @version 1.00
  */
 public class Player {
 
@@ -43,7 +43,7 @@ public class Player {
         this.name = name;
         this.colour = colour;
         this.active = true;
-        owned = new ArrayList<>();
+        owned = new LinkedList<>();
     }
 
     /**
