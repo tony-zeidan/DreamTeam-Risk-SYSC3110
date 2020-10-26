@@ -9,6 +9,7 @@ import java.util.LinkedList;
  * @author Ethan Chase
  * @author Anthony Dooley
  * @author Kyler Verge
+ *
  * @version 1.00
  * @since 1.00
  */
@@ -356,7 +357,6 @@ public class Game {
              */
             String battleCommand = null;
             while (battleCommand == null) {
-                attacking.printValidNeighbours(false);
                 System.out.println(String.format("\n%s is attacking. %s, would you like to attack or retreat?", attName, attName));
                 battleCommand = myAction.nextLine().toLowerCase();
                 if (!battleCommand.equals("attack") && !battleCommand.equals("retreat")) {
