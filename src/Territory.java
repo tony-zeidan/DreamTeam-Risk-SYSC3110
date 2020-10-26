@@ -186,11 +186,11 @@ public class Territory {
     public void printValidNeighbours(boolean ally) {
 
         //check if the the user wants to print allied neighbours or enemy neighbours
-        if (ally==true) {
-            System.out.println(String.format("%s's Enemy Neighbours ():", name));
+        if (ally!=true) {
+            System.out.println(String.format("%s's Enemy Neighbours:", name));
         }
         else {
-            System.out.println(String.format("%s's Ally Neighbours ():", name));
+            System.out.println(String.format("%s's Ally Neighbours:", name));
         }
         for (Territory t : neighbours.values()) {
             if (isAlly(t)==ally) {
