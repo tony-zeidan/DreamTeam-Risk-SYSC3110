@@ -53,7 +53,13 @@ As soon as the game receives input for all the player names, the game begins! Th
  All of these processes will will continue until the game ends.
    
 ### Decision Making:
-
+For classes we created :
+A Territory class to have a name, with a number of units occupying it, ownership being a Player object and its neighbours. We decided to use a HashMap to implement the neighbours, because the look up time is 0(1).  Instead of a list or Binary Search Tree where searching respectively is 0(n) and 0(logn).
+A WorldMap to hold a set of Territory objects and a name for the map. As well as preforming the random set up for the risk game. The set of Territories are implemented using a HashMap because of its quick look up time.
+A Player class is to show ownership, with name, and color. As well as a list of territories to be able to check if a Player is still in the game. This is because a player loses when they have 0 territories, this list is implemented with a LinkedList because there will be a fair bit of adds and removes, and LinkedList are more efficient when removing. But, because there will not be many removes in a row between user input the efficiency will not be noticeable. Also in the Player class holds a Boolean active.
+Game class holds a WorldMap object and a list of Player Objects. The list of Player objects is implemented using an array list as it is more efficient to traverse and there will be no deletions. But again, this efficiency will not be noticeable. The Game class also hold attack,fortify and end turn functionalities, with the game loop. 
+Later we try to remove responsibilities from Game class as it has a lot.
+    
 ### Milestones:
 - [x] Milestone 1: A text-based playable version of the game, i.e., players should be able to play the game via the console using the keyboard.
     >A text-based playable version of the game, i.e., players should be able to
