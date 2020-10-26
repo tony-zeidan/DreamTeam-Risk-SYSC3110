@@ -59,7 +59,7 @@ public class Game {
         int numOfPlayers = 0;
         boolean validNumEntered = false;
         while (!validNumEntered) {
-            System.out.println("Please input the number of players (max-6 min-2):");
+            System.out.println("Please input the number of players (max-6 min-2): ");
             input = myAction.nextLine();
 
             //attempt to parse an integer value from the user's input
@@ -100,7 +100,7 @@ public class Game {
          */
         for (int i = 0; i < numOfPlayers; i++) {
             //get this players name
-            System.out.print(String.format("Player %s Name:", i + 1));
+            System.out.print(String.format("Player %s Name: ", i + 1));
             String playerName = myAction.nextLine();
 
             int randIndex = rand.nextInt(randomColors.size());
