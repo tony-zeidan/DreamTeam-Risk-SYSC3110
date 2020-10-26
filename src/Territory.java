@@ -194,7 +194,7 @@ public class Territory {
         }
         for (Territory t : neighbours.values()) {
             if (isAlly(t)==ally) {
-                System.out.print(String.format("%s (%s,Units:%s), ",t.getName(),t.getOwner().getColour(),t.getUnits()));
+                System.out.print(String.format("%s (%s,Units: %s), ",t.getName(),t.getOwner().getColour(),t.getUnits()));
             }
         }
     }
