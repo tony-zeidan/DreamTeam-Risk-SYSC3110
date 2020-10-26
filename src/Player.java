@@ -125,7 +125,7 @@ public class Player {
     public void printOwned() {
         System.out.println(String.format("%s owns the following territories:",name));
         for (Territory t : owned) {
-            System.out.print(String.format("%s (U:%s), ",t.getName(),t.getUnits()));
+            System.out.print(String.format("%s (Units:%s), ",t.getName(),t.getUnits()));
         }
     }
 }
