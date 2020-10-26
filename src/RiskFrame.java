@@ -28,6 +28,8 @@ public class RiskFrame extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
+
+                //draw the scaled instance of the image
                 boolean b = g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),Image.SCALE_SMOOTH), 0, 0, null);
             }
         };
@@ -37,9 +39,15 @@ public class RiskFrame extends JFrame {
         buttonPane.add(new JButton("World State"));
         buttonPane.add(new JButton("End Turn"));
 
+        JPanel infoPane = new JPanel(new BorderLayout());
+        infoPane.add(BorderLayout.NORTH,new JLabel("Game Information"));
+        infoPane.add(BorderLayout.CENTER,new JTextArea());
+        infoPane.add(BorderLayout.SOUTH,new JTextField("Whatever"));
+
 
         getContentPane().add(BorderLayout.CENTER,board);
         getContentPane().add(BorderLayout.EAST,buttonPane);
+        getContentPane().add(BorderLayout.WEST,infoPane);
         pack();
         setVisible(true);
     }
