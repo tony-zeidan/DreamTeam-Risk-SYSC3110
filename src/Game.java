@@ -1,5 +1,6 @@
 import java.util.*;
 import java.util.List;
+import java.util.LinkedList;
 
 /**
  * Class Game implements the main functionality of the RISK game.
@@ -81,7 +82,14 @@ public class Game {
         numActivePlayer = numOfPlayers;
 
         //six random colors for players
-        List<String> randomColors = Arrays.asList("RED", "GREEN", "BLUE", "YELLOW", "WHITE", "BLACK");
+        List<String> randomColors = new LinkedList<>();
+        randomColors.add("RED");
+        randomColors.add("GREEN");
+        randomColors.add("BLUE");
+        randomColors.add("YELLOW");
+        randomColors.add("WHITE");
+        randomColors.add("BLACK");
+
         Random rand = new Random();
 
         /*
@@ -94,10 +102,11 @@ public class Game {
             System.out.print(String.format("Player %s Name:", i + 1));
             String playerName = myAction.nextLine();
 
+            int randIndex = rand.nextInt(randomColors.size());
             //generate and assign random colours
-            String colour = randomColors.get(rand.nextInt(randomColors.size()));
+            String colour = randomColors.get(randIndex);
             System.out.println(String.format("Player %s Colour is: %s\n", i + 1, colour));
-            randomColors.remove(colour);
+            randomColors.remove(randIndex);
             players.add(new Player(playerName, colour));
         }
         //shuffle the order of the players
