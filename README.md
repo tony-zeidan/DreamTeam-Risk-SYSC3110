@@ -26,7 +26,7 @@ Kyler Verge | user input queries, attacking conditions, UML/SQ
 
 milestone 1 phase
 
-[UML/Sequence Diagrams](https://lucid.app/invitations/accept/fdd00eb0-1f04-4212-8db9-c9dd045a9c40)
+[UML](https://lucid.app/invitations/accept/fdd00eb0-1f04-4212-8db9-c9dd045a9c40)
 
 ### How to Use:
 When a user runs the program, they initially will be prompted for how many players they wish to be in the game (as the map is hardcoded).
