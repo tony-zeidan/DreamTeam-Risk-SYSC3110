@@ -1,6 +1,8 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.Point;
 import java.awt.image.ImagingOpException;
@@ -34,6 +36,17 @@ public class RiskFrame extends JFrame {
             }
         };
 
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Options");
+        JRadioButtonMenuItem fullscreen = new JRadioButtonMenuItem("Fullscreen");
+
+        menu.add(fullscreen);
+        menuBar.add(menu);
+        menuBar.add(Box.createHorizontalGlue());
+        menuBar.add(new JLabel("Player N's Turn"));
+
+        setJMenuBar(menuBar);
+
         JPanel buttonPane = new JPanel(new GridLayout(3,1));
         buttonPane.add(new JButton("Attack"));
         buttonPane.add(new JButton("World State"));
@@ -48,10 +61,12 @@ public class RiskFrame extends JFrame {
         getContentPane().add(BorderLayout.CENTER,board);
         getContentPane().add(BorderLayout.EAST,buttonPane);
         getContentPane().add(BorderLayout.WEST,infoPane);
+
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setUndecorated(true);
         pack();
         setVisible(true);
     }
-
     public static void main(String[] args) {
         RiskFrame rf = new RiskFrame();
     }
