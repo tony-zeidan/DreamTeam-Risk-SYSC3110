@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,15 +22,6 @@ public class Territory {
      * The units that occupy this territory.
      */
     private int units;
-    /**
-     * The player that currently owns units in this territory.
-     */
-    private Player owner;
-
-    /**
-     * The map implementation of the neighbouring territories.
-     */
-    private Map<String,Territory> neighbours;
 
     /** Constructor for the territory object that contains a name and current player.
      *
@@ -37,18 +30,8 @@ public class Territory {
     public Territory(String name){
         this.name = name;
         units = 0;
-        owner = null;
-        neighbours = new HashMap<>();
     }
 
-    /**
-     * Add a territory to the list of territories neighbouring this territory.
-     *
-     * @param territory The new neighbouring territory
-     */
-    public void addNeighbour(Territory territory) {
-        neighbours.put(territory.getName(),territory);
-    }
 
     /** Get the name of the territory.
      *
@@ -94,60 +77,6 @@ public class Territory {
         this.units -= units;
     }
 
-    /** Get the player that occupies the territory.
-     *
-     * @return The player that currently occupies the territory.
-     */
-    public Player getOwner() {
-        return owner;
-    }
-
-    /** Set new player as occupant of the territory.
-     *
-     * @param owner The new player that now occupies the territory
-     */
-    public void setOwner(Player owner) {
-        Player oldOwner= this.owner;
-        if(oldOwner != null)
-        {
-            oldOwner.removeTerritory(this);
-        }
-        this.owner = owner;
-        this.owner.addTerritory(this);
-    }
-
-    /**
-     * Determines if a territory is a neighbour to this one.
-     *
-     * @param territory The territory to check
-     * @return Whether the given territory is a neighbour
-     */
-    public boolean isNeighbour(Territory territory) {
-        return neighbours.containsValue(territory);
-    }
-
-    /**
-     * Determines if another territory is allied (same owner) as this one.
-     *
-     * @param territory The territory to check
-     * @return Whether the same person owns both territories
-     */
-    public boolean isAlly(Territory territory) {
-        return (owner== territory.getOwner());
-    }
-
-    /**
-     * Determines if this territory and all ones around it are conquered by
-     * the same player.
-     *
-     * @return Whether the player has conquered all neighbouring territories
-     */
-    public boolean ownsAllNeighbours() {
-        for (Territory t : neighbours.values()) {
-            if (owner!=t.getOwner()) return false;
-        }
-        return true;
-    }
 
     /**
      * Retrieves a string representation of the territory.
@@ -156,7 +85,7 @@ public class Territory {
      */
     @Override
     public String toString() {
-        return String.format("The Territory of %s:\n\towner: %s \n\tunits: %s",name,owner,units);
+        return String.format("The Territory of %s: \n\tunits: %s",name,units);
     }
 
     /**
@@ -173,29 +102,5 @@ public class Territory {
      */
     public void print(String tabs){
         System.out.println(tabs+toString());
-    }
-
-    /**
-     * Prints the neighbours of this territory according to the ally boolean.
-     * If true, the method will print only allied neighbours.
-     * If false, the method will print only enemy neighbours.
-     * {@link Territory#isAlly(Territory)}
-     *
-     * @param ally Whether to print allies (true) or enemies (false)
-     */
-    public void printValidNeighbours(boolean ally) {
-
-        //check if the the user wants to print allied neighbours or enemy neighbours
-        if (ally!=true) {
-            System.out.println(String.format("%s's Enemy Neighbours:", name));
-        }
-        else {
-            System.out.println(String.format("%s's Ally Neighbours:", name));
-        }
-        for (Territory t : neighbours.values()) {
-            if (isAlly(t)==ally) {
-                System.out.print(String.format("%s (%s,Units: %s), ",t.getName(),t.getOwner().getColour(),t.getUnits()));
-            }
-        }
     }
 }

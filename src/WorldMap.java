@@ -21,6 +21,11 @@ public class WorldMap {
     private String name;
 
     /**
+     * Container for players playing on the map.
+     */
+    private List<Player> players;
+
+    /**
      * The map containing all territories (used to implement graph).
      */
     private HashMap<String, Territory> allTerritories;
@@ -29,6 +34,8 @@ public class WorldMap {
      * The map containing the coordinates of each region.
      */
     private HashMap<Territory,Point> allCoordinates;
+
+    private List<Territory[]> mapEdgeList;
 
     /**
      * Random variable for assigning territories in setup.
@@ -44,31 +51,32 @@ public class WorldMap {
     public WorldMap(String name)
     {
         this.name = name;
+        players = null;
         rand = new Random();
+        this.players = players;
         allTerritories = new HashMap<>();
         allCoordinates = new HashMap<>();
+        mapEdgeList = new ArrayList<>(); //test edge list
         readMap();
     }
 
     /**
      * Testing constructor for WorldMap.
      * {@link Game#Game(String)}
-     *
-     * @param name The name of the world
-     * @param players A list of pre-made players
      */
-    public WorldMap(String name,List<Player> players)
+    public WorldMap()
     {
-        this.name = name;
+        name = "TEST: Solar System";
         rand = new Random();
+        Player p1 = new Player("Tony","RED");
+        Player p2 = new Player("Fred","BLUE");
         allTerritories = new HashMap<>();
         allCoordinates = new HashMap<>();
         Territory mars = new Territory("Mars");
         Territory earth = new Territory("Earth");
-        mars.addNeighbour(earth);
-        earth.addNeighbour(mars);
-        mars.setOwner(players.get(0));
-        earth.setOwner(players.get(1));
+        addTerritoryNeighbour(mars,earth);
+        addPlayerOwned(p1,mars);
+        addPlayerOwned(p2,mars);
         allTerritories.put("Earth",earth);
         allTerritories.put("Mars",mars);
         allCoordinates.put(earth,new Point(60,60));
@@ -96,7 +104,7 @@ public class WorldMap {
         HashMap<Territory,String> neighbourStrings = new HashMap<>();
 
         //use a regex pattern to recognize each portion our map syntax in each line of the file
-        Pattern valid = Pattern.compile("(\\w+\\s?)+\\(((\\d+):(\\d+))\\)((,?((\\w+)\\s?)+)+)");
+        Pattern valid = Pattern.compile("((\\w+\\s?)+)\\(((\\d+):(\\d+))\\)((,?((\\w+)\\s?)+)+)");
 
         //attempt to read the file
         try {
@@ -113,11 +121,13 @@ public class WorldMap {
 
                     //parse the information from the different groups of the line
                     readName = matcher.group(1);
-                    int xCoord = Integer.parseInt(matcher.group(3));
-                    int yCoord = Integer.parseInt(matcher.group(4));
+                    int xCoord = Integer.parseInt(matcher.group(4));
+                    int yCoord = Integer.parseInt(matcher.group(5));
                     Point readCoordinates = new Point(xCoord,yCoord);
-                    String readNeighbours = matcher.group(5).substring(1);  //substring gets rid of first comma
+                    String readNeighbours = matcher.group(6).substring(1);  //substring gets rid of first comma
                     Territory readTerritory = new Territory(readName);
+
+                    //System.out.println(matcher.group(1));
 
                     //put the information in the correct spots
                     allTerritories.put(readName,readTerritory);
@@ -139,10 +149,66 @@ public class WorldMap {
         for (Territory t : neighbourStrings.keySet()) {
             for (String rt : neighbourStrings.get(t).split(",")) {
                 if (allTerritories.containsKey(rt)) {
-                    t.addNeighbour(allTerritories.get(rt));
+                    addTerritoryNeighbour(t,allTerritories.get(rt));
                 }
             }
         }
+    }
+
+    public boolean areNeighbours(Territory first, Territory second) {
+        for (Territory[] t : mapEdgeList) {
+            if (t[0].equals(first)&&t[1].equals(second)) return true;
+            if (t[0].equals(second)&&t[1].equals(first)) return true;
+        }
+        return false;
+    }
+
+    public void addPlayerOwned(Player player,Territory territory) {
+        Player previousOwner = getTerritoryOwner(territory);
+        removePlayerOwned(previousOwner,territory);
+        player.addTerritory(territory);
+    }
+
+    public void removePlayerOwned(Player player,Territory territory) {
+        if (player==null) return;
+        player.removeTerritory(territory);
+    }
+
+    public void addTerritoryNeighbour(Territory first, Territory second) {
+        if (areNeighbours(first,second)) return;
+        mapEdgeList.add(new Territory[]{first,second});
+    }
+
+    public boolean ownsAllTerritoryNeighbours(Player player,Territory territory) {
+        for (Territory t : getTerritoryNeighbours(territory)) {
+            if (!player.ownsTerritory(t)) return false;
+        }
+        return true;
+    }
+
+    public List<Territory> getTerritoryNeighbours(Territory territory) {
+        ArrayList<Territory> neighbours = new ArrayList<>();
+        for (Territory[] t : mapEdgeList) {
+            if (t[0].equals(territory)) {
+                neighbours.add(t[1]);
+            } else if (t[1].equals(territory)) {
+                neighbours.add(t[0]);
+            }
+        }
+        return neighbours;
+    }
+
+    public void printTerritoryNeighbours(Territory territory) {
+        for (Territory t : getTerritoryNeighbours(territory)) {
+            System.out.print(String.format("%s (%s,Units: %s), ",t.getName(),getTerritoryOwner(t).getColour(),t.getUnits()));
+        }
+    }
+
+    public Player getTerritoryOwner(Territory territory) {
+        for (Player p : players) {
+            if (p.ownsTerritory(territory)) return p;
+        }
+        return null;
     }
 
     /**
@@ -152,6 +218,7 @@ public class WorldMap {
      */
     public void setUp(List<Player> players)
     {
+        this.players=players;
         assignTerritories(players);
         //place remaining troops on each of the territories
         int max = 50;
@@ -175,7 +242,7 @@ public class WorldMap {
 
             Territory t = allTerrs.get(rand.nextInt(allTerrs.size()));
             //set current player to territory, add a unit and remove territory from free territories
-            t.setOwner(players.get(playerInd));
+            addPlayerOwned(players.get(playerInd),t);
             t.addUnits(1);
             allTerrs.remove(t);
         }
@@ -212,6 +279,11 @@ public class WorldMap {
     public Territory getTerritory(String name) {
         return allTerritories.getOrDefault(name,null);
     }
+
+    /**
+     * Determines if two territories are neighbours.
+     */
+
 
     /**
      * Retrieves a list of territories within the map.

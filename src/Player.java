@@ -120,6 +120,16 @@ public class Player {
     }
 
     /**
+     * Determines whether the player owns the given Territory.
+     *
+     * @param territory The territory to check
+     * @return Whether the player owns the territory (t/f)
+     */
+    public boolean ownsTerritory(Territory territory) {
+        return owned.contains(territory);
+    }
+
+    /**
      * Prints all of the territories that this player owns.
      */
     public void printOwned() {
