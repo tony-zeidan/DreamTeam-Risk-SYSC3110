@@ -3,12 +3,16 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 
-public class JFortifyInputDialog extends JDialog implements ChangeListener {
+/**
+ * This class represents a dialog that will be shown in the game of RISK when
+ * a player attempts to fortify (move units) or after a successful attack.
+ *
+ * @author Tony Zeidan
+ */
+public class JFortifyInputDialog extends JDialog implements ActionListener,ChangeListener {
 
     /**
      * The initial amount of units stored in the moving territory.
@@ -41,52 +45,146 @@ public class JFortifyInputDialog extends JDialog implements ChangeListener {
     private BoundedRangeModel sliderModel;
 
     /**
+     * Stores the player that made the dialog appear.
+     */
+    private Player player;
+
+    /**
+     * The minimum amount of units the player has to move (default set to 1).
+     */
+    private int minimumMove;
+
+    /**
+     * The territory object, whose units will move after this dialog completes.
+     */
+    private Territory moving;
+
+    /**
+     * The territory object, who will receive units after this dialog completes.
+     */
+    private Territory destination;
+
+    /**
+     * Stores the closing option that the user selected.
+     */
+    private int selectedOption;
+
+    /**
+     * Stores whether the player is able to use the command option.
+     */
+    private boolean canCancel;
+
+    /**
      * Constructor for instances of JFortifyInputDialog.
-     * Creates a new dialog corresponding to the two given territories.
+     * Creates a new dialog whose parent frame is the one specified.
      *
      * @param frame The parent frame
-     * @param moving The territory that is moving
-     * @param destination The territory that will be receiving units
-     * @param minMove The minimum amount of units the player can move
      */
-    public JFortifyInputDialog(JFrame frame, Territory moving, Territory destination, int minMove) {
-        super(frame, String.format("FORTIFY: %s moving to %s",moving.getName(),destination.getName()));
+    public JFortifyInputDialog(JFrame frame) {
+        super(frame,true);
+        minimumMove = 1;
+        moving = null;
+        destination = null;
+        sliderModel = null;
+        shortcutUnits = null;
+        territoryUnits1 = null;
+        territoryUnits2 = null;
+        initialUnits1 = -1;
+        initialUnits2 = -1;
+        selectedOption = JOptionPane.DEFAULT_OPTION;
+        canCancel = true;
+    }
+
+    /**
+     * Sets the territories that will act as the origin and destination of this move.
+     *
+     * @param moving The territory losing units
+     * @param destination The territory gaining units
+     * @return The same instance of the class
+     */
+    public JFortifyInputDialog setTerritories(Territory moving,Territory destination) {
+        this.moving = moving;
+        initialUnits1 = moving.getUnits();
+        this.destination = destination;
+        initialUnits2 = destination.getUnits();
+        return this;
+    }
+
+    /**
+     * Sets the minimum amount of units for this move.
+     *
+     * @param minMove The minimum units
+     * @return The same instance of the class
+     */
+    public JFortifyInputDialog setMinimumMove(int minMove) {
+        this.minimumMove=minMove;
+        return this;
+    }
+
+    /**
+     * Sets the player who commenced this dialog.
+     *
+     * @param player The fortifying player
+     * @return The same instance of the class.
+     */
+    public JFortifyInputDialog setPlayer(Player player) {
+        this.player=player;
+        return this;
+    }
+
+    /**
+     * Sets whether the dialog can be cancelled.
+     *
+     * @param cancel Whether the dialog will be cancellable
+     * @return The same instance of the class
+     */
+    public JFortifyInputDialog setCancellable(boolean cancel) {
+        canCancel=cancel;
+        return this;
+    }
+
+    /**
+     * Sets up all of the components that will be used in the dialog, according to
+     * the values that should have already been set.
+     */
+    private void composeDialog() {
+
+        //check for
+        if (moving==null) {
+            throw new RuntimeException("Risk Fortify Dialog: No moving territory set");
+        } else if (destination==null) {
+            throw new RuntimeException("Risk Fortify Dialog: No destination territory set");
+        } else if (player==null) {
+            //set the title of the dialog
+            setTitle(String.format("FORTIFY: %s to %s",moving.getName(),destination.getName()));
+        } else {
+            //set the title of the dialog
+            setTitle(String.format("FORTIFY: %s to %s [%s]",moving.getName(),destination.getName(),player.getName()));
+        }
+
+        //set the model of the slider
+        sliderModel = new DefaultBoundedRangeModel(minimumMove,1,minimumMove,initialUnits1);
 
         //initialize other fields
         initialUnits1 = moving.getUnits();
         initialUnits2 = destination.getUnits();
-        territoryUnits1 = new JLabel(String.valueOf(initialUnits1-minMove),SwingConstants.CENTER);
+        territoryUnits1 = new JLabel(String.valueOf(initialUnits1-minimumMove),SwingConstants.CENTER);
         territoryUnits2 = new JLabel(String.valueOf(initialUnits2),SwingConstants.CENTER);
 
         //initialize slider model
-        sliderModel = new DefaultBoundedRangeModel(minMove,1,minMove,initialUnits1);
+        sliderModel = new DefaultBoundedRangeModel(minimumMove,1,minimumMove,initialUnits1);
         sliderModel.addChangeListener(this);
 
         //initialize and set preferences for slider
         JSlider unitsSlider = new JSlider(sliderModel);
-        unitsSlider.setMajorTickSpacing(findMajorTick(minMove,initialUnits1));
+        unitsSlider.setMajorTickSpacing(findMajorTick(minimumMove,initialUnits1));
         unitsSlider.setPaintTicks(true);
         unitsSlider.setPaintLabels(true);
 
         //initialize shortcut text field
-        shortcutUnits = new JTextField(minMove);
+        shortcutUnits = new JTextField(minimumMove);
         shortcutUnits.setToolTipText("input number of units to move");
-        shortcutUnits.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    int num = Integer.parseInt(shortcutUnits.getText());
-                    if (num<minMove) {
-                        sliderModel.setValue(minMove);
-                    } else if (num>initialUnits1) {
-                        sliderModel.setValue(initialUnits1);
-                    } else {
-                        sliderModel.setValue(num);
-                    }
-                } catch (NumberFormatException n) {
-                }
-            }
-        });
+        shortcutUnits.addActionListener(this);
 
         /*
         Middle panel of the border layout.
@@ -95,17 +193,19 @@ public class JFortifyInputDialog extends JDialog implements ChangeListener {
             2) a JSlider concerning the amount of units to move
             3) a button at the bottom "Move Units"
          */
-                JPanel middlePanel = new JPanel(new BorderLayout());
+        JPanel middlePanel = new JPanel(new BorderLayout());
         JButton move = new JButton("Move Units");
-        move.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                close();    //TODO: this should communicate with the controller
-            }
-        });
+        move.addActionListener(this);
+        JButton cancel = new JButton("Cancel");
+        cancel.addActionListener(this);
+
+        JPanel bottomMiddlePanel = new JPanel(new GridLayout(1,2));
+        bottomMiddlePanel.add(move);
+        bottomMiddlePanel.add(cancel);
+
         middlePanel.add(BorderLayout.NORTH,new JLabel("moving:",SwingConstants.CENTER));
         middlePanel.add(BorderLayout.CENTER,unitsSlider);
-        middlePanel.add(BorderLayout.SOUTH,move);
+        middlePanel.add(BorderLayout.SOUTH,bottomMiddlePanel);
 
         /*
         Left panel of the border layout.
@@ -174,12 +274,15 @@ public class JFortifyInputDialog extends JDialog implements ChangeListener {
     }
 
     /**
-     * Retrieves the current value of the slider model.
+     * Shows the composed dialog.
+     * Retrieves the user inputs.
      *
-     * @return The slider model value
+     * @return An array of ints (size=2) in the form [selected closing operation, selected amount of units]
      */
-    public int getSelectedUnits() {
-        return sliderModel.getValue();
+    public int[] showInputDialog() {
+        composeDialog();
+        setVisible(true);
+        return new int[] {selectedOption,sliderModel.getValue()};
     }
 
     /**
@@ -191,14 +294,38 @@ public class JFortifyInputDialog extends JDialog implements ChangeListener {
     @Override
     public void stateChanged(ChangeEvent e) {
         DefaultBoundedRangeModel source = (DefaultBoundedRangeModel) e.getSource();
-        int value = getSelectedUnits();
+        int value = sliderModel.getValue();
         territoryUnits1.setText(String.valueOf(initialUnits1-value));
         territoryUnits2.setText(String.valueOf(initialUnits2+value));
-        /*if (!source.getValueIsAdjusting()) {
-            int value = getSelectedUnits();
-            territoryUnits1.setText(String.valueOf(initialUnits1-value));
-            territoryUnits2.setText(String.valueOf(initialUnits2+value));
-        }*/
+    }
+
+    /**
+     * General action listener for the shortcut text field and ok/cancel buttons
+     *
+     * @param e The event that was triggered
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() instanceof JTextField) {
+            try {
+                int num = Integer.parseInt(shortcutUnits.getText());
+                if (num<minimumMove) {
+                    sliderModel.setValue(minimumMove);
+                } else if (num>initialUnits1) {
+                    sliderModel.setValue(initialUnits1);
+                } else {
+                    sliderModel.setValue(num);
+                }
+            } catch (NumberFormatException n) { }
+        } else {
+            JButton source = (JButton) e.getSource();
+            if (source.getText().equals("Move Units")) {
+                selectedOption = JOptionPane.OK_OPTION;
+            } else {
+                selectedOption = JOptionPane.CANCEL_OPTION;
+            }
+            close();
+        }
     }
 
     /**
@@ -216,7 +343,7 @@ public class JFortifyInputDialog extends JDialog implements ChangeListener {
         t1.setUnits(50);
         Territory t2 = new Territory("MARS");
         t2.setUnits(10);
-        JFortifyInputDialog f1 = new JFortifyInputDialog(null,t1,t2,0);
+        JFortifyInputDialog f1 = new JFortifyInputDialog(null);
     }
 
 
