@@ -41,18 +41,19 @@ public class JFortifyInputDialog extends JDialog implements ChangeListener {
      * @param frame The parent frame
      * @param moving The territory that is moving
      * @param destination The territory that will be receiving units
+     * @param minMove The minimum amount of units the player can move
      */
-    public JFortifyInputDialog(JFrame frame, Territory moving, Territory destination) {
+    public JFortifyInputDialog(JFrame frame, Territory moving, Territory destination, int minMove) {
         super(frame, String.format("FORTIFY: %s moving to %s",moving.getName(),destination.getName()));
 
         //initialize slider model
-        sliderModel = new DefaultBoundedRangeModel(1,0,1,moving.getUnits()-1);
+        sliderModel = new DefaultBoundedRangeModel(minMove,0,minMove,moving.getUnits()-minMove);
         sliderModel.addChangeListener(this);
 
         //initialize other fields
         initialUnits1 = moving.getUnits();
         initialUnits2 = destination.getUnits();
-        territoryUnits1 = new JLabel(String.valueOf(initialUnits1-1),SwingConstants.CENTER);
+        territoryUnits1 = new JLabel(String.valueOf(initialUnits1-minMove),SwingConstants.CENTER);
         territoryUnits2 = new JLabel(String.valueOf(initialUnits2),SwingConstants.CENTER);
 
         //initialize and set preferences for slider
@@ -151,11 +152,14 @@ public class JFortifyInputDialog extends JDialog implements ChangeListener {
     @Override
     public void stateChanged(ChangeEvent e) {
         DefaultBoundedRangeModel source = (DefaultBoundedRangeModel) e.getSource();
-        if (!source.getValueIsAdjusting()) {
+        int value = getSelectedUnits();
+        territoryUnits1.setText(String.valueOf(initialUnits1-value));
+        territoryUnits2.setText(String.valueOf(initialUnits2+value));
+        /*if (!source.getValueIsAdjusting()) {
             int value = getSelectedUnits();
             territoryUnits1.setText(String.valueOf(initialUnits1-value));
             territoryUnits2.setText(String.valueOf(initialUnits2+value));
-        }
+        }*/
     }
 
     /**
@@ -173,7 +177,7 @@ public class JFortifyInputDialog extends JDialog implements ChangeListener {
         t1.setUnits(50);
         Territory t2 = new Territory("MARS");
         t2.setUnits(10);
-        JFortifyInputDialog f1 = new JFortifyInputDialog(null,t1,t2);
+        JFortifyInputDialog f1 = new JFortifyInputDialog(null,t1,t2,0);
     }
 
 
