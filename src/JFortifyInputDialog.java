@@ -3,9 +3,10 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class JFortifyInputDialog extends JDialog implements ChangeListener {
 
@@ -30,6 +31,11 @@ public class JFortifyInputDialog extends JDialog implements ChangeListener {
     private JLabel territoryUnits2;
 
     /**
+     * Text field for shortcutting slider.
+     */
+    private JTextField shortcutUnits;
+
+    /**
      * Slider model for the JSlider representing moved units.
      */
     private BoundedRangeModel sliderModel;
@@ -46,23 +52,41 @@ public class JFortifyInputDialog extends JDialog implements ChangeListener {
     public JFortifyInputDialog(JFrame frame, Territory moving, Territory destination, int minMove) {
         super(frame, String.format("FORTIFY: %s moving to %s",moving.getName(),destination.getName()));
 
-        //initialize slider model
-        sliderModel = new DefaultBoundedRangeModel(minMove,0,minMove,moving.getUnits()-minMove);
-        sliderModel.addChangeListener(this);
-
         //initialize other fields
         initialUnits1 = moving.getUnits();
         initialUnits2 = destination.getUnits();
         territoryUnits1 = new JLabel(String.valueOf(initialUnits1-minMove),SwingConstants.CENTER);
         territoryUnits2 = new JLabel(String.valueOf(initialUnits2),SwingConstants.CENTER);
 
+        //initialize slider model
+        sliderModel = new DefaultBoundedRangeModel(minMove,1,minMove,initialUnits1);
+        sliderModel.addChangeListener(this);
+
         //initialize and set preferences for slider
         JSlider unitsSlider = new JSlider(sliderModel);
-        unitsSlider.setMajorTickSpacing(10);
-        unitsSlider.setMinorTickSpacing(1);
+        unitsSlider.setMajorTickSpacing(findMajorTick(minMove,initialUnits1));
         unitsSlider.setPaintTicks(true);
         unitsSlider.setPaintLabels(true);
-        unitsSlider.setSnapToTicks(true);
+
+        //initialize shortcut text field
+        shortcutUnits = new JTextField(minMove);
+        shortcutUnits.setToolTipText("input number of units to move");
+        shortcutUnits.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int num = Integer.parseInt(shortcutUnits.getText());
+                    if (num<minMove) {
+                        sliderModel.setValue(minMove);
+                    } else if (num>initialUnits1) {
+                        sliderModel.setValue(initialUnits1);
+                    } else {
+                        sliderModel.setValue(num);
+                    }
+                } catch (NumberFormatException n) {
+                }
+            }
+        });
 
         /*
         Middle panel of the border layout.
@@ -71,7 +95,7 @@ public class JFortifyInputDialog extends JDialog implements ChangeListener {
             2) a JSlider concerning the amount of units to move
             3) a button at the bottom "Move Units"
          */
-        JPanel middlePanel = new JPanel(new BorderLayout());
+                JPanel middlePanel = new JPanel(new BorderLayout());
         JButton move = new JButton("Move Units");
         move.addActionListener(new ActionListener() {
             @Override
@@ -98,6 +122,7 @@ public class JFortifyInputDialog extends JDialog implements ChangeListener {
         leftSubPanel.add(new JLabel("    after move: "));
         leftSubPanel.add(territoryUnits1);
         leftPanel.add(BorderLayout.CENTER,leftSubPanel);
+        leftPanel.add(BorderLayout.SOUTH,shortcutUnits);
 
         /*
         Right panel of the border layout.
@@ -131,7 +156,21 @@ public class JFortifyInputDialog extends JDialog implements ChangeListener {
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
-        setVisible(true);
+    }
+
+    /**
+     * Calculates the space that should be in between each major tick.
+     *
+     * @param start The start of the tick range
+     * @param finish The end of the tick range
+     * @return The spacing of each major tick from the start
+     */
+    private int findMajorTick(int start, int finish) {
+        int t = finish-start;
+        for (int i = t-1; i>= 0; i--) {
+            if (t%i==0) return i;
+        }
+        return t;
     }
 
     /**
