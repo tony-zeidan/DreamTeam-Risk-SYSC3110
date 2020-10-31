@@ -197,6 +197,7 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
         JButton move = new JButton("Move Units");
         move.addActionListener(this);
         JButton cancel = new JButton("Cancel");
+        cancel.setEnabled(canCancel);
         cancel.addActionListener(this);
 
         JPanel bottomMiddlePanel = new JPanel(new GridLayout(1,2));
@@ -343,7 +344,11 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
         t1.setUnits(50);
         Territory t2 = new Territory("MARS");
         t2.setUnits(10);
-        JFortifyInputDialog f1 = new JFortifyInputDialog(null);
+        JFortifyInputDialog f1 = new JFortifyInputDialog(null)
+                .setPlayer(new Player("Tony","RED"))
+                .setTerritories(t1,t2)
+                .setMinimumMove(3)
+                .setCancellable(true);
     }
 
 
