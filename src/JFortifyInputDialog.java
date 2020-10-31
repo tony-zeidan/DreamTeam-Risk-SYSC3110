@@ -349,6 +349,9 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
                 .setTerritories(t1,t2)
                 .setMinimumMove(3)
                 .setCancellable(true);
+        int[] result = f1.showInputDialog();
+        System.out.print(String.format("Selected Close Operation: %s\nSelected Unit Amount: %s",
+                result[0],result[1]));
     }
 
 
