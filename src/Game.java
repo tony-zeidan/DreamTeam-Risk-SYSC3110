@@ -306,6 +306,28 @@ public class Game {
         printMap();
     }
 
+
+    private int getPlayerDieCount(Player player,int lowerBound, int upperBound) {
+        if (lowerBound==upperBound) return lowerBound;
+
+        boolean validInput = false;
+        int dieCount = 0;
+        while (!validInput) {
+            System.out.println(String.format("%s how many die would you like to roll with? (%s to %s)",player.getName(),lowerBound,upperBound));
+            String attInput = myAction.nextLine();
+            try {
+                dieCount = Integer.parseInt(attInput);
+                validInput = true;
+                if (dieCount>upperBound||dieCount<lowerBound) {
+                    validInput = false;
+                }
+            } catch (NumberFormatException e) {
+                validInput = false;
+            }
+        }
+        return dieCount;
+    }
+
     /**
      * Simulates the battle sequence between a territory attacking an adjacent territory. The attacker
      * is required to select a number of dice to attack with provided he/she meets the minimum unit requirements
