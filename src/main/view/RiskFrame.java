@@ -32,7 +32,7 @@ public class RiskFrame extends JFrame implements RiskView{
     /**
      * JPanel containing the game board;
      */
-    private JPanel board;
+    //private JPanel board;
 
     /**
      * Constructor for instances of main.view.RiskFrame, constructs a new GUI.
@@ -43,7 +43,7 @@ public class RiskFrame extends JFrame implements RiskView{
     public RiskFrame() {
         super("RISK");
         riskModel = new WorldMap("Earth");
-        board = null;
+        //board = null;
         setLayout(new BorderLayout());
         composeFrame();
         showFrame();
@@ -60,7 +60,7 @@ public class RiskFrame extends JFrame implements RiskView{
         }
 
         Image finalMapImage=mapImage;
-        board = new JPanel() {
+        JPanel board = new JPanel() {
 
             /*
             Paint the image on our canvas.
@@ -73,7 +73,7 @@ public class RiskFrame extends JFrame implements RiskView{
 
                 //draw the scaled instance of the image
                 boolean b = g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),Image.SCALE_SMOOTH), 0, 0, null);
-                paintPoints(g,0.79);
+                //paintPoints(g,0.79);
             }
         };
 
