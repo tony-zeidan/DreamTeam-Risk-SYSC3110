@@ -1,8 +1,8 @@
-Alaska(80:157),Kamchatka,Northwest main.core.Territory,Western Canada
-Northwest main.core.Territory(203:163),Greenland,Central Canada,Alaska,Western Canada
-Greenland(476:97),Central Canada,Eastern Canada,Northwest main.core.Territory,Iceland
-Western Canada(196:228),Central Canada,Northwest main.core.Territory,Alaska,Western United States
-Central Canada(289:236),Western Canada,Eastern Canada,Northwest main.core.Territory,Greenland,Western United States,Eastern United States
+Alaska(80:157),Kamchatka,Northwest Territory,Western Canada
+Northwest Territory(203:163),Greenland,Central Canada,Alaska,Western Canada
+Greenland(476:97),Central Canada,Eastern Canada,Northwest Territory,Iceland
+Western Canada(196:228),Central Canada,Northwest Territory,Alaska,Western United States
+Central Canada(289:236),Western Canada,Eastern Canada,Northwest Territory,Greenland,Western United States,Eastern United States
 Eastern Canada(380:234),Greenland,Central Canada,Eastern United States
 Western United States(207:306),Western Canada,Central Canada,Eastern United States,Central America
 Eastern United States(291:327),Central Canada,Western United States,Eastern Canada,Central America
