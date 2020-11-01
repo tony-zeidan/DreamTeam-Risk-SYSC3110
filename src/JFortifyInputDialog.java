@@ -68,9 +68,9 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
     private Territory destination;
 
     /**
-     * Stores the closing option that the user selected.
+     * Stores the value that the user selected.
      */
-    private int selectedOption;
+    private int selectedValue;
 
     /**
      * Stores whether the player is able to use the command option.
@@ -94,7 +94,7 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
         territoryUnits2 = null;
         initialUnits1 = -1;
         initialUnits2 = -1;
-        selectedOption = JOptionPane.DEFAULT_OPTION;
+        selectedValue = -1;
         canCancel = true;
     }
 
@@ -283,10 +283,10 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
      *
      * @return An array of ints (size=2) in the form [selected closing operation, selected amount of units]
      */
-    public int[] showInputDialog() {
+    public int showInputDialog() {
         composeDialog();
         setVisible(true);
-        return new int[] {selectedOption,sliderModel.getValue()};
+        return selectedValue;
     }
 
     /**
@@ -324,9 +324,7 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
         } else {
             JButton source = (JButton) e.getSource();
             if (source.getText().equals("Move Units")) {
-                selectedOption = JOptionPane.OK_OPTION;
-            } else {
-                selectedOption = JOptionPane.CANCEL_OPTION;
+                selectedValue=sliderModel.getValue();
             }
             close();
         }
@@ -352,9 +350,9 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
                 .setTerritories(t1,t2)
                 .setMinimumMove(3)
                 .setCancellable(true);
-        int[] result = f1.showInputDialog();
-        System.out.print(String.format("Selected Close Operation: %s\nSelected Unit Amount: %s",
-                result[0],result[1]));
+        int result = f1.showInputDialog();
+        System.out.print(String.format("Selected Unit Amount: %s",
+                result));
     }
 
 
