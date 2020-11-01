@@ -49,6 +49,7 @@ public class GameSingleton {
      * @return Single instance of RISK game
      */
     public static GameSingleton getGameInstance() {
+        //If an instance doesn't exist, create one
         if(gameInstance == null){
             gameInstance = new GameSingleton();
         }
@@ -607,7 +608,7 @@ public class GameSingleton {
     }
 
     /**
-     * Update the number of players active.
+     * Update the number of players not yet eliminated from the game.
      */
     public void setPlayersEliminated() {
         int numActive = 0;
