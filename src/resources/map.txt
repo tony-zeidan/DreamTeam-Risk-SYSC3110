@@ -1,12 +1,12 @@
-Alaska(1:1),Kamchatka,Northwest main.core.Territory,Western Canada
-Northwest main.core.Territory(1:1),Greenland,Central Canada,Alaska,Western Canada
-Greenland(1:1),Central Canada,Eastern Canada,Northwest main.core.Territory,Iceland
-Western Canada(1:1),Central Canada,Northwest main.core.Territory,Alaska,Western United States
-Central Canada(1:1),Western Canada,Eastern Canada,Northwest main.core.Territory,Greenland,Western United States,Eastern United States
-Eastern Canada(1:1),Greenland,Central Canada,Eastern United States
-Western United States(1:1),Western Canada,Central Canada,Eastern United States,Central America
-Eastern United States(1:1),Central Canada,Western United States,Eastern Canada,Central America
-Central America(1:1),Western United States,Eastern United States,Venezuela
+Alaska(80:157),Kamchatka,Northwest main.core.Territory,Western Canada
+Northwest main.core.Territory(203:163),Greenland,Central Canada,Alaska,Western Canada
+Greenland(476:97),Central Canada,Eastern Canada,Northwest main.core.Territory,Iceland
+Western Canada(196:228),Central Canada,Northwest main.core.Territory,Alaska,Western United States
+Central Canada(289:236),Western Canada,Eastern Canada,Northwest main.core.Territory,Greenland,Western United States,Eastern United States
+Eastern Canada(380:234),Greenland,Central Canada,Eastern United States
+Western United States(207:306),Western Canada,Central Canada,Eastern United States,Central America
+Eastern United States(291:327),Central Canada,Western United States,Eastern Canada,Central America
+Central America(218:385),Western United States,Eastern United States,Venezuela
 Venezuela(1:1),Central America,Brazil,Peru
 Peru(1:1),Venezuela,Brazil,Argentina
 Brazil(1:1),Venezuela,Peru,Argentina
