@@ -125,7 +125,7 @@ public class Game {
         players = new ArrayList<>(2);
         players.add(new Player("Jim", "RED"));
         players.add(new Player("Fred", "BLUE"));
-        world = new WorldMap("Solar System", players);
+        world = new WorldMap();
         myAction = new Scanner(System.in);
         numActivePlayer = 2;
     }
@@ -221,28 +221,28 @@ public class Game {
                                     if (attacking == null) {
                                         System.out.println("\nThat territory is not valid, try again.");
                                         attacking = null;
-                                    } else if (attacking.getOwner() != players.get(i)) {
+                                    } else if (world.getTerritoryOwner(attacking) != players.get(i)) {
                                         System.out.println("\nYou do not own that territory, try again.");
                                         attacking = null;
                                     }
                                 }
 
                                 //we can use this method if we have conquered all neighbouring territories
-                                if (!attacking.ownsAllNeighbours()) {
+                                if (!world.ownsAllTerritoryNeighbours(currentPlayer,attacking)) {
                                     System.out.println("");
 
                                     Territory defending = null;
                                     while (defending == null) {
-                                        attacking.printValidNeighbours(false);
+                                        world.printTerritoryNeighbours(attacking);
                                         System.out.print("\nwho to attack? ");
                                         defending = getTerritory(myAction.nextLine());
                                         if (defending == null) {
                                             System.out.println("\nThat territory is not valid, try again.");
                                             defending = null;
-                                        } else if (!attacking.isNeighbour(defending)) {
+                                        } else if (!world.areNeighbours(attacking,defending)) {
                                             System.out.println("\nThat territory is not a neighbour, try again.");
                                             defending = null;
-                                        } else if (attacking.getOwner() == defending.getOwner()) {
+                                        } else if (currentPlayer.ownsTerritory(attacking) && currentPlayer.ownsTerritory(defending)) {
                                             System.out.println("\nYou can not attack yourself!");
                                             defending = null;
                                         }
@@ -306,6 +306,28 @@ public class Game {
         printMap();
     }
 
+
+    private int getPlayerDieCount(Player player,int lowerBound, int upperBound) {
+        if (lowerBound==upperBound) return lowerBound;
+
+        boolean validInput = false;
+        int dieCount = 0;
+        while (!validInput) {
+            System.out.println(String.format("%s how many die would you like to roll with? (%s to %s)",player.getName(),lowerBound,upperBound));
+            String attInput = myAction.nextLine();
+            try {
+                dieCount = Integer.parseInt(attInput);
+                validInput = true;
+                if (dieCount>upperBound||dieCount<lowerBound) {
+                    validInput = false;
+                }
+            } catch (NumberFormatException e) {
+                validInput = false;
+            }
+        }
+        return dieCount;
+    }
+
     /**
      * Simulates the battle sequence between a territory attacking an adjacent territory. The attacker
      * is required to select a number of dice to attack with provided he/she meets the minimum unit requirements
@@ -313,15 +335,15 @@ public class Game {
      * @param attacking The territory containing units that will be used in the attack
      * @param defending The territory being attacked
      */
-    private static void battle(Territory attacking, Territory defending) {
+    private void battle(Territory attacking, Territory defending) {
 
         System.out.println(String.format("|------------------(Battle Commenced - %s vs. %s)------------------|", attacking.getName(), defending.getName()));
         String end = "|------------------(Battle %s - %s)------------------|";
         String attInput;
         String defInput;
 
-        String attName = attacking.getOwner().getName();
-        String defName = defending.getOwner().getName();
+        String attName = world.getTerritoryOwner(attacking).getName();
+        String defName = world.getTerritoryOwner(defending).getName();
 
         int attDice = 0;
         int defDice;
@@ -342,7 +364,7 @@ public class Game {
             if (defending.getUnits() == 0) {
                 System.out.println(String.format("%s dominates over %s!", attacking.getName(), defending.getName()));
                 System.out.println(String.format(end, "Ended", attacking.getName() + " Wins!"));
-                defending.setOwner(attacking.getOwner());
+                world.addPlayerOwned(world.getTerritoryOwner(attacking),defending);
                 fortifyPosition(attacking, defending, attDice);
                 break;
             } else if (attacking.getUnits() == 1) {
@@ -360,7 +382,7 @@ public class Game {
                 System.out.println(String.format("\n%s is attacking. %s, would you like to attack or retreat?", attName, attName));
                 battleCommand = myAction.nextLine().toLowerCase();
                 if (!battleCommand.equals("attack") && !battleCommand.equals("retreat")) {
-                    System.out.println("\nYou need to select either attack or retreat, try again.");
+                    System.out.println("You need to select either attack or retreat, try again.");
                     battleCommand = null;
                 }
             }
