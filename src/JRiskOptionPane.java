@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,25 +47,69 @@ public class JRiskOptionPane {
         return input;
     }
 
-    public static int showFortifyInputDialog(JFrame frame,Player player,Territory territory1,Territory territory2,int minMove) {
-        JFortifyInputDialog fort = new JFortifyInputDialog(frame)
-                .setPlayer(player)
-                .setTerritories(territory1,territory2)
-                .setMinimumMove(minMove);
-        int[] r = fort.showInputDialog();
-        System.out.println(r[0]+":"+r[1]);
-        return 1;
+    /**
+     * Basic JOptionPane implementation of the dialog that will be showed
+     * when a user commences a fortification.
+     *
+     * @param frame The parent frame
+     * @param player The player who commenced this dialog
+     * @param moving The territory that will be losing units
+     * @param destination The territory that will be gaining units
+     * @param minMove The minimum amount of units the player has to move
+     * @return The user's input to the dialog (number of units)
+     */
+    public static int showFortifyInput(JFrame frame,Player player, Territory moving, Territory destination, int minMove) {
+
+        Object[] options = new Object[moving.getUnits()-minMove];
+        int index = 0;
+        for (int i = minMove; i < moving.getUnits()-minMove; i ++) {
+            options[index]=String.valueOf(i);
+            index ++;
+        }
+
+        try {
+            return Integer.parseInt(((String) JOptionPane.showInputDialog(
+                    frame, player.getName() + ", how many units will you move?",
+                    String.format("FORTIFY: %s to %s [%s]", moving.getName(), destination.getName(), player.getName()),
+                    JOptionPane.QUESTION_MESSAGE,
+                    null, options, String.valueOf(minMove)
+            )));
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 
+    /**
+     * A custom implementation of a dialog that will be showed when a user
+     * commences a fortification.
+     * This implementation uses the JDialog API.
+     * Features highly custom components.
+     *
+     * @param frame The parent frame
+     * @param player The player who commenced the dialog
+     * @param moving The territory that will lose units
+     * @param destination The territory that will gain units
+     * @param minMove The minimum amount of units the player has to move
+     * @return The user's input (number of units or -1)
+     */
+    public static int showFortifyInputDialog(JFrame frame,Player player,Territory moving,Territory destination,int minMove) {
+        JFortifyInputDialog fort = new JFortifyInputDialog(frame)
+                .setPlayer(player)
+                .setTerritories(moving,destination)
+                .setMinimumMove(minMove);
+        int r = fort.showInputDialog();
+        return 1;
+    }
 
     public static void main(String[] args) {
         //int r = JRiskInputPane.showDieCountDialog(null,new Player("Tony","RED"),1,3);
         Player p1 = new Player("Tony","RED");
         Territory t1 = new Territory("EARTH");
-        t1.setUnits(500);
+        t1.setUnits(47);
         Territory t2 = new Territory("MARS");
         t2.setUnits(10);
         //System.out.println(showFortifyInputDialog(null,p1,t1,t2,3));
-        showDieCountDialog(null,p1,1,3);
+        //showDieCountDialog(null,p1,1,3);
+        System.out.println(showFortifyInput(null,p1,t1,t2,2));
     }
 }
