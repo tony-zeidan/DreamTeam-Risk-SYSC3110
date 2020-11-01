@@ -69,8 +69,8 @@ public class WorldMap {
     {
         name = "TEST: Solar System";
         rand = new Random();
-        Player p1 = new Player("Tony","RED");
-        Player p2 = new Player("Fred","BLUE");
+        Player p1 = new Player("Tony",Color.RED);
+        Player p2 = new Player("Fred",Color.BLUE);
         allTerritories = new HashMap<>();
         allCoordinates = new HashMap<>();
         Territory mars = new Territory("Mars");

@@ -1,5 +1,7 @@
 package main.view;
 
+import main.core.*;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -16,7 +18,7 @@ import java.util.List;
  *
  * @author Tony Zeidan
  */
-public class RiskFrame extends JFrame {
+public class RiskFrame extends JFrame implements RiskView{
 
     /**
      * A container for the points that will be displayed on the map.
@@ -37,6 +39,9 @@ public class RiskFrame extends JFrame {
     }
 
     private void composeFrame() {
+        Game riskModel = new Game();
+        RiskController riskC = new RiskController(riskModel);
+        riskModel.addRiskView(this);
         //attempt to read the map file
         BufferedImage mapImage = null;
         try {
@@ -156,6 +161,7 @@ public class RiskFrame extends JFrame {
         setPreferredSize(new Dimension(1200,800));
 
         //prepare
+        setResizable(false);
         pack();
     }
 
@@ -172,5 +178,10 @@ public class RiskFrame extends JFrame {
 
     public static void main(String[] args) {
         RiskFrame rf = new RiskFrame();
+    }
+
+    @Override
+    public void handleRiskUpdate(RiskEvent e) {
+
     }
 }

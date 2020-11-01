@@ -1,5 +1,8 @@
 package main.core;
 
+import main.view.RiskView;
+
+import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.LinkedList;
@@ -16,7 +19,7 @@ import java.util.LinkedList;
  * @since 1.00
  */
 public class Game {
-
+    private List<RiskView> riskViews;
     /**
      * The list of players that may or may not be active throughout the game.
      *
@@ -52,7 +55,7 @@ public class Game {
         players = new ArrayList<>(6);
         world = new WorldMap("Earth");
         myAction = new Scanner(System.in);
-
+        riskViews = new ArrayList<>();
         /*
         We must get the amount of people playing the game.
         Continuously prompt the user for valid information.
@@ -85,13 +88,13 @@ public class Game {
         numActivePlayer = numOfPlayers;
 
         //six random colors for players
-        List<String> randomColors = new LinkedList<>();
-        randomColors.add("RED");
-        randomColors.add("GREEN");
-        randomColors.add("BLUE");
-        randomColors.add("YELLOW");
-        randomColors.add("WHITE");
-        randomColors.add("BLACK");
+        List<Color> randomColors = new LinkedList<>();
+        randomColors.add(Color.RED);
+        randomColors.add(Color.GREEN);
+        randomColors.add(Color.BLUE);
+        randomColors.add(Color.YELLOW);
+        randomColors.add(Color.WHITE);
+        randomColors.add(Color.BLACK);
 
         Random rand = new Random();
 
@@ -107,7 +110,7 @@ public class Game {
 
             int randIndex = rand.nextInt(randomColors.size());
             //generate and assign random colours
-            String colour = randomColors.get(randIndex);
+            Color colour = randomColors.get(randIndex);
             System.out.println(String.format("main.core.Player %s Colour is: %s\n", i + 1, colour));
             randomColors.remove(randIndex);
             players.add(new Player(playerName, colour));
@@ -116,7 +119,10 @@ public class Game {
         shufflePlayers();
         world.setUp(players);
     }
-
+    public void addRiskView(RiskView rv)
+    {
+        riskViews.add(rv);
+    }
     /**
      * Testing constructor of main.core.Game.
      * Creates a new game with two territories.
@@ -125,8 +131,8 @@ public class Game {
      */
     public Game(String test) {
         players = new ArrayList<>(2);
-        players.add(new Player("Jim", "RED"));
-        players.add(new Player("Fred", "BLUE"));
+        players.add(new Player("Jim", Color.RED));
+        players.add(new Player("Fred", Color.BLUE));
         world = new WorldMap();
         myAction = new Scanner(System.in);
         numActivePlayer = 2;

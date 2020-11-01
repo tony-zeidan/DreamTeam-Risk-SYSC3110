@@ -4,6 +4,7 @@ import main.core.Player;
 import main.core.Territory;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -108,7 +109,7 @@ public class JRiskOptionPane {
 
     public static void main(String[] args) {
         //int r = JRiskInputPane.showDieCountDialog(null,new main.core.Player("Tony","RED"),1,3);
-        Player p1 = new Player("Tony","RED");
+        Player p1 = new Player("Tony", Color.RED);
         Territory t1 = new Territory("EARTH");
         t1.setUnits(47);
         Territory t2 = new Territory("MARS");
