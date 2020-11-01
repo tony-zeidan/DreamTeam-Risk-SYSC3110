@@ -1,5 +1,8 @@
 package main.view;
 
+import main.core.Territory;
+import main.core.WorldMap;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -9,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class represents a GUI for the game risk, including the feature of
@@ -23,6 +27,8 @@ public class RiskFrame extends JFrame {
      */
     private List<Point> territoryPoints;
 
+    private WorldMap riskModel;
+
     /**
      * Constructor for instances of main.view.RiskFrame, constructs a new GUI.
      *
@@ -31,6 +37,7 @@ public class RiskFrame extends JFrame {
      */
     public RiskFrame() {
         super("RISK");
+        riskModel = new WorldMap("Earth");
         setLayout(new BorderLayout());
         composeFrame();
         showFrame();
@@ -60,6 +67,7 @@ public class RiskFrame extends JFrame {
 
                 //draw the scaled instance of the image
                 boolean b = g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),Image.SCALE_SMOOTH), 0, 0, null);
+                paintPoints(g,0.79);
             }
         };
 
@@ -157,6 +165,16 @@ public class RiskFrame extends JFrame {
 
         //prepare
         pack();
+    }
+
+    private void paintPoints(Graphics g,double scalingFactor) {
+        g.setColor(Color.WHITE);
+        Map<Territory,Point> points = riskModel.getAllCoordinates();
+        for (Point p : points.values()) {
+            int x = (int) (p.x*scalingFactor);
+            int y = (int) (p.y*scalingFactor);
+            g.fillOval(x,  y, 8, 8);
+        }
     }
 
     public void showFrame() {
