@@ -22,9 +22,9 @@ Kyler Verge | user input queries, attacking conditions, UML/SQ
  
 **Project Progress**
 
-![98%](https://progress-bar.dev/98)
+![15%](https://progress-bar.dev/15)
 
-milestone 1 phase
+milestone 2 phase
 
 [UML](https://lucid.app/invitations/accept/fdd00eb0-1f04-4212-8db9-c9dd045a9c40)
 
