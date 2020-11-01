@@ -109,7 +109,7 @@ public class WorldMap {
 
         //attempt to read the file
         try {
-            File myObj = new File("map.txt");
+            File myObj = new File(getClass().getResource("/resources/map.txt").getFile());
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
