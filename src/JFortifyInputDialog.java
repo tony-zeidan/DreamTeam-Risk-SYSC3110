@@ -10,6 +10,9 @@ import java.awt.event.*;
  * This class represents a dialog that will be shown in the game of RISK when
  * a player attempts to fortify (move units) or after a successful attack.
  *
+ * This is a very custom dialog that required the use of the JDialog api,
+ * instead of the commonly used JOptionPane.
+ *
  * @author Tony Zeidan
  */
 public class JFortifyInputDialog extends JDialog implements ActionListener,ChangeListener {
@@ -268,10 +271,10 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
      */
     private int findMajorTick(int start, int finish) {
         int t = finish-start;
-        for (int i = t-1; i>= 0; i--) {
+        for (int i = t-1; i>= 2; i--) {
             if (t%i==0) return i;
         }
-        return t;
+        return t/2;
     }
 
     /**
@@ -343,7 +346,7 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
         Territory t1 = new Territory("EARTH");
         t1.setUnits(50);
         Territory t2 = new Territory("MARS");
-        t2.setUnits(10);
+        t2.setUnits(5);
         JFortifyInputDialog f1 = new JFortifyInputDialog(null)
                 .setPlayer(new Player("Tony","RED"))
                 .setTerritories(t1,t2)
