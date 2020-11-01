@@ -199,6 +199,15 @@ public class WorldMap {
         return neighbours;
     }
 
+    /**
+     * Retrieves a map of all the territories linked to their coordinates.
+     *
+     * @return A map collection of territories and points.
+     */
+    public Map<Territory,Point> getAllCoordinates() {
+        return allCoordinates;
+    }
+
     public void printTerritoryNeighbours(Territory territory) {
         for (Territory t : getTerritoryNeighbours(territory)) {
             System.out.print(String.format("%s (%s,Units: %s), ",t.getName(),getTerritoryOwner(t).getColour(),t.getUnits()));
