@@ -33,13 +33,10 @@ public class RiskFrame extends JFrame {
         super("RISK");
         setLayout(new BorderLayout());
 
-        //change to filepath of map image
-        String filepath = "C:\\Users\\Tony Zeidan\\Pictures\\RiskBoard.png";
-
         //attempt to read the map file
         BufferedImage mapImage = null;
         try {
-            mapImage = ImageIO.read(new File(filepath));
+            mapImage = ImageIO.read(getClass().getResource("/resources/RiskBoard.png"));
         } catch (IOException ioException) {
             System.out.println("RISK Board Load Failed");
             ioException.printStackTrace();
