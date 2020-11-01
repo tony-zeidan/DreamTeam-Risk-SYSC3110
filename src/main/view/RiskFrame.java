@@ -1,7 +1,7 @@
 package main.view;
 
-import main.core.Territory;
-import main.core.WorldMap;
+
+import main.core.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,7 +20,7 @@ import java.util.Map;
  *
  * @author Tony Zeidan
  */
-public class RiskFrame extends JFrame {
+public class RiskFrame extends JFrame implements RiskView{
 
     /**
      * A container for the points that will be displayed on the map.
@@ -190,5 +190,10 @@ public class RiskFrame extends JFrame {
 
     public static void main(String[] args) {
         RiskFrame rf = new RiskFrame();
+    }
+
+    @Override
+    public void handleRiskUpdate(RiskEvent e) {
+
     }
 }

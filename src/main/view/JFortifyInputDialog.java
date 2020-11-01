@@ -351,7 +351,7 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
         Territory t2 = new Territory("MARS");
         t2.setUnits(5);
         JFortifyInputDialog f1 = new JFortifyInputDialog(null)
-                .setPlayer(new Player("Tony","RED"))
+                .setPlayer(new Player("Tony",Color.RED))
                 .setTerritories(t1,t2)
                 .setMinimumMove(3)
                 .setCancellable(true);

@@ -1,5 +1,6 @@
 package main.core;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class Player {
     /**
      * The colour of the units that the player owns.
      */
-    private String colour;
+    private Color colour;
 
     /**
      * List of territories that the player owns.
@@ -37,11 +38,9 @@ public class Player {
 
     /**
      * Constructor for instances of main.core.Player class with name and colour.
-     *
-     * @param name   The name of the player
-     * @param colour The colour of the units that the player owns
-     */
-    public Player(String name, String colour) {
+     *  @param name   The name of the player
+     * @param colour The colour of the units that the player owns*/
+    public Player(String name, Color colour) {
         this.name = name;
         this.colour = colour;
         this.active = true;
@@ -62,7 +61,7 @@ public class Player {
      *
      * @return The colour of the units that the player owns.
      */
-    public String getColour() {
+    public Color getColour() {
         return colour;
     }
 
