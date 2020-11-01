@@ -1,9 +1,11 @@
+package main.core;
+
 import java.util.*;
 import java.util.List;
 import java.util.LinkedList;
 
 /**
- * Class Game implements the main functionality of the RISK game.
+ * Class main.core.Game implements the main functionality of the RISK game.
  *
  * @author Tony Zeidan
  * @author Ethan Chase
@@ -40,7 +42,7 @@ public class Game {
     private static Scanner myAction;
 
     /**
-     * Default constructor for instances of Game class.
+     * Default constructor for instances of main.core.Game class.
      * (For now) Creates a new game with the hardcoded map and the players that
      * the user inputs.
      */
@@ -100,13 +102,13 @@ public class Game {
          */
         for (int i = 0; i < numOfPlayers; i++) {
             //get this players name
-            System.out.print(String.format("Player %s Name: ", i + 1));
+            System.out.print(String.format("main.core.Player %s Name: ", i + 1));
             String playerName = myAction.nextLine();
 
             int randIndex = rand.nextInt(randomColors.size());
             //generate and assign random colours
             String colour = randomColors.get(randIndex);
-            System.out.println(String.format("Player %s Colour is: %s\n", i + 1, colour));
+            System.out.println(String.format("main.core.Player %s Colour is: %s\n", i + 1, colour));
             randomColors.remove(randIndex);
             players.add(new Player(playerName, colour));
         }
@@ -116,7 +118,7 @@ public class Game {
     }
 
     /**
-     * Testing constructor of Game.
+     * Testing constructor of main.core.Game.
      * Creates a new game with two territories.
      *
      * @param test Does nothing
@@ -166,7 +168,7 @@ public class Game {
 
     /**
      * Runs the current session corresponding to all the setup that has been done.
-     * (Main Game Loop)
+     * (Main main.core.Game Loop)
      */
     public void runGame() {
 
@@ -307,7 +309,7 @@ public class Game {
     }
 
 
-    private int getPlayerDieCount(Player player,int lowerBound, int upperBound) {
+    private int getPlayerDieCount(Player player, int lowerBound, int upperBound) {
         if (lowerBound==upperBound) return lowerBound;
 
         boolean validInput = false;
@@ -607,7 +609,7 @@ public class Game {
     public static void main(String[] args) {
 
         Game g1 = new Game();
-        //Game g1 = new Game("test");
+        //main.core.Game g1 = new main.core.Game("test");
         g1.runGame();
     }
 }

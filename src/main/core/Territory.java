@@ -1,10 +1,7 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+package main.core;
 
 /**
- * Class Territory represents the individual Territories found within the map.
+ * Class main.core.Territory represents the individual Territories found within the map.
  *
  * @author Tony Zeidan
  * @author Ethan Chase
@@ -85,7 +82,7 @@ public class Territory {
      */
     @Override
     public String toString() {
-        return String.format("The Territory of %s: \n\tunits: %s",name,units);
+        return String.format("The main.core.Territory of %s: \n\tunits: %s",name,units);
     }
 
     /**

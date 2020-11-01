@@ -1,3 +1,8 @@
+package main.view;
+
+import main.core.Player;
+import main.core.Territory;
+
 import javax.swing.*;
 import java.util.Arrays;
 import java.util.List;
@@ -58,7 +63,7 @@ public class JRiskOptionPane {
      * @param minMove The minimum amount of units the player has to move
      * @return The user's input to the dialog (number of units)
      */
-    public static int showFortifyInput(JFrame frame,Player player, Territory moving, Territory destination, int minMove) {
+    public static int showFortifyInput(JFrame frame, Player player, Territory moving, Territory destination, int minMove) {
 
         Object[] options = new Object[moving.getUnits()-minMove];
         int index = 0;
@@ -102,7 +107,7 @@ public class JRiskOptionPane {
     }
 
     public static void main(String[] args) {
-        //int r = JRiskInputPane.showDieCountDialog(null,new Player("Tony","RED"),1,3);
+        //int r = JRiskInputPane.showDieCountDialog(null,new main.core.Player("Tony","RED"),1,3);
         Player p1 = new Player("Tony","RED");
         Territory t1 = new Territory("EARTH");
         t1.setUnits(47);

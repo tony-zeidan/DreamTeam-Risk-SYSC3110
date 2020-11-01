@@ -1,3 +1,8 @@
+package main.view;
+
+import main.core.Player;
+import main.core.Territory;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
@@ -78,7 +83,7 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
     private boolean canCancel;
 
     /**
-     * Constructor for instances of JFortifyInputDialog.
+     * Constructor for instances of main.view.JFortifyInputDialog.
      * Creates a new dialog whose parent frame is the one specified.
      *
      * @param frame The parent frame

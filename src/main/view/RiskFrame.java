@@ -1,3 +1,5 @@
+package main.view;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -22,7 +24,7 @@ public class RiskFrame extends JFrame {
     private List<Point> territoryPoints;
 
     /**
-     * Constructor for instances of RiskFrame, constructs a new GUI.
+     * Constructor for instances of main.view.RiskFrame, constructs a new GUI.
      *
      * NEEDS ALTERING FOR COMMUNICATION WITH MODEL AND
      * CONTROLLER
@@ -66,7 +68,7 @@ public class RiskFrame extends JFrame {
 
         //create a massive seperator in the menu bar
         menuBar.add(Box.createHorizontalGlue());
-        menuBar.add(new JLabel("Player N's Turn "));    //we must update this with the players turn
+        menuBar.add(new JLabel("main.core.Player N's Turn "));    //we must update this with the players turn
 
         setJMenuBar(menuBar);
 
@@ -100,7 +102,7 @@ public class RiskFrame extends JFrame {
         /*
         The following is the scrolling table for territory information
         The table is only going to have three rows:
-        1) Owner: Player/String
+        1) Owner: main.core.Player/String
         2) Color: String
         2) Units : int/String
          */
@@ -110,7 +112,7 @@ public class RiskFrame extends JFrame {
         gameInfoScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         //combo box for selecting territory
-        topSubEventPane.add(BorderLayout.NORTH,new JLabel("Select Territory"));
+        topSubEventPane.add(BorderLayout.NORTH,new JLabel("Select main.core.Territory"));
         JComboBox<String> topSubEventCombo = new JComboBox<>();
         topSubEventCombo.addItem("GRINEER");    //testing items
         topSubEventCombo.addItem("Eurasia");        //testing items
@@ -127,7 +129,7 @@ public class RiskFrame extends JFrame {
         gameEventScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         //add list to the bottom sub pane
-        bottomSubEventPane.add(BorderLayout.NORTH,new JLabel("Game Events"));
+        bottomSubEventPane.add(BorderLayout.NORTH,new JLabel("main.core.Game Events"));
         bottomSubEventPane.add(BorderLayout.CENTER,gameEventScroller); //TODO: switch this to a scroller JList
 
         //set borders for both sub panes (to look seperate)

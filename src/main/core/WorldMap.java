@@ -1,5 +1,6 @@
+package main.core;
+
 import java.awt.*;
-import java.awt.image.PackedColorModel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -8,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * WorldMap represents the entire map of that the Game contains.
+ * main.core.WorldMap represents the entire map of that the main.core.Game contains.
  *
  * @author Anthony Dooley
  * @author Tony Zeidan
@@ -43,7 +44,7 @@ public class WorldMap {
     private static Random rand;
 
     /**'
-     * Constructor for instances of WorldMap.
+     * Constructor for instances of main.core.WorldMap.
      * Creates a new World with the name given (hardcoded map).
      *
      * @param name The name of the World
@@ -61,7 +62,7 @@ public class WorldMap {
     }
 
     /**
-     * Testing constructor for WorldMap.
+     * Testing constructor for main.core.WorldMap.
      * {@link Game#Game(String)}
      */
     public WorldMap()

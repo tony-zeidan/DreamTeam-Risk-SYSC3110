@@ -1,8 +1,8 @@
-Alaska(1:1),Kamchatka,Northwest Territory,Western Canada
-Northwest Territory(1:1),Greenland,Central Canada,Alaska,Western Canada
-Greenland(1:1),Central Canada,Eastern Canada,Northwest Territory,Iceland
-Western Canada(1:1),Central Canada,Northwest Territory,Alaska,Western United States
-Central Canada(1:1),Western Canada,Eastern Canada,Northwest Territory,Greenland,Western United States,Eastern United States
+Alaska(1:1),Kamchatka,Northwest main.core.Territory,Western Canada
+Northwest main.core.Territory(1:1),Greenland,Central Canada,Alaska,Western Canada
+Greenland(1:1),Central Canada,Eastern Canada,Northwest main.core.Territory,Iceland
+Western Canada(1:1),Central Canada,Northwest main.core.Territory,Alaska,Western United States
+Central Canada(1:1),Western Canada,Eastern Canada,Northwest main.core.Territory,Greenland,Western United States,Eastern United States
 Eastern Canada(1:1),Greenland,Central Canada,Eastern United States
 Western United States(1:1),Western Canada,Central Canada,Eastern United States,Central America
 Eastern United States(1:1),Central Canada,Western United States,Eastern Canada,Central America
