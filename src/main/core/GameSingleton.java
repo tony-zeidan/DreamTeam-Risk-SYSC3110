@@ -158,6 +158,31 @@ public class GameSingleton {
         }
     }
 
+    private Territory getAttackingTerritory(int i){
+        /* Attacking Conditions:
+           1) Defending territory must be a neighbour to Attacking territory
+           2) There are 2 units on the attacking territory (taken care of in implementation)
+           3) Attacking owner does not own Defending territory
+        */
+        Territory attacking = null;
+
+        //keep asking for a territory until we get a valid one
+        while (attacking == null) {
+            players.get(i).printOwned();
+            System.out.print("\nattack from where? ");
+            attacking = getTerritory(myAction.nextLine());
+            if (attacking == null) {
+                System.out.println("\nThat territory is not valid, try again.");
+                attacking = null;
+            } else if (world.getTerritoryOwner(attacking) != players.get(i)) {
+                System.out.println("\nYou do not own that territory, try again.");
+                attacking = null;
+            }
+        }
+
+        return attacking;
+    }
+
     /** Go through the current player's turn if they have not yet been eliminated
      * from the game.
      *
@@ -187,27 +212,8 @@ public class GameSingleton {
                 switch (command) {
                     //Current player selected 'attack' : Begin attack protocol
                     case "attack":
-                        /*
-                           Attacking Conditions:
-                           1) Defending territory must be a neighbour to Attacking territory
-                           2) There are 2 units on the attacking territory (taken care of in implementation)
-                           3) Attacking owner does not own Defending territory
-                           */
-                        Territory attacking = null;
 
-                        //keep asking for a territory until we get a valid one
-                        while (attacking == null) {
-                            players.get(i).printOwned();
-                            System.out.print("\nattack from where? ");
-                            attacking = getTerritory(myAction.nextLine());
-                            if (attacking == null) {
-                                System.out.println("\nThat territory is not valid, try again.");
-                                attacking = null;
-                            } else if (world.getTerritoryOwner(attacking) != players.get(i)) {
-                                System.out.println("\nYou do not own that territory, try again.");
-                                attacking = null;
-                            }
-                        }
+                        Territory attacking = getAttackingTerritory(i);
 
                         //we can use this method if we have conquered all neighbouring territories
                         if (!world.ownsAllTerritoryNeighbours(currentPlayer, attacking)) {
@@ -318,28 +324,6 @@ public class GameSingleton {
         System.out.println(String.format("|--------------------(World State: %s)--------------------|", world.getName()));
         printMap();
     }
-
-
-    /*private int getPlayerDieCount(Player player, int lowerBound, int upperBound) {
-        if (lowerBound==upperBound) return lowerBound;
-
-        boolean validInput = false;
-        int dieCount = 0;
-        while (!validInput) {
-            System.out.println(String.format("%s how many die would you like to roll with? (%s to %s)",player.getName(),lowerBound,upperBound));
-            String attInput = myAction.nextLine();
-            try {
-                dieCount = Integer.parseInt(attInput);
-                validInput = true;
-                if (dieCount>upperBound||dieCount<lowerBound) {
-                    validInput = false;
-                }
-            } catch (NumberFormatException e) {
-                validInput = false;
-            }
-        }
-        return dieCount;
-    }*/
 
     private int getPlayerDice(Player player, Boolean isAttacking, int units){
         String attInput, defInput;
