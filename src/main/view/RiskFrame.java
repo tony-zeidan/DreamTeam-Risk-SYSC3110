@@ -32,7 +32,11 @@ public class RiskFrame extends JFrame {
     public RiskFrame() {
         super("RISK");
         setLayout(new BorderLayout());
+        composeFrame();
+        showFrame();
+    }
 
+    private void composeFrame() {
         //attempt to read the map file
         BufferedImage mapImage = null;
         try {
@@ -152,8 +156,11 @@ public class RiskFrame extends JFrame {
         setPreferredSize(new Dimension(1200,800));
 
         //prepare
-        setResizable(false);
         pack();
+    }
+
+    public void showFrame() {
+        setResizable(false);
         setVisible(true);
     }
 
