@@ -2,6 +2,7 @@ package main.core;
 
 import main.view.RiskFrame;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -50,7 +51,7 @@ public class Game {
      * (For now) Creates a new game with the hardcoded map and the players that
      * the user inputs.
      */
-    public Game() {
+    public Game(int numOfPlayers, ArrayList<String> names) {
 
         //initialize map, player list, and scanner
         players = new ArrayList<>(6);
@@ -60,30 +61,7 @@ public class Game {
         We must get the amount of people playing the game.
         Continuously prompt the user for valid information.
          */
-        String input;
-        int numOfPlayers = 0;
-        boolean validNumEntered = false;
-        while (!validNumEntered) {
-            System.out.println("Please input the number of players (max-6 min-2): ");
-            input = myAction.nextLine();
 
-            //attempt to parse an integer value from the user's input
-            try {
-                numOfPlayers = Integer.parseInt(input);
-                validNumEntered = true;
-
-                //check if the number parsed is invalid
-                if (numOfPlayers > 6 || numOfPlayers < 2) {
-                    validNumEntered = false;
-                    System.out.println("You input an invalid number, try again.");
-                }
-
-                //catch the exception (most commonly thrown when an integer can't be parsed)
-            } catch (NumberFormatException e) {
-                validNumEntered = false;
-                System.out.println("You input an invalid number, try again.");
-            }
-        }
         //set the initial amount of active players accordingly
         numActivePlayer = numOfPlayers;
 
@@ -105,15 +83,12 @@ public class Game {
          */
         for (int i = 0; i < numOfPlayers; i++) {
             //get this players name
-            System.out.print(String.format("main.core.Player %s Name: ", i + 1));
-            String playerName = myAction.nextLine();
 
             int randIndex = rand.nextInt(randomColors.size());
             //generate and assign random colours
             Color colour = randomColors.get(randIndex);
-            System.out.println(String.format("main.core.Player %s Colour is: %s\n", i + 1, colour));
             randomColors.remove(randIndex);
-            players.add(new Player(playerName, colour));
+            players.add(new Player(names.get(i), colour));
         }
         //shuffle the order of the players
         shufflePlayers();
@@ -610,17 +585,5 @@ public class Game {
             }
         }
         numActivePlayer = numActive;
-    }
-
-    /**
-     * This main method represents the main game loop.
-     *
-     * @param args nothing
-     */
-    public static void main(String[] args) {
-
-        Game g1 = new Game();
-        //main.core.Game g1 = new main.core.Game("test");
-        g1.runGame();
     }
 }

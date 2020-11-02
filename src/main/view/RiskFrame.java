@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +46,11 @@ public class RiskFrame extends JFrame implements RiskGameListener {
      */
     public RiskFrame() {
         super("RISK");
-        riskModel = new Game();
+
+        int numPlayers= getNumOfPlayers();
+        ArrayList<String> playerName = getPlayerNames(numPlayers);
+        riskModel = new Game(numPlayers, playerName);
+
         //board = null;
         setLayout(new BorderLayout());
         selectedAction = -1;
@@ -219,7 +224,37 @@ public class RiskFrame extends JFrame implements RiskGameListener {
         setResizable(false);
         setVisible(true);
     }
+    private int getNumOfPlayers()
+    {
+        String input;
+        int numOfPlayers = 0;
+        boolean validNumEntered = false;
+        while (!validNumEntered) {
+            input  = JOptionPane.showInputDialog(this,"Please enter the number of players");
+            //attempt to parse an integer value from the user's input
+            try {
+                numOfPlayers = Integer.parseInt(input);
 
+                //check if the number parsed is invalid
+                if (numOfPlayers < 7 && numOfPlayers > 1) {
+                    validNumEntered = true;
+                }
+                //catch the exception (most commonly thrown when an integer can't be parsed)
+            } catch (NumberFormatException e) {
+                validNumEntered = false;
+            }
+        }
+        return numOfPlayers;
+    }
+    private ArrayList<String> getPlayerNames(int numPlayers)
+    {
+        ArrayList<String> names = new ArrayList<>();
+        for(int i= 0; i<numPlayers;i++)
+        {
+            names.add(JOptionPane.showInputDialog(this,String.format("Player %s Name: ", i + 1)));
+        }
+        return names;
+    }
     /**
      * We need some sort of updating methods that will do the following.
      *
