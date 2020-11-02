@@ -297,7 +297,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
         int numOfPlayers = 0;
         boolean validNumEntered = false;
         while (!validNumEntered) {
-            input  = JOptionPane.showInputDialog(this,"Please enter the number of players");
+            input  = JOptionPane.showInputDialog(this,"Please enter the number of players (2 - 6)");
             //attempt to parse an integer value from the user's input
             try {
                 numOfPlayers = Integer.parseInt(input);
@@ -305,6 +305,9 @@ public class RiskFrame extends JFrame implements RiskGameView {
                 //check if the number parsed is invalid
                 if (numOfPlayers < 7 && numOfPlayers > 1) {
                     validNumEntered = true;
+                }
+                else if(numOfPlayers >= 7 || numOfPlayers <= 1){
+                    JOptionPane.showMessageDialog(null,"Invalid number of players");
                 }
                 //catch the exception (most commonly thrown when an integer can't be parsed)
             } catch (NumberFormatException e) {
@@ -318,6 +321,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
         ArrayList<String> names = new ArrayList<>();
         for(int i= 0; i<numPlayers;i++)
         {
+
             names.add(JOptionPane.showInputDialog(this,String.format("Player %s Name: ", i + 1)));
         }
         return names;
