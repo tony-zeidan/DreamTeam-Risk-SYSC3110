@@ -1,6 +1,6 @@
 package main.core;
 
-import main.view.RiskView;
+import main.view.RiskFrame;
 
 import java.awt.*;
 import java.util.*;
@@ -19,7 +19,6 @@ import java.util.LinkedList;
  * @since 1.00
  */
 public class Game {
-    private List<RiskView> riskViews;
     /**
      * The list of players that may or may not be active throughout the game.
      *
@@ -44,6 +43,8 @@ public class Game {
      */
     private static Scanner myAction;
 
+    private RiskFrame riskView;
+
     /**
      * Default constructor for instances of main.core.Game class.
      * (For now) Creates a new game with the hardcoded map and the players that
@@ -55,7 +56,6 @@ public class Game {
         players = new ArrayList<>(6);
         world = new WorldMap("Earth");
         myAction = new Scanner(System.in);
-        riskViews = new ArrayList<>();
         /*
         We must get the amount of people playing the game.
         Continuously prompt the user for valid information.
@@ -93,8 +93,8 @@ public class Game {
         randomColors.add(Color.GREEN);
         randomColors.add(Color.BLUE);
         randomColors.add(Color.YELLOW);
-        randomColors.add(Color.WHITE);
-        randomColors.add(Color.BLACK);
+        randomColors.add(Color.ORANGE);
+        randomColors.add(Color.CYAN);
 
         Random rand = new Random();
 
@@ -119,10 +119,7 @@ public class Game {
         shufflePlayers();
         world.setUp(players);
     }
-    public void addRiskView(RiskView rv)
-    {
-        riskViews.add(rv);
-    }
+
     /**
      * Testing constructor of main.core.Game.
      * Creates a new game with two territories.
@@ -136,6 +133,14 @@ public class Game {
         world = new WorldMap();
         myAction = new Scanner(System.in);
         numActivePlayer = 2;
+    }
+
+    public Map<Territory,Point> getAllCoordinates() {
+        return world.getAllCoordinates();
+    }
+
+    public Player getTerritoryOwner(Territory territory) {
+        return world.getTerritoryOwner(territory);
     }
 
     /**
@@ -343,7 +348,7 @@ public class Game {
      * @param attacking The territory containing units that will be used in the attack
      * @param defending The territory being attacked
      */
-    private void battle(Territory attacking, Territory defending) {
+    public void battle(Territory attacking, Territory defending) {
 
         System.out.println(String.format("|------------------(Battle Commenced - %s vs. %s)------------------|", attacking.getName(), defending.getName()));
         String end = "|------------------(Battle %s - %s)------------------|";

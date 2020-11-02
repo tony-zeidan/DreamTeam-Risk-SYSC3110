@@ -18,7 +18,7 @@ public class RiskEvent extends EventObject {
      * @param source the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
      */
-    public RiskEvent(Object source, Point point1, int units1, Player owner1,Point point2, int units2, Player owner2) {
+    public RiskEvent(Object source, Player player) {
         super(source);
         this.point1 = point1;
         this.units1 = units1;

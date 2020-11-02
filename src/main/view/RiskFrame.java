@@ -8,8 +8,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -20,14 +20,17 @@ import java.util.Map;
  *
  * @author Tony Zeidan
  */
-public class RiskFrame extends JFrame implements RiskView{
+public class RiskFrame extends JFrame implements RiskGameListener {
+
+    private Game riskModel;
+
 
     /**
-     * A container for the points that will be displayed on the map.
+     *
      */
-    private List<Point> territoryPoints;
+    private Territory selectedTerritory;
 
-    private WorldMap riskModel;
+    private int selectedAction;
 
     /**
      * JPanel containing the game board;
@@ -42,14 +45,18 @@ public class RiskFrame extends JFrame implements RiskView{
      */
     public RiskFrame() {
         super("RISK");
-        riskModel = new WorldMap("Earth");
+        riskModel = new Game();
         //board = null;
         setLayout(new BorderLayout());
+        selectedAction = -1;
         composeFrame();
         showFrame();
     }
 
     private void composeFrame() {
+
+        RiskController rc = new RiskController(riskModel,this);
+
         //attempt to read the map file
         BufferedImage mapImage = null;
         try {
@@ -73,9 +80,10 @@ public class RiskFrame extends JFrame implements RiskView{
 
                 //draw the scaled instance of the image
                 boolean b = g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),Image.SCALE_SMOOTH), 0, 0, null);
-                //paintPoints(g,0.79);
+                paintPoints(g,1);
             }
         };
+        board.addMouseListener(rc);
 
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Options");
@@ -92,9 +100,15 @@ public class RiskFrame extends JFrame implements RiskView{
             - we must enable them and disable them accordingly
          */
         JPanel buttonPane = new JPanel(new GridLayout(3,1));
-        buttonPane.add(new JButton("Attack"));
-        buttonPane.add(new JButton("World State"));
-        buttonPane.add(new JButton("End Turn"));
+        JButton attack = new JButton("Attack");
+        JButton worldState = new JButton("World State");
+        JButton endTurn = new JButton("End Turn");
+        attack.addActionListener(rc);
+        worldState.addActionListener(rc);
+        endTurn.addActionListener(rc);
+        buttonPane.add(attack);
+        buttonPane.add(worldState);
+        buttonPane.add(endTurn);
 
         /*
         This panel (eventPane) is responsible for showing the events that occurred
@@ -173,14 +187,31 @@ public class RiskFrame extends JFrame implements RiskView{
         pack();
     }
 
-    private void paintPoints(Graphics g,double scalingFactor) {
+    public Territory getSelectedTerritory() {
+        return selectedTerritory;
+    }
+
+
+    public int getSelectedAction() {
+        return selectedAction;
+    }
+    public void setSelectedAction(int selectedAction) {
+        this.selectedAction = selectedAction;
+    }
+
+    private void paintPoints(Graphics g, double scalingFactor) {
         Map<Territory,Point> points = riskModel.getAllCoordinates();
         for (Territory t : points.keySet()) {
-            g.setColor(riskModel.getTerritoryOwner(t).getColour());
             Point p = points.get(t);
             int x = (int) (p.x*scalingFactor);
             int y = (int) (p.y*scalingFactor);
-            g.fillOval(x,  y, 8, 8);
+            g.setColor(Color.WHITE);
+            g.fillOval(x-2,y-2,16,16);
+            g.setColor(riskModel.getTerritoryOwner(t).getColour());
+            g.fillOval(x,  y, 12, 12);
+            g.setFont(new Font("Segoe UI",Font.PLAIN,10));
+            g.setColor(Color.WHITE);
+            g.drawString(t.getName(),x-25,y-10);
         }
     }
 
@@ -202,5 +233,9 @@ public class RiskFrame extends JFrame implements RiskView{
     @Override
     public void handleRiskUpdate(RiskEvent e) {
 
+    }
+
+    public void setSelectedTerritory(Territory selectedTerritory) {
+        this.selectedTerritory = selectedTerritory;
     }
 }
