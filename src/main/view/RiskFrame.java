@@ -267,7 +267,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
             lbl.setBounds(25 + insets.left, 5 + insets.top,
                     lblSize.width, lblSize.height);
             board.add(lbl);
-            lbl2.setBounds(25 + insets.left, 5 + insets.top,
+            lbl2.setBounds(30 + insets.left, 5 + insets.top,
                     lblSize2.width, lblSize2.height);
             board.add(lbl);
             board.add(lbl2);
@@ -296,14 +296,14 @@ public class RiskFrame extends JFrame implements RiskGameView {
     {
         String input;
         int numOfPlayers = 0;
-            Object[] options = {"2", "3", "4", "5", "6"};
-            input  = (String) JOptionPane.showInputDialog(this,"How many players?","Number of Players",
-                    JOptionPane.QUESTION_MESSAGE,null,options,"2");
-            //User pressed close or cancel
-            if(input == null){
-                System.exit(0);
-            }
-            return numOfPlayers = Integer.parseInt(input);
+        Object[] options = {"2", "3", "4", "5", "6"};
+        input  = (String) JOptionPane.showInputDialog(this,"How many players?","Number of Players",
+                JOptionPane.QUESTION_MESSAGE,null,options,"2");
+        //User pressed close or cancel
+        if(input == null){
+            System.exit(0);
+        }
+        return numOfPlayers = Integer.parseInt(input);
     }
 
     private ArrayList<String> getPlayerNames(int numPlayers)
