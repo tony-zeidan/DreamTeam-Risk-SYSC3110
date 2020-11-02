@@ -37,7 +37,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
             } else if (jb.getText().equals("World State")) {
                 riskView.setSelectedAction(2);
             } else if (jb.getText().equals("End Turn")) {
-                riskView.setSelectedAction(3);
+                riskModel.nextPlayer();
             }
         }
     }

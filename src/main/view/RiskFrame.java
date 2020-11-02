@@ -9,12 +9,9 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,10 +20,10 @@ import java.util.Map;
  *
  * @author Tony Zeidan
  */
-public class RiskFrame extends JFrame implements RiskGameListener {
+public class RiskFrame extends JFrame implements RiskGameView {
 
     private Game riskModel;
-
+    private JLabel playerTurnLbl;
     private DefaultListModel<String> eventDescriptions;
 
     /**
@@ -57,6 +54,7 @@ public class RiskFrame extends JFrame implements RiskGameListener {
         int numPlayers= getNumOfPlayers();
         ArrayList<String> playerName = getPlayerNames(numPlayers);
         riskModel = new Game(numPlayers, playerName);
+        riskModel.makeView(this);
         pointsToPaint = riskModel.getAllCoordinates();
 
         board=null;
@@ -112,7 +110,8 @@ public class RiskFrame extends JFrame implements RiskGameListener {
 
         //create a massive seperator in the menu bar
         menuBar.add(Box.createHorizontalGlue());
-        menuBar.add(new JLabel("main.core.Player N's Turn "));    //we must update this with the players turn
+        playerTurnLbl = new JLabel("it is : "+riskModel.getStartingPlayer()+"'s turn.        ");
+        menuBar.add(playerTurnLbl);    //we must update this with the players turn
 
         setJMenuBar(menuBar);
 
@@ -331,7 +330,12 @@ public class RiskFrame extends JFrame implements RiskGameListener {
     public void handleRiskUpdate(RiskEvent e) {
         Game riskModel = (Game) e.getSource();
         String description = e.getDescription();
-        eventDescriptions.addElement(description);
+        if (description == "Next Turn")
+        {
+            playerTurnLbl.setText("it is : "+e.getInfo()+"'s turn.        ");
+            eventDescriptions.addElement("Turn ended, It is now "+e.getInfo()+"'s turn");
+        }
+
         //board.repaint();
         board.revalidate();
     }

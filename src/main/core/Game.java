@@ -1,6 +1,8 @@
 package main.core;
 
+import main.view.RiskEvent;
 import main.view.RiskFrame;
+import main.view.RiskGameView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,8 +45,8 @@ public class Game {
      * Scanner for user input.
      */
     private static Scanner myAction;
-
-    private RiskFrame riskView;
+    private int currentPlayerInd;
+    private RiskGameView riskView;
 
     /**
      * Default constructor for instances of main.core.Game class.
@@ -57,6 +59,7 @@ public class Game {
         players = new ArrayList<>(6);
         world = new WorldMap("Earth");
         myAction = new Scanner(System.in);
+        currentPlayerInd = 0;
         /*
         We must get the amount of people playing the game.
         Continuously prompt the user for valid information.
@@ -121,6 +124,14 @@ public class Game {
     public Player getTerritoryOwner(Territory territory) {
         return world.getTerritoryOwner(territory);
     }
+    public String getStartingPlayer()
+    {
+        return players.get(0).getName();
+    }
+    public void makeView(RiskGameView rgv)
+    {
+        riskView = rgv;
+    }
 
     /**
      * Retrieves a territory from the map (or null).
@@ -155,7 +166,17 @@ public class Game {
             players.set(chosen, holder);
         }
     }
-
+    /**
+     * get the next active player
+     */
+    public void nextPlayer()
+    {
+        currentPlayerInd = (currentPlayerInd+1)%players.size();
+        while(!(players.get(currentPlayerInd).isActive())){
+            currentPlayerInd = (currentPlayerInd+1)%players.size();
+        }
+        riskView.handleRiskUpdate(new RiskEvent(this,"Next Turn", players.get(currentPlayerInd).getName()));
+    }
     /**
      * Runs the current session corresponding to all the setup that has been done.
      * (Main main.core.Game Loop)
