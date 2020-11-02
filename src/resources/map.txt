@@ -1,42 +1,42 @@
-Alaska(80:157),Kamchatka,Northwest Territory,Western Canada
-Northwest Territory(203:163),Greenland,Central Canada,Alaska,Western Canada
-Greenland(476:97),Central Canada,Eastern Canada,Northwest Territory,Iceland
-Western Canada(196:228),Central Canada,Northwest Territory,Alaska,Western United States
-Central Canada(289:236),Western Canada,Eastern Canada,Northwest Territory,Greenland,Western United States,Eastern United States
-Eastern Canada(380:234),Greenland,Central Canada,Eastern United States
-Western United States(207:306),Western Canada,Central Canada,Eastern United States,Central America
-Eastern United States(291:327),Central Canada,Western United States,Eastern Canada,Central America
-Central America(218:385),Western United States,Eastern United States,Venezuela
-Venezuela(276:481),Central America,Brazil,Peru
-Peru(275:584),Venezuela,Brazil,Argentina
-Brazil(363:558),Venezuela,Peru,Argentina
-Argentina(298:697),Peru,Brazil
-North Africa(535:500),Brazil,Western Europe,Southern Europe,Egypt,Congo,East Africa
-Egypt(619:450),Southern Europe,North Africa,East Africa,Middle East
-East Africa(668:547),Egypt,Middle East,North Africa,Congo,South Africa,Madagascar
-Congo(607:606),North Africa,East Africa,South Africa
-South Africa(605:713),Madagascar,Congo,East Africa
-Madagascar(704:704),East Africa,South Africa
-Iceland(518:188),Greenland,Scandinavia,Great Britain
-Scandinavia(594:169),Iceland,Ukraine,Northern Europe,Great Britain
-Ukraine(699:241),Scandinavia,Northern Europe,Southern Europe,Middle East,Afghanistan,Ural
-Great Britain(521:268),Iceland,Western Europe,Northern Europe,Scandinavia
-Northern Europe(583:280),Southern Europe,Western Europe,Great Britain,Scandinavia,Ukraine
-Southern Europe(605:340),Western Europe,Northern Europe,Ukraine,Middle East,Egypt,North Africa
-Western Europe(525:342),Great Britain,Northern Europe,Southern Europe,North Africa
-Indonesia(959:564),Siam,Western Australia,New Guinea
-New Guinea(1095:582),Indonesia,Western Australia,Eastern Australia
-Western Australia(973:694),Indonesia,Eastern Australia,New Guinea
-Eastern Australia(1073:681),Western Australia,New Guinea
-Siam(933:462),Indonesia,India,China
-India(843:447),Middle East,Afghanistan,China,Siam
-China(926:370),Siam,India,Afghanistan,Mongolia,Ural,Siberia
-Mongolia(999:302),Irkutsk,Japan,China,Siberia,Kamchatka
-Japan(1087:334),Kamchatka,Mongolia
-Irkutsk(978:235),Mongolia,Siberia,Kamchatka,Yakutsk
-Yakutsk(1031:161),Siberia,Yakutsk,Irkutsk
-Kamchatka(1133:163),Japan,Yakutsk,Irkutsk,Mongolia,Alaska
-Siberia(896:197),Ural,China,Mongolia,Irkutsk,Yakutsk
-Afghanistan(792:314),Ukraine,Middle East,India,China,Ural
-Ural(830:230),Ukraine,Afghanistan,China,Siberia
-Middle East(716:419),Afghanistan,Ukraine,India,Egypt,East Africa,Southern Europe
+Alaska(63:124),Kamchatka,Northwest Territory,Western Canada
+Northwest Territory(160:129),Greenland,Central Canada,Alaska,Western Canada
+Greenland(376:77),Central Canada,Eastern Canada,Northwest Territory,Iceland
+Western Canada(155:180),Central Canada,Northwest Territory,Alaska,Western United States
+Central Canada(228:186),Western Canada,Eastern Canada,Northwest Territory,Greenland,Western United States,Eastern United States
+Eastern Canada(300:185),Greenland,Central Canada,Eastern United States
+Western United States(164:242),Western Canada,Central Canada,Eastern United States,Central America
+Eastern United States(230:258),Central Canada,Western United States,Eastern Canada,Central America
+Central America(172:304),Western United States,Eastern United States,Venezuela
+Venezuela(218:380),Central America,Brazil,Peru
+Peru(217:461),Venezuela,Brazil,Argentina
+Brazil(287:441),Venezuela,Peru,Argentina
+Argentina(235:551),Peru,Brazil
+North Africa(423:395),Brazil,Western Europe,Southern Europe,Egypt,Congo,East Africa
+Egypt(489:356),Southern Europe,North Africa,East Africa,Middle East
+East Africa(528:432),Egypt,Middle East,North Africa,Congo,South Africa,Madagascar
+Congo(480:479),North Africa,East Africa,South Africa
+South Africa(478:563),Madagascar,Congo,East Africa
+Madagascar(556:556),East Africa,South Africa
+Iceland(409:149),Greenland,Scandinavia,Great Britain
+Scandinavia(469:134),Iceland,Ukraine,Northern Europe,Great Britain
+Ukraine(552:190),Scandinavia,Northern Europe,Southern Europe,Middle East,Afghanistan,Ural
+Great Britain(412:212),Iceland,Western Europe,Northern Europe,Scandinavia
+Northern Europe(461:221),Southern Europe,Western Europe,Great Britain,Scandinavia,Ukraine
+Southern Europe(478:267),Western Europe,Northern Europe,Ukraine,Middle East,Egypt,North Africa+
+Western Europe(415:270),Great Britain,Northern Europe,Southern Europe,North Africa
+Indonesia(758:446),Siam,Western Australia,New Guinea
+New Guinea(865:460),Indonesia,Western Australia,Eastern Australia
+Western Australia(769:548),Indonesia,Eastern Australia,New Guinea
+Eastern Australia(848:538),Western Australia,New Guinea
+Siam(737:365),Indonesia,India,China
+India(666:353),Middle East,Afghanistan,China,Siam
+China(732:292),Siam,India,Afghanistan,Mongolia,Ural,Siberia
+Mongolia(789:239),Irkutsk,Japan,China,Siberia,Kamchatka
+Japan(859:264),Kamchatka,Mongolia
+Irkutsk(773:186),Mongolia,Siberia,Kamchatka,Yakutsk
+Yakutsk(814:127),Siberia,Yakutsk,Irkutsk
+Kamchatka(895:129),Japan,Yakutsk,Irkutsk,Mongolia,Alaska
+Siberia(708:156),Ural,China,Mongolia,Irkutsk,Yakutsk
+Afghanistan(626:248),Ukraine,Middle East,India,China,Ural
+Ural(656:182),Ukraine,Afghanistan,China,Siberia
+Middle East(566:331),Afghanistan,Ukraine,India,Egypt,East Africa,Southern Europe
