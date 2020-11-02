@@ -77,7 +77,7 @@ public class RiskFrame extends JFrame implements RiskGameListener {
         //attempt to read the map file
         BufferedImage mapImage = null;
         try {
-            mapImage = ImageIO.read(getClass().getResource("/resources/testMap2/testMap2.jpg"));
+            mapImage = ImageIO.read(getClass().getResource("/resources/RiskBoard.png"));
         } catch (IOException ioException) {
             System.out.println("RISK Board Load Failed");
             ioException.printStackTrace();
@@ -231,11 +231,20 @@ public class RiskFrame extends JFrame implements RiskGameListener {
     }
 
     private void paintPoints(Graphics g) {
+        /*for (Territory t : pointsToPaint.keySet()) {
+            Point p = pointsToPaint.get(t);
+            Map<Territory,Point> neighbourNodes = riskModel.getNeighbouringNodes(t);
+            for (Point p2 : neighbourNodes.values()) {
+                g.drawLine(p2.x+6,p2.y+6,p.x+6,p.y+6);
+            }
+        }*/
+
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
+            g.setColor(Color.BLACK);
+
             int x = (int) (p.getX());
             int y = (int) (p.getY());
-            g.setColor(Color.BLACK);
             g.fillOval(x-2,y-2,16,16);
             g.setColor(riskModel.getTerritoryOwner(t).getColour());
             g.fillOval(x,  y, 12, 12);
