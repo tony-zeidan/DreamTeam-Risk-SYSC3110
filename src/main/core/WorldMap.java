@@ -187,6 +187,18 @@ public class WorldMap {
         return true;
     }
 
+    public Map<Territory,Point> getNeighbouringNodes(Territory territory) {
+        HashMap<Territory,Point> neighbours = new HashMap<>();
+        for (Territory[] t : mapEdgeList) {
+            if (t[0].equals(territory)) {
+                neighbours.put(t[1],allCoordinates.get(t[1]));
+            } else if (t[1].equals(territory)) {
+                neighbours.put(t[0],allCoordinates.get(t[0]));
+            }
+        }
+        return neighbours;
+    }
+
     public List<Territory> getTerritoryNeighbours(Territory territory) {
         ArrayList<Territory> neighbours = new ArrayList<>();
         for (Territory[] t : mapEdgeList) {
