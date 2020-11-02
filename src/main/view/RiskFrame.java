@@ -157,9 +157,6 @@ public class RiskFrame extends JFrame implements RiskGameListener {
         2) Units : int/String
          */
         JTable infoTable = new JTable(infoModel); //TODO: add model to update table
-        JScrollPane gameInfoScroller = new JScrollPane(infoTable);
-        gameInfoScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        gameInfoScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         //combo box for selecting territory
         topSubEventPane.add(BorderLayout.NORTH,new JLabel("Select main.core.Territory"));
@@ -169,7 +166,7 @@ public class RiskFrame extends JFrame implements RiskGameListener {
         topSubSubEventPane.add(BorderLayout.NORTH,topSubEventCombo);
 
         //add table to top sub pane
-        topSubSubEventPane.add(BorderLayout.CENTER,gameInfoScroller);
+        topSubSubEventPane.add(BorderLayout.CENTER,infoTable);
         topSubEventPane.add(BorderLayout.CENTER,topSubSubEventPane);
 
         //the following is the list of in game events that occurred
@@ -278,7 +275,7 @@ public class RiskFrame extends JFrame implements RiskGameListener {
 
             //Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 
-            lbl.setLocation(p.x,p.y-15);
+            lbl.setLocation(p.x-(lbl.getWidth()/2)+2,p.y-15);
             lbl2.setLocation(p.x+15,p.y);
             lbl.setForeground(Color.BLACK);
             lbl2.setForeground(riskModel.getTerritoryOwner(t).getColour());
