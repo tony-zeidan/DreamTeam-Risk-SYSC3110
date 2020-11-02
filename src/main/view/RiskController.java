@@ -29,6 +29,10 @@ public class RiskController extends MouseAdapter implements ActionListener {
         if (o instanceof JButton) {
             JButton jb = (JButton) o;
             if (jb.getText().equals("Attack")) {
+                Territory selected = riskView.getSelectedTerritory();
+                if (selected!=null) {
+                    riskView.setPointsToPaint(riskModel.getNeighbouringNodes(selected));
+                }
                 riskView.setSelectedAction(1);
             } else if (jb.getText().equals("World State")) {
                 riskView.setSelectedAction(2);
@@ -50,17 +54,20 @@ public class RiskController extends MouseAdapter implements ActionListener {
         System.out.println(riskView.getSelectedAction());
 
         if (clickedTerritory!=null) {
-
+            riskView.setInfoDisplay(clickedTerritory);
         }
+
         //check if the user selected attack and has previously selected a territory
-        if (selectedAction==1 && riskView.getSelectedTerritory()!=null) {
-            int riskAction = riskView.getSelectedAction();
-            if (riskAction==1) {
-                //TODO: add battling inputs here
-                inputBattle(clickedTerritory,riskView.getSelectedTerritory());
-            }
+        if (selectedAction==1 && riskView.getSelectedTerritory()!=null && clickedTerritory!=null) {
+
+            //TODO: add battling inputs here
+            inputBattle(clickedTerritory,riskView.getSelectedTerritory());
+
+            riskView.setPointsToPaint(riskModel.getAllCoordinates());
+
             riskView.setSelectedAction(-1);
             riskView.setSelectedTerritory(null);
+            riskView.setInfoDisplay(clickedTerritory);
         } else if (selectedAction!=-1) {
             riskView.setSelectedAction(-1);
 
@@ -70,7 +77,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
     }
 
     private Territory checkClickedTerritory(Point clicked) {
-        Map<Territory,Point> coords = riskModel.getAllCoordinates();
+        Map<Territory,Point> coords = riskView.getPointsToPaint();
         for (Territory t : coords.keySet()) {
             Point p = coords.get(t);
             if (p.distance(clicked)<20) {

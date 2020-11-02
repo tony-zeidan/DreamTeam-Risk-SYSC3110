@@ -114,6 +114,10 @@ public class Game {
         return world.getAllCoordinates();
     }
 
+    public Map<Territory,Point> getNeighbouringNodes(Territory territory) {
+        return world.getNeighbouringNodes(territory);
+    }
+
     public Player getTerritoryOwner(Territory territory) {
         return world.getTerritoryOwner(territory);
     }
