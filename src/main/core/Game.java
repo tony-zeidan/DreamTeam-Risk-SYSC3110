@@ -547,6 +547,33 @@ public class Game {
     }
 
     /**
+     *
+     */
+    public int getMaximumDieCount(int numUnits, boolean attacking){
+        //The Player is Attacking
+        if(attacking = true){
+            if(numUnits == 2){
+                return 1;
+            }
+            else if(numUnits == 3){
+                return 2;
+            }
+            else{
+                return 3;
+            }
+        }
+        //The Player is Defending
+        else{
+            if(numUnits == 1){
+                return 1;
+            }
+            else{
+                return 2;
+            }
+        }
+    }
+
+    /**
      * Fortify more units into one territory from an adjacent territory, such
      * that the current player owns both territories. At least one unit must
      * be left behind in the initial territory. Used after an attack once the

@@ -61,6 +61,21 @@ public class RiskController extends MouseAdapter implements ActionListener {
         if (selectedAction==1 && riskView.getSelectedTerritory()!=null && clickedTerritory!=null) {
 
             //TODO: add battling inputs here
+            Object[] beforeBattleOptions = {"March Forward", "Retreat"};
+            int beforeBattleChoice = JOptionPane.showOptionDialog(riskView,"Are you going to attack? or retreat?", "Before Battle",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,null,beforeBattleOptions,"1");
+            //Attack was pressed
+            if(beforeBattleChoice == JOptionPane.YES_OPTION){
+                Player playerCurrent = riskModel.getCurrentPlayer();
+                int amountOfAttackDie = JRiskOptionPane.showDieCountDialog(riskView, playerCurrent, 1,
+                        riskModel.getMaximumDieCount(clickedTerritory.getUnits(),true));
+                int amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1,
+                        riskModel.getMaximumDieCount(riskView.getSelectedTerritory().getUnits(),false));
+            }
+            //Retreat was pressed
+            else{
+
+            }
             inputBattle(clickedTerritory,riskView.getSelectedTerritory());
 
             riskView.setPointsToPaint(riskModel.getAllCoordinates());
