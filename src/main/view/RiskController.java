@@ -48,6 +48,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
         //System.out.println(clicked.getX()+":"+clicked.getY());
         Territory clickedTerritory = checkClickedTerritory(clicked);
+        Territory previousTerritory = riskView.getSelectedTerritory();
         int selectedAction = riskView.getSelectedAction();
 
         System.out.println(clickedTerritory);
@@ -58,7 +59,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
         }
 
         //check if the user selected attack and has previously selected a territory
-        if (selectedAction==1 && riskView.getSelectedTerritory()!=null && clickedTerritory!=null) {
+        if (selectedAction==1 && previousTerritory!=null && clickedTerritory!=null) {
 
             //TODO: add battling inputs here
             Object[] beforeBattleOptions = {"March Forward", "Retreat"};
@@ -66,18 +67,23 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,null,beforeBattleOptions,"1");
             //Attack was pressed
             if(beforeBattleChoice == JOptionPane.YES_OPTION){
-                Player playerCurrent = riskModel.getCurrentPlayer();
-                int amountOfAttackDie = JRiskOptionPane.showDieCountDialog(riskView, playerCurrent, 1,
-                        riskModel.getMaximumDieCount(clickedTerritory.getUnits(),true));
+                //Attacker Set Up
+                Player playerCurrent = riskModel.getTerritoryOwner(clickedTerritory);
+                //Get Max Attack Die
+                int maxAttack = riskModel.getMaxBattleDie(clickedTerritory.getUnits(), true);
+                int amountOfAttackDie = JRiskOptionPane.showDieCountDialog(riskView, playerCurrent, 1, maxAttack);
+
+                //Defender Set Up
+                Player defendingPlayer = riskModel.getTerritoryOwner(previousTerritory);
+                //Get Max Defend Die
+                int maxDefend = riskModel.getMaxBattleDie(previousTerritory.getUnits(), false);
                 int amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1,
-                        riskModel.getMaximumDieCount(riskView.getSelectedTerritory().getUnits(),false));
+                        riskModel.getMaxBattleDie(previousTerritory.getUnits(),false));
             }
             //Retreat was pressed
             else{
 
             }
-            inputBattle(clickedTerritory,riskView.getSelectedTerritory());
-
             riskView.setPointsToPaint(riskModel.getAllCoordinates());
 
             riskView.setSelectedAction(-1);

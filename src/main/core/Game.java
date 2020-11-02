@@ -549,26 +549,26 @@ public class Game {
     /**
      *
      */
-    public int getMaximumDieCount(int numUnits, boolean attacking){
+    public int getMaxBattleDie(int numUnits, boolean attacking) {
         //The Player is Attacking
-        if(attacking = true){
-            if(numUnits == 2){
-                return 1;
+        if (attacking = true) {
+            switch (numUnits) {
+                case (1):
+                    return 0;
+                case (2):
+                    return 1;
+                case (3):
+                    return 2;
+                default:
+                    return 3;
             }
-            else if(numUnits == 3){
-                return 2;
-            }
-            else{
-                return 3;
-            }
-        }
-        //The Player is Defending
-        else{
-            if(numUnits == 1){
-                return 1;
-            }
-            else{
-                return 2;
+            //The Player is Defending
+        } else {
+            switch (numUnits) {
+                case (1):
+                    return 1;
+                default:
+                    return 2;
             }
         }
     }
