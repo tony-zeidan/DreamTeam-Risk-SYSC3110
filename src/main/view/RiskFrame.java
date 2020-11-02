@@ -7,10 +7,12 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +26,7 @@ public class RiskFrame extends JFrame implements RiskGameListener {
 
     private Game riskModel;
 
+    private DefaultListModel<String> eventDescriptions;
 
     /**
      *
@@ -32,10 +35,14 @@ public class RiskFrame extends JFrame implements RiskGameListener {
 
     private int selectedAction;
 
+    private Map<Territory,Point> pointsToPaint;
+
+    private DefaultTableModel infoModel;
+
     /**
      * JPanel containing the game board;
      */
-    //private JPanel board;
+    private JPanel board;
 
     /**
      * Constructor for instances of main.view.RiskFrame, constructs a new GUI.
@@ -46,7 +53,13 @@ public class RiskFrame extends JFrame implements RiskGameListener {
     public RiskFrame() {
         super("RISK");
         riskModel = new Game();
-        //board = null;
+        pointsToPaint = riskModel.getAllCoordinates();
+
+        board=null;
+        eventDescriptions = new DefaultListModel<>();
+        infoModel = new DefaultTableModel();
+        infoModel.addColumn("Type");
+        infoModel.addColumn("Value");
         setLayout(new BorderLayout());
         selectedAction = -1;
         composeFrame();
@@ -67,7 +80,7 @@ public class RiskFrame extends JFrame implements RiskGameListener {
         }
 
         Image finalMapImage=mapImage;
-        JPanel board = new JPanel() {
+        board = new JPanel() {
 
             /*
             Paint the image on our canvas.
@@ -79,11 +92,15 @@ public class RiskFrame extends JFrame implements RiskGameListener {
                 super.paintComponent(g);
 
                 //draw the scaled instance of the image
+                board.removeAll();
                 boolean b = g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),Image.SCALE_SMOOTH), 0, 0, null);
-                paintPoints(g,1);
+                paintPoints(g);
+                placePointLabels();
             }
         };
         board.addMouseListener(rc);
+        board.setLayout(null);
+
 
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Options");
@@ -135,7 +152,7 @@ public class RiskFrame extends JFrame implements RiskGameListener {
         2) Color: String
         2) Units : int/String
          */
-        JTable infoTable = new JTable(); //TODO: add model to update table
+        JTable infoTable = new JTable(infoModel); //TODO: add model to update table
         JScrollPane gameInfoScroller = new JScrollPane(infoTable);
         gameInfoScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         gameInfoScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -152,7 +169,7 @@ public class RiskFrame extends JFrame implements RiskGameListener {
         topSubEventPane.add(BorderLayout.CENTER,topSubSubEventPane);
 
         //the following is the list of in game events that occurred
-        JList eventList = new JList(); //TODO: add model to update list
+        JList eventList = new JList(eventDescriptions);
         JScrollPane gameEventScroller = new JScrollPane(eventList);
         gameEventScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         gameEventScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -191,7 +208,6 @@ public class RiskFrame extends JFrame implements RiskGameListener {
         return selectedTerritory;
     }
 
-
     public int getSelectedAction() {
         return selectedAction;
     }
@@ -199,19 +215,65 @@ public class RiskFrame extends JFrame implements RiskGameListener {
         this.selectedAction = selectedAction;
     }
 
-    private void paintPoints(Graphics g, double scalingFactor) {
-        Map<Territory,Point> points = riskModel.getAllCoordinates();
-        for (Territory t : points.keySet()) {
-            Point p = points.get(t);
-            int x = (int) (p.x*scalingFactor);
-            int y = (int) (p.y*scalingFactor);
-            g.setColor(Color.WHITE);
+    public Map<Territory,Point> getPointsToPaint() {
+        return pointsToPaint;
+    }
+
+    public void setPointsToPaint(Map<Territory,Point> pointsToPaint) {
+        this.pointsToPaint=pointsToPaint;
+        board.repaint();
+        board.revalidate();
+    }
+
+    private void paintPoints(Graphics g) {
+        for (Territory t : pointsToPaint.keySet()) {
+            Point p = pointsToPaint.get(t);
+            int x = (int) (p.getX());
+            int y = (int) (p.getY());
+            g.setColor(Color.BLACK);
             g.fillOval(x-2,y-2,16,16);
             g.setColor(riskModel.getTerritoryOwner(t).getColour());
             g.fillOval(x,  y, 12, 12);
-            g.setFont(new Font("Segoe UI",Font.PLAIN,10));
-            g.setColor(Color.WHITE);
-            g.drawString(t.getName(),x-25,y-10);
+            //g.setFont(new Font("Segoe UI",Font.PLAIN,10));
+            //g.setColor(Color.WHITE);
+            //g.drawString(t.getName(),x-25,y-10);
+        }
+    }
+
+    public void placePointLabels() {
+        for (Territory t : pointsToPaint.keySet()) {
+            Point p = pointsToPaint.get(t);
+            int x = (int) (p.getX());
+            int y = (int) (p.getY());
+            JLabel lbl = new JLabel(t.getName());
+            JLabel lbl2 = new JLabel(" " + String.valueOf(t.getUnits())+ " ");
+
+            lbl.setFont(new Font("Segoe UI",Font.BOLD,9));
+            lbl2.setFont(new Font("Segoe UI",Font.BOLD,11));
+
+            Insets insets = board.getInsets();
+            Dimension lblSize = lbl.getPreferredSize();
+            Dimension lblSize2 = lbl2.getPreferredSize();
+            lbl.setBounds(25 + insets.left, 5 + insets.top,
+                    lblSize.width, lblSize.height);
+            board.add(lbl);
+            lbl2.setBounds(25 + insets.left, 5 + insets.top,
+                    lblSize2.width, lblSize2.height);
+            board.add(lbl);
+            board.add(lbl2);
+
+            //Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+
+            lbl.setLocation(p.x,p.y-15);
+            lbl2.setLocation(p.x+15,p.y);
+            lbl.setForeground(Color.BLACK);
+            lbl2.setForeground(riskModel.getTerritoryOwner(t).getColour());
+            lbl.setBackground(Color.WHITE);
+            lbl2.setBackground(Color.WHITE);
+            //lbl.setBorder(raisedEtched);
+            //lbl2.setBorder(raisedEtched);
+            lbl.setOpaque(true);
+            lbl2.setOpaque(true);
         }
     }
 
@@ -232,7 +294,28 @@ public class RiskFrame extends JFrame implements RiskGameListener {
 
     @Override
     public void handleRiskUpdate(RiskEvent e) {
+        Game riskModel = (Game) e.getSource();
+        String description = e.getDescription();
+        eventDescriptions.addElement(description);
+        //board.repaint();
+        board.revalidate();
+    }
 
+    public void clearInfoDiaplay() {
+        if (infoModel.getRowCount() > 0) {
+            for (int i = infoModel.getRowCount() - 1; i > -1; i--) {
+                infoModel.removeRow(i);
+            }
+        }
+    }
+
+    public void setInfoDisplay(Territory territory) {
+        Player p = riskModel.getTerritoryOwner(territory);
+        clearInfoDiaplay();
+        infoModel.addRow(new String[]{"Name", territory.getName()});
+        infoModel.addRow(new String[]{"Owner", p.getName()});
+        infoModel.addRow(new String[]{"Colour", p.getColour().toString()});
+        infoModel.addRow(new String[]{"Units", String.valueOf(territory.getUnits())});
     }
 
     public void setSelectedTerritory(Territory selectedTerritory) {
