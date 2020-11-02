@@ -107,6 +107,24 @@ public class JRiskOptionPane {
         return 1;
     }
 
+    public static String showPlayerNameDialog(JFrame frame, int playerNum){
+        String[] options = {"OK"};
+        JPanel panel = new JPanel();
+        JLabel lbl = new JLabel(String.format("Player %s's Name: ", playerNum));
+        JTextField txt = new JTextField(10);
+        panel.add(lbl);
+        panel.add(txt);
+        int selectedOption = JOptionPane.showOptionDialog(frame, panel, "Player Name", JOptionPane.NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
+        if (selectedOption == 0){
+            return txt.getText();
+        }
+        else{
+            System.exit(0);
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         //int r = JRiskInputPane.showDieCountDialog(null,new main.core.Player("Tony","RED"),1,3);
         Player p1 = new Player("Tony", Color.RED);

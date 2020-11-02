@@ -291,41 +291,31 @@ public class RiskFrame extends JFrame implements RiskGameView {
         setResizable(false);
         setVisible(true);
     }
+
     private int getNumOfPlayers()
     {
         String input;
         int numOfPlayers = 0;
-        boolean validNumEntered = false;
-        while (!validNumEntered) {
-            input  = JOptionPane.showInputDialog(this,"Please enter the number of players (2 - 6)");
-            //attempt to parse an integer value from the user's input
-            try {
-                if(input == null){
-                    System.exit(0);
-                }
-                numOfPlayers = Integer.parseInt(input);
-
-                //check if the number parsed is invalid
-                if (numOfPlayers < 7 && numOfPlayers > 1) {
-                    validNumEntered = true;
-                }
-                else if(numOfPlayers >= 7 || numOfPlayers <= 1){
-                    JOptionPane.showMessageDialog(null,"Invalid number of players");
-                }
-                //catch the exception (most commonly thrown when an integer can't be parsed)
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Input needs to be a number");
-                validNumEntered = false;
+            Object[] options = {"2", "3", "4", "5", "6"};
+            input  = (String) JOptionPane.showInputDialog(this,"How many players?","Number of Players",
+                    JOptionPane.QUESTION_MESSAGE,null,options,"2");
+            //User pressed close or cancel
+            if(input == null){
+                System.exit(0);
             }
-        }
-        return numOfPlayers;
+            return numOfPlayers = Integer.parseInt(input);
     }
+
     private ArrayList<String> getPlayerNames(int numPlayers)
     {
         ArrayList<String> names = new ArrayList<>();
         for(int i= 0; i<numPlayers;i++)
         {
-            names.add(JOptionPane.showInputDialog(this,String.format("Player %s Name: ", i + 1)));
+            String input = null;
+            while(input == null || input.length() == 0){
+                input = JRiskOptionPane.showPlayerNameDialog(this,i+1);
+            }
+            names.add(input);
         }
         return names;
     }
