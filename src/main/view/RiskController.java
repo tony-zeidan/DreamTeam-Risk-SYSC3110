@@ -16,8 +16,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
         this.riskModel=riskModel;
     }
 
-    public void inputBattle(Territory attacking, Territory defending) {
-        riskModel.battle(attacking,defending);
+    public void inputBattle(Territory attacking, Territory defending, int attackDie, int defendDie) {
+        riskModel.battle(attacking,defending, attackDie, defendDie);
     }
     public void inputEndTurn() {
 
@@ -79,6 +79,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 int maxDefend = riskModel.getMaxBattleDie(previousTerritory.getUnits(), false);
                 int amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1,
                         riskModel.getMaxBattleDie(previousTerritory.getUnits(),false));
+
+                inputBattle(clickedTerritory, previousTerritory, amountOfAttackDie, amountOfDefendDie);
             }
             //Retreat was pressed
             else{
