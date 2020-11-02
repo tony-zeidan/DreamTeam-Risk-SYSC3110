@@ -300,6 +300,9 @@ public class RiskFrame extends JFrame implements RiskGameView {
             input  = JOptionPane.showInputDialog(this,"Please enter the number of players (2 - 6)");
             //attempt to parse an integer value from the user's input
             try {
+                if(input == null){
+                    System.exit(0);
+                }
                 numOfPlayers = Integer.parseInt(input);
 
                 //check if the number parsed is invalid
@@ -311,6 +314,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
                 }
                 //catch the exception (most commonly thrown when an integer can't be parsed)
             } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Input needs to be a number");
                 validNumEntered = false;
             }
         }
@@ -321,7 +325,6 @@ public class RiskFrame extends JFrame implements RiskGameView {
         ArrayList<String> names = new ArrayList<>();
         for(int i= 0; i<numPlayers;i++)
         {
-
             names.add(JOptionPane.showInputDialog(this,String.format("Player %s Name: ", i + 1)));
         }
         return names;
