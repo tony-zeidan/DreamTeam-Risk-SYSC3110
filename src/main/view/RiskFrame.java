@@ -77,7 +77,7 @@ public class RiskFrame extends JFrame implements RiskGameListener {
         //attempt to read the map file
         BufferedImage mapImage = null;
         try {
-            mapImage = ImageIO.read(getClass().getResource("/resources/testMap/mapTest.jpg"));
+            mapImage = ImageIO.read(getClass().getResource("/resources/testMap2/testMap2.jpg"));
         } catch (IOException ioException) {
             System.out.println("RISK Board Load Failed");
             ioException.printStackTrace();
