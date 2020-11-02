@@ -75,7 +75,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
         //attempt to read the map file
         BufferedImage mapImage = null;
         try {
-            mapImage = ImageIO.read(getClass().getResource("/resources/testMap/mapTest.jpg"));
+            mapImage = ImageIO.read(getClass().getResource("/resources/RiskBoard.png"));
         } catch (IOException ioException) {
             System.out.println("RISK Board Load Failed");
             ioException.printStackTrace();
@@ -156,9 +156,6 @@ public class RiskFrame extends JFrame implements RiskGameView {
         2) Units : int/String
          */
         JTable infoTable = new JTable(infoModel); //TODO: add model to update table
-        JScrollPane gameInfoScroller = new JScrollPane(infoTable);
-        gameInfoScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        gameInfoScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         //combo box for selecting territory
         topSubEventPane.add(BorderLayout.NORTH,new JLabel("Select main.core.Territory"));
@@ -168,7 +165,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
         topSubSubEventPane.add(BorderLayout.NORTH,topSubEventCombo);
 
         //add table to top sub pane
-        topSubSubEventPane.add(BorderLayout.CENTER,gameInfoScroller);
+        topSubSubEventPane.add(BorderLayout.CENTER,infoTable);
         topSubEventPane.add(BorderLayout.CENTER,topSubSubEventPane);
 
         //the following is the list of in game events that occurred
@@ -230,11 +227,20 @@ public class RiskFrame extends JFrame implements RiskGameView {
     }
 
     private void paintPoints(Graphics g) {
+        /*for (Territory t : pointsToPaint.keySet()) {
+            Point p = pointsToPaint.get(t);
+            Map<Territory,Point> neighbourNodes = riskModel.getNeighbouringNodes(t);
+            for (Point p2 : neighbourNodes.values()) {
+                g.drawLine(p2.x+6,p2.y+6,p.x+6,p.y+6);
+            }
+        }*/
+
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
+            g.setColor(Color.BLACK);
+
             int x = (int) (p.getX());
             int y = (int) (p.getY());
-            g.setColor(Color.BLACK);
             g.fillOval(x-2,y-2,16,16);
             g.setColor(riskModel.getTerritoryOwner(t).getColour());
             g.fillOval(x,  y, 12, 12);
@@ -268,7 +274,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
 
             //Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 
-            lbl.setLocation(p.x,p.y-15);
+            lbl.setLocation(p.x-(lbl.getWidth()/2)+2,p.y-15);
             lbl2.setLocation(p.x+15,p.y);
             lbl.setForeground(Color.BLACK);
             lbl2.setForeground(riskModel.getTerritoryOwner(t).getColour());
