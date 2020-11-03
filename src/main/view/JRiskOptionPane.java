@@ -40,7 +40,6 @@ public class JRiskOptionPane {
         //get the exact number of options the user has
         List<Object> op = Arrays.asList(dieRollOptions);
         Object[] options = op.subList(lowerBound-1,upperBound).toArray();
-        int middle = options.length-1;
 
         int input = JOptionPane.showOptionDialog(frame,
                 "How many die will you roll?",
@@ -48,7 +47,7 @@ public class JRiskOptionPane {
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
-                options,options[middle]);
+                options,options[0]);
         System.out.println(input);
         return input;
     }
