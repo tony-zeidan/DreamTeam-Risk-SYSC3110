@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class RiskController extends MouseAdapter implements ActionListener {
 
-    private Game riskModel;
+    private GameSingleton riskModel;
     private RiskFrame riskView;
 
     /**
@@ -32,7 +32,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
      * @param riskModel The model to get data from and update
      * @param riskView The view to obtain
      */
-    public RiskController(Game riskModel, RiskFrame riskView) {
+    public RiskController(GameSingleton riskModel, RiskFrame riskView) {
         this.riskView=riskView;
         this.riskModel=riskModel;
     }

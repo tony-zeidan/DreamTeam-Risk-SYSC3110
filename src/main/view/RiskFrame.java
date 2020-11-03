@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class RiskFrame extends JFrame implements RiskGameView {
 
-    private Game riskModel;
+    private GameSingleton riskModel;
     private JLabel playerTurnLbl;
     private DefaultListModel<String> eventDescriptions;
 
@@ -76,7 +76,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
     public RiskFrame() {
         super("RISK");
         //TODO: Call GameSingleton.getGameInstance() instead
-        riskModel = new Game(getPlayers(getNumOfPlayers()));
+        riskModel = GameSingleton.getGameInstance(getPlayers(getNumOfPlayers()));
         riskModel.makeView(this);
         eventDescriptions = new DefaultListModel<>();
         infoModel = new DefaultTableModel();
@@ -102,7 +102,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
         //attempt to read the map file
         BufferedImage mapImage = null;
         try {
-            mapImage = ImageIO.read(getClass().getResource("/resources/RiskBoard.png"));
+            mapImage = ImageIO.read(getClass().getResource("/resources/testMap2/testMap2.jpg"));
         } catch (IOException ioException) {
             System.out.println("RISK Board Load Failed");
             ioException.printStackTrace();
@@ -430,7 +430,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
         clearSelectedTerritoryDisplay();
         infoModel.addRow(new String[]{"Name", territory.getName()});
         infoModel.addRow(new String[]{"Owner", p.getName()});
-        infoModel.addRow(new String[]{"Colour", p.getColour().toString()});
+        infoModel.addRow(new String[]{"Colour", ""});
         infoModel.addRow(new String[]{"Units", String.valueOf(territory.getUnits())});
     }
 
