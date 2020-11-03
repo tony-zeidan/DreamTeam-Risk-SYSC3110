@@ -31,11 +31,15 @@ public class RiskController extends MouseAdapter implements ActionListener {
             if (jb.getText().equals("Attack")) {
                 Territory selected = riskView.getSelectedTerritory();
                 if (selected!=null) {
-                    riskView.setPointsToPaint(riskModel.getNeighbouringNodes(selected));
+                    riskView.setPointsToPaint(riskModel.getValidAttackNeighboursOwned(
+                            riskModel.getCurrentPlayer(),selected));
+                    jb.setText("Cancel");
                 }
                 riskView.setSelectedAction(1);
-            } else if (jb.getText().equals("World State")) {
-                riskView.setSelectedAction(2);
+            } else if (jb.getText().equals("Cancel")) {
+                riskView.setPointsToPaint(riskModel.getAllCoordinates());
+                riskView.setSelectedAction(-1);
+                jb.setText("Attack");
             } else if (jb.getText().equals("End Turn")) {
                 riskModel.nextPlayer();
             }
@@ -45,17 +49,23 @@ public class RiskController extends MouseAdapter implements ActionListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         Point clicked = new Point(e.getX(),e.getY());
+        Player currentPlayer = riskModel.getCurrentPlayer();
 
         //System.out.println(clicked.getX()+":"+clicked.getY());
         Territory clickedTerritory = checkClickedTerritory(clicked);
         Territory previousTerritory = riskView.getSelectedTerritory();
         int selectedAction = riskView.getSelectedAction();
 
-        System.out.println(clickedTerritory);
-        System.out.println(riskView.getSelectedAction());
+        System.out.println(String.format("\nCLICK REGISTERED:\nCoordinates: (%s,%s)\nSelected Action: %s\nCurrent Territory Selected: %s\nPrevious Territory Selected: %s\n",
+                clicked.x,clicked.y,selectedAction,clickedTerritory,previousTerritory));
 
         if (clickedTerritory!=null) {
             riskView.setInfoDisplay(clickedTerritory);
+
+            Map<Territory,Point> validAttackers = riskModel.getValidAttackNeighboursOwned(
+                    currentPlayer, clickedTerritory
+            );
+            riskView.setAttackable(validAttackers!=null);
         }
 
         //check if the user selected attack and has previously selected a territory
@@ -68,28 +78,22 @@ public class RiskController extends MouseAdapter implements ActionListener {
             //Attack was pressed
             if(beforeBattleChoice == JOptionPane.YES_OPTION){
                 //Attacker Set Up
-                Player playerCurrent = riskModel.getTerritoryOwner(clickedTerritory);
                 //Get Max Attack Die
                 int maxAttack = riskModel.getMaxBattleDie(clickedTerritory.getUnits(), true);
-                int amountOfAttackDie = JRiskOptionPane.showDieCountDialog(riskView, playerCurrent, 1, maxAttack);
+                int amountOfAttackDie = JRiskOptionPane.showDieCountDialog(riskView, currentPlayer, 1, maxAttack);
 
                 //Defender Set Up
                 Player defendingPlayer = riskModel.getTerritoryOwner(previousTerritory);
                 //Get Max Defend Die
                 int maxDefend = riskModel.getMaxBattleDie(previousTerritory.getUnits(), false);
-                int amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1,
-                        riskModel.getMaxBattleDie(previousTerritory.getUnits(),false));
+                int amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1, maxDefend);
 
                 inputBattle(clickedTerritory, previousTerritory, amountOfAttackDie, amountOfDefendDie);
+                riskView.setSelectedTerritory(null);
             }
-            //Retreat was pressed
-            else{
 
-            }
             riskView.setPointsToPaint(riskModel.getAllCoordinates());
-
             riskView.setSelectedAction(-1);
-            riskView.setSelectedTerritory(null);
             riskView.setInfoDisplay(clickedTerritory);
         } else if (selectedAction!=-1) {
             riskView.setSelectedAction(-1);
