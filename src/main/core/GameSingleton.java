@@ -269,7 +269,7 @@ public class GameSingleton {
                 world.getTerritoryOwner(attacking).getName()+" lost "+lost[0]+" units and "+world.getTerritoryOwner(defending).getName()+" lost "+lost[1]+" units!",
                 RiskEventType.ATTACK_COMPLETED));
 
-        if (defending.getUnits()==0){
+        if (defending.getUnits()==0) {
             riskView.handleRiskUpdate(new RiskEvent(this,
                     world.getTerritoryOwner(attacking).getName()+" obliterated "+world.getTerritoryOwner(defending).getName(),
                     RiskEventType.TERRITORY_DOMINATION));
@@ -338,7 +338,6 @@ public class GameSingleton {
         }
         //Return the result of the attack via units lost
         return new int[]{attackLost, defendLost};
-
     }
 
     /**
@@ -378,7 +377,7 @@ public class GameSingleton {
      *
      * @param initialT The territory that will move units out
      * @param finalT The territory that will add units
-     * @param attDice The number of dice that the attacker used (if applicable)
+     * @param numUnits The number of units that the attacker wants to move
      */
     public void fortifyPosition(Territory initialT, Territory finalT, int numUnits) {
 
