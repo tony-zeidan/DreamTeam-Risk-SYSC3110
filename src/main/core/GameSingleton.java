@@ -380,37 +380,7 @@ public class GameSingleton {
      * @param finalT The territory that will add units
      * @param attDice The number of dice that the attacker used (if applicable)
      */
-    public void fortifyPosition(Territory initialT, Territory finalT, int attDice) {
-
-        String input;
-
-        //Number of units to fortify
-        int numUnits = 0;
-
-        //True if valid number of units is provided by the player, false otherwise
-        boolean fortifyCommand = false;
-
-        //Keep looping until player enters a valid number of units to fortify
-        while (!fortifyCommand) {
-            System.out.println("How many troops would you like to move from " + initialT.getName() + " to " + finalT.getName() + "?");
-            input = myAction.nextLine();
-
-            //Check if player provides a number, not text
-            try {
-                numUnits = Integer.parseInt(input);
-                fortifyCommand = true;
-                //Check if number inputted is valid
-                if (numUnits > initialT.getUnits() - 1 || numUnits < attDice) {
-                    fortifyCommand = false;
-                    System.out.println("Invalid number of units! Please enter a valid number of units" +
-                            "(remember, after winning an attack, you must move units at least the number of attack dice you rolled");
-                }
-            } catch (NumberFormatException e) {
-                //Input provided is not a number
-                fortifyCommand = false;
-                System.out.println("Invalid number of units! Please enter a valid number of units");
-            }
-        }
+    public void fortifyPosition(Territory initialT, Territory finalT, int numUnits) {
 
         //Move the units from the fortifying territory to the fortified territory
         initialT.removeUnits(numUnits);
