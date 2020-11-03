@@ -97,10 +97,13 @@ public class Game {
         //shuffle the order of the players
         shufflePlayers();
         world.setUp(players);
+
         riskView.handleRiskUpdate(new RiskEvent(
                 this, "Welcome to RISK, the game has started!",
                 RiskEventType.GAME_STARTED
         ));
+
+        riskView.handleRiskUpdate(new RiskEvent(this,players.get(currentPlayerInd),RiskEventType.TURN_BEGAN));
     }
 
     /**
@@ -181,7 +184,7 @@ public class Game {
         while(!(players.get(currentPlayerInd).isActive())){
             currentPlayerInd = (currentPlayerInd+1)%players.size();
         }
-        Player current = players.get(currentPlayerInd)
+        Player current = players.get(currentPlayerInd);
         riskView.handleRiskUpdate(new RiskEvent(
                 this, "the game has started!",
                 RiskEventType.TURN_ENDED
@@ -253,11 +256,21 @@ public class Game {
      * @param defending The territory being attacked
      */
     public boolean battle(Territory attacking, Territory defending, int attackDie, int defendDie) {
+        riskView.handleRiskUpdate(new RiskEvent(this,
+                "Attack has started between "+world.getTerritoryOwner(attacking)+" and "+world.getTerritoryOwner(defending),RiskEventType.ATTACK_COMMENCED));
         int[] lost = attack(attackDie, defendDie);
         attacking.removeUnits(lost[0]);
         defending.removeUnits(lost[1]);
-        //TODO: add event triggered
-        return (defending.getUnits()==0);
+        riskView.handleRiskUpdate(new RiskEvent(this,
+                world.getTerritoryOwner(attacking)+" lost "+lost[0]+" units and "+world.getTerritoryOwner(defending)+" lost "+lost[1]+" units!",
+                RiskEventType.ATTACK_COMPLETED));
+
+        if (defending.getUnits()==0){
+            riskView.handleRiskUpdate(new RiskEvent(this,
+                    world.getTerritoryOwner(attacking)+" obliterated "+world.getTerritoryOwner(defending), RiskEventType.TERRITORY_DOMINATION));
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -362,7 +375,7 @@ public class Game {
      * @param finalT The territory that will add units
      * @param attDice The number of dice that the attacker used (if applicable)
      */
-    private static void fortifyPosition(Territory initialT, Territory finalT, int attDice) {
+    public static void fortifyPosition(Territory initialT, Territory finalT, int attDice) {
 
         String input;
 
