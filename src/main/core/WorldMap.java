@@ -187,6 +187,18 @@ public class WorldMap {
         return true;
     }
 
+    public Map<Territory,Point> getNeighbourNodesOwned(Player player, Territory territory) {
+        HashMap<Territory,Point> neighbours = new HashMap<>();
+        for (Territory[] t : mapEdgeList) {
+            if (t[0].equals(territory) && player.ownsTerritory(t[1])) {
+                neighbours.put(t[1],allCoordinates.get(t[1]));
+            } else if (t[1].equals(territory) && player.ownsTerritory(t[0])) {
+                neighbours.put(t[0],allCoordinates.get(t[0]));
+            }
+        }
+        return neighbours;
+    }
+
     public Map<Territory,Point> getNeighbouringNodes(Territory territory) {
         HashMap<Territory,Point> neighbours = new HashMap<>();
         for (Territory[] t : mapEdgeList) {
