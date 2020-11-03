@@ -16,8 +16,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
         this.riskModel=riskModel;
     }
 
-    public void inputBattle(Territory attacking, Territory defending, int attackDie, int defendDie) {
-        riskModel.battle(attacking,defending, attackDie, defendDie);
+    public boolean inputBattle(Territory attacking, Territory defending, int attackDie, int defendDie) {
+        return riskModel.battle(attacking,defending, attackDie, defendDie);
     }
     public void inputEndTurn() {
 
@@ -72,11 +72,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
         if (selectedAction==1 && previousTerritory!=null && clickedTerritory!=null) {
 
             //TODO: add battling inputs here
-            Object[] beforeBattleOptions = {"March Forward", "Retreat"};
-            int beforeBattleChoice = JOptionPane.showOptionDialog(riskView,"Are you going to attack? or retreat?", "Before Battle",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,null,beforeBattleOptions,"1");
             //Attack was pressed
-            if(beforeBattleChoice == JOptionPane.YES_OPTION){
                 //Attacker Set Up
                 //Get Max Attack Die
                 int maxAttack = riskModel.getMaxBattleDie(clickedTerritory.getUnits(), true);
@@ -88,13 +84,16 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 int maxDefend = riskModel.getMaxBattleDie(previousTerritory.getUnits(), false);
                 int amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1, maxDefend);
 
-                inputBattle(clickedTerritory, previousTerritory, amountOfAttackDie, amountOfDefendDie);
-                riskView.setSelectedTerritory(null);
-            }
+                boolean won = inputBattle(clickedTerritory, previousTerritory, amountOfAttackDie, amountOfDefendDie);
+            riskView.setSelectedTerritory(null);
 
             riskView.setPointsToPaint(riskModel.getAllCoordinates());
             riskView.setSelectedAction(-1);
             riskView.setInfoDisplay(clickedTerritory);
+                if (won) {
+                    //TODO: add fortify logic (JRiskOptionPane.showFortifyInputDialog)
+                }
+
         } else if (selectedAction!=-1) {
             riskView.setSelectedAction(-1);
 
