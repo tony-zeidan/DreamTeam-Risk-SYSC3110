@@ -9,8 +9,11 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -21,11 +24,13 @@ import java.util.Map;
  *
  * @author Tony Zeidan
  */
-public class RiskFrame extends JFrame implements RiskGameView {
+public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 
     private GameSingleton riskModel;
     private JLabel playerTurnLbl;
     private DefaultListModel<String> eventDescriptions;
+    private double scalingX;
+    private double scalingY;
 
     /**
      * Stores the territory clicked on by the user.
@@ -85,10 +90,18 @@ public class RiskFrame extends JFrame implements RiskGameView {
         board=null;
         setLayout(new BorderLayout());
         selectedAction = -1;
-        pointsToPaint = riskModel.getAllCoordinates();
+        pointsToPaint = null;
+        scalingX=1;
+        scalingY=1;
         composeFrame();
         riskModel.setUpGame();
         showFrame();
+    }
+
+    public void scaleWorld(double sX,double sY) {
+        for (Point p : riskModel.getAllCoordinates().values()) {
+            p.setLocation(p.x*scalingX,p.y*scalingY);
+        }
     }
 
     /**
@@ -108,8 +121,12 @@ public class RiskFrame extends JFrame implements RiskGameView {
             ioException.printStackTrace();
         }
 
+        Dimension og = getSize();
         Image finalMapImage=mapImage;
+        setPointsToPaint(riskModel.getAllCoordinates());
         board = new JPanel() {
+
+            Dimension previous = null;
 
             /**
              * Paints the JPanel component with the given graphics.
@@ -123,6 +140,14 @@ public class RiskFrame extends JFrame implements RiskGameView {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 board.removeAll();  //clears the labels off of the board
+
+                Dimension current = getSize();
+                if (previous!=null && !(current.equals(previous))) {
+                    scalingX = current.getWidth()/previous.getWidth();
+                    scalingY = current.getHeight()/previous.getHeight();
+                    scaleWorld(scalingX,scalingY);
+                }
+                previous = current;
 
                 //draws the scaled version of the map image
                 g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),
@@ -138,6 +163,10 @@ public class RiskFrame extends JFrame implements RiskGameView {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Options");
         menuBar.add(menu);
+
+        JRadioButtonMenuItem fs = new JRadioButtonMenuItem("Fullscreen");
+        fs.addActionListener(this);
+        menu.add(fs);
 
         //create a massive seperator in the menu bar
         menuBar.add(Box.createHorizontalGlue());
@@ -232,16 +261,20 @@ public class RiskFrame extends JFrame implements RiskGameView {
         restoreGUI();
 
         //set size of frame
-        setPreferredSize(new Dimension(1200,800));
+        setSize(new Dimension(1200,800));
 
         //prepare
-        pack();
+        //pack();
     }
 
     public Territory getSelectedTerritory() {
         return selectedTerritory;
     }
 
+    public void setScalings() {
+        Dimension current = getSize();
+
+    }
 
     public int getSelectedAction() {
         return selectedAction;
@@ -260,8 +293,6 @@ public class RiskFrame extends JFrame implements RiskGameView {
 
     public void setPointsToPaint(Map<Territory,Point> pointsToPaint) {
         this.pointsToPaint=pointsToPaint;
-        board.repaint();
-        board.revalidate();
     }
 
     private static Color getContrastColor(Color color) {
@@ -270,14 +301,18 @@ public class RiskFrame extends JFrame implements RiskGameView {
     }
 
     private void paintPoints(Graphics g) {
-        if (pointsToPaint==null) return;
+
+
+
+        /*if (pointsToPaint==null) return;
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
+
             Map<Territory,Point> neighbourNodes = riskModel.getNeighbouringNodes(t);
             for (Point p2 : neighbourNodes.values()) {
                 g.drawLine(p2.x+6,p2.y+6,p.x+6,p.y+6);
             }
-        }
+        }*/
 
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
@@ -296,6 +331,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
 
     public void placePointLabels() {
         if (pointsToPaint==null) return;
+
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
             int x = (int) (p.getX());
@@ -333,7 +369,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
     }
 
     public void showFrame() {
-        setResizable(false);
+        setResizable(true);
         setVisible(true);
     }
 
@@ -437,7 +473,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
     public void restoreGUI() {
         selectedAction = -1;
         selectedTerritory = null;
-        pointsToPaint = riskModel.getAllCoordinates();
+        setPointsToPaint(riskModel.getAllCoordinates());
         attack.setText("Attack");
         attack.setEnabled(false);
         clearSelectedTerritoryDisplay();
@@ -447,5 +483,18 @@ public class RiskFrame extends JFrame implements RiskGameView {
 
     public void setSelectedTerritory(Territory selectedTerritory) {
         this.selectedTerritory = selectedTerritory;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JRadioButtonMenuItem fs = (JRadioButtonMenuItem) e.getSource();
+        dispose();
+        if (fs.isSelected()) {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+        } else {
+            setPreferredSize(new Dimension(1200,800));
+        }
+        setUndecorated(fs.isSelected());
+        setVisible(true);
     }
 }
