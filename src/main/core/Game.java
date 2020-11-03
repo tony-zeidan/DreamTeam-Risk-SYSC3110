@@ -204,6 +204,21 @@ public class Game {
         printMap();
     }
 
+    /**
+     * Game has ended. Print the name and colour of the player who won the game.
+     */
+    private void endGame(){
+        Player winner = null;
+
+        for (Player p : players) {
+            if (p.isActive()) winner = p;
+        }
+
+        riskView.handleRiskUpdate(new RiskEvent(this,
+                String.format("%s of %s has conquered all of %s! Hooray!", winner.getName(), winner.getColour(), world.getName()),
+                RiskEventType.GAME_OVER));
+    }
+
 
     private int getPlayerDieCount(Player player, int lowerBound, int upperBound) {
         if (lowerBound==upperBound) return lowerBound;
@@ -248,26 +263,30 @@ public class Game {
         return world.getNeighbourNodesOwned(player,territory);
     }
 
+
     /**
-     * Simulates the battle sequence between a territory attacking an adjacent territory. The attacker
-     * is required to select a number of dice to attack with provided he/she meets the minimum unit requirements
-     *
-     * @param attacking The territory containing units that will be used in the attack
-     * @param defending The territory being attacked
+     * @param attacking
+     * @param defending
+     * @param attackDie
+     * @param defendDie
+     * @return
      */
     public boolean battle(Territory attacking, Territory defending, int attackDie, int defendDie) {
         riskView.handleRiskUpdate(new RiskEvent(this,
                 "Attack has started between "+world.getTerritoryOwner(attacking)+" and "+world.getTerritoryOwner(defending),RiskEventType.ATTACK_COMMENCED));
+
         int[] lost = attack(attackDie, defendDie);
         attacking.removeUnits(lost[0]);
         defending.removeUnits(lost[1]);
+
         riskView.handleRiskUpdate(new RiskEvent(this,
                 world.getTerritoryOwner(attacking)+" lost "+lost[0]+" units and "+world.getTerritoryOwner(defending)+" lost "+lost[1]+" units!",
                 RiskEventType.ATTACK_COMPLETED));
 
         if (defending.getUnits()==0){
             riskView.handleRiskUpdate(new RiskEvent(this,
-                    world.getTerritoryOwner(attacking)+" obliterated "+world.getTerritoryOwner(defending), RiskEventType.TERRITORY_DOMINATION));
+                    world.getTerritoryOwner(attacking)+" obliterated "+world.getTerritoryOwner(defending),
+                    RiskEventType.TERRITORY_DOMINATION));
             return true;
         }
         return false;
@@ -375,7 +394,7 @@ public class Game {
      * @param finalT The territory that will add units
      * @param attDice The number of dice that the attacker used (if applicable)
      */
-    public static void fortifyPosition(Territory initialT, Territory finalT, int attDice) {
+    public void fortifyPosition(Territory initialT, Territory finalT, int attDice) {
 
         String input;
 
@@ -410,12 +429,16 @@ public class Game {
         //Move the units from the fortifying territory to the fortified territory
         initialT.removeUnits(numUnits);
         finalT.addUnits(numUnits);
+
+        riskView.handleRiskUpdate(new RiskEvent(this,
+                numUnits+" have been moved from "+world.getTerritoryOwner(initialT)+" to "+world.getTerritoryOwner(finalT)+"!",
+                RiskEventType.UNITS_MOVED));
     }
 
     /**
      * Update the number of players active.
      */
-    public void updateIsInactive() {
+    public void checkEliminated() {
         int numActive = 0;
         List<Territory> territories = world.getTerritories();
         for (Player player : players) {
