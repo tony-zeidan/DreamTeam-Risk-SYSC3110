@@ -386,6 +386,12 @@ public class GameSingleton {
         initialT.removeUnits(numUnits);
         finalT.addUnits(numUnits);
 
+        Player attacker = world.getTerritoryOwner(initialT);
+        Player defender = world.getTerritoryOwner(finalT);
+
+        attacker.addTerritory(initialT);
+        defender.removeTerritory(finalT);
+
         riskView.handleRiskUpdate(new RiskEvent(this,
                 numUnits+" have been moved from "+initialT.getName()+" to "+finalT.getName()+"!",
                 RiskEventType.UNITS_MOVED));
