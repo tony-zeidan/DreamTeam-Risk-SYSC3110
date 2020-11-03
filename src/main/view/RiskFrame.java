@@ -359,7 +359,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
         board.revalidate();
     }
 
-    public void clearInfoDiaplay() {
+    public void clearInfoDisplay() {
         if (infoModel.getRowCount() > 0) {
             for (int i = infoModel.getRowCount() - 1; i > -1; i--) {
                 infoModel.removeRow(i);
@@ -369,7 +369,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
 
     public void setInfoDisplay(Territory territory) {
         Player p = riskModel.getTerritoryOwner(territory);
-        clearInfoDiaplay();
+        clearInfoDisplay();
         infoModel.addRow(new String[]{"Name", territory.getName()});
         infoModel.addRow(new String[]{"Owner", p.getName()});
         infoModel.addRow(new String[]{"Colour", p.getColour().toString()});
