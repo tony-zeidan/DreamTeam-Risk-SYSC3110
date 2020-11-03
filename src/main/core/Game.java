@@ -100,10 +100,11 @@ public class Game {
 
         riskView.handleRiskUpdate(new RiskEvent(
                 this, "Welcome to RISK, the game has started!",
-                RiskEventType.GAME_STARTED
-        ));
+                RiskEventType.GAME_STARTED));
 
-        riskView.handleRiskUpdate(new RiskEvent(this,players.get(currentPlayerInd),RiskEventType.TURN_BEGAN));
+        riskView.handleRiskUpdate(new RiskEvent(this,
+                players.get(currentPlayerInd),
+                RiskEventType.TURN_BEGAN));
     }
 
     /**
@@ -273,19 +274,20 @@ public class Game {
      */
     public boolean battle(Territory attacking, Territory defending, int attackDie, int defendDie) {
         riskView.handleRiskUpdate(new RiskEvent(this,
-                "Attack has started between "+world.getTerritoryOwner(attacking)+" and "+world.getTerritoryOwner(defending),RiskEventType.ATTACK_COMMENCED));
+                "Attack has started between "+world.getTerritoryOwner(attacking).getName()+" and "+world.getTerritoryOwner(defending).getName(),
+                RiskEventType.ATTACK_COMMENCED));
 
         int[] lost = attack(attackDie, defendDie);
         attacking.removeUnits(lost[0]);
         defending.removeUnits(lost[1]);
 
         riskView.handleRiskUpdate(new RiskEvent(this,
-                world.getTerritoryOwner(attacking)+" lost "+lost[0]+" units and "+world.getTerritoryOwner(defending)+" lost "+lost[1]+" units!",
+                world.getTerritoryOwner(attacking).getName()+" lost "+lost[0]+" units and "+world.getTerritoryOwner(defending).getName()+" lost "+lost[1]+" units!",
                 RiskEventType.ATTACK_COMPLETED));
 
         if (defending.getUnits()==0){
             riskView.handleRiskUpdate(new RiskEvent(this,
-                    world.getTerritoryOwner(attacking)+" obliterated "+world.getTerritoryOwner(defending),
+                    world.getTerritoryOwner(attacking).getName()+" obliterated "+world.getTerritoryOwner(defending).getName(),
                     RiskEventType.TERRITORY_DOMINATION));
             return true;
         }
