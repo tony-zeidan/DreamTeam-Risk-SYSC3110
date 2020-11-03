@@ -75,6 +75,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
      */
     public RiskFrame() {
         super("RISK");
+        //TODO: Call GameSingleton.getGameInstance() instead
         riskModel = new Game(getPlayers(getNumOfPlayers()));
         riskModel.makeView(this);
         eventDescriptions = new DefaultListModel<>();
