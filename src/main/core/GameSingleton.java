@@ -417,7 +417,7 @@ public class GameSingleton {
         finalT.addUnits(numUnits);
 
         riskView.handleRiskUpdate(new RiskEvent(this,
-                numUnits+" have been moved from "+world.getTerritoryOwner(initialT).getName()+" to "+world.getTerritoryOwner(finalT).getName()+"!",
+                numUnits+" have been moved from "+initialT.getName()+" to "+finalT.getName()+"!",
                 RiskEventType.UNITS_MOVED));
     }
 
