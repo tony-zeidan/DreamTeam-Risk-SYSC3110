@@ -178,15 +178,19 @@ public class Game {
      */
     public void nextPlayer()
     {
-        Player previous = players.get(currentPlayerInd);
+        riskView.handleRiskUpdate(new RiskEvent(
+                this, players.get(currentPlayerInd),
+                RiskEventType.TURN_ENDED
+        ));
+
         currentPlayerInd = (currentPlayerInd+1)%players.size();
         while(!(players.get(currentPlayerInd).isActive())){
             currentPlayerInd = (currentPlayerInd+1)%players.size();
         }
-        Player current = players.get(currentPlayerInd);
+
         riskView.handleRiskUpdate(new RiskEvent(
-                this, "the game has started!",
-                RiskEventType.TURN_ENDED
+                this, players.get(currentPlayerInd),
+                RiskEventType.TURN_BEGAN
         ));
     }
 
