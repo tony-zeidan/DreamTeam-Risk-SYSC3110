@@ -37,10 +37,14 @@ public class RiskFrame extends JFrame implements RiskGameView {
 
     private DefaultTableModel infoModel;
 
+    private JLabel playerColorLbl;
+
     /**
      * JPanel containing the game board;
      */
     private JPanel board;
+
+    private JButton attack;
 
     /**
      * Constructor for instances of main.view.RiskFrame, constructs a new GUI.
@@ -110,7 +114,11 @@ public class RiskFrame extends JFrame implements RiskGameView {
 
         //create a massive seperator in the menu bar
         menuBar.add(Box.createHorizontalGlue());
-        playerTurnLbl = new JLabel("it is : "+riskModel.getStartingPlayer()+"'s turn.        ");
+        playerColorLbl = new JLabel("     ");
+        playerColorLbl.setBackground(riskModel.getCurrentPlayer().getColour());
+        playerColorLbl.setOpaque(true);
+        playerTurnLbl = new JLabel(" it is : "+riskModel.getStartingPlayer()+"'s turn.    ");
+        menuBar.add(playerColorLbl);
         menuBar.add(playerTurnLbl);    //we must update this with the players turn
 
         setJMenuBar(menuBar);
@@ -120,7 +128,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
             - we must enable them and disable them accordingly
          */
         JPanel buttonPane = new JPanel(new GridLayout(3,1));
-        JButton attack = new JButton("Attack");
+        attack = new JButton("Attack");
         JButton worldState = new JButton("World State");
         JButton endTurn = new JButton("End Turn");
         attack.addActionListener(rc);
@@ -216,6 +224,10 @@ public class RiskFrame extends JFrame implements RiskGameView {
         this.selectedAction = selectedAction;
     }
 
+    public void setAttackable(boolean enabled) {
+        attack.setEnabled(enabled);
+    }
+
     public Map<Territory,Point> getPointsToPaint() {
         return pointsToPaint;
     }
@@ -227,13 +239,14 @@ public class RiskFrame extends JFrame implements RiskGameView {
     }
 
     private void paintPoints(Graphics g) {
-        /*for (Territory t : pointsToPaint.keySet()) {
+        if (pointsToPaint==null) return;
+        for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
             Map<Territory,Point> neighbourNodes = riskModel.getNeighbouringNodes(t);
             for (Point p2 : neighbourNodes.values()) {
                 g.drawLine(p2.x+6,p2.y+6,p.x+6,p.y+6);
             }
-        }*/
+        }
 
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
@@ -251,6 +264,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
     }
 
     public void placePointLabels() {
+        if (pointsToPaint==null) return;
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
             int x = (int) (p.getX());
@@ -335,6 +349,8 @@ public class RiskFrame extends JFrame implements RiskGameView {
         String description = e.getDescription();
         if (description == "Next Turn")
         {
+            playerColorLbl.setBackground(riskModel.getCurrentPlayer().getColour());
+            playerColorLbl.setOpaque(true);
             playerTurnLbl.setText("it is : "+e.getInfo()+"'s turn.        ");
             eventDescriptions.addElement("Turn ended, It is now "+e.getInfo()+"'s turn");
         }
