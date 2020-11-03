@@ -60,39 +60,13 @@ public class Game {
         world = new WorldMap("Earth");
         myAction = new Scanner(System.in);
         currentPlayerInd = 0;
-        /*
-        We must get the amount of people playing the game.
-        Continuously prompt the user for valid information.
-         */
+        numActivePlayer = 0;
 
         //set the initial amount of active players accordingly
         numActivePlayer = numOfPlayers;
 
-        //six random colors for players
-        List<Color> randomColors = new LinkedList<>();
-        randomColors.add(Color.RED);
-        randomColors.add(Color.GREEN);
-        randomColors.add(Color.BLUE);
-        randomColors.add(Color.YELLOW);
-        randomColors.add(Color.ORANGE);
-        randomColors.add(Color.CYAN);
+        setColoursAndNames(names);
 
-        Random rand = new Random();
-
-        /*
-        We must get all player names and generate colours.
-        Loop through players and obtain names through user input.
-        Randomly assign colours.
-         */
-        for (int i = 0; i < numOfPlayers; i++) {
-            //get this players name
-
-            int randIndex = rand.nextInt(randomColors.size());
-            //generate and assign random colours
-            Color colour = randomColors.get(randIndex);
-            randomColors.remove(randIndex);
-            players.add(new Player(names.get(i), colour));
-        }
         //shuffle the order of the players
         shufflePlayers();
         world.setUp(players);
@@ -111,6 +85,83 @@ public class Game {
         world = new WorldMap();
         myAction = new Scanner(System.in);
         numActivePlayer = 2;
+    }
+
+    /**
+     * Get the number of people playing the game
+     */
+    private void getNumPlayers(){
+        String input;
+        int numOfPlayers = 0;
+
+        boolean validNumEntered = false;
+
+        /*Continuously prompt the user for valid information*/
+        while (!validNumEntered) {
+            System.out.println("Please input the number of players (max-6 min-2): ");
+            input = myAction.nextLine();
+
+            //attempt to parse an integer value from the user's input
+            try {
+                numOfPlayers = Integer.parseInt(input);
+                validNumEntered = true;
+
+                //check if the number parsed is invalid
+                if (numOfPlayers > 6 || numOfPlayers < 2) {
+                    validNumEntered = false;
+                    System.out.println("You input an invalid number, try again.");
+                }
+
+                //catch the exception (most commonly thrown when an integer can't be parsed)
+            } catch (NumberFormatException e) {
+                validNumEntered = false;
+                System.out.println("You input an invalid number, try again.");
+            }
+        }
+
+        setNumActivePlayer(numOfPlayers);
+    }
+
+    /** Get all player names and assign random colours for each player.
+     */
+    private void setColoursAndNames(ArrayList<String> names){
+        //six random colors for players
+        List<Color> randomColors = new LinkedList<>();
+        randomColors.add(Color.RED);
+        randomColors.add(Color.GREEN);
+        randomColors.add(Color.BLUE);
+        randomColors.add(Color.YELLOW);
+        randomColors.add(Color.ORANGE);
+        randomColors.add(Color.CYAN);
+
+        Random rand = new Random();
+
+        /*
+        We must get all player names and generate colours.
+        Loop through players and obtain names through user input.
+        Randomly assign colours.
+         */
+        for (int i = 0; i < this.getNumActivePlayer(); i++) {
+            //get this players name
+
+            int randIndex = rand.nextInt(randomColors.size());
+            //generate and assign random colours
+            Color colour = randomColors.get(randIndex);
+            randomColors.remove(randIndex);
+            players.add(new Player(names.get(i), colour));
+        }
+    }
+
+    /** Get the number of players in the game who have not yet been eliminated.
+     *
+     * @return The number of players active in the game
+     */
+    public int getNumActivePlayer() {
+        return numActivePlayer;
+    }
+
+    public void setNumActivePlayer(int numActivePlayer) {
+        this.numActivePlayer = numActivePlayer;
     }
 
     public Map<Territory,Point> getAllCoordinates() {
@@ -182,6 +233,12 @@ public class Game {
      * (Main main.core.Game Loop)
      */
     public void runGame() {
+
+        getNumPlayers();
+
+        //setColoursAndNames();
+
+        shufflePlayers();
 
         //print player order at the start of the game.
         System.out.println("The order of players: ");
