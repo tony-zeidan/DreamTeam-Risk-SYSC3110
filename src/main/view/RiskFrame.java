@@ -97,6 +97,12 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         showFrame();
     }
 
+    public void scaleWorld(double sX,double sY) {
+        for (Point p : riskModel.getAllCoordinates().values()) {
+            p.setLocation(p.x*scalingX,p.y*scalingY);
+        }
+    }
+
     /**
      * Generates and places all components on the frame, this should
      * generally only be called once per frame.
@@ -114,10 +120,12 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
             ioException.printStackTrace();
         }
 
-        Dimension og = new Dimension(1200,800);
+        Dimension og = getSize();
         Image finalMapImage=mapImage;
         setPointsToPaint(riskModel.getAllCoordinates());
         board = new JPanel() {
+
+            Dimension previous = null;
 
             /**
              * Paints the JPanel component with the given graphics.
@@ -133,12 +141,12 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
                 board.removeAll();  //clears the labels off of the board
 
                 Dimension current = getSize();
-                if (current.getWidth()!=og.getWidth() && current.getHeight()!=og.getHeight()) {
-                    scalingX = current.getWidth()/og.getWidth();
-                    scalingY = current.getHeight()/og.getHeight();
-                    System.out.println(scalingX + ":" + scalingY);
-                    setPointsToPaint(pointsToPaint);    //resizes
+                if (previous!=null && !(current.equals(previous))) {
+                    scalingX = current.getWidth()/previous.getWidth();
+                    scalingY = current.getHeight()/previous.getHeight();
+                    scaleWorld(scalingX,scalingY);
                 }
+                previous = current;
 
                 //draws the scaled version of the map image
                 g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),
@@ -283,14 +291,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     }
 
     public void setPointsToPaint(Map<Territory,Point> pointsToPaint) {
-        HashMap<Territory,Point> points = new HashMap<>();
-        for (Territory t : pointsToPaint.keySet()) {
-            Point p = pointsToPaint.get(t);
-            Point p2 = new Point();
-            p2.setLocation(p.getX()*scalingX,p.getY()*scalingY);
-            points.put(t,p2);
-        }
-        this.pointsToPaint=points;
+        this.pointsToPaint=pointsToPaint;
     }
 
     private static Color getContrastColor(Color color) {
