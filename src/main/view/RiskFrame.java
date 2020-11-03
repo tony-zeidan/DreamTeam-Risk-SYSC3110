@@ -300,7 +300,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
             int x = (int) (p.getX());
             int y = (int) (p.getY());
             JLabel lbl = new JLabel(t.getName());
-            JLabel lbl2 = new JLabel(" " + String.valueOf(t.getUnits())+ " ");
+            JLabel lbl2 = new JLabel(String.valueOf(t.getUnits()));
 
             lbl.setFont(new Font("Segoe UI",Font.BOLD,9));
             lbl2.setFont(new Font("Segoe UI",Font.BOLD,11));

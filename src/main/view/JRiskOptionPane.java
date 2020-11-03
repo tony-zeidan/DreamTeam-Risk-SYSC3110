@@ -102,7 +102,7 @@ public class JRiskOptionPane {
                 .setTerritories(moving,destination)
                 .setMinimumMove(minMove);
         int r = fort.showInputDialog();
-        return 1;
+        return r;
     }
 
     public static String showPlayerNameDialog(JFrame frame, int playerNum){

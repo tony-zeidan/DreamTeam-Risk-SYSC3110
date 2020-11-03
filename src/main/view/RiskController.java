@@ -135,10 +135,20 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     riskView.setPointsToPaint(riskModel.getAllCoordinates());
                     riskView.setSelectedAction(-1);
                     riskView.setInfoDisplay(clickedTerritory);
-                    if (won) {
-                        //TODO: add fortify logic (JRiskOptionPane.showFortifyInputDialog)
-                        //TODO: call fortify
 
+                    //If Defending Territory Has Been Wiped Out, Start Fortifying Process
+                    if (won) {
+                        //Get the Number of Units the Victor wishes to move to their newly claimed territory
+                        int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView,currentPlayer,clickedTerritory,
+                                previousTerritory,amountOfAttackDie);
+                        //Move chosen number of units from the attacking territory to the claimed territory and gives rightful ownership
+                        clickedTerritory.removeUnits(fortifyUnits);
+                        previousTerritory.addUnits(fortifyUnits);
+                        defendingPlayer.removeTerritory(previousTerritory);
+                        currentPlayer.addTerritory(previousTerritory);
+                        riskView.handleRiskUpdate(new RiskEvent(this,
+                                fortifyUnits+" have been moved from "+riskModel.getTerritoryOwner(clickedTerritory)+" to "+
+                                        riskModel.getTerritoryOwner(previousTerritory)+"!", RiskEventType.UNITS_MOVED));
                     }
                 }
             }
