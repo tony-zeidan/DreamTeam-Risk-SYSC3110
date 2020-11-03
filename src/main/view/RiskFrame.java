@@ -39,6 +39,8 @@ public class RiskFrame extends JFrame implements RiskGameView {
 
     private JLabel playerColorLbl;
 
+    private JTextArea instructionsText;
+
     /**
      * JPanel containing the game board;
      */
@@ -120,22 +122,19 @@ public class RiskFrame extends JFrame implements RiskGameView {
         playerTurnLbl = new JLabel(" it is : "+riskModel.getStartingPlayer()+"'s turn.    ");
         menuBar.add(playerColorLbl);
         menuBar.add(playerTurnLbl);    //we must update this with the players turn
-
         setJMenuBar(menuBar);
 
         /*
         This panel contains the buttons for the players turn.
             - we must enable them and disable them accordingly
          */
-        JPanel buttonPane = new JPanel(new GridLayout(3,1));
+        JPanel buttonPane = new JPanel(new GridLayout(2,1));
         attack = new JButton("Attack");
-        JButton worldState = new JButton("World State");
+        attack.setEnabled(false);
         JButton endTurn = new JButton("End Turn");
         attack.addActionListener(rc);
-        worldState.addActionListener(rc);
         endTurn.addActionListener(rc);
         buttonPane.add(attack);
-        buttonPane.add(worldState);
         buttonPane.add(endTurn);
 
         /*
@@ -145,13 +144,13 @@ public class RiskFrame extends JFrame implements RiskGameView {
             1) topSubEventPane is responsible for displaying individual territory information
                 either when the player clicks on a territory on the map, or when they select one
                 from the drop down list.
-             2) bottomSubEventPane is responsible for showing a list of the events that have
+             2) middleSubEventPane is responsible for showing a list of the events that have
                 occurred during the game, perhaps through the use of a RiskGameEvent.toString()
+             3) bottomSubEventPane is responsible for showing instructions to the user.
          */
-        JPanel eventPane = new JPanel(new GridLayout(2,1));
+        JPanel eventPane = new JPanel(new GridLayout(3,1));
         JPanel topSubEventPane = new JPanel(new BorderLayout());
-        JPanel topSubSubEventPane = new JPanel(new BorderLayout());
-
+        JPanel middleSubEventPane = new JPanel(new BorderLayout());
         JPanel bottomSubEventPane = new JPanel(new BorderLayout());
 
         Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
@@ -166,15 +165,10 @@ public class RiskFrame extends JFrame implements RiskGameView {
         JTable infoTable = new JTable(infoModel); //TODO: add model to update table
 
         //combo box for selecting territory
-        topSubEventPane.add(BorderLayout.NORTH,new JLabel("Select main.core.Territory"));
-        JComboBox<String> topSubEventCombo = new JComboBox<>();
-        topSubEventCombo.addItem("GRINEER");    //testing items
-        topSubEventCombo.addItem("Eurasia");        //testing items
-        topSubSubEventPane.add(BorderLayout.NORTH,topSubEventCombo);
+        topSubEventPane.add(BorderLayout.NORTH,new JLabel("Selected Territory Information"));
 
         //add table to top sub pane
-        topSubSubEventPane.add(BorderLayout.CENTER,infoTable);
-        topSubEventPane.add(BorderLayout.CENTER,topSubSubEventPane);
+        topSubEventPane.add(BorderLayout.CENTER,infoTable);
 
         //the following is the list of in game events that occurred
         JList eventList = new JList(eventDescriptions);
@@ -183,16 +177,22 @@ public class RiskFrame extends JFrame implements RiskGameView {
         gameEventScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         //add list to the bottom sub pane
-        bottomSubEventPane.add(BorderLayout.NORTH,new JLabel("main.core.Game Events"));
-        bottomSubEventPane.add(BorderLayout.CENTER,gameEventScroller); //TODO: switch this to a scroller JList
+        middleSubEventPane.add(BorderLayout.NORTH,new JLabel("Game Events"));
+        middleSubEventPane.add(BorderLayout.CENTER,gameEventScroller);
+        bottomSubEventPane.add(BorderLayout.NORTH,new JLabel("Game Instructor"));
+        instructionsText = new JTextArea();
+        instructionsText.setEditable(false);
+        bottomSubEventPane.add(BorderLayout.CENTER,instructionsText);
 
         //set borders for both sub panes (to look seperate)
         topSubEventPane.setBorder(raisedEtched);
+        middleSubEventPane.setBorder(raisedEtched);
         bottomSubEventPane.setBorder(raisedEtched);
 
         //add both sub panes to main event pane
         eventPane.add(BorderLayout.NORTH,topSubEventPane);
-        eventPane.add(BorderLayout.CENTER,bottomSubEventPane);
+        eventPane.add(BorderLayout.CENTER,middleSubEventPane);
+        eventPane.add(BorderLayout.SOUTH,bottomSubEventPane);
 
         //set event pane size
         eventPane.setPreferredSize(new Dimension(200,800));
@@ -343,11 +343,16 @@ public class RiskFrame extends JFrame implements RiskGameView {
         RiskFrame rf = new RiskFrame();
     }
 
+    public void setCurrentInstruction(String info) {
+        instructionsText.setText(info);
+    }
+
     @Override
     public void handleRiskUpdate(RiskEvent e) {
         Game riskModel = (Game) e.getSource();
         String description = e.getDescription();
-        if (description == "Next Turn")
+        if (eventDescriptions.getSize()==25) eventDescriptions.clear();
+        if (description.equals("Next Turn"))
         {
             playerColorLbl.setBackground(riskModel.getCurrentPlayer().getColour());
             playerColorLbl.setOpaque(true);
