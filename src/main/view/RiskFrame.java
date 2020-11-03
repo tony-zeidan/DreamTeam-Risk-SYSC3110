@@ -130,7 +130,6 @@ public class RiskFrame extends JFrame implements RiskGameView {
          */
         JPanel buttonPane = new JPanel(new GridLayout(2,1));
         attack = new JButton("Attack");
-        attack.setEnabled(false);
         JButton endTurn = new JButton("End Turn");
         attack.addActionListener(rc);
         endTurn.addActionListener(rc);
@@ -182,6 +181,8 @@ public class RiskFrame extends JFrame implements RiskGameView {
         bottomSubEventPane.add(BorderLayout.NORTH,new JLabel("Game Instructor"));
         instructionsText = new JTextArea();
         instructionsText.setEditable(false);
+        instructionsText.setLineWrap(true);
+        instructionsText.setWrapStyleWord(true);
         bottomSubEventPane.add(BorderLayout.CENTER,instructionsText);
 
         //set borders for both sub panes (to look seperate)
@@ -204,6 +205,9 @@ public class RiskFrame extends JFrame implements RiskGameView {
 
         //make the program terminate when frame is closed
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //just to make sure everything has been reset for the start of the game
+        restoreGUI();
 
         //set size of frame
         setPreferredSize(new Dimension(1200,800));
@@ -379,6 +383,17 @@ public class RiskFrame extends JFrame implements RiskGameView {
         infoModel.addRow(new String[]{"Owner", p.getName()});
         infoModel.addRow(new String[]{"Colour", p.getColour().toString()});
         infoModel.addRow(new String[]{"Units", String.valueOf(territory.getUnits())});
+    }
+
+    public void restoreGUI() {
+        selectedAction = -1;
+        selectedTerritory = null;
+        pointsToPaint = riskModel.getAllCoordinates();
+        attack.setText("Attack");
+        attack.setEnabled(false);
+        clearInfoDisplay();
+        instructionsText.setText(riskModel.getCurrentPlayer().getName()+
+                ", please select a territory or end your turn.");
     }
 
     public void setSelectedTerritory(Territory selectedTerritory) {
