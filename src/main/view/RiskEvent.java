@@ -3,23 +3,25 @@ package main.view;
 import java.util.EventObject;
 
 public class RiskEvent extends EventObject {
-    private String eventDescription;
-    private String info;
+    private RiskEventType type;
+    private Object trigger;
     /**
      * Constructs a prototypical Event.
      *
      * @param source the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
      */
-    public RiskEvent(Object source, String description,String info) {
+    public RiskEvent(Object source, String trigger,RiskEventType type) {
         super(source);
-        eventDescription =description;
-        this.info = info;
+        this.trigger = trigger;
+        this.type = type;
     }
-    public String getDescription() {
-        return eventDescription;
+    public RiskEventType getType() {
+        return type;
     }
-    public String getInfo() {
-        return info;
+    public Object getTrigger() {
+        return trigger;
     }
+
+
 }

@@ -27,25 +27,43 @@ public class RiskFrame extends JFrame implements RiskGameView {
     private DefaultListModel<String> eventDescriptions;
 
     /**
-     *
+     * Stores the territory clicked on by the user.
+     * @see RiskController
      */
     private Territory selectedTerritory;
 
+    /**
+     * Stores the action selected by the user.
+     * @see RiskController
+     */
     private int selectedAction;
 
+    /**
+     * Stores the points that will be painted on the map.
+     * It is altered constantly depending on user inputs.
+     */
     private Map<Territory,Point> pointsToPaint;
 
+    /**
+     * This is the model for the table that contains the information
+     * of the users selected territory.
+     */
     private DefaultTableModel infoModel;
 
-    private JLabel playerColorLbl;
-
+    /**
+     * The text area containing instructions for the user.
+     */
     private JTextArea instructionsText;
 
     /**
-     * JPanel containing the game board;
+     * JPanel containing the game board (the map).
      */
     private JPanel board;
 
+    /**
+     * The button for attacking. It is a field as it needs to be
+     * altered in other methods.
+     */
     private JButton attack;
 
     /**
@@ -74,6 +92,10 @@ public class RiskFrame extends JFrame implements RiskGameView {
         showFrame();
     }
 
+    /**
+     * Generates and places all components on the frame, this should
+     * generally only be called once per frame.
+     */
     private void composeFrame() {
 
         RiskController rc = new RiskController(riskModel,this);
@@ -90,25 +112,29 @@ public class RiskFrame extends JFrame implements RiskGameView {
         Image finalMapImage=mapImage;
         board = new JPanel() {
 
-            /*
-            Paint the image on our canvas.
-            1) every time paintComponent() is called we must resize the image. (could also be done through a window resize listener)
-            2) we do this through the use of getScaledInstance()
+            /**
+             * Paints the JPanel component with the given graphics.
+             * It also uses the given graphics instance to draw a scaled version of
+             * the image on the panel, along with the points representing territories and
+             * the labels that go with them.
+             *
+             * @param g The dedicated graphics for this panel
              */
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
+                board.removeAll();  //clears the labels off of the board
 
-                //draw the scaled instance of the image
-                board.removeAll();
-                boolean b = g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),Image.SCALE_SMOOTH), 0, 0, null);
-                paintPoints(g);
-                placePointLabels();
+                //draws the scaled version of the map image
+                g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),
+                        Image.SCALE_SMOOTH), 0, 0, null);
+
+                paintPoints(g);     //paint points representing territories
+                placePointLabels();     //paint the labels to go with the points
             }
         };
         board.addMouseListener(rc);
         board.setLayout(null);
-
 
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Options");
@@ -116,11 +142,8 @@ public class RiskFrame extends JFrame implements RiskGameView {
 
         //create a massive seperator in the menu bar
         menuBar.add(Box.createHorizontalGlue());
-        playerColorLbl = new JLabel("     ");
-        playerColorLbl.setBackground(riskModel.getCurrentPlayer().getColour());
-        playerColorLbl.setOpaque(true);
-        playerTurnLbl = new JLabel(" it is : "+riskModel.getStartingPlayer()+"'s turn.    ");
-        menuBar.add(playerColorLbl);
+        playerTurnLbl = new JLabel();
+        playerTurnLbl.setOpaque(true);
         menuBar.add(playerTurnLbl);    //we must update this with the players turn
         setJMenuBar(menuBar);
 
@@ -242,6 +265,11 @@ public class RiskFrame extends JFrame implements RiskGameView {
         board.revalidate();
     }
 
+    private static Color getContrastColor(Color color) {
+        double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
+        return y >= 128 ? Color.black : Color.white;
+    }
+
     private void paintPoints(Graphics g) {
         if (pointsToPaint==null) return;
         for (Territory t : pointsToPaint.keySet()) {
@@ -354,18 +382,38 @@ public class RiskFrame extends JFrame implements RiskGameView {
     @Override
     public void handleRiskUpdate(RiskEvent e) {
         Game riskModel = (Game) e.getSource();
-        String description = e.getDescription();
+        RiskEventType eventType = e.getType();
+        Object trigger = e.getTrigger();
         if (eventDescriptions.getSize()==25) eventDescriptions.clear();
-        if (description.equals("Next Turn"))
-        {
-            playerColorLbl.setBackground(riskModel.getCurrentPlayer().getColour());
-            playerColorLbl.setOpaque(true);
-            playerTurnLbl.setText("it is : "+e.getInfo()+"'s turn.        ");
-            eventDescriptions.addElement("Turn ended, It is now "+e.getInfo()+"'s turn");
-        }
 
-        //board.repaint();
-        board.revalidate();
+        //TODO: only tell game board to repaint when necessary
+        switch (eventType) {
+            case GAME_STARTED:
+                //TODO: add handling for game started
+            case TURN_BEGAN:
+                //TODO: add handling for turn began
+            case TURN_ENDED:
+                //TODO: trigger this event when the next turn method is called
+                //TODO: but before the player is actually switched
+                Player currentPlayer = riskModel.getCurrentPlayer();
+                Player nextPlayer = (Player) trigger;
+                playerTurnLbl.setBackground(nextPlayer.getColour());
+                playerTurnLbl.setForeground(getContrastColor(nextPlayer.getColour()));
+                playerTurnLbl.setText("it is : "+nextPlayer.getName()+"'s turn.        ");
+                eventDescriptions.addElement(String.format("%s's turn had ended, it is now %s's turn.",
+                        currentPlayer.getName(),nextPlayer.getName()));
+            case ATTACK_COMMENCED:
+                //TODO: add handling for attack started
+            case ATTACK_COMPLETED:
+                //TODO: add handling for attack completed
+            case TERRITORY_DOMINATION:
+                //TODO: add handling for territory takeover
+                board.revalidate();
+            case UNITS_MOVED:
+                //TODO: add handling for units being moved
+            case GAME_OVER:
+                //TODO: add handling for the end of the game
+        }
     }
 
     public void clearInfoDisplay() {

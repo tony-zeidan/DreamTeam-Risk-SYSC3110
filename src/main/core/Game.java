@@ -1,6 +1,7 @@
 package main.core;
 
 import main.view.RiskEvent;
+import main.view.RiskEventType;
 import main.view.RiskFrame;
 import main.view.RiskGameView;
 
@@ -96,6 +97,10 @@ public class Game {
         //shuffle the order of the players
         shufflePlayers();
         world.setUp(players);
+        riskView.handleRiskUpdate(new RiskEvent(
+                this, "Welcome to RISK, the game has started!",
+                RiskEventType.GAME_STARTED
+        ));
     }
 
     /**
@@ -171,11 +176,16 @@ public class Game {
      */
     public void nextPlayer()
     {
+        Player previous = players.get(currentPlayerInd);
         currentPlayerInd = (currentPlayerInd+1)%players.size();
         while(!(players.get(currentPlayerInd).isActive())){
             currentPlayerInd = (currentPlayerInd+1)%players.size();
         }
-        riskView.handleRiskUpdate(new RiskEvent(this,"Next Turn", players.get(currentPlayerInd).getName()));
+        Player current = players.get(currentPlayerInd)
+        riskView.handleRiskUpdate(new RiskEvent(
+                this, "the game has started!",
+                RiskEventType.TURN_ENDED
+        ));
     }
 
     public Player getCurrentPlayer() {
