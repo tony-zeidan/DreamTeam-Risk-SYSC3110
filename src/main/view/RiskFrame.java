@@ -379,7 +379,6 @@ public class RiskFrame extends JFrame implements RiskGameView {
 
     @Override
     public void handleRiskUpdate(RiskEvent e) {
-        Game riskModel = (Game) e.getSource();
         RiskEventType eventType = e.getType();
         Object trigger = e.getTrigger();
         if (eventDescriptions.getSize()==25) eventDescriptions.clear();
@@ -387,46 +386,37 @@ public class RiskFrame extends JFrame implements RiskGameView {
         //TODO: only tell game board to repaint when necessary
         switch (eventType) {
             case GAME_STARTED:
-                //TODO: add handling for game started
+            case GAME_OVER:
+            case ATTACK_COMMENCED:
                 eventDescriptions.addElement((String) trigger);
+                break;
             case TURN_BEGAN:
-                //TODO: add handling for turn began
                 Player beganPlayer = (Player) trigger;
                 eventDescriptions.addElement(String.format("%s's turn has began",
                         beganPlayer.getName()));
                 playerTurnLbl.setText("it is : "+beganPlayer.getName()+"'s turn.        ");
                 playerTurnLbl.setBackground(beganPlayer.getColour());
                 playerTurnLbl.setForeground(getContrastColor(beganPlayer.getColour()));
+                break;
             case TURN_ENDED:
                 //TODO: trigger this event when the next turn method is called
                 //TODO: but before the player is actually switched
                 Player endedPlayer = (Player) trigger;
                 eventDescriptions.addElement(String.format("%s's turn had ended",
                         endedPlayer.getName()));
-            case ATTACK_COMMENCED:
-                //TODO: add handling for attack started
-                eventDescriptions.addElement((String) trigger);
+                break;
             case ATTACK_COMPLETED:
-                //TODO: add handling for attack completed
-                eventDescriptions.addElement((String) trigger);
-                board.revalidate();
-            case TERRITORY_DOMINATION:
-                //TODO: add handling for territory takeover
-                eventDescriptions.addElement((String) trigger);
-                board.revalidate();
             case UNITS_MOVED:
-                //TODO: add handling for units being moved
+            case TERRITORY_DOMINATION:
                 eventDescriptions.addElement((String) trigger);
                 board.revalidate();
-            case GAME_OVER:
-                //TODO: add handling for the end of the game
-                eventDescriptions.addElement((String) trigger);
+                break;
             default:
                 return;
         }
     }
 
-    public void clearInfoDisplay() {
+    public void clearSelectedTerritoryDisplay() {
         if (infoModel.getRowCount() > 0) {
             for (int i = infoModel.getRowCount() - 1; i > -1; i--) {
                 infoModel.removeRow(i);
@@ -436,7 +426,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
 
     public void setInfoDisplay(Territory territory) {
         Player p = riskModel.getTerritoryOwner(territory);
-        clearInfoDisplay();
+        clearSelectedTerritoryDisplay();
         infoModel.addRow(new String[]{"Name", territory.getName()});
         infoModel.addRow(new String[]{"Owner", p.getName()});
         infoModel.addRow(new String[]{"Colour", p.getColour().toString()});
@@ -449,7 +439,7 @@ public class RiskFrame extends JFrame implements RiskGameView {
         pointsToPaint = riskModel.getAllCoordinates();
         attack.setText("Attack");
         attack.setEnabled(false);
-        clearInfoDisplay();
+        clearSelectedTerritoryDisplay();
         instructionsText.setText(riskModel.getCurrentPlayer().getName()+
                 ", please select a territory or end your turn.");
     }
