@@ -110,11 +110,12 @@ public class JRiskOptionPane {
         JPanel panel = new JPanel();
         JLabel lbl = new JLabel(String.format("Player %s's Name: ", playerNum));
         JTextField txt = new JTextField(10);
+        txt.requestFocus();
         panel.add(lbl);
         panel.add(txt);
-        int selectedOption = JOptionPane.showOptionDialog(frame, panel, "Player Name", JOptionPane.NO_OPTION,
+        int selectedOption = JOptionPane.showOptionDialog(frame, panel, "Player Name", JOptionPane.OK_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
-        if (selectedOption == 0){
+        if (selectedOption == JOptionPane.OK_OPTION){
             return txt.getText();
         }
         else{

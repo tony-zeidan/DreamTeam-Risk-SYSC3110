@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -74,21 +75,18 @@ public class RiskFrame extends JFrame implements RiskGameView {
      */
     public RiskFrame() {
         super("RISK");
-
-        int numPlayers= getNumOfPlayers();
-        ArrayList<String> playerName = getPlayerNames(numPlayers);
-        riskModel = new Game(numPlayers, playerName);
+        riskModel = new Game(getPlayers(getNumOfPlayers()));
         riskModel.makeView(this);
-        pointsToPaint = riskModel.getAllCoordinates();
-
-        board=null;
         eventDescriptions = new DefaultListModel<>();
         infoModel = new DefaultTableModel();
         infoModel.addColumn("Type");
         infoModel.addColumn("Value");
+        board=null;
         setLayout(new BorderLayout());
         selectedAction = -1;
+        pointsToPaint = riskModel.getAllCoordinates();
         composeFrame();
+        riskModel.setUpGame();
         showFrame();
     }
 
@@ -352,19 +350,19 @@ public class RiskFrame extends JFrame implements RiskGameView {
         return numOfPlayers = Integer.parseInt(input);
     }
 
-    private ArrayList<String> getPlayerNames(int numPlayers)
+    private List<Player> getPlayers(int numPlayers)
     {
-        ArrayList<String> names = new ArrayList<>();
-        for(int i= 0; i<numPlayers;i++)
-        {
+        ArrayList<Player> players = new ArrayList<>();
+        for(int i= 0; i<numPlayers;i++) {
             String input = null;
             while(input == null || input.length() == 0){
                 input = JRiskOptionPane.showPlayerNameDialog(this,i+1);
             }
-            names.add(input);
+            players.add(new Player(input));
         }
-        return names;
+        return players;
     }
+
     /**
      * We need some sort of updating methods that will do the following.
      *
@@ -390,29 +388,41 @@ public class RiskFrame extends JFrame implements RiskGameView {
         switch (eventType) {
             case GAME_STARTED:
                 //TODO: add handling for game started
+                eventDescriptions.addElement((String) trigger);
             case TURN_BEGAN:
                 //TODO: add handling for turn began
+                Player beganPlayer = (Player) trigger;
+                eventDescriptions.addElement(String.format("%s's turn has began",
+                        beganPlayer.getName()));
+                playerTurnLbl.setText("it is : "+beganPlayer.getName()+"'s turn.        ");
+                playerTurnLbl.setBackground(beganPlayer.getColour());
+                playerTurnLbl.setForeground(getContrastColor(beganPlayer.getColour()));
             case TURN_ENDED:
                 //TODO: trigger this event when the next turn method is called
                 //TODO: but before the player is actually switched
-                Player currentPlayer = riskModel.getCurrentPlayer();
-                Player nextPlayer = (Player) trigger;
-                playerTurnLbl.setBackground(nextPlayer.getColour());
-                playerTurnLbl.setForeground(getContrastColor(nextPlayer.getColour()));
-                playerTurnLbl.setText("it is : "+nextPlayer.getName()+"'s turn.        ");
-                eventDescriptions.addElement(String.format("%s's turn had ended, it is now %s's turn.",
-                        currentPlayer.getName(),nextPlayer.getName()));
+                Player endedPlayer = (Player) trigger;
+                eventDescriptions.addElement(String.format("%s's turn had ended",
+                        endedPlayer.getName()));
             case ATTACK_COMMENCED:
                 //TODO: add handling for attack started
+                eventDescriptions.addElement((String) trigger);
             case ATTACK_COMPLETED:
                 //TODO: add handling for attack completed
+                eventDescriptions.addElement((String) trigger);
+                board.revalidate();
             case TERRITORY_DOMINATION:
                 //TODO: add handling for territory takeover
+                eventDescriptions.addElement((String) trigger);
                 board.revalidate();
             case UNITS_MOVED:
                 //TODO: add handling for units being moved
+                eventDescriptions.addElement((String) trigger);
+                board.revalidate();
             case GAME_OVER:
                 //TODO: add handling for the end of the game
+                eventDescriptions.addElement((String) trigger);
+            default:
+                return;
         }
     }
 

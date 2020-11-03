@@ -137,6 +137,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     riskView.setInfoDisplay(clickedTerritory);
                     if (won) {
                         //TODO: add fortify logic (JRiskOptionPane.showFortifyInputDialog)
+                        //TODO: call fortify
+
                     }
                 }
             }

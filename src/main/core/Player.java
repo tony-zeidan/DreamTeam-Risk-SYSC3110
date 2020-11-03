@@ -37,6 +37,18 @@ public class Player {
     private boolean active;
 
     /**
+     * Constructor for instances of Player class with name.
+     *  @param name   The name of the player
+    */
+    public Player(String name) {
+        this.name = name;
+        this.colour = null;
+        this.active = true;
+        owned = new LinkedList<>();
+    }
+
+
+    /**
      * Constructor for instances of main.core.Player class with name and colour.
      *  @param name   The name of the player
      * @param colour The colour of the units that the player owns*/
@@ -63,6 +75,13 @@ public class Player {
      */
     public Color getColour() {
         return colour;
+    }
+
+    /**
+     * Sets the colour of the units that the player owns.
+     */
+    public void setColour(Color colour) {
+        this.colour=colour;
     }
 
     /**

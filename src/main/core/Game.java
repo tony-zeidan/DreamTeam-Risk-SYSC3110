@@ -54,10 +54,10 @@ public class Game {
      * (For now) Creates a new game with the hardcoded map and the players that
      * the user inputs.
      */
-    public Game(int numOfPlayers, ArrayList<String> names) {
+    public Game(List<Player> players) {
 
         //initialize map, player list, and scanner
-        players = new ArrayList<>(6);
+        this.players = players;
         world = new WorldMap("Earth");
         myAction = new Scanner(System.in);
         currentPlayerInd = 0;
@@ -65,9 +65,11 @@ public class Game {
         We must get the amount of people playing the game.
         Continuously prompt the user for valid information.
          */
+    }
 
+    public void setUpGame() {
         //set the initial amount of active players accordingly
-        numActivePlayer = numOfPlayers;
+        numActivePlayer = players.size();
 
         //six random colors for players
         List<Color> randomColors = new LinkedList<>();
@@ -85,14 +87,14 @@ public class Game {
         Loop through players and obtain names through user input.
         Randomly assign colours.
          */
-        for (int i = 0; i < numOfPlayers; i++) {
+        for (Player p : players) {
             //get this players name
 
             int randIndex = rand.nextInt(randomColors.size());
             //generate and assign random colours
             Color colour = randomColors.get(randIndex);
+            p.setColour(colour);
             randomColors.remove(randIndex);
-            players.add(new Player(names.get(i), colour));
         }
         //shuffle the order of the players
         shufflePlayers();
@@ -133,12 +135,8 @@ public class Game {
     public Player getTerritoryOwner(Territory territory) {
         return world.getTerritoryOwner(territory);
     }
-    public String getStartingPlayer()
-    {
-        return players.get(0).getName();
-    }
-    public void makeView(RiskGameView rgv)
-    {
+
+    public void makeView(RiskGameView rgv) {
         riskView = rgv;
     }
 
@@ -264,13 +262,12 @@ public class Game {
         return world.getNeighbourNodesOwned(player,territory);
     }
 
-
     /**
-     * @param attacking
-     * @param defending
-     * @param attackDie
-     * @param defendDie
-     * @return
+     * Simulates the battle sequence between a territory attacking an adjacent territory. The attacker
+     * is required to select a number of dice to attack with provided he/she meets the minimum unit requirements
+     *
+     * @param attacking The territory containing units that will be used in the attack
+     * @param defending The territory being attacked
      */
     public boolean battle(Territory attacking, Territory defending, int attackDie, int defendDie) {
         riskView.handleRiskUpdate(new RiskEvent(this,
