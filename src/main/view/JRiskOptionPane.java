@@ -48,8 +48,7 @@ public class JRiskOptionPane {
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 options,options[0]);
-        System.out.println(input);
-        return input;
+        return input+1;
     }
 
     /**
