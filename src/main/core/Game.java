@@ -242,10 +242,12 @@ public class Game {
      * @param attacking The territory containing units that will be used in the attack
      * @param defending The territory being attacked
      */
-    public void battle(Territory attacking, Territory defending, int attackDie, int defendDie) {
+    public boolean battle(Territory attacking, Territory defending, int attackDie, int defendDie) {
         int[] lost = attack(attackDie, defendDie);
         attacking.removeUnits(lost[0]);
         defending.removeUnits(lost[1]);
+        //TODO: add event triggered
+        return (defending.getUnits()==0);
     }
 
     /**
