@@ -51,7 +51,7 @@ public class GameSingleton {
      */
     private GameSingleton(List<Player> players) {
         //initialize map, player list, and scanner
-        this.players = new ArrayList<>(6);
+        this.players = players;
         world = new WorldMap("Earth");
         myAction = new Scanner(System.in);
         currentPlayerInd = 0;
