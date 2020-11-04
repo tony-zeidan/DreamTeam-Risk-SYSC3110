@@ -29,14 +29,12 @@ public class WorldMap {
     /**
      * The map containing all territories (used to implement graph).
      */
-    private HashMap<String, Territory> allTerritories;
+    private Map<String, Territory> allTerritories;
 
     /**
      * The map containing the coordinates of each region.
      */
-    private HashMap<Territory,Point> allCoordinates;
-
-    private List<Territory[]> mapEdgeList;
+    private Map<Territory,Point> allCoordinates;
 
     /**
      * Random variable for assigning territories in setup.
@@ -57,7 +55,6 @@ public class WorldMap {
         this.players = players;
         allTerritories = new HashMap<>();
         allCoordinates = new HashMap<>();
-        mapEdgeList = new ArrayList<>(); //test edge list
         readMap();
     }
     /**
@@ -76,7 +73,7 @@ public class WorldMap {
 
         //contains a temporary list of neighbours (in the form of strings)
         //corresponding to each territory (this is a result of reading the text file)
-        HashMap<Territory,String> neighbourStrings = new HashMap<>();
+        HashMap<Territory, String> neighbourStrings = new HashMap<>();
 
         //use a regex pattern to recognize each portion our map syntax in each line of the file
         Pattern valid = Pattern.compile("((\\w+\\s?)+)\\(((\\d+):(\\d+))\\)((,?((\\w+)\\s?)+)+)");
@@ -98,16 +95,16 @@ public class WorldMap {
                     readName = matcher.group(1);
                     int xCoord = Integer.parseInt(matcher.group(4));
                     int yCoord = Integer.parseInt(matcher.group(5));
-                    Point readCoordinates = new Point(xCoord,yCoord);
+                    Point readCoordinates = new Point(xCoord, yCoord);
                     String readNeighbours = matcher.group(6).substring(1);  //substring gets rid of first comma
                     Territory readTerritory = new Territory(readName);
 
                     //System.out.println(matcher.group(1));
 
                     //put the information in the correct spots
-                    allTerritories.put(readName,readTerritory);
-                    allCoordinates.put(readTerritory,readCoordinates);
-                    neighbourStrings.put(readTerritory,readNeighbours);
+                    allTerritories.put(readName, readTerritory);
+                    allCoordinates.put(readTerritory, readCoordinates);
+                    neighbourStrings.put(readTerritory, readNeighbours);
                 }
             }
             myReader.close();
@@ -124,75 +121,28 @@ public class WorldMap {
         for (Territory t : neighbourStrings.keySet()) {
             for (String rt : neighbourStrings.get(t).split(",")) {
                 if (allTerritories.containsKey(rt)) {
-                    addTerritoryNeighbour(t,allTerritories.get(rt));
+                    t.addNeighbour( allTerritories.get(rt));
                 }
             }
         }
     }
 
-    //TODO
-    /**
-     *
-     * @param first
-     * @param second
-     * @return
-     */
-    public boolean areNeighbours(Territory first, Territory second) {
-        for (Territory[] t : mapEdgeList) {
-            if (t[0].equals(first)&&t[1].equals(second)) return true;
-            if (t[0].equals(second)&&t[1].equals(first)) return true;
-        }
-        return false;
-    }
-
-    //TODO
-    /**
-     *
-     * @param player
-     * @param territory
-     */
     public void addPlayerOwned(Player player,Territory territory) {
         Player previousOwner = getTerritoryOwner(territory);
         removePlayerOwned(previousOwner,territory);
         player.addTerritory(territory);
     }
 
-    //TODO
-    /**
-     *
-     * @param player
-     * @param territory
-     */
     public void removePlayerOwned(Player player,Territory territory) {
         if (player==null) return;
         player.removeTerritory(territory);
     }
 
-    //TODO
-    /**
-     *
-     * @param first
-     * @param second
-     */
-    public void addTerritoryNeighbour(Territory first, Territory second) {
-        if (areNeighbours(first,second)) return;
-        mapEdgeList.add(new Territory[]{first,second});
-    }
-
-    //TODO
-    /**
-     *
-     * @param player
-     * @param territory
-     * @return
-     */
     public Map<Territory,Point> getNeighbourNodesOwned(Player player, Territory territory) {
         HashMap<Territory,Point> neighbours = new HashMap<>();
-        for (Territory[] t : mapEdgeList) {
-            if (t[0].equals(territory) && player.ownsTerritory(t[1])) {
-                neighbours.put(t[1],allCoordinates.get(t[1]));
-            } else if (t[1].equals(territory) && player.ownsTerritory(t[0])) {
-                neighbours.put(t[0],allCoordinates.get(t[0]));
+        for (Territory terr : territory.getNeighbours()) {
+            if (player.ownsTerritory(terr)) {
+                neighbours.put(terr, allCoordinates.get(terr));
             }
         }
         return neighbours;
@@ -272,17 +222,6 @@ public class WorldMap {
             }
         }
     }
-
-    /**
-     * Retrieves the territory with the given name (or null if nonexistent).
-     *
-     * @param name The name of the territory
-     * @return The territory with the name
-     */
-    public Territory getTerritory(String name) {
-        return allTerritories.getOrDefault(name,null);
-    }
-
 
     /**
      * Retrieves a list of territories within the map.

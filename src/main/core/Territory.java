@@ -1,5 +1,8 @@
 package main.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class main.core.Territory represents the individual Territories found within the map.
  *
@@ -20,6 +23,8 @@ public class Territory {
      */
     private int units;
 
+    private List<Territory> neighbours;
+
     /** Constructor for the territory object that contains a name and current player.
      *
      * @param name The name of the territory
@@ -27,6 +32,7 @@ public class Territory {
     public Territory(String name){
         this.name = name;
         units = 0;
+        neighbours = new ArrayList<>();
     }
 
 
@@ -85,4 +91,16 @@ public class Territory {
         return String.format("The main.core.Territory of %s: \n\tunits: %s",name,units);
     }
 
+    public void addNeighbour(Territory territory)
+    {
+        if(!(this.getNeighbours().contains(territory)))
+        {
+            neighbours.add(territory);
+            territory.addNeighbour(this);
+        }
+    }
+    public List<Territory> getNeighbours()
+    {
+        return neighbours;
+    }
 }
