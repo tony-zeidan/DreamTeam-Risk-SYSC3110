@@ -12,45 +12,25 @@ Kyler Verge | user input queries, attacking conditions, UML/SQ
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
 > Risk project!
 
-### Since-Start Changes:
- - implemented the "hard-coding" of the world map
- - game setup (player input) implemented
- - added functionality for the user input of player names
- - added attacking functionalities
- - main game loop implemented
- - UML documentation updated
+### Since-Milestone 1 Changes:
+- visual map implemented (an interactive map that uses java.awt.Graphics and a JPanel)
+- MVC pattern implemented (RiskFrame, RiskController, RiskEvent, RiskGameView, JRiskOptionPane)
+- made changes to Territory.java (has a neighbour container)
  
 **Project Progress**
 
-![15%](https://progress-bar.dev/15)
+![90%](https://progress-bar.dev/90)
 
 milestone 2 phase
 
 [UML](https://lucid.app/invitations/accept/fdd00eb0-1f04-4212-8db9-c9dd045a9c40)
 
 ### How to Use:
-When a user runs the program, they initially will be prompted for how many players they wish to be in the game (as the map is hardcoded).
-After entering a valid amount of players (2-6), the user will then be prompted for the names of the players participating in the game.
-As soon as the game receives input for all the player names, the game begins! The game shuffles the players to allow a new first player every time.
- 
- The first player will be prompted for a decision of commands (attack, worldstate, end).
- 
- Attack:
-    If the player selects the attack command, they will continuously be prompted for the territory they wish to attack from, and the territory they wish to attack.
-    Once the program receives valid input for these variables, the battle will commence, and the attacker will be prompted if they wish to attack or retreat.
-    As long as the attacker wishes to attack, the players involved in the battle will then continuously select the amount of die they wish to roll. 
-    After each set of rolls, attacking and defending territories will have their units adjusted accordingly.
-    If the attacker selects retreat, the battle will end and the players turn will continue until they select to "end".
-    
- WorldState:
-    If the player selects the worldstate command, they will be shown a list of the entire world that they are currently playing on.
-    This shows all territories, who owns them and how many units are on them.
-    After this is displayed, the players turn will continue.
-    
- End:
-    If the player selects to end their turn, the main game loop will pass their turn onto the next player in order.
-   
- All of these processes will continue until the game ends.
+When a user runs the program, they will initially be prompted by a user input dialog asking for the amount of players that wish to participate in the game.
+![Player Number Input](U:\courses\course_SYSC3110\DreamTeam-Risk-SYSC3110\manual\AfterAttack.png)
+After selecting a valid number and clicking "OK", each of the players will then be prompted for their names.
+After all the valid information has been input, a map will appear of the board that is currently being played on, with all the territories painted on.
+In the top right of the frame 
    
 ### Decision Making:
 Design Decisions:
