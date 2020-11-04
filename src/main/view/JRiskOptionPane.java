@@ -96,11 +96,12 @@ public class JRiskOptionPane {
      * @param minMove The minimum amount of units the player has to move
      * @return The user's input (number of units or -1)
      */
-    public static int showFortifyInputDialog(JFrame frame,Player player,Territory moving,Territory destination,int minMove) {
+    public static int showFortifyInputDialog(JFrame frame,Player player,Territory moving,Territory destination,int minMove,boolean cancelable) {
         JFortifyInputDialog fort = new JFortifyInputDialog(frame)
                 .setPlayer(player)
                 .setTerritories(moving,destination)
-                .setMinimumMove(minMove);
+                .setMinimumMove(minMove)
+                .setCancellable(cancelable);
         int r = fort.showInputDialog();
         return r;
     }

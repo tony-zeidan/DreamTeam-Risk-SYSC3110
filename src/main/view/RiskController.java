@@ -11,7 +11,7 @@ import java.util.Map;
  * The controller registers events in the GUI and then takes input from the user,
  * and then uses that input to update the Model.
  *
- * @see Game
+ * @see GameSingleton
  *
  * The thought process behind its implementation is that two types GUI events
  * (i.e. buttons being pressed and specific points on the map board being clicked)
@@ -146,7 +146,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     if (won) {
                         //Get the Number of Units the Victor wishes to move to their newly claimed territory
                         int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView,currentPlayer,clickedTerritory,
-                                previousTerritory,amountOfAttackDie);
+                                previousTerritory,amountOfAttackDie,false);
                         //Move chosen number of units from the attacking territory to the claimed territory and gives rightful ownership
                         riskModel.fortifyPosition(clickedTerritory,previousTerritory,fortifyUnits);
                     }
