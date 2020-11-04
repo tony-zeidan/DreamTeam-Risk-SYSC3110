@@ -341,12 +341,18 @@ public class GameSingleton {
         riskView.handleRiskUpdate(new RiskEvent(this,
                 numUnits+" have been moved from "+initialT.getName()+" to "+finalT.getName()+"!",
                 RiskEventType.UNITS_MOVED));
+
+        updateNumActivePlayer();
+        if (this.getNumActivePlayer() == 1){
+            endGame();
+        }
+
     }
 
     /**
      * Update the number of players active.
      */
-    public void checkEliminated() {
+    public void updateNumActivePlayer() {
         int numActive = 0;
         List<Territory> territories = world.getTerritories();
         for (Player player : players) {
@@ -360,5 +366,13 @@ public class GameSingleton {
             }
         }
         numActivePlayer = numActive;
+    }
+
+    /** Returns the number of players who have not yet been eliminated.
+     *
+     * @return The number of active players
+     */
+    public int getNumActivePlayer() {
+        return numActivePlayer;
     }
 }
