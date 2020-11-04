@@ -223,13 +223,4 @@ public class WorldMap {
         }
     }
 
-    /**
-     * Retrieves a list of territories within the map.
-     *
-     * @return A complete list of territories
-     */
-    public List<Territory> getTerritories() {
-        return new ArrayList<>(allTerritories.values());
-    }
-
 }
