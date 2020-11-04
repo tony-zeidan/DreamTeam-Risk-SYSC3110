@@ -40,9 +40,6 @@ public class RiskController extends MouseAdapter implements ActionListener {
     public boolean inputBattle(Territory attacking, Territory defending, int attackDie, int defendDie) {
         return riskModel.battle(attacking,defending, attackDie, defendDie);
     }
-    public void inputEndTurn() {
-
-    }
 
     /**
      * Action listener implementation.
@@ -64,6 +61,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     riskView.setPointsToPaint(riskModel.getValidAttackNeighboursOwned(
                             riskModel.getCurrentPlayer(),selected));
                     jb.setText("Cancel");
+                    riskView.setEndable(false);
                 }
                 riskView.setSelectedAction(1);
             } else if (jb.getText().equals("Cancel")) {
@@ -128,7 +126,6 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     int maxDefend = riskModel.getMaxBattleDie(previousTerritory.getUnits(), false);
                     int amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1, maxDefend);
 
-                    System.out.println(amountOfAttackDie + ":" + amountOfDefendDie);
                     boolean won = inputBattle(clickedTerritory, previousTerritory, amountOfAttackDie, amountOfDefendDie);
                     riskView.setSelectedTerritory(null);
 
