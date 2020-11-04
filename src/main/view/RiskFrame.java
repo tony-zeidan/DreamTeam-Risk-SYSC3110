@@ -574,7 +574,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     public void restoreGUI() {
         selectedAction = -1;
         selectedTerritory = null;
-        setPointsToPaint(riskModel.getAllCoordinates());
+        //setPointsToPaint(riskModel.getAllCoordinates());
         attack.setText("Attack");
         attack.setEnabled(false);
         endTurn.setEnabled(true);

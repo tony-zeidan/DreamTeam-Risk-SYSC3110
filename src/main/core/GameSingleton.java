@@ -125,7 +125,14 @@ public class GameSingleton {
     public Map<Territory,Point> getAllCoordinates() {
         return world.getAllCoordinates();
     }
-
+    public void updateViewNeighbourPoints(Territory territory)
+    {
+        ((RiskFrame)riskView).setPointsToPaint(getValidAttackNeighboursOwned(getCurrentPlayer(),territory));
+    }
+    public void updateViewAllPoints()
+    {
+        ((RiskFrame)riskView).setPointsToPaint(getAllCoordinates());
+    }
     //TODO
     /**
      *
