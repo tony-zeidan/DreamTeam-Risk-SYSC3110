@@ -105,6 +105,14 @@ public class JRiskOptionPane {
         return r;
     }
 
+    /**
+     * Shows a custom dialog of the requesting for a player's name in the game
+     * of risk.
+     *
+     * @param frame The parent frame
+     * @param playerNum This players number
+     * @return The user's input
+     */
     public static String showPlayerNameDialog(JFrame frame, int playerNum){
         String[] options = {"OK"};
         JPanel panel = new JPanel();
