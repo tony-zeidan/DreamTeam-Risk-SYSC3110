@@ -121,7 +121,7 @@ public class WorldMap {
         for (Territory t : neighbourStrings.keySet()) {
             for (String rt : neighbourStrings.get(t).split(",")) {
                 if (allTerritories.containsKey(rt)) {
-                    t.addNeighbour( allTerritories.get(rt));
+                    t.addNeighbour(allTerritories.get(rt));
                 }
             }
         }

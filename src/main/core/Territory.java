@@ -1,7 +1,7 @@
 package main.core;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class main.core.Territory represents the individual Territories found within the map.
@@ -23,7 +23,7 @@ public class Territory {
      */
     private int units;
 
-    private List<Territory> neighbours;
+    private Set<Territory> neighbours;
 
     /** Constructor for the territory object that contains a name and current player.
      *
@@ -32,7 +32,7 @@ public class Territory {
     public Territory(String name){
         this.name = name;
         units = 0;
-        neighbours = new ArrayList<>();
+        neighbours = new HashSet<>();
     }
 
 
@@ -93,13 +93,13 @@ public class Territory {
 
     public void addNeighbour(Territory territory)
     {
-        if(!(this.getNeighbours().contains(territory)))
+        if(!(neighbours.contains(territory)))
         {
             neighbours.add(territory);
             territory.addNeighbour(this);
         }
     }
-    public List<Territory> getNeighbours()
+    public Set<Territory> getNeighbours()
     {
         return neighbours;
     }
