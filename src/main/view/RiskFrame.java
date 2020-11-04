@@ -180,7 +180,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         fs.addActionListener(this);
         menu.add(fs);
 
-        //create a massive seperator in the menu bar
+        //create a massive separator in the menu bar
         menuBar.add(Box.createHorizontalGlue());
         playerTurnLbl = new JLabel();
         playerTurnLbl.setOpaque(true);

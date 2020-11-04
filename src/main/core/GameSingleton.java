@@ -134,17 +134,16 @@ public class GameSingleton {
         ((RiskFrame)riskView).setPointsToPaint(getAllCoordinates());
     }
     //TODO
-    /**
+    /** Returns the player who owns the given territory.
      *
-     * @param territory
-     * @return
+     * @param territory The selected territory.
+     * @return the player who owns the given territory
      */
     public Player getTerritoryOwner(Territory territory) {
         return world.getTerritoryOwner(territory);
     }
 
-    //TODO
-    /**
+    /** Create the view for the Risk Game
      *
      * @param rgv
      */
@@ -168,7 +167,7 @@ public class GameSingleton {
     }
 
     /**
-     * Get the next active player
+     * Get the next player who has not yet been eliminated from the game.
      */
     public void nextPlayer()
     {
@@ -188,17 +187,16 @@ public class GameSingleton {
         ));
     }
 
-    //TODO
-    /**
+    /** Get the player who is currently on their turn.
      *
-     * @return
+     * @return the player who is currently on their turn
      */
     public Player getCurrentPlayer() {
         return players.get(currentPlayerInd);
     }
 
     /**
-     * Game has ended. Print the name and colour of the player who won the game.
+     * Game has finished and determine the player who won.
      */
     private void endGame(){
         Player winner = null;
@@ -212,11 +210,10 @@ public class GameSingleton {
                 RiskEventType.GAME_OVER));
     }
 
-    //TODO
-    /**
+    /** Retrieve a
      *
-     * @param attacker
-     * @param defending
+     * @param attacker The player who is currently attacking.
+     * @param defending The territory being defended.
      * @return
      */
     public Map<Territory,Point> getValidAttackNeighboursOwned(Player attacker, Territory defending) {
@@ -233,16 +230,16 @@ public class GameSingleton {
         return (neighboursOwned.size()>0)?neighboursOwned:null;
     }
 
-    public Map<Territory,Point> getNeighboursOwned(Player player,Territory territory) {
-        return world.getNeighbourNodesOwned(player,territory);
-    }
-
-    /**
-     * Simulates the battle sequence between a territory attacking an adjacent territory. The attacker
-     * is required to select a number of dice to attack with provided he/she meets the minimum unit requirements
+    /** Represents a battle sequence between a territory owned by the current player and
+     * an adjacent territory owned by another player.
      *
-     * @param attacking The territory containing units that will be used in the attack
-     * @param defending The territory being attacked
+     * Completes a single attack and removes units from the territories according to the result of
+     * the attack. If, after the attack, the territory being attacked contains no more units, then
+     * declare the attack a victory for the attacker and return true.
+     *
+     * @param attacking The territory that supplies the attacking units.
+     * @param defending The territory that is being attacked.
+     * @return true if the battle is over, false otherwise
      */
     public boolean battle(Territory attacking, Territory defending, int attackDie, int defendDie) {
         riskView.handleRiskUpdate(new RiskEvent(this,
