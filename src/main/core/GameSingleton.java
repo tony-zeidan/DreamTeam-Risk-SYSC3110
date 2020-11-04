@@ -181,15 +181,6 @@ public class GameSingleton {
         return players.get(currentPlayerInd);
     }
 
-
-    /**
-     * Prints the current state of the world.
-     */
-    private void checkWorld() {
-        System.out.println(String.format("|--------------------(World State: %s)--------------------|", world.getName()));
-        printMap();
-    }
-
     /**
      * Game has ended. Print the name and colour of the player who won the game.
      */
@@ -203,32 +194,6 @@ public class GameSingleton {
         riskView.handleRiskUpdate(new RiskEvent(this,
                 String.format("%s of %s has conquered all of %s! Hooray!", winner.getName(), winner.getColour(), world.getName()),
                 RiskEventType.GAME_OVER));
-    }
-
-
-    private int getPlayerDieCount(Player player, int lowerBound, int upperBound) {
-        if (lowerBound==upperBound) return lowerBound;
-
-        boolean validInput = false;
-        int dieCount = 0;
-        while (!validInput) {
-            System.out.println(String.format("%s how many die would you like to roll with? (%s to %s)",player.getName(),lowerBound,upperBound));
-            String attInput = myAction.nextLine();
-            try {
-                dieCount = Integer.parseInt(attInput);
-                validInput = true;
-                if (dieCount>upperBound||dieCount<lowerBound) {
-                    validInput = false;
-                }
-            } catch (NumberFormatException e) {
-                validInput = false;
-            }
-        }
-        return dieCount;
-    }
-
-    public Map<Territory,Point> getAllNodes() {
-        return world.getAllCoordinates();
     }
 
     public Map<Territory,Point> getValidAttackNeighboursOwned(Player attacker, Territory defending) {
@@ -286,7 +251,7 @@ public class GameSingleton {
      * @param defendRolls The number of dice the defender is using for this defence
      * @return A pair of integers (position 0: how many units attacker lost, position 1: how many units defender lost)
      */
-    private static int[] attack(int attackRolls, int defendRolls) {
+    private int[] attack(int attackRolls, int defendRolls) {
 
         //random acts as die
         Random rand = new Random();
@@ -296,16 +261,20 @@ public class GameSingleton {
         int[] defendDice = new int[defendRolls];
 
         //roll dice (random integer) for both parties and display simultaneously
-        System.out.print("Attacking Rolls:   |");
+        String rolled = "";
         for (int i = 0; i < attackRolls; i++) {
             attackDice[i] = rand.nextInt(6) + 1;
-            System.out.print(" " + attackDice[i] + " |");
+            rolled += attackDice[i] + ",";
         }
-        System.out.print("\nDefending Rolls:  |");
+        riskView.handleRiskUpdate(new RiskEvent(this,
+                rolled.substring(0,rolled.length()-1),RiskEventType.DIE_ROLLED));
+        rolled = "";
         for (int i = 0; i < defendRolls; i++) {
             defendDice[i] = rand.nextInt(6) + 1;
-            System.out.print(" " + defendDice[i] + " |");
+            rolled += defendDice[i] + ",";
         }
+        riskView.handleRiskUpdate(new RiskEvent(this,
+                rolled.substring(0,rolled.length()-1),RiskEventType.DIE_ROLLED));
 
         //sort both rolls in descending order
         Arrays.sort(attackDice);
@@ -388,7 +357,7 @@ public class GameSingleton {
         Player attacker = world.getTerritoryOwner(initialT);
         Player defender = world.getTerritoryOwner(finalT);
 
-        attacker.addTerritory(initialT);
+        attacker.addTerritory(finalT);
         defender.removeTerritory(finalT);
 
         riskView.handleRiskUpdate(new RiskEvent(this,
