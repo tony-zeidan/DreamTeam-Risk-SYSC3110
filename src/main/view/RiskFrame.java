@@ -293,7 +293,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         attack.setEnabled(enabled);
     }
 
-    public void setEndable(boolean enabled) {
+    public void setEnable(boolean enabled) {
         endTurn.setEnabled(enabled);
     }
 
