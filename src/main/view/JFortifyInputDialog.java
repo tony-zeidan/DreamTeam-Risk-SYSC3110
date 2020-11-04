@@ -359,6 +359,4 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
         System.out.print(String.format("Selected Unit Amount: %s",
                 result));
     }
-
-
 }

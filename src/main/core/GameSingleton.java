@@ -57,6 +57,12 @@ public class GameSingleton {
         currentPlayerInd = 0;
     }
 
+    //TODO
+    /**
+     *
+     * @param players
+     * @return
+     */
     public static GameSingleton getGameInstance(List<Player> players){
         //if an instance doesn't exist, create only one instance
         if(gameInstance == null){
@@ -65,18 +71,22 @@ public class GameSingleton {
         return gameInstance;
     }
 
+    //TODO
+    /**
+     *
+     */
     public void setUpGame() {
         //set the initial amount of active players accordingly
         numActivePlayer = players.size();
 
         //six random colors for players
         List<Color> randomColors = new LinkedList<>();
-        randomColors.add(Color.RED);
-        randomColors.add(Color.GREEN);
+        randomColors.add(new Color(125, 1, 22));
+        randomColors.add(Color.GRAY);
         randomColors.add(Color.BLUE);
-        randomColors.add(Color.YELLOW);
-        randomColors.add(Color.ORANGE);
-        randomColors.add(Color.CYAN);
+        randomColors.add(new Color(191, 176, 12));
+        randomColors.add(new Color(15,0,0));
+        randomColors.add(new Color(10, 142, 1));
 
         Random rand = new Random();
 
@@ -107,15 +117,30 @@ public class GameSingleton {
                 RiskEventType.TURN_BEGAN));
     }
 
+    //TODO
+    /**
+     *
+     * @return
+     */
     public Map<Territory,Point> getAllCoordinates() {
         return world.getAllCoordinates();
     }
 
-
+    //TODO
+    /**
+     *
+     * @param territory
+     * @return
+     */
     public Player getTerritoryOwner(Territory territory) {
         return world.getTerritoryOwner(territory);
     }
 
+    //TODO
+    /**
+     *
+     * @param rgv
+     */
     public void makeView(RiskGameView rgv) {
         riskView = rgv;
     }
@@ -134,8 +159,9 @@ public class GameSingleton {
             players.set(chosen, holder);
         }
     }
+
     /**
-     * get the next active player
+     * Get the next active player
      */
     public void nextPlayer()
     {
@@ -155,6 +181,11 @@ public class GameSingleton {
         ));
     }
 
+    //TODO
+    /**
+     *
+     * @return
+     */
     public Player getCurrentPlayer() {
         return players.get(currentPlayerInd);
     }
@@ -174,6 +205,13 @@ public class GameSingleton {
                 RiskEventType.GAME_OVER));
     }
 
+    //TODO
+    /**
+     *
+     * @param attacker
+     * @param defending
+     * @return
+     */
     public Map<Territory,Point> getValidAttackNeighboursOwned(Player attacker, Territory defending) {
 
         if (attacker.ownsTerritory(defending)) return null;
@@ -231,14 +269,14 @@ public class GameSingleton {
      */
     private int[] attack(int attackRolls, int defendRolls) {
 
-        //random acts as die
+        //Random Acts as a Die
         Random rand = new Random();
 
-        //two primitive integer arrays to store random rolls
+        //Two Primitive Integer Arrays to Store Random Rolls
         int[] attackDice = new int[attackRolls];
         int[] defendDice = new int[defendRolls];
 
-        //roll dice (random integer) for both parties and display simultaneously
+        //Roll Dice (Random Integer) For Both Parties And Display Simultaneously
         String rolled = "";
         for (int i = 0; i < attackRolls; i++) {
             attackDice[i] = rand.nextInt(6) + 1;
@@ -254,11 +292,11 @@ public class GameSingleton {
         riskView.handleRiskUpdate(new RiskEvent(this,
                 rolled.substring(0,rolled.length()-1),RiskEventType.DIE_ROLLED));
 
-        //sort both rolls in descending order
+        //Sort Both Rolls in Descending Order
         Arrays.sort(attackDice);
         Arrays.sort(defendDice);
 
-        //Set counter variables for lost units in the attack
+        //Set Counter Variables for Lost Units in the Attack
         int attackLost = 0;
         int defendLost = 0;
 
@@ -288,11 +326,16 @@ public class GameSingleton {
     }
 
     /**
+     * Gets the max amount of dice the attacker/defender can roll
      *
+     * @param numUnits The number of units on the territory
+     * @param attacking Whether the player is attacking or defending
+     * @return The max number of dice the player can roll
      */
     public int getMaxBattleDie(int numUnits, boolean attacking) {
         //The Player is Attacking
-        if (attacking == true) {
+        if (attacking) {
+            //Determines Number of Die by the Number of Units on Attacking Territory
             switch (numUnits) {
                 case (1):
                     return 0;
@@ -305,6 +348,7 @@ public class GameSingleton {
             }
             //The Player is Defending
         } else {
+            //Determines Number of Die by the Number of Units on Defending Territory
             switch (numUnits) {
                 case (0):
                     return 0;
@@ -335,13 +379,16 @@ public class GameSingleton {
         Player attacker = world.getTerritoryOwner(initialT);
         Player defender = world.getTerritoryOwner(finalT);
 
+        //Gives the victor the claimed territory
         attacker.addTerritory(finalT);
         defender.removeTerritory(finalT);
 
+        //Print a message to confirm the fortify
         riskView.handleRiskUpdate(new RiskEvent(this,
                 numUnits+" have been moved from "+initialT.getName()+" to "+finalT.getName()+"!",
                 RiskEventType.UNITS_MOVED));
 
+        //Check to see if their is only one player remaining
         updateNumActivePlayer();
         if (this.getNumActivePlayer() == 1){
             endGame();
@@ -353,8 +400,8 @@ public class GameSingleton {
      * Update the number of players active.
      */
     public void updateNumActivePlayer() {
+        //Check to see if each player has at least one territory of their own, if not they are removed from the game
         int numActive = 0;
-        List<Territory> territories = world.getTerritories();
         for (Player player : players) {
             if (player.isActive()) {
                 if (player.getOwnedTerritories().size() > 0) {

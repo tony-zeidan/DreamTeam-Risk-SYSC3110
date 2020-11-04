@@ -130,6 +130,13 @@ public class WorldMap {
         }
     }
 
+    //TODO
+    /**
+     *
+     * @param first
+     * @param second
+     * @return
+     */
     public boolean areNeighbours(Territory first, Territory second) {
         for (Territory[] t : mapEdgeList) {
             if (t[0].equals(first)&&t[1].equals(second)) return true;
@@ -138,22 +145,47 @@ public class WorldMap {
         return false;
     }
 
+    //TODO
+    /**
+     *
+     * @param player
+     * @param territory
+     */
     public void addPlayerOwned(Player player,Territory territory) {
         Player previousOwner = getTerritoryOwner(territory);
         removePlayerOwned(previousOwner,territory);
         player.addTerritory(territory);
     }
 
+    //TODO
+    /**
+     *
+     * @param player
+     * @param territory
+     */
     public void removePlayerOwned(Player player,Territory territory) {
         if (player==null) return;
         player.removeTerritory(territory);
     }
 
+    //TODO
+    /**
+     *
+     * @param first
+     * @param second
+     */
     public void addTerritoryNeighbour(Territory first, Territory second) {
         if (areNeighbours(first,second)) return;
         mapEdgeList.add(new Territory[]{first,second});
     }
 
+    //TODO
+    /**
+     *
+     * @param player
+     * @param territory
+     * @return
+     */
     public Map<Territory,Point> getNeighbourNodesOwned(Player player, Territory territory) {
         HashMap<Territory,Point> neighbours = new HashMap<>();
         for (Territory[] t : mapEdgeList) {

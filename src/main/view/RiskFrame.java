@@ -104,6 +104,12 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         showFrame();
     }
 
+    //TODO
+    /**
+     *
+     * @param sX
+     * @param sY
+     */
     public void scaleWorld(double sX,double sY) {
         for (Point p : riskModel.getAllCoordinates().values()) {
             p.setLocation(p.x*scalingX,p.y*scalingY);
@@ -273,38 +279,83 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         //pack();
     }
 
+    //TODO
+    /**
+     *
+     * @return
+     */
     public Territory getSelectedTerritory() {
         return selectedTerritory;
     }
 
+    //TODO
+    /**
+     *
+     * @return
+     */
     public int getSelectedAction() {
         return selectedAction;
     }
+
+    //TODO
+    /**
+     *
+     * @param selectedAction
+     */
     public void setSelectedAction(int selectedAction) {
         this.selectedAction = selectedAction;
     }
 
+    /**
+     * Enables or disables the Attack Button
+     * @param enabled
+     */
     public void setAttackable(boolean enabled) {
         attack.setEnabled(enabled);
     }
 
-    public void setEnable(boolean enabled) {
+    /**
+     * Enables or disables the End Turn Button
+     * @param enabled
+     */
+    public void setEndable(boolean enabled) {
         endTurn.setEnabled(enabled);
     }
 
+    //TODO
+    /**
+     *
+     * @return
+     */
     public Map<Territory,Point> getPointsToPaint() {
         return pointsToPaint;
     }
 
+    //TODO
+    /**
+     *
+     * @param pointsToPaint
+     */
     public void setPointsToPaint(Map<Territory,Point> pointsToPaint) {
         this.pointsToPaint=pointsToPaint;
     }
 
+    //TODO
+    /**
+     *
+     * @param color
+     * @return
+     */
     private static Color getContrastColor(Color color) {
         double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
         return y >= 128 ? Color.black : Color.white;
     }
 
+    //TODO
+    /**
+     *
+     * @param g
+     */
     private void paintPoints(Graphics g) {
 
 
@@ -334,6 +385,10 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         }
     }
 
+    //TODO
+    /**
+     *
+     */
     public void placePointLabels() {
         if (pointsToPaint==null) return;
 
@@ -373,11 +428,20 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         }
     }
 
+    //TODO
+    /**
+     *
+     */
     public void showFrame() {
         setResizable(true);
         setVisible(true);
     }
 
+    //TODO
+    /**
+     *
+     * @return
+     */
     private int getNumOfPlayers()
     {
         String input;
@@ -392,6 +456,12 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         return numOfPlayers = Integer.parseInt(input);
     }
 
+    //TODO
+    /**
+     *
+     * @param numPlayers
+     * @return
+     */
     private List<Player> getPlayers(int numPlayers)
     {
         ArrayList<Player> players = new ArrayList<>();
@@ -415,10 +485,20 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         RiskFrame rf = new RiskFrame();
     }
 
+    //TODO
+    /**
+     *
+     * @param info
+     */
     public void setCurrentInstruction(String info) {
         instructionsText.setText(info);
     }
 
+    //TODO
+    /**
+     *
+     * @param e
+     */
     @Override
     public void handleRiskUpdate(RiskEvent e) {
         RiskEventType eventType = e.getType();
@@ -461,6 +541,10 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         }
     }
 
+    //TODO
+    /**
+     *
+     */
     public void clearSelectedTerritoryDisplay() {
         if (infoModel.getRowCount() > 0) {
             for (int i = infoModel.getRowCount() - 1; i > -1; i--) {
@@ -469,6 +553,11 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         }
     }
 
+    //TODO
+    /**
+     *
+     * @param territory
+     */
     public void setInfoDisplay(Territory territory) {
         Player p = riskModel.getTerritoryOwner(territory);
         clearSelectedTerritoryDisplay();
@@ -478,6 +567,10 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         infoModel.addRow(new String[]{"Units", String.valueOf(territory.getUnits())});
     }
 
+    //TODO
+    /**
+     *
+     */
     public void restoreGUI() {
         selectedAction = -1;
         selectedTerritory = null;
@@ -490,10 +583,20 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
                 ", please select a territory or end your turn.");
     }
 
+    //TODO
+    /**
+     *
+     * @param selectedTerritory
+     */
     public void setSelectedTerritory(Territory selectedTerritory) {
         this.selectedTerritory = selectedTerritory;
     }
 
+    //TODO
+    /**
+     *
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         JRadioButtonMenuItem fs = (JRadioButtonMenuItem) e.getSource();

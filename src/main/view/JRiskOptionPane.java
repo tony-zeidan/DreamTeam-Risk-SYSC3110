@@ -132,6 +132,11 @@ public class JRiskOptionPane {
         return null;
     }
 
+    //TODO
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         //int r = JRiskInputPane.showDieCountDialog(null,new main.core.Player("Tony","RED"),1,3);
         Player p1 = new Player("Tony", Color.RED);

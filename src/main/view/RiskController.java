@@ -37,6 +37,15 @@ public class RiskController extends MouseAdapter implements ActionListener {
         this.riskModel=riskModel;
     }
 
+    //TODO
+    /**
+     *
+     * @param attacking
+     * @param defending
+     * @param attackDie
+     * @param defendDie
+     * @return
+     */
     public boolean inputBattle(Territory attacking, Territory defending, int attackDie, int defendDie) {
         return riskModel.battle(attacking,defending, attackDie, defendDie);
     }
@@ -61,7 +70,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     riskView.setPointsToPaint(riskModel.getValidAttackNeighboursOwned(
                             riskModel.getCurrentPlayer(),selected));
                     jb.setText("Cancel");
-                    riskView.setEnable(false);
+                    riskView.setEndable(false);
                 }
                 riskView.setSelectedAction(1);
             } else if (jb.getText().equals("Cancel")) {
@@ -148,54 +157,22 @@ public class RiskController extends MouseAdapter implements ActionListener {
             riskView.setSelectedAction(-1);
             riskView.setSelectedTerritory(clickedTerritory);
         }
-
-        /*
-        //check if the user selected attack and has previously selected a territory
-        if (selectedAction==1 && previousTerritory!=null && clickedTerritory!=null) {
-
-            //TODO: add battling inputs here
-            //Attack was pressed
-                //Attacker Set Up
-                //Get Max Attack Die
-                int maxAttack = riskModel.getMaxBattleDie(clickedTerritory.getUnits(), true);
-                int amountOfAttackDie = JRiskOptionPane.showDieCountDialog(riskView, currentPlayer, 1, maxAttack);
-
-                //Defender Set Up
-                Player defendingPlayer = riskModel.getTerritoryOwner(previousTerritory);
-                //Get Max Defend Die
-                int maxDefend = riskModel.getMaxBattleDie(previousTerritory.getUnits(), false);
-                int amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1, maxDefend);
-
-                boolean won = inputBattle(clickedTerritory, previousTerritory, amountOfAttackDie, amountOfDefendDie);
-            riskView.setSelectedTerritory(null);
-
-            riskView.setPointsToPaint(riskModel.getAllCoordinates());
-            riskView.setSelectedAction(-1);
-            riskView.setInfoDisplay(clickedTerritory);
-                if (won) {
-                    //TODO: add fortify logic (JRiskOptionPane.showFortifyInputDialog)
-                }
-
-
-
-        } else if (selectedAction!=-1) {
-            riskView.setSelectedAction(-1);
-
-        } else if (clickedTerritory!=null) {
-            riskView.setSelectedTerritory(clickedTerritory);
-        }
-        */
     }
 
+    //TODO
+    /**
+     *
+     * @param clicked
+     * @return
+     */
     private Territory checkClickedTerritory(Point clicked) {
-        Map<Territory,Point> coords = riskView.getPointsToPaint();
-        for (Territory t : coords.keySet()) {
-            Point p = coords.get(t);
+        Map<Territory,Point> cords = riskView.getPointsToPaint();
+        for (Territory t : cords.keySet()) {
+            Point p = cords.get(t);
             if (p.distance(clicked)<20) {
                 return t;
             }
         }
         return null;
     }
-
 }
