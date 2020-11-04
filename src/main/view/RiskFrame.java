@@ -73,6 +73,12 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     private JButton attack;
 
     /**
+     * The button for ending turn. It is a field as it needs to be
+     * altered in other methods.
+     */
+    private JButton endTurn;
+
+    /**
      * Constructor for instances of main.view.RiskFrame, constructs a new GUI.
      *
      * NEEDS ALTERING FOR COMMUNICATION WITH MODEL AND
@@ -181,7 +187,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
          */
         JPanel buttonPane = new JPanel(new GridLayout(2,1));
         attack = new JButton("Attack");
-        JButton endTurn = new JButton("End Turn");
+        endTurn = new JButton("End Turn");
         attack.addActionListener(rc);
         endTurn.addActionListener(rc);
         buttonPane.add(attack);
@@ -285,6 +291,10 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 
     public void setAttackable(boolean enabled) {
         attack.setEnabled(enabled);
+    }
+
+    public void setEndable(boolean enabled) {
+        endTurn.setEnabled(enabled);
     }
 
     public Map<Territory,Point> getPointsToPaint() {
@@ -442,6 +452,9 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
                 eventDescriptions.addElement(String.format("%s's turn had ended",
                         endedPlayer.getName()));
                 break;
+            case DIE_ROLLED:
+                eventDescriptions.addElement("Rolled: " + trigger);
+                break;
             case ATTACK_COMPLETED:
             case UNITS_MOVED:
             case TERRITORY_DOMINATION:
@@ -476,6 +489,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         setPointsToPaint(riskModel.getAllCoordinates());
         attack.setText("Attack");
         attack.setEnabled(false);
+        endTurn.setEnabled(true);
         clearSelectedTerritoryDisplay();
         instructionsText.setText(riskModel.getCurrentPlayer().getName()+
                 ", please select a territory or end your turn.");
