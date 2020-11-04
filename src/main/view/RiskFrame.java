@@ -277,11 +277,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         return selectedTerritory;
     }
 
-    public void setScalings() {
-        Dimension current = getSize();
-
-    }
-
     public int getSelectedAction() {
         return selectedAction;
     }
