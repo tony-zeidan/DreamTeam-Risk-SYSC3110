@@ -1,6 +1,7 @@
 package main.view;
 
 import main.core.Player;
+import main.core.RiskColour;
 import main.core.Territory;
 
 import javax.swing.*;
@@ -351,7 +352,7 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
         Territory t2 = new Territory("MARS");
         t2.setUnits(5);
         JFortifyInputDialog f1 = new JFortifyInputDialog(null)
-                .setPlayer(new Player("Tony",Color.RED))
+                .setPlayer(new Player("Tony", RiskColour.RED))
                 .setTerritories(t1,t2)
                 .setMinimumMove(3)
                 .setCancellable(true);

@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Class main.core.Player represents the user within the {@link Game}.
+ * Class main.core.Player represents the user within the {@link GameSingleton}.
  *
  * @author Tony Zeidan
  * @author Ethan Chase
@@ -24,7 +24,7 @@ public class Player {
     /**
      * The colour of the units that the player owns.
      */
-    private Color colour;
+    private RiskColour colour;
 
     /**
      * List of territories that the player owns.
@@ -52,7 +52,7 @@ public class Player {
      * Constructor for instances of main.core.Player class with name and colour.
      *  @param name   The name of the player
      * @param colour The colour of the units that the player owns*/
-    public Player(String name, Color colour) {
+    public Player(String name, RiskColour colour) {
         this.name = name;
         this.colour = colour;
         this.active = true;
@@ -73,14 +73,14 @@ public class Player {
      *
      * @return The colour of the units that the player owns.
      */
-    public Color getColour() {
+    public RiskColour getColour() {
         return colour;
     }
 
     /**
      * Sets the colour of the units that the player owns.
      */
-    public void setColour(Color colour) {
+    public void setColour(RiskColour colour) {
         this.colour=colour;
     }
 

@@ -377,7 +377,8 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
             int x = (int) (p.getX());
             int y = (int) (p.getY());
             g.fillOval(x-2,y-2,16,16);
-            g.setColor(riskModel.getTerritoryOwner(t).getColour());
+            Player player = riskModel.getTerritoryOwner(t);
+            g.setColor(player.getColour().getValue());
             g.fillOval(x,  y, 12, 12);
             //g.setFont(new Font("Segoe UI",Font.PLAIN,10));
             //g.setColor(Color.WHITE);
@@ -418,7 +419,8 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
             lbl.setLocation(p.x-(lbl.getWidth()/2)+2,p.y-15);
             lbl2.setLocation(p.x+15,p.y);
             lbl.setForeground(Color.BLACK);
-            lbl2.setForeground(riskModel.getTerritoryOwner(t).getColour());
+            RiskColour playerColour = riskModel.getTerritoryOwner(t).getColour();
+            lbl2.setForeground(playerColour.getValue());
             lbl.setBackground(Color.WHITE);
             lbl2.setBackground(Color.WHITE);
             //lbl.setBorder(raisedEtched);
@@ -514,11 +516,12 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
                 break;
             case TURN_BEGAN:
                 Player beganPlayer = (Player) trigger;
+                Color playerColour = beganPlayer.getColour().getValue();
                 eventDescriptions.addElement(String.format("%s's turn has began",
                         beganPlayer.getName()));
                 playerTurnLbl.setText("it is : "+beganPlayer.getName()+"'s turn.        ");
-                playerTurnLbl.setBackground(beganPlayer.getColour());
-                playerTurnLbl.setForeground(getContrastColor(beganPlayer.getColour()));
+                playerTurnLbl.setBackground(playerColour);
+                playerTurnLbl.setForeground(getContrastColor(playerColour));
                 break;
             case TURN_ENDED:
                 //TODO: trigger this event when the next turn method is called
@@ -564,7 +567,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         clearSelectedTerritoryDisplay();
         infoModel.addRow(new String[]{"Name", territory.getName()});
         infoModel.addRow(new String[]{"Owner", p.getName()});
-        infoModel.addRow(new String[]{"Colour", ""});
+        infoModel.addRow(new String[]{"Colour", p.getColour().getName()});
         infoModel.addRow(new String[]{"Units", String.valueOf(territory.getUnits())});
     }
 

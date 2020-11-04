@@ -80,13 +80,13 @@ public class GameSingleton {
         numActivePlayer = players.size();
 
         //six random colors for players
-        List<Color> randomColors = new LinkedList<>();
-        randomColors.add(new Color(125, 1, 22));
-        randomColors.add(Color.GRAY);
-        randomColors.add(Color.BLUE);
-        randomColors.add(new Color(191, 176, 12));
-        randomColors.add(new Color(15,0,0));
-        randomColors.add(new Color(10, 142, 1));
+        List<RiskColour> randomColors = new LinkedList<>();
+        randomColors.add(RiskColour.RED);
+        randomColors.add(RiskColour.GRAY);
+        randomColors.add(RiskColour.BLUE);
+        randomColors.add(RiskColour.YELLOW);
+        randomColors.add(RiskColour.BLACK);
+        randomColors.add(RiskColour.GREEN);
 
         Random rand = new Random();
 
@@ -100,7 +100,7 @@ public class GameSingleton {
 
             int randIndex = rand.nextInt(randomColors.size());
             //generate and assign random colours
-            Color colour = randomColors.get(randIndex);
+            RiskColour colour = randomColors.get(randIndex);
             p.setColour(colour);
             randomColors.remove(randIndex);
         }

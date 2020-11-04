@@ -1,6 +1,7 @@
 package main.view;
 
 import main.core.Player;
+import main.core.RiskColour;
 import main.core.Territory;
 
 import javax.swing.*;
@@ -131,22 +132,5 @@ public class JRiskOptionPane {
             System.exit(0);
         }
         return null;
-    }
-
-    //TODO
-    /**
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-        //int r = JRiskInputPane.showDieCountDialog(null,new main.core.Player("Tony","RED"),1,3);
-        Player p1 = new Player("Tony", Color.RED);
-        Territory t1 = new Territory("EARTH");
-        t1.setUnits(47);
-        Territory t2 = new Territory("MARS");
-        t2.setUnits(10);
-        //System.out.println(showFortifyInputDialog(null,p1,t1,t2,3));
-        //showDieCountDialog(null,p1,1,3);
-        System.out.println(showFortifyInput(null,p1,t1,t2,2));
     }
 }
