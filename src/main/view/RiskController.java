@@ -64,8 +64,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
         if (o instanceof JButton) {
             JButton jb = (JButton) o;
             if (jb.getText().equals("Attack")) {
+                riskView.setCurrentInstruction("Select a territory to attack");
                 Territory selected = riskView.getSelectedTerritory();
-                int action = riskView.getSelectedAction();
                 if (selected!=null) {
                     riskView.setPointsToPaint(riskModel.getValidAttackNeighboursOwned(
                             riskModel.getCurrentPlayer(),selected));
