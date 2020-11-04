@@ -262,7 +262,7 @@ public class GameSingleton {
             riskView.handleRiskUpdate(new RiskEvent(this,
                     defending.getName()+" fended off the attack from "+attacking.getName()+"!",
                     RiskEventType.TERRITORY_DEFENDED));
-            return true;
+            return false;
         }
 
         if (defending.getUnits()==0) {
