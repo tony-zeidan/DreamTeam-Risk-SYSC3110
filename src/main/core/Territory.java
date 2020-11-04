@@ -85,19 +85,4 @@ public class Territory {
         return String.format("The main.core.Territory of %s: \n\tunits: %s",name,units);
     }
 
-    /**
-     * Prints the string representation of this territory without indentation.
-     */
-    public void print() {
-        print("");
-    }
-
-    /**
-     * Prints the string representation of this territory, allowing indentation.
-     *
-     * @param tabs A string representing the tabulation (\t)
-     */
-    public void print(String tabs){
-        System.out.println(tabs+toString());
-    }
 }

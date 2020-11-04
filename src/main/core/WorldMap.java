@@ -60,32 +60,6 @@ public class WorldMap {
         mapEdgeList = new ArrayList<>(); //test edge list
         readMap();
     }
-
-    /**
-     * Testing constructor for main.core.WorldMap.
-     * {@link Game#Game(String)}
-     */
-    public WorldMap()
-    {
-        name = "TEST: Solar System";
-        rand = new Random();
-        Player p1 = new Player("Tony",Color.RED);
-        Player p2 = new Player("Fred",Color.BLUE);
-        allTerritories = new HashMap<>();
-        allCoordinates = new HashMap<>();
-        Territory mars = new Territory("Mars");
-        Territory earth = new Territory("Earth");
-        addTerritoryNeighbour(mars,earth);
-        addPlayerOwned(p1,mars);
-        addPlayerOwned(p2,mars);
-        allTerritories.put("Earth",earth);
-        allTerritories.put("Mars",mars);
-        allCoordinates.put(earth,new Point(60,60));
-        allCoordinates.put(mars,new Point(100,100));
-        mars.setUnits(10);
-        earth.setUnits(1);
-    }
-
     /**
      * Retrieves the name of the world.
      *
@@ -180,13 +154,6 @@ public class WorldMap {
         mapEdgeList.add(new Territory[]{first,second});
     }
 
-    public boolean ownsAllTerritoryNeighbours(Player player,Territory territory) {
-        for (Territory t : getTerritoryNeighbours(territory)) {
-            if (!player.ownsTerritory(t)) return false;
-        }
-        return true;
-    }
-
     public Map<Territory,Point> getNeighbourNodesOwned(Player player, Territory territory) {
         HashMap<Territory,Point> neighbours = new HashMap<>();
         for (Territory[] t : mapEdgeList) {
@@ -199,30 +166,6 @@ public class WorldMap {
         return neighbours;
     }
 
-    public Map<Territory,Point> getNeighbouringNodes(Territory territory) {
-        HashMap<Territory,Point> neighbours = new HashMap<>();
-        for (Territory[] t : mapEdgeList) {
-            if (t[0].equals(territory)) {
-                neighbours.put(t[1],allCoordinates.get(t[1]));
-            } else if (t[1].equals(territory)) {
-                neighbours.put(t[0],allCoordinates.get(t[0]));
-            }
-        }
-        return neighbours;
-    }
-
-    public List<Territory> getTerritoryNeighbours(Territory territory) {
-        ArrayList<Territory> neighbours = new ArrayList<>();
-        for (Territory[] t : mapEdgeList) {
-            if (t[0].equals(territory)) {
-                neighbours.add(t[1]);
-            } else if (t[1].equals(territory)) {
-                neighbours.add(t[0]);
-            }
-        }
-        return neighbours;
-    }
-
     /**
      * Retrieves a map of all the territories linked to their coordinates.
      *
@@ -230,12 +173,6 @@ public class WorldMap {
      */
     public Map<Territory,Point> getAllCoordinates() {
         return allCoordinates;
-    }
-
-    public void printTerritoryNeighbours(Territory territory) {
-        for (Territory t : getTerritoryNeighbours(territory)) {
-            System.out.print(String.format("%s (%s,Units: %s), ",t.getName(),getTerritoryOwner(t).getColour(),t.getUnits()));
-        }
     }
 
     public Player getTerritoryOwner(Territory territory) {
@@ -314,10 +251,6 @@ public class WorldMap {
         return allTerritories.getOrDefault(name,null);
     }
 
-    /**
-     * Determines if two territories are neighbours.
-     */
-
 
     /**
      * Retrieves a list of territories within the map.
@@ -326,21 +259,6 @@ public class WorldMap {
      */
     public List<Territory> getTerritories() {
         return new ArrayList<>(allTerritories.values());
-    }
-
-    /**
-     * Prints the map (through delegation of printing).
-     */
-    public void printMap() {
-        for (Territory t: allTerritories.values()) {
-            t.print();
-        }
-    }
-
-    public static void main(String[] args) {
-        WorldMap w1 = new WorldMap("test read");
-        w1.readMap();
-        w1.printMap();
     }
 
 }

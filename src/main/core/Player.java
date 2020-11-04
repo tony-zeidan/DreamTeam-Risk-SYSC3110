@@ -149,13 +149,4 @@ public class Player {
         return owned.contains(territory);
     }
 
-    /**
-     * Prints all of the territories that this player owns.
-     */
-    public void printOwned() {
-        System.out.println(String.format("%s owns the following territories:",name));
-        for (Territory t : owned) {
-            System.out.print(String.format("%s (Units:%s), ",t.getName(),t.getUnits()));
-        }
-    }
 }

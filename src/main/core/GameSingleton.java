@@ -111,9 +111,6 @@ public class GameSingleton {
         return world.getAllCoordinates();
     }
 
-    public Map<Territory,Point> getNeighbouringNodes(Territory territory) {
-        return world.getNeighbouringNodes(territory);
-    }
 
     public Player getTerritoryOwner(Territory territory) {
         return world.getTerritoryOwner(territory);
@@ -121,25 +118,6 @@ public class GameSingleton {
 
     public void makeView(RiskGameView rgv) {
         riskView = rgv;
-    }
-
-    /**
-     * Retrieves a territory from the map (or null).
-     * {@link WorldMap#getTerritory(String)}
-     *
-     * @param name The name of the territory to search for
-     * @return The requested territory (null if not found)
-     */
-    public Territory getTerritory(String name) {
-        return world.getTerritory(name);
-    }
-
-    /**
-     * Asks the current world to print itself.
-     * {@link WorldMap#printMap}
-     */
-    public void printMap() {
-        world.printMap();
     }
 
     /**
