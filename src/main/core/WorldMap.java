@@ -93,9 +93,9 @@ public class WorldMap {
 
                     //parse the information from the different groups of the line
                     readName = matcher.group(1);
-                    int xCoord = Integer.parseInt(matcher.group(4));
-                    int yCoord = Integer.parseInt(matcher.group(5));
-                    Point readCoordinates = new Point(xCoord, yCoord);
+                    int xCord = Integer.parseInt(matcher.group(4));
+                    int yCord = Integer.parseInt(matcher.group(5));
+                    Point readCoordinates = new Point(xCord, yCord);
                     String readNeighbours = matcher.group(6).substring(1);  //substring gets rid of first comma
                     Territory readTerritory = new Territory(readName);
 
