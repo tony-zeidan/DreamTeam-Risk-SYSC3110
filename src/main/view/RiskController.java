@@ -61,7 +61,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     riskView.setPointsToPaint(riskModel.getValidAttackNeighboursOwned(
                             riskModel.getCurrentPlayer(),selected));
                     jb.setText("Cancel");
-                    riskView.setEndable(false);
+                    riskView.setEnable(false);
                 }
                 riskView.setSelectedAction(1);
             } else if (jb.getText().equals("Cancel")) {
