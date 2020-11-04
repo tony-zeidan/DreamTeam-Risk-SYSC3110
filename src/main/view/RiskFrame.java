@@ -532,6 +532,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
                 break;
             case ATTACK_COMPLETED:
             case UNITS_MOVED:
+            case TERRITORY_DEFENDED:
             case TERRITORY_DOMINATION:
                 eventDescriptions.addElement((String) trigger);
                 board.revalidate();

@@ -234,11 +234,15 @@ public class GameSingleton {
      * an adjacent territory owned by another player.
      *
      * Completes a single attack and removes units from the territories according to the result of
-     * the attack. If, after the attack, the territory being attacked contains no more units, then
-     * declare the attack a victory for the attacker and return true.
+     * the attack. If, after the attack, the territory owned by a current player loses all but one
+     * unit, then declare the attack a victory for the defender and return true. If, after the
+     * attack, the territory being attacked contains no more units, then declare the attack a victory
+     * for the attacker and return true.
      *
      * @param attacking The territory that supplies the attacking units.
      * @param defending The territory that is being attacked.
+     * @param attackDie The number of dice that the attacker has chosen to roll.
+     * @param defendDie The number of dice that the defender has chosen to roll.
      * @return true if the battle is over, false otherwise
      */
     public boolean battle(Territory attacking, Territory defending, int attackDie, int defendDie) {
@@ -253,6 +257,13 @@ public class GameSingleton {
         riskView.handleRiskUpdate(new RiskEvent(this,
                 world.getTerritoryOwner(attacking).getName()+" lost "+lost[0]+" units and "+world.getTerritoryOwner(defending).getName()+" lost "+lost[1]+" units!",
                 RiskEventType.ATTACK_COMPLETED));
+
+        if(attacking.getUnits()==1){
+            riskView.handleRiskUpdate(new RiskEvent(this,
+                    defending.getName()+" fended off the attack from "+attacking.getName()+"!",
+                    RiskEventType.TERRITORY_DEFENDED));
+            return true;
+        }
 
         if (defending.getUnits()==0) {
             riskView.handleRiskUpdate(new RiskEvent(this,
