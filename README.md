@@ -3,10 +3,10 @@
 ### Team Members:
 Name | Main Contributions
 ------------ | -------------
-Tony Abou-Zeidan | attacking logic, battling logic, UML/SQ
-Anthony Dooley | game setup, map setup, UML/SQ
-Ethan Chase | attacking logic, battling logic, moving troops logic, UML/SQ
-Kyler Verge | user input queries, attacking conditions, UML/SQ
+Tony Abou-Zeidan | GUI, Controller, Events
+Anthony Dooley | Controller, Events, Territory Refactoring
+Ethan Chase | Events, Singleton Model, Map Editing
+Kyler Verge | Events, Controller Input, Map Editing
 
 ### Project Description:
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
