@@ -80,31 +80,38 @@ public class GameSingleton {
         //set the initial amount of active players accordingly
         numActivePlayer = players.size();
 
-        //six random colors for players
-        List<RiskColour> randomColors = new LinkedList<>();
-        randomColors.add(RiskColour.RED);
-        randomColors.add(RiskColour.GRAY);
-        randomColors.add(RiskColour.BLUE);
-        randomColors.add(RiskColour.YELLOW);
-        randomColors.add(RiskColour.BLACK);
-        randomColors.add(RiskColour.GREEN);
-
-        Random rand = new Random();
-
-        /*
-        We must get all player names and generate colours.
-        Loop through players and obtain names through user input.
-        Randomly assign colours.
+        /*Check if colours have already been assigned to players.
+        If not, then assign random colours to players.
          */
-        for (Player p : players) {
-            //get this players name
+        if(players.get(0).getColour() == null){
+            //six random colors for players
+            List<RiskColour> randomColors = new LinkedList<>();
+            randomColors.add(RiskColour.RED);
+            randomColors.add(RiskColour.GRAY);
+            randomColors.add(RiskColour.BLUE);
+            randomColors.add(RiskColour.YELLOW);
+            randomColors.add(RiskColour.BLACK);
+            randomColors.add(RiskColour.GREEN);
 
-            int randIndex = rand.nextInt(randomColors.size());
-            //generate and assign random colours
-            RiskColour colour = randomColors.get(randIndex);
-            p.setColour(colour);
-            randomColors.remove(randIndex);
+            Random rand = new Random();
+
+            /*
+            We must get all player names and generate colours.
+            Loop through players and obtain names through user input.
+            Randomly assign colours.
+            */
+            for (Player p : players) {
+                //get this players name
+
+                int randIndex = rand.nextInt(randomColors.size());
+                //generate and assign random colours
+                RiskColour colour = randomColors.get(randIndex);
+                p.setColour(colour);
+                randomColors.remove(randIndex);
+            }
         }
+
+
         //shuffle the order of the players
         shufflePlayers();
         world.setUp(players);
