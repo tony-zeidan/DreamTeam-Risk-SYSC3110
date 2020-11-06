@@ -242,8 +242,12 @@ public class GameSingleton {
      * @return true if the attacker dominated the defender
      */
     public boolean battle(Territory attacking, Territory defending, int attackDie, int defendDie) {
+
+        String attackerName = attacking.getOwner().getName();
+        String defenderName = defending.getOwner().getName();
+
         notifyHandlers(new RiskEvent(this,
-                "Attack has started between "+attacking.getOwner().getName()+" and "+defending.getOwner().getName(),
+                "Attack has started between "+attackerName+" and "+defenderName,
                 RiskEventType.ATTACK_COMMENCED));
 
         int[] lost = attack(attackDie, defendDie);
@@ -251,18 +255,18 @@ public class GameSingleton {
         defending.removeUnits(lost[1]);
 
         notifyHandlers(new RiskEvent(this,
-                attacking.getOwner().getName()+" lost "+lost[0]+" units and "+defending.getOwner().getName()+" lost "+lost[1]+" units!",
+                attackerName+" lost "+lost[0]+" units and "+defenderName+" lost "+lost[1]+" units!",
                 RiskEventType.ATTACK_COMPLETED));
 
         if(attacking.getUnits()==1){
             notifyHandlers(new RiskEvent(this,
-                    defending.getName()+" fended off the attack from "+attacking.getName()+"!",
+                    defenderName+" fended off the attack from "+attackerName+"!",
                     RiskEventType.TERRITORY_DEFENDED));
         }
 
         if (defending.getUnits()==0) {
             notifyHandlers(new RiskEvent(this,
-                    attacking.getOwner().getName()+" obliterated "+defending.getOwner().getName(),
+                    attackerName+" obliterated "+defenderName,
                     RiskEventType.TERRITORY_DOMINATION));
             return true;
         }
