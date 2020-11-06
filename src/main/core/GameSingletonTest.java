@@ -42,14 +42,39 @@ public class GameSingletonTest {
         assertEquals(2, gsm.getMaxBattleDie(3,true));
     }
 
+    /**
+     * Test getColour() in Player class
+     *
+     * NOTE: In order to test getColour from the Player class, you
+     * have to run getColoursTest() only. Running the entire
+     * GameSingletonTest.java won't work.
+     */
     @Test
-    public void getColoursStatus(){
+    public void getColoursTest(){
         Player ethan = players.get(0);
         Player anthony = players.get(1);
         Player tony = players.get(2);
         assertEquals(RiskColour.RED, ethan.getColour());
         assertEquals(RiskColour.BLUE, anthony.getColour());
         assertEquals(RiskColour.YELLOW, tony.getColour());
-        //Test passes if order of players is not shuffled in setUpGame()
+        //NOTE: Test passes if order of players is not shuffled in setUpGame()
+    }
+
+    /**
+     * Test getName() in Player class
+     *
+     * NOTE: In order to test getName from the Player class, you
+     * have to run getNameTest() only. Running the entire
+     * GameSingletonTest.java won't work.
+     */
+    @Test
+    public void getNameTest(){
+        Player ethan = players.get(0);
+        Player anthony = players.get(1);
+        Player tony = players.get(2);
+        assertEquals("Ethan", ethan.getName());
+        assertEquals("Anthony", anthony.getName());
+        assertEquals("Tony", tony.getName());
+        //NOTE: Test passes if order of players is not shuffled in setUpGame()
     }
 }
