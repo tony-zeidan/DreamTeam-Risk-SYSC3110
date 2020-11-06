@@ -126,15 +126,10 @@ public class GameSingleton {
         System.out.println("in worldMap");
         notifyHandlers(new RiskEvent(this,world.getAllCoordinates(),RiskEventType.UPDATE_MAP));
     }
-    public void updateViewNeighbourPoints(Territory territory)
+    public void getNeighbourCoordinates(Territory territory)
     {
         notifyHandlers(new RiskEvent(this,getValidAttackNeighboursOwned(getCurrentPlayer(),territory),RiskEventType.UPDATE_MAP));
     }
-//    public void updateViewAllPoints()
-//    {
-//        ((RiskFrame)riskHandlers).setPointsToPaint(getAllCoordinates());
-//    }
-
     /** Create the view for the Risk Game
      *
      * @param rgv
@@ -264,6 +259,7 @@ public class GameSingleton {
             notifyHandlers(new RiskEvent(this,
                     attacking.getOwner().getName()+" obliterated "+defending.getOwner().getName(),
                     RiskEventType.TERRITORY_DOMINATION));
+            getAllCoordinates();
             return true;
         }
         return false;
