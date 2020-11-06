@@ -76,7 +76,8 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         super("RISK");
         //TODO: Call GameSingleton.getGameInstance() instead
         riskModel = GameSingleton.getGameInstance(getPlayers(getNumOfPlayers()));
-        riskModel.makeView(this);
+        riskModel.addHandler(this);
+
         board=null;
         setLayout(new BorderLayout());
         selectedAction = -1;
@@ -95,9 +96,9 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      * @param sY
      */
     public void scaleWorld(double sX,double sY) {
-        for (Point p : riskModel.getAllCoordinates().values()) {
-            p.setLocation(p.x*scalingX,p.y*scalingY);
-        }
+//        for (Point p : riskModel.getAllCoordinates().values()) {
+//            p.setLocation(p.x*scalingX,p.y*scalingY);
+//        }
     }
 
     /**
@@ -119,7 +120,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 
         Dimension og = getSize();
         Image finalMapImage=mapImage;
-        setPointsToPaint(riskModel.getAllCoordinates());
+        //setPointsToPaint(riskModel.getAllCoordinates());
         board = new JPanel() {
 
             Dimension previous = null;

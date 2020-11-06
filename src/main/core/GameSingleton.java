@@ -42,7 +42,7 @@ public class GameSingleton {
      */
     private static Scanner myAction;
     private int currentPlayerInd;
-    private RiskGameView riskView;
+    private ArrayList<RiskGameView> riskHandlers;
 
     /**
      * Default constructor for instances of main.core.Game class.
@@ -108,11 +108,11 @@ public class GameSingleton {
         shufflePlayers();
         world.setUp(players);
 
-        riskView.handleRiskUpdate(new RiskEvent(
+        notifyHandlers(new RiskEvent(
                 this, "Welcome to RISK, the game has started!",
                 RiskEventType.GAME_STARTED));
 
-        riskView.handleRiskUpdate(new RiskEvent(this,
+        notifyHandlers(new RiskEvent(this,
                 players.get(currentPlayerInd),
                 RiskEventType.TURN_BEGAN));
     }
@@ -121,25 +121,26 @@ public class GameSingleton {
      *
      * @return
      */
-    public Map<Territory,Point> getAllCoordinates() {
-        return world.getAllCoordinates();
-    }
-    public void updateViewNeighbourPoints(Territory territory)
-    {
-        ((RiskFrame)riskView).setPointsToPaint(getValidAttackNeighboursOwned(getCurrentPlayer(),territory));
-    }
-    public void updateViewAllPoints()
-    {
-        ((RiskFrame)riskView).setPointsToPaint(getAllCoordinates());
-    }
+//    public Map<Territory,Point> getAllCoordinates() {
+//        return world.getAllCoordinates();
+//    }
+//    public void updateViewNeighbourPoints(Territory territory)
+//    {
+//        ((RiskFrame)riskHandlers).setPointsToPaint(getValidAttackNeighboursOwned(getCurrentPlayer(),territory));
+//    }
+//    public void updateViewAllPoints()
+//    {
+//        ((RiskFrame)riskHandlers).setPointsToPaint(getAllCoordinates());
+//    }
 
     /** Create the view for the Risk Game
      *
      * @param rgv
      */
-    public void makeView(RiskGameView rgv) {
-        riskView = rgv;
+    public void addHandler(RiskGameView rgv) {
+        riskHandlers.add(rgv);
     }
+    public void removeHandler(RiskGameView rgv){riskHandlers.remove(rgv);}
 
     /**
      * Generates a random order for the players.
@@ -161,7 +162,7 @@ public class GameSingleton {
      */
     public void nextPlayer()
     {
-        riskView.handleRiskUpdate(new RiskEvent(
+        notifyHandlers(new RiskEvent(
                 this, players.get(currentPlayerInd),
                 RiskEventType.TURN_ENDED
         ));
@@ -171,7 +172,7 @@ public class GameSingleton {
             currentPlayerInd = (currentPlayerInd+1)%players.size();
         }
 
-        riskView.handleRiskUpdate(new RiskEvent(
+        notifyHandlers(new RiskEvent(
                 this, players.get(currentPlayerInd),
                 RiskEventType.TURN_BEGAN
         ));
@@ -195,7 +196,7 @@ public class GameSingleton {
             if (p.isActive()) winner = p;
         }
 
-        riskView.handleRiskUpdate(new RiskEvent(this,
+        notifyHandlers(new RiskEvent(this,
                 String.format("%s of %s has conquered all of %s! Hooray!", winner.getName(), winner.getColour(), world.getName()),
                 RiskEventType.GAME_OVER));
     }
@@ -239,7 +240,7 @@ public class GameSingleton {
      * @return true if the attacker dominated the defender
      */
     public boolean battle(Territory attacking, Territory defending, int attackDie, int defendDie) {
-        riskView.handleRiskUpdate(new RiskEvent(this,
+        notifyHandlers(new RiskEvent(this,
                 "Attack has started between "+attacking.getOwner().getName()+" and "+defending.getOwner().getName(),
                 RiskEventType.ATTACK_COMMENCED));
 
@@ -247,18 +248,18 @@ public class GameSingleton {
         attacking.removeUnits(lost[0]);
         defending.removeUnits(lost[1]);
 
-        riskView.handleRiskUpdate(new RiskEvent(this,
+        notifyHandlers(new RiskEvent(this,
                 attacking.getOwner().getName()+" lost "+lost[0]+" units and "+defending.getOwner().getName()+" lost "+lost[1]+" units!",
                 RiskEventType.ATTACK_COMPLETED));
 
         if(attacking.getUnits()==1){
-            riskView.handleRiskUpdate(new RiskEvent(this,
+            notifyHandlers(new RiskEvent(this,
                     defending.getName()+" fended off the attack from "+attacking.getName()+"!",
                     RiskEventType.TERRITORY_DEFENDED));
         }
 
         if (defending.getUnits()==0) {
-            riskView.handleRiskUpdate(new RiskEvent(this,
+            notifyHandlers(new RiskEvent(this,
                     attacking.getOwner().getName()+" obliterated "+defending.getOwner().getName(),
                     RiskEventType.TERRITORY_DOMINATION));
             return true;
@@ -289,15 +290,13 @@ public class GameSingleton {
             attackDice[i] = rand.nextInt(6) + 1;
             rolled += attackDice[i] + ",";
         }
-        riskView.handleRiskUpdate(new RiskEvent(this,
-                rolled.substring(0,rolled.length()-1),RiskEventType.DIE_ROLLED));
+        notifyHandlers(new RiskEvent(this, rolled.substring(0,rolled.length()-1),RiskEventType.DIE_ROLLED));
         rolled = "";
         for (int i = 0; i < defendRolls; i++) {
             defendDice[i] = rand.nextInt(6) + 1;
             rolled += defendDice[i] + ",";
         }
-        riskView.handleRiskUpdate(new RiskEvent(this,
-                rolled.substring(0,rolled.length()-1),RiskEventType.DIE_ROLLED));
+        notifyHandlers(new RiskEvent(this, rolled.substring(0,rolled.length()-1),RiskEventType.DIE_ROLLED));
 
         //Sort Both Rolls in Descending Order
         Arrays.sort(attackDice);
@@ -391,9 +390,7 @@ public class GameSingleton {
         defender.removeTerritory(finalT);
 
         //Print a message to confirm the fortify
-        riskView.handleRiskUpdate(new RiskEvent(this,
-                numUnits+" have been moved from "+initialT.getName()+" to "+finalT.getName()+"!",
-                RiskEventType.UNITS_MOVED));
+        notifyHandlers(new RiskEvent(this, numUnits+" have been moved from "+initialT.getName()+" to "+finalT.getName()+"!", RiskEventType.UNITS_MOVED));
 
         //Check to see if their is only one player remaining
         updateNumActivePlayer();
@@ -428,5 +425,12 @@ public class GameSingleton {
      */
     public int getNumActivePlayer() {
         return numActivePlayer;
+    }
+    private void notifyHandlers(RiskEvent e)
+    {
+        for(RiskGameView rgv:riskHandlers)
+        {
+            rgv.handleRiskUpdate(e);
+        }
     }
 }

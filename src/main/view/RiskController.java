@@ -67,14 +67,14 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 riskView.setCurrentInstruction("Select a territory to attack");
                 Territory selected = riskView.getSelectedTerritory();
                 if (selected!=null) {
-                    riskModel.updateViewNeighbourPoints(selected);
+                    //riskModel.updateViewNeighbourPoints(selected);
                     jb.setText("Cancel");
                     riskView.setEndable(false);
                 }
                 riskView.setSelectedAction(1);
             } else if (jb.getText().equals("Cancel")) {
                 riskView.restoreGUI();
-                riskModel.updateViewAllPoints();
+               // riskModel.updateViewAllPoints();
             } else if (jb.getText().equals("End Turn")) {
                 riskModel.nextPlayer();
             }
@@ -108,7 +108,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
         if (clickedTerritory==null) {
             riskView.restoreGUI();
-            riskModel.updateViewAllPoints();
+            //riskModel.updateViewAllPoints();
             return;
         }
 
@@ -138,7 +138,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
                     boolean won = inputBattle(clickedTerritory, previousTerritory, amountOfAttackDie, amountOfDefendDie);
                     riskView.setSelectedTerritory(null);
-                    riskModel.updateViewAllPoints();
+                   // riskModel.updateViewAllPoints();
 
                     riskView.setSelectedAction(-1);
                     riskView.setInfoDisplay(clickedTerritory);
@@ -154,7 +154,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 }
             }
             riskView.restoreGUI();
-            riskModel.updateViewAllPoints();
+            //riskModel.updateViewAllPoints();
         } else {
             riskView.setSelectedAction(-1);
             riskView.setSelectedTerritory(clickedTerritory);
