@@ -73,7 +73,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 riskView.setCurrentInstruction("Select a territory to attack");
                 Territory selected = riskView.getSelectedTerritory();
                 if (selected!=null) {
-                    //riskModel.updateViewNeighbourPoints(selected);
+                    riskModel.updateViewNeighbourPoints(selected);
                     jb.setText("Cancel");
                     riskView.setEndable(false);
                 }

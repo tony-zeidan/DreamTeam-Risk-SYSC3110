@@ -82,43 +82,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         RiskController rc = new RiskController(riskModel,this);
         riskModel.addHandler(this);
 
-        //setPointsToPaint(riskModel.getAllCoordinates());
-//        board = new JPanel() {
-//
-//            Dimension previous = null;
-//
-//            /**
-//             * Paints the JPanel component with the given graphics.
-//             * It also uses the given graphics instance to draw a scaled version of
-//             * the image on the panel, along with the points representing territories and
-//             * the labels that go with them.
-//             *
-//             * @param g The dedicated graphics for this panel
-//             */
-//            @Override
-//            protected void paintComponent(Graphics g) {
-//                System.out.println("in paintComponent");
-//                super.paintComponent(g);
-//                board.removeAll();  //clears the labels off of the board
-//
-//                Dimension current = getSize();
-//                if (previous!=null && !(current.equals(previous))) {
-//                    scalingX = current.getWidth()/previous.getWidth();
-//                    scalingY = current.getHeight()/previous.getHeight();
-//                    scaleWorld(scalingX,scalingY);
-//                }
-//                previous = current;
-//
-//                //draws the scaled version of the map image
-//                g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),
-//                        Image.SCALE_SMOOTH), 0, 0, null);
-//
-//                System.out.println("asd");
-//                paintPoints(g);     //paint points representing territories
-//                placePointLabels();     //paint the labels to go with the points
-//            }
-//        };
-
         board.addMouseListener(rc);
         board.setLayout(null);
 
@@ -225,15 +188,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     //TODO
     /**
      *
-     * @param pointsToPaint
-     */
-    public void setPointsToPaint(Map<Territory,Point> pointsToPaint) {
-       // this.pointsToPaint=pointsToPaint;
-    }
-
-    //TODO
-    /**
-     *
      * @param color
      * @return
      */
@@ -322,7 +276,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     public void restoreGUI() {
         selectedAction = -1;
         selectedTerritory = null;
-        //setPointsToPaint(riskModel.getAllCoordinates());
         attack.setText("Attack");
         attack.setEnabled(false);
         endTurn.setEnabled(true);
@@ -379,7 +332,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
             case GAME_STARTED:
             case GAME_OVER:
             case ATTACK_COMMENCED:
-                //eventPane.addEvent((String) trigger);
+               // eventPane.addEvent((String) trigger);
                 break;
             case TURN_BEGAN:
                 Player beganPlayer = (Player) trigger;
