@@ -150,6 +150,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
                 //draws the scaled version of the map image
                 g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),
                         Image.SCALE_SMOOTH), 0, 0, null);
+
                 System.out.println("asd");
                 paintPoints(g);     //paint points representing territories
                 placePointLabels();     //paint the labels to go with the points
@@ -318,40 +319,39 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 
         for (Territory t : nodesToPaint.keySet()) {
             Point p = nodesToPaint.get(t);
-//            int x = (int) (p.getX());
-//            int y = (int) (p.getY());
-//            JLabel lbl = new JLabel(t.getName());
-//            JLabel lbl2 = new JLabel(String.valueOf(t.getUnits()));
-//
-//            lbl.setFont(new Font("Segoe UI",Font.BOLD,9));
-//            lbl2.setFont(new Font("Segoe UI",Font.BOLD,11));
-//
-//            Insets insets = board.getInsets();
-//            Dimension lblSize = lbl.getPreferredSize();
-//            Dimension lblSize2 = lbl2.getPreferredSize();
-//            lbl.setBounds(25 + insets.left, 5 + insets.top,
-//                    lblSize.width, lblSize.height);
-//            board.add(lbl);
-//            lbl2.setBounds(30 + insets.left, 5 + insets.top,
-//                    lblSize2.width, lblSize2.height);
-//            board.add(lbl);
-//            board.add(lbl2);
-//
-//            //Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-//
-//            lbl.setLocation(p.x-(lbl.getWidth()/2)+2,p.y-15);
-//            lbl2.setLocation(p.x+15,p.y);
-//            lbl.setForeground(Color.BLACK);
-//            RiskColour playerColour = t.getOwner().getColour();
-//            lbl2.setForeground(playerColour.getValue());
-//            lbl.setBackground(Color.WHITE);
-//            lbl2.setBackground(Color.WHITE);
-//            //lbl.setBorder(raisedEtched);
-//            //lbl2.setBorder(raisedEtched);
-//            lbl.setOpaque(true);
-//            lbl2.setOpaque(true);
-//            System.out.println("a");
+            int x = (int) (p.getX());
+            int y = (int) (p.getY());
+            JLabel lbl = new JLabel(t.getName());
+            JLabel lbl2 = new JLabel(String.valueOf(t.getUnits()));
+
+            lbl.setFont(new Font("Segoe UI",Font.BOLD,9));
+            lbl2.setFont(new Font("Segoe UI",Font.BOLD,11));
+
+            Insets insets = board.getInsets();
+            Dimension lblSize = lbl.getPreferredSize();
+            Dimension lblSize2 = lbl2.getPreferredSize();
+            lbl.setBounds(25 + insets.left, 5 + insets.top,
+                    lblSize.width, lblSize.height);
+            lbl2.setBounds(30 + insets.left, 5 + insets.top,
+                    lblSize2.width, lblSize2.height);
+
+            Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+
+            lbl.setLocation(p.x-(lbl.getWidth()/2)+2,p.y-15);
+            lbl2.setLocation(p.x+15,p.y);
+            lbl.setForeground(Color.BLACK);
+            RiskColour playerColour = t.getOwner().getColour();
+            lbl2.setForeground(playerColour.getValue());
+            lbl.setBackground(Color.WHITE);
+            lbl2.setBackground(Color.WHITE);
+            //lbl.setBorder(raisedEtched);
+            //lbl2.setBorder(raisedEtched);
+            lbl.setOpaque(true);
+            lbl2.setOpaque(true);
+            board.add(lbl);
+            board.add(lbl2);
         }
+        System.out.println("a");
     }
 
     //TODO
