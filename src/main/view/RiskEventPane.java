@@ -49,11 +49,17 @@ public class RiskEventPane extends JPanel {
         top.setBorder(raisedEtched);
         middle.setBorder(raisedEtched);
         bottom.setBorder(raisedEtched);
+        this.add(top);
+        this.add(middle);
+        this.add(bottom);
+        //set event pane size
+        setPreferredSize(new Dimension(200,800));
     }
 
     public void setInfoDisplay(Player player, Territory territory) {
         infoModel.addRow(new Object[]{"Name",territory.getName()});
         infoModel.addRow(new Object[]{"Owner",player.getName()});
+        infoModel.addRow(new String[]{"Colour", player.getColour().getName()});
         infoModel.addRow(new Object[]{"Units",territory.getUnits()});
     }
 
@@ -63,5 +69,13 @@ public class RiskEventPane extends JPanel {
 
     public void setCurrentInstruction(String instruction) {
         instructionsText.setText(instruction);
+    }
+    public void clearSelectedTerritoryDisplay()
+    {
+        if (infoModel.getRowCount() > 0) {
+            for (int i = infoModel.getRowCount() - 1; i > -1; i--) {
+                infoModel.removeRow(i);
+            }
+        }
     }
 }

@@ -28,10 +28,9 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 
     private GameSingleton riskModel;
     private JLabel playerTurnLbl;
-    private DefaultListModel<String> eventDescriptions;
     private double scalingX;
     private double scalingY;
-
+    private RiskEventPane eventPane;
     /**
      * Stores the territory clicked on by the user.
      * @see RiskController
@@ -49,17 +48,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      * It is altered constantly depending on user inputs.
      */
     private Map<Territory,Point> pointsToPaint;
-
-    /**
-     * This is the model for the table that contains the information
-     * of the users selected territory.
-     */
-    private DefaultTableModel infoModel;
-
-    /**
-     * The text area containing instructions for the user.
-     */
-    private JTextArea instructionsText;
 
     /**
      * JPanel containing the game board (the map).
@@ -89,10 +77,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         //TODO: Call GameSingleton.getGameInstance() instead
         riskModel = GameSingleton.getGameInstance(getPlayers(getNumOfPlayers()));
         riskModel.makeView(this);
-        eventDescriptions = new DefaultListModel<>();
-        infoModel = new DefaultTableModel();
-        infoModel.addColumn("Type");
-        infoModel.addColumn("Value");
         board=null;
         setLayout(new BorderLayout());
         selectedAction = -1;
@@ -199,67 +183,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         buttonPane.add(attack);
         buttonPane.add(endTurn);
 
-        /*
-        This panel (eventPane) is responsible for showing the events that occurred
-        during the game and individual territory information.
-        It contains two main sub panels:
-            1) topSubEventPane is responsible for displaying individual territory information
-                either when the player clicks on a territory on the map, or when they select one
-                from the drop down list.
-             2) middleSubEventPane is responsible for showing a list of the events that have
-                occurred during the game, perhaps through the use of a RiskGameEvent.toString()
-             3) bottomSubEventPane is responsible for showing instructions to the user.
-         */
-        JPanel eventPane = new JPanel(new GridLayout(3,1));
-        JPanel topSubEventPane = new JPanel(new BorderLayout());
-        JPanel middleSubEventPane = new JPanel(new BorderLayout());
-        JPanel bottomSubEventPane = new JPanel(new BorderLayout());
-
-        Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-
-        /*
-        The following is the scrolling table for territory information
-        The table is only going to have three rows:
-        1) Owner: main.core.Player/String
-        2) Color: String
-        2) Units : int/String
-         */
-        JTable infoTable = new JTable(infoModel); //TODO: add model to update table
-
-        //combo box for selecting territory
-        topSubEventPane.add(BorderLayout.NORTH,new JLabel("Selected Territory Information"));
-
-        //add table to top sub pane
-        topSubEventPane.add(BorderLayout.CENTER,infoTable);
-
-        //the following is the list of in game events that occurred
-        JList eventList = new JList(eventDescriptions);
-        JScrollPane gameEventScroller = new JScrollPane(eventList);
-        gameEventScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        gameEventScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        //add list to the bottom sub pane
-        middleSubEventPane.add(BorderLayout.NORTH,new JLabel("Game Events"));
-        middleSubEventPane.add(BorderLayout.CENTER,gameEventScroller);
-        bottomSubEventPane.add(BorderLayout.NORTH,new JLabel("Game Instructor"));
-        instructionsText = new JTextArea();
-        instructionsText.setEditable(false);
-        instructionsText.setLineWrap(true);
-        instructionsText.setWrapStyleWord(true);
-        bottomSubEventPane.add(BorderLayout.CENTER,instructionsText);
-
-        //set borders for both sub panes (to look seperate)
-        topSubEventPane.setBorder(raisedEtched);
-        middleSubEventPane.setBorder(raisedEtched);
-        bottomSubEventPane.setBorder(raisedEtched);
-
-        //add both sub panes to main event pane
-        eventPane.add(BorderLayout.NORTH,topSubEventPane);
-        eventPane.add(BorderLayout.CENTER,middleSubEventPane);
-        eventPane.add(BorderLayout.SOUTH,bottomSubEventPane);
-
-        //set event pane size
-        eventPane.setPreferredSize(new Dimension(200,800));
+        eventPane = new RiskEventPane();
 
         //add everything to the main content pane
         getContentPane().add(BorderLayout.CENTER,board);
@@ -491,7 +415,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      * @param info
      */
     public void setCurrentInstruction(String info) {
-        instructionsText.setText(info);
+        eventPane.setCurrentInstruction(info);
     }
 
     //TODO
@@ -503,20 +427,19 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     public void handleRiskUpdate(RiskEvent e) {
         RiskEventType eventType = e.getType();
         Object trigger = e.getTrigger();
-        if (eventDescriptions.getSize()==25) eventDescriptions.clear();
+        //if (eventDescriptions.getSize()==25) eventDescriptions.clear();
 
         //TODO: only tell game board to repaint when necessary
         switch (eventType) {
             case GAME_STARTED:
             case GAME_OVER:
             case ATTACK_COMMENCED:
-                eventDescriptions.addElement((String) trigger);
+                eventPane.addEvent((String) trigger);
                 break;
             case TURN_BEGAN:
                 Player beganPlayer = (Player) trigger;
                 Color playerColour = beganPlayer.getColour().getValue();
-                eventDescriptions.addElement(String.format("%s's turn has began",
-                        beganPlayer.getName()));
+                eventPane.addEvent(String.format("%s's turn has began", beganPlayer.getName()));
                 playerTurnLbl.setText("it is : "+beganPlayer.getName()+"'s turn.        ");
                 playerTurnLbl.setBackground(playerColour);
                 playerTurnLbl.setForeground(getContrastColor(playerColour));
@@ -525,17 +448,16 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
                 //TODO: trigger this event when the next turn method is called
                 //TODO: but before the player is actually switched
                 Player endedPlayer = (Player) trigger;
-                eventDescriptions.addElement(String.format("%s's turn had ended",
-                        endedPlayer.getName()));
+                eventPane.addEvent(String.format("%s's turn had ended", endedPlayer.getName()));
                 break;
             case DIE_ROLLED:
-                eventDescriptions.addElement("Rolled: " + trigger);
+                eventPane.addEvent("Rolled: " + trigger);
                 break;
             case ATTACK_COMPLETED:
             case UNITS_MOVED:
             case TERRITORY_DEFENDED:
             case TERRITORY_DOMINATION:
-                eventDescriptions.addElement((String) trigger);
+                eventPane.addEvent((String) trigger);
                 board.revalidate();
                 break;
             default:
@@ -543,17 +465,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         }
     }
 
-    //TODO
-    /**
-     *
-     */
-    public void clearSelectedTerritoryDisplay() {
-        if (infoModel.getRowCount() > 0) {
-            for (int i = infoModel.getRowCount() - 1; i > -1; i--) {
-                infoModel.removeRow(i);
-            }
-        }
-    }
 
     //TODO
     /**
@@ -562,11 +473,8 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      */
     public void setInfoDisplay(Territory territory) {
         Player p = territory.getOwner();
-        clearSelectedTerritoryDisplay();
-        infoModel.addRow(new String[]{"Name", territory.getName()});
-        infoModel.addRow(new String[]{"Owner", p.getName()});
-        infoModel.addRow(new String[]{"Colour", p.getColour().getName()});
-        infoModel.addRow(new String[]{"Units", String.valueOf(territory.getUnits())});
+        eventPane.clearSelectedTerritoryDisplay();
+        eventPane.setInfoDisplay(p,territory);
     }
 
     //TODO
@@ -580,8 +488,8 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         attack.setText("Attack");
         attack.setEnabled(false);
         endTurn.setEnabled(true);
-        clearSelectedTerritoryDisplay();
-        instructionsText.setText(riskModel.getCurrentPlayer().getName()+
+        eventPane.clearSelectedTerritoryDisplay();
+        eventPane.addEvent(riskModel.getCurrentPlayer().getName()+
                 ", please select a territory or end your turn.");
     }
 
