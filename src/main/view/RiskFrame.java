@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-
+import java.awt.Graphics;
 /**
  * This class represents a GUI for the game risk, including the feature of
  *  an interactive map.
@@ -25,12 +25,13 @@ import java.util.Map;
  * @author Tony Zeidan
  */
 public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
-
     private GameSingleton riskModel;
     private JLabel playerTurnLbl;
     private double scalingX;
     private double scalingY;
     private RiskEventPane eventPane;
+    private Graphics gr;
+    private Image finalMapImage;
     /**
      * Stores the territory clicked on by the user.
      * @see RiskController
@@ -47,7 +48,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      * Stores the points that will be painted on the map.
      * It is altered constantly depending on user inputs.
      */
-    private Map<Territory,Point> pointsToPaint;
+    private Map<Territory,Point> nodesToPaint;
 
     /**
      * JPanel containing the game board (the map).
@@ -76,12 +77,10 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         super("RISK");
         //TODO: Call GameSingleton.getGameInstance() instead
         riskModel = GameSingleton.getGameInstance(getPlayers(getNumOfPlayers()));
-        riskModel.addHandler(this);
-
         board=null;
         setLayout(new BorderLayout());
         selectedAction = -1;
-        pointsToPaint = null;
+        nodesToPaint = null;
         scalingX=1;
         scalingY=1;
         composeFrame();
@@ -108,6 +107,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     private void composeFrame() {
 
         RiskController rc = new RiskController(riskModel,this);
+        riskModel.addHandler(this);
 
         //attempt to read the map file
         BufferedImage mapImage = null;
@@ -119,7 +119,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         }
 
         Dimension og = getSize();
-        Image finalMapImage=mapImage;
+        finalMapImage=mapImage;
         //setPointsToPaint(riskModel.getAllCoordinates());
         board = new JPanel() {
 
@@ -135,6 +135,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
              */
             @Override
             protected void paintComponent(Graphics g) {
+                System.out.println("in paintComponent");
                 super.paintComponent(g);
                 board.removeAll();  //clears the labels off of the board
 
@@ -149,7 +150,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
                 //draws the scaled version of the map image
                 g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),
                         Image.SCALE_SMOOTH), 0, 0, null);
-
+                System.out.println("asd");
                 paintPoints(g);     //paint points representing territories
                 placePointLabels();     //paint the labels to go with the points
             }
@@ -200,6 +201,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         //set size of frame
         setSize(new Dimension(1200,800));
 
+        rc.gameStart();
         //prepare
         //pack();
     }
@@ -253,7 +255,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      * @return
      */
     public Map<Territory,Point> getPointsToPaint() {
-        return pointsToPaint;
+        return nodesToPaint;
     }
 
     //TODO
@@ -262,7 +264,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      * @param pointsToPaint
      */
     public void setPointsToPaint(Map<Territory,Point> pointsToPaint) {
-        this.pointsToPaint=pointsToPaint;
+       // this.pointsToPaint=pointsToPaint;
     }
 
     //TODO
@@ -279,7 +281,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     //TODO
     /**
      *
-     * @param g
+     * @param
      */
     private void paintPoints(Graphics g) {
 
@@ -287,14 +289,14 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
 
-            Map<Territory,Point> neighbourNodes = riskModel.getNeighbouringNodes(t);
-            for (Point p2 : neighbourNodes.values()) {
-                g.drawLine(p2.x+6,p2.y+6,p.x+6,p.y+6);
-            }
+//            Map<Territory,Point> neighbourNodes = riskModel.getNeighbouringNodes(t);
+//            for (Point p2 : neighbourNodes.values()) {
+//                g.drawLine(p2.x+6,p2.y+6,p.x+6,p.y+6);
+//            }
         }*/
 
-        for (Territory t : pointsToPaint.keySet()) {
-            Point p = pointsToPaint.get(t);
+        for (Territory t : nodesToPaint.keySet()) {
+            Point p = nodesToPaint.get(t);
             g.setColor(Color.BLACK);
 
             int x = (int) (p.getX());
@@ -303,10 +305,8 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
             Player player = t.getOwner();
             g.setColor(player.getColour().getValue());
             g.fillOval(x,  y, 12, 12);
-            //g.setFont(new Font("Segoe UI",Font.PLAIN,10));
-            //g.setColor(Color.WHITE);
-            //g.drawString(t.getName(),x-25,y-10);
         }
+        System.out.println("1");
     }
 
     //TODO
@@ -314,42 +314,43 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      *
      */
     public void placePointLabels() {
-        if (pointsToPaint==null) return;
+        if (nodesToPaint==null) return;
 
-        for (Territory t : pointsToPaint.keySet()) {
-            Point p = pointsToPaint.get(t);
-            int x = (int) (p.getX());
-            int y = (int) (p.getY());
-            JLabel lbl = new JLabel(t.getName());
-            JLabel lbl2 = new JLabel(String.valueOf(t.getUnits()));
-
-            lbl.setFont(new Font("Segoe UI",Font.BOLD,9));
-            lbl2.setFont(new Font("Segoe UI",Font.BOLD,11));
-
-            Insets insets = board.getInsets();
-            Dimension lblSize = lbl.getPreferredSize();
-            Dimension lblSize2 = lbl2.getPreferredSize();
-            lbl.setBounds(25 + insets.left, 5 + insets.top,
-                    lblSize.width, lblSize.height);
-            board.add(lbl);
-            lbl2.setBounds(30 + insets.left, 5 + insets.top,
-                    lblSize2.width, lblSize2.height);
-            board.add(lbl);
-            board.add(lbl2);
-
-            //Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-
-            lbl.setLocation(p.x-(lbl.getWidth()/2)+2,p.y-15);
-            lbl2.setLocation(p.x+15,p.y);
-            lbl.setForeground(Color.BLACK);
-            RiskColour playerColour = t.getOwner().getColour();
-            lbl2.setForeground(playerColour.getValue());
-            lbl.setBackground(Color.WHITE);
-            lbl2.setBackground(Color.WHITE);
-            //lbl.setBorder(raisedEtched);
-            //lbl2.setBorder(raisedEtched);
-            lbl.setOpaque(true);
-            lbl2.setOpaque(true);
+        for (Territory t : nodesToPaint.keySet()) {
+            Point p = nodesToPaint.get(t);
+//            int x = (int) (p.getX());
+//            int y = (int) (p.getY());
+//            JLabel lbl = new JLabel(t.getName());
+//            JLabel lbl2 = new JLabel(String.valueOf(t.getUnits()));
+//
+//            lbl.setFont(new Font("Segoe UI",Font.BOLD,9));
+//            lbl2.setFont(new Font("Segoe UI",Font.BOLD,11));
+//
+//            Insets insets = board.getInsets();
+//            Dimension lblSize = lbl.getPreferredSize();
+//            Dimension lblSize2 = lbl2.getPreferredSize();
+//            lbl.setBounds(25 + insets.left, 5 + insets.top,
+//                    lblSize.width, lblSize.height);
+//            board.add(lbl);
+//            lbl2.setBounds(30 + insets.left, 5 + insets.top,
+//                    lblSize2.width, lblSize2.height);
+//            board.add(lbl);
+//            board.add(lbl2);
+//
+//            //Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+//
+//            lbl.setLocation(p.x-(lbl.getWidth()/2)+2,p.y-15);
+//            lbl2.setLocation(p.x+15,p.y);
+//            lbl.setForeground(Color.BLACK);
+//            RiskColour playerColour = t.getOwner().getColour();
+//            lbl2.setForeground(playerColour.getValue());
+//            lbl.setBackground(Color.WHITE);
+//            lbl2.setBackground(Color.WHITE);
+//            //lbl.setBorder(raisedEtched);
+//            //lbl2.setBorder(raisedEtched);
+//            lbl.setOpaque(true);
+//            lbl2.setOpaque(true);
+//            System.out.println("a");
         }
     }
 
@@ -422,54 +423,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     //TODO
     /**
      *
-     * @param e
-     */
-    @Override
-    public void handleRiskUpdate(RiskEvent e) {
-        RiskEventType eventType = e.getType();
-        Object trigger = e.getTrigger();
-        //if (eventDescriptions.getSize()==25) eventDescriptions.clear();
-
-        //TODO: only tell game board to repaint when necessary
-        switch (eventType) {
-            case GAME_STARTED:
-            case GAME_OVER:
-            case ATTACK_COMMENCED:
-                eventPane.addEvent((String) trigger);
-                break;
-            case TURN_BEGAN:
-                Player beganPlayer = (Player) trigger;
-                Color playerColour = beganPlayer.getColour().getValue();
-                eventPane.addEvent(String.format("%s's turn has began", beganPlayer.getName()));
-                playerTurnLbl.setText("it is : "+beganPlayer.getName()+"'s turn.        ");
-                playerTurnLbl.setBackground(playerColour);
-                playerTurnLbl.setForeground(getContrastColor(playerColour));
-                break;
-            case TURN_ENDED:
-                //TODO: trigger this event when the next turn method is called
-                //TODO: but before the player is actually switched
-                Player endedPlayer = (Player) trigger;
-                eventPane.addEvent(String.format("%s's turn had ended", endedPlayer.getName()));
-                break;
-            case DIE_ROLLED:
-                eventPane.addEvent("Rolled: " + trigger);
-                break;
-            case ATTACK_COMPLETED:
-            case UNITS_MOVED:
-            case TERRITORY_DEFENDED:
-            case TERRITORY_DOMINATION:
-                eventPane.addEvent((String) trigger);
-                board.revalidate();
-                break;
-            default:
-                return;
-        }
-    }
-
-
-    //TODO
-    /**
-     *
      * @param territory
      */
     public void setInfoDisplay(Territory territory) {
@@ -519,5 +472,57 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         }
         setUndecorated(fs.isSelected());
         setVisible(true);
+    }
+
+    //TODO
+    /**
+     *
+     * @param e
+     */
+    @Override
+    public void handleRiskUpdate(RiskEvent e) {
+        RiskEventType eventType = e.getType();
+        Object trigger = e.getTrigger();
+        //if (eventDescriptions.getSize()==25) eventDescriptions.clear();
+
+        System.out.println(eventType);
+        //TODO: only tell game board to repaint when necessary
+        switch (eventType) {
+            case UPDATE_MAP:
+                //for selecting on our map we need a reference
+                nodesToPaint = (HashMap<Territory,Point>)trigger;
+                board.repaint();
+            case GAME_STARTED:
+            case GAME_OVER:
+            case ATTACK_COMMENCED:
+                //eventPane.addEvent((String) trigger);
+                break;
+            case TURN_BEGAN:
+                Player beganPlayer = (Player) trigger;
+                Color playerColour = beganPlayer.getColour().getValue();
+                eventPane.addEvent(String.format("%s's turn has began", beganPlayer.getName()));
+                playerTurnLbl.setText("it is : "+beganPlayer.getName()+"'s turn.        ");
+                playerTurnLbl.setBackground(playerColour);
+                playerTurnLbl.setForeground(getContrastColor(playerColour));
+                break;
+            case TURN_ENDED:
+                //TODO: trigger this event when the next turn method is called
+                //TODO: but before the player is actually switched
+                Player endedPlayer = (Player) trigger;
+                eventPane.addEvent(String.format("%s's turn had ended", endedPlayer.getName()));
+                break;
+            case DIE_ROLLED:
+                eventPane.addEvent("Rolled: " + trigger);
+                break;
+            case ATTACK_COMPLETED:
+            case UNITS_MOVED:
+            case TERRITORY_DEFENDED:
+            case TERRITORY_DOMINATION:
+                eventPane.addEvent((String) trigger);
+                board.revalidate();
+                break;
+            default:
+                return;
+        }
     }
 }

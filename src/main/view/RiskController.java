@@ -37,6 +37,12 @@ public class RiskController extends MouseAdapter implements ActionListener {
         this.riskModel=riskModel;
     }
 
+
+    public void gameStart()
+    {
+        System.out.println("in controller");
+        riskModel.getAllCoordinates();
+    }
     //TODO
     /**
      *
