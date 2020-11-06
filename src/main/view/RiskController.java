@@ -40,7 +40,6 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
     public void gameStart()
     {
-        System.out.println("in controller");
         riskModel.getAllCoordinates();
     }
     //TODO
@@ -79,7 +78,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 }
                 riskView.setSelectedAction(1);
             } else if (jb.getText().equals("Cancel")) {
-                riskView.restoreGUI();
+                riskModel.updateGUI();
                 riskModel.getAllCoordinates();
             } else if (jb.getText().equals("End Turn")) {
                 riskModel.nextPlayer();
@@ -113,7 +112,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 clicked.x,clicked.y,selectedAction,clickedTerritory,previousTerritory));
 
         if (clickedTerritory==null) {
-            riskView.restoreGUI();
+            riskModel.updateGUI();
             riskModel.getAllCoordinates();
             return;
         }
@@ -159,7 +158,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     }
                 }
             }
-            riskView.restoreGUI();
+            riskModel.updateGUI();
             riskModel.getAllCoordinates();
         } else {
             riskView.setSelectedAction(-1);

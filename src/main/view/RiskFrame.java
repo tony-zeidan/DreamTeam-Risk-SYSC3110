@@ -122,13 +122,12 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         //make the program terminate when frame is closed
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //just to make sure everything has been reset for the start of the game
-        restoreGUI();
-
         //set size of frame
         setSize(new Dimension(1200,800));
 
         rc.gameStart();
+        //just to make sure everything has been reset for the start of the game
+        restoreGUI();
         //prepare
         //pack();
     }
@@ -280,8 +279,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         attack.setEnabled(false);
         endTurn.setEnabled(true);
         eventPane.clearSelectedTerritoryDisplay();
-        eventPane.addEvent(riskModel.getCurrentPlayer().getName()+
-                ", please select a territory or end your turn.");
     }
 
     //TODO
@@ -325,14 +322,15 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         System.out.println(eventType);
         //TODO: only tell game board to repaint when necessary
         switch (eventType) {
+            case ADD_EVENT:
+                eventPane.addEvent((String)trigger);
+                break;
             case UPDATE_MAP:
                 //for selecting on our map we need a reference
                 board.setPointsToPaint((HashMap<Territory,Point>)trigger);
                 board.repaint();
-            case GAME_STARTED:
+                break;
             case GAME_OVER:
-            case ATTACK_COMMENCED:
-               // eventPane.addEvent((String) trigger);
                 break;
             case TURN_BEGAN:
                 Player beganPlayer = (Player) trigger;
@@ -342,21 +340,9 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
                 playerTurnLbl.setBackground(playerColour);
                 playerTurnLbl.setForeground(getContrastColor(playerColour));
                 break;
-            case TURN_ENDED:
-                //TODO: trigger this event when the next turn method is called
-                //TODO: but before the player is actually switched
-                Player endedPlayer = (Player) trigger;
-                eventPane.addEvent(String.format("%s's turn had ended", endedPlayer.getName()));
-                break;
-            case DIE_ROLLED:
-                eventPane.addEvent("Rolled: " + trigger);
-                break;
-            case ATTACK_COMPLETED:
-            case UNITS_MOVED:
-            case TERRITORY_DEFENDED:
-            case TERRITORY_DOMINATION:
-                eventPane.addEvent((String) trigger);
-                break;
+            case RESTORE_GUI:
+                eventPane.addEvent((String)trigger);
+                restoreGUI();
             default:
                 return;
         }

@@ -88,6 +88,11 @@ public class Territory {
     }
 
     public void setOwner(Player owner) {
+        if (this.owner!= null)
+        {
+            Player prevOwner = this.owner;
+            prevOwner.removeTerritory(this);
+        }
         this.owner = owner;
         owner.addTerritory(this);
     }

@@ -111,7 +111,7 @@ public class GameSingleton {
 
         notifyHandlers(new RiskEvent(
                 this, "Welcome to RISK, the game has started!",
-                RiskEventType.GAME_STARTED));
+                RiskEventType.ADD_EVENT));
 
         notifyHandlers(new RiskEvent(this,
                 players.get(currentPlayerInd),
@@ -129,6 +129,11 @@ public class GameSingleton {
     public void getNeighbourCoordinates(Territory territory)
     {
         notifyHandlers(new RiskEvent(this,getValidAttackNeighboursOwned(getCurrentPlayer(),territory),RiskEventType.UPDATE_MAP));
+    }
+    public void updateGUI()
+    {
+        notifyHandlers(new RiskEvent(this,getCurrentPlayer().getName()+
+                ", please select a territory or end your turn.",RiskEventType.RESTORE_GUI));
     }
     /** Create the view for the Risk Game
      *
@@ -160,9 +165,8 @@ public class GameSingleton {
     public void nextPlayer()
     {
         notifyHandlers(new RiskEvent(
-                this, players.get(currentPlayerInd),
-                RiskEventType.TURN_ENDED
-        ));
+                this, players.get(currentPlayerInd).getName()+"'s turn had ended",
+                RiskEventType.ADD_EVENT));
 
         currentPlayerInd = (currentPlayerInd+1)%players.size();
         while(!(players.get(currentPlayerInd).isActive())){
@@ -239,7 +243,7 @@ public class GameSingleton {
     public boolean battle(Territory attacking, Territory defending, int attackDie, int defendDie) {
         notifyHandlers(new RiskEvent(this,
                 "Attack has started between "+attacking.getOwner().getName()+" and "+defending.getOwner().getName(),
-                RiskEventType.ATTACK_COMMENCED));
+                RiskEventType.ADD_EVENT));
 
         int[] lost = attack(attackDie, defendDie);
         attacking.removeUnits(lost[0]);
@@ -247,18 +251,18 @@ public class GameSingleton {
 
         notifyHandlers(new RiskEvent(this,
                 attacking.getOwner().getName()+" lost "+lost[0]+" units and "+defending.getOwner().getName()+" lost "+lost[1]+" units!",
-                RiskEventType.ATTACK_COMPLETED));
+                RiskEventType.ADD_EVENT));
 
         if(attacking.getUnits()==1){
             notifyHandlers(new RiskEvent(this,
                     defending.getName()+" fended off the attack from "+attacking.getName()+"!",
-                    RiskEventType.TERRITORY_DEFENDED));
+                    RiskEventType.ADD_EVENT));
         }
 
         if (defending.getUnits()==0) {
             notifyHandlers(new RiskEvent(this,
                     attacking.getOwner().getName()+" obliterated "+defending.getOwner().getName(),
-                    RiskEventType.TERRITORY_DOMINATION));
+                    RiskEventType.ADD_EVENT));
             getAllCoordinates();
             return true;
         }
@@ -288,13 +292,13 @@ public class GameSingleton {
             attackDice[i] = rand.nextInt(6) + 1;
             rolled += attackDice[i] + ",";
         }
-        notifyHandlers(new RiskEvent(this, rolled.substring(0,rolled.length()-1),RiskEventType.DIE_ROLLED));
+        notifyHandlers(new RiskEvent(this, "Rolled: " +rolled.substring(0,rolled.length()-1),RiskEventType.ADD_EVENT));
         rolled = "";
         for (int i = 0; i < defendRolls; i++) {
             defendDice[i] = rand.nextInt(6) + 1;
             rolled += defendDice[i] + ",";
         }
-        notifyHandlers(new RiskEvent(this, rolled.substring(0,rolled.length()-1),RiskEventType.DIE_ROLLED));
+        notifyHandlers(new RiskEvent(this, "Rolled: " +rolled.substring(0,rolled.length()-1),RiskEventType.ADD_EVENT));
 
         //Sort Both Rolls in Descending Order
         Arrays.sort(attackDice);
@@ -384,11 +388,11 @@ public class GameSingleton {
         Player defender = finalT.getOwner();
 
         //Gives the victor the claimed territory
-        attacker.addTerritory(finalT);
+        finalT.setOwner(attacker);
+        //attacker.addTerritory(finalT);
         defender.removeTerritory(finalT);
-
         //Print a message to confirm the fortify
-        notifyHandlers(new RiskEvent(this, numUnits+" have been moved from "+initialT.getName()+" to "+finalT.getName()+"!", RiskEventType.UNITS_MOVED));
+        notifyHandlers(new RiskEvent(this, numUnits+" have been moved from "+initialT.getName()+" to "+finalT.getName()+"!", RiskEventType.ADD_EVENT));
 
         //Check to see if their is only one player remaining
         updateNumActivePlayer();
