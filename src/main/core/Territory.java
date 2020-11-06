@@ -23,6 +23,8 @@ public class Territory {
      */
     private int units;
 
+    private Player owner;
+
     private Set<Territory> neighbours;
 
     /** Constructor for the territory object that contains a name and current player.
@@ -78,6 +80,16 @@ public class Territory {
      */
     public void removeUnits(int units){
         this.units -= units;
+    }
+
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
+        owner.addTerritory(this);
     }
 
 
