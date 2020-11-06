@@ -131,7 +131,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     int amountOfAttackDie = JRiskOptionPane.showDieCountDialog(riskView, currentPlayer, 1, maxAttack);
 
                     //Defender Set Up
-                    Player defendingPlayer = riskModel.getTerritoryOwner(previousTerritory);
+                    Player defendingPlayer = previousTerritory.getOwner();
                     //Get Max Defend Die
                     int maxDefend = riskModel.getMaxBattleDie(previousTerritory.getUnits(), false);
                     int amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1, maxDefend);
