@@ -25,10 +25,7 @@ import java.util.Map;
 public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     private GameSingleton riskModel;
     private JLabel playerTurnLbl;
-    private double scalingX;
-    private double scalingY;
     private RiskEventPane eventPane;
-    private Image finalMapImage;
     /**
      * Stores the territory clicked on by the user.
      * @see RiskController
@@ -42,15 +39,9 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     private int selectedAction;
 
     /**
-     * Stores the points that will be painted on the map.
-     * It is altered constantly depending on user inputs.
-     */
-    private Map<Territory,Point> pointsToPaint;
-
-    /**
      * JPanel containing the game board (the map).
      */
-    private JPanel board;
+    private RiskMapPane board;
 
     /**
      * The button for attacking. It is a field as it needs to be
@@ -74,27 +65,12 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         super("RISK");
         //TODO: Call GameSingleton.getGameInstance() instead
         riskModel = GameSingleton.getGameInstance(getPlayers(getNumOfPlayers()));
-        board=null;
+        board = new RiskMapPane();
         setLayout(new BorderLayout());
         selectedAction = -1;
-        pointsToPaint = null;
-        scalingX=1;
-        scalingY=1;
         composeFrame();
         riskModel.setUpGame();
         showFrame();
-    }
-
-    //TODO
-    /**
-     *
-     * @param sX
-     * @param sY
-     */
-    public void scaleWorld(double sX,double sY) {
-//        for (Point p : riskModel.getAllCoordinates().values()) {
-//            p.setLocation(p.x*scalingX,p.y*scalingY);
-//        }
     }
 
     /**
@@ -106,53 +82,43 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         RiskController rc = new RiskController(riskModel,this);
         riskModel.addHandler(this);
 
-        //attempt to read the map file
-        BufferedImage mapImage = null;
-        try {
-            mapImage = ImageIO.read(getClass().getResource("/resources/RiskBoard.png"));
-        } catch (IOException ioException) {
-            System.out.println("RISK Board Load Failed");
-            ioException.printStackTrace();
-        }
-
-        Dimension og = getSize();
-        finalMapImage=mapImage;
         //setPointsToPaint(riskModel.getAllCoordinates());
-        board = new JPanel() {
+//        board = new JPanel() {
+//
+//            Dimension previous = null;
+//
+//            /**
+//             * Paints the JPanel component with the given graphics.
+//             * It also uses the given graphics instance to draw a scaled version of
+//             * the image on the panel, along with the points representing territories and
+//             * the labels that go with them.
+//             *
+//             * @param g The dedicated graphics for this panel
+//             */
+//            @Override
+//            protected void paintComponent(Graphics g) {
+//                System.out.println("in paintComponent");
+//                super.paintComponent(g);
+//                board.removeAll();  //clears the labels off of the board
+//
+//                Dimension current = getSize();
+//                if (previous!=null && !(current.equals(previous))) {
+//                    scalingX = current.getWidth()/previous.getWidth();
+//                    scalingY = current.getHeight()/previous.getHeight();
+//                    scaleWorld(scalingX,scalingY);
+//                }
+//                previous = current;
+//
+//                //draws the scaled version of the map image
+//                g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),
+//                        Image.SCALE_SMOOTH), 0, 0, null);
+//
+//                System.out.println("asd");
+//                paintPoints(g);     //paint points representing territories
+//                placePointLabels();     //paint the labels to go with the points
+//            }
+//        };
 
-            Dimension previous = null;
-
-            /**
-             * Paints the JPanel component with the given graphics.
-             * It also uses the given graphics instance to draw a scaled version of
-             * the image on the panel, along with the points representing territories and
-             * the labels that go with them.
-             *
-             * @param g The dedicated graphics for this panel
-             */
-            @Override
-            protected void paintComponent(Graphics g) {
-                System.out.println("in paintComponent");
-                super.paintComponent(g);
-                board.removeAll();  //clears the labels off of the board
-
-                Dimension current = getSize();
-                if (previous!=null && !(current.equals(previous))) {
-                    scalingX = current.getWidth()/previous.getWidth();
-                    scalingY = current.getHeight()/previous.getHeight();
-                    scaleWorld(scalingX,scalingY);
-                }
-                previous = current;
-
-                //draws the scaled version of the map image
-                g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),
-                        Image.SCALE_SMOOTH), 0, 0, null);
-
-                System.out.println("asd");
-                paintPoints(g);     //paint points representing territories
-                placePointLabels();     //paint the labels to go with the points
-            }
-        };
         board.addMouseListener(rc);
         board.setLayout(null);
 
@@ -253,7 +219,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      * @return
      */
     public Map<Territory,Point> getPointsToPaint() {
-        return pointsToPaint;
+        return board.getPointsToPaint();
     }
 
     //TODO
@@ -276,85 +242,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         return y >= 128 ? Color.black : Color.white;
     }
 
-    //TODO
-    /**
-     *
-     * @param
-     */
-    private void paintPoints(Graphics g) {
-
-        /*if (pointsToPaint==null) return;
-        for (Territory t : pointsToPaint.keySet()) {
-            Point p = pointsToPaint.get(t);
-
-//            Map<Territory,Point> neighbourNodes = riskModel.getNeighbouringNodes(t);
-//            for (Point p2 : neighbourNodes.values()) {
-//                g.drawLine(p2.x+6,p2.y+6,p.x+6,p.y+6);
-//            }
-        }*/
-
-        for (Territory t : pointsToPaint.keySet()) {
-            Point p = pointsToPaint.get(t);
-            g.setColor(Color.BLACK);
-
-            int x = (int) (p.getX());
-            int y = (int) (p.getY());
-            g.fillOval(x-2,y-2,16,16);
-            Player player = t.getOwner();
-            g.setColor(player.getColour().getValue());
-            g.fillOval(x,  y, 12, 12);
-        }
-        System.out.println("1");
-    }
-
-    //TODO
-    /**
-     *
-     */
-    public void placePointLabels() {
-        if (pointsToPaint ==null) return;
-
-        for (Territory t : pointsToPaint.keySet()) {
-            Point p = pointsToPaint.get(t);
-            int x = (int) (p.getX());
-            int y = (int) (p.getY());
-            JLabel lbl = new JLabel(t.getName());
-            JLabel lbl2 = new JLabel(String.valueOf(t.getUnits()));
-
-            lbl.setFont(new Font("Segoe UI",Font.BOLD,9));
-            lbl2.setFont(new Font("Segoe UI",Font.BOLD,11));
-
-            Insets insets = board.getInsets();
-            Dimension lblSize = lbl.getPreferredSize();
-            Dimension lblSize2 = lbl2.getPreferredSize();
-            lbl.setBounds(25 + insets.left, 5 + insets.top,
-                    lblSize.width, lblSize.height);
-            lbl2.setBounds(30 + insets.left, 5 + insets.top,
-                    lblSize2.width, lblSize2.height);
-
-            Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-
-            lbl.setLocation(p.x-(lbl.getWidth()/2)+2,p.y-15);
-            lbl2.setLocation(p.x+15,p.y);
-            lbl.setForeground(Color.BLACK);
-            RiskColour playerColour = t.getOwner().getColour();
-            lbl2.setForeground(playerColour.getValue());
-            lbl.setBackground(Color.WHITE);
-            lbl2.setBackground(Color.WHITE);
-            //lbl.setBorder(raisedEtched);
-            //lbl2.setBorder(raisedEtched);
-            lbl.setOpaque(true);
-            lbl2.setOpaque(true);
-            board.add(lbl);
-            board.add(lbl2);
-        }
-        System.out.println("a");
-    }
-
-    //TODO
-    /**
-     *
-     */
     public void showFrame() {
         setResizable(true);
         setVisible(true);
@@ -487,7 +374,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         switch (eventType) {
             case UPDATE_MAP:
                 //for selecting on our map we need a reference
-                pointsToPaint = (HashMap<Territory,Point>)trigger;
+                board.setPointsToPaint((HashMap<Territory,Point>)trigger);
                 board.repaint();
             case GAME_STARTED:
             case GAME_OVER:
