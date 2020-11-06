@@ -7,7 +7,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.awt.Graphics;
 /**
  * This class represents a GUI for the game risk, including the feature of
  *  an interactive map.
@@ -30,7 +28,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     private double scalingX;
     private double scalingY;
     private RiskEventPane eventPane;
-    private Graphics gr;
     private Image finalMapImage;
     /**
      * Stores the territory clicked on by the user.
@@ -48,7 +45,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      * Stores the points that will be painted on the map.
      * It is altered constantly depending on user inputs.
      */
-    private Map<Territory,Point> nodesToPaint;
+    private Map<Territory,Point> pointsToPaint;
 
     /**
      * JPanel containing the game board (the map).
@@ -80,7 +77,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         board=null;
         setLayout(new BorderLayout());
         selectedAction = -1;
-        nodesToPaint = null;
+        pointsToPaint = null;
         scalingX=1;
         scalingY=1;
         composeFrame();
@@ -256,7 +253,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      * @return
      */
     public Map<Territory,Point> getPointsToPaint() {
-        return nodesToPaint;
+        return pointsToPaint;
     }
 
     //TODO
@@ -296,8 +293,8 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 //            }
         }*/
 
-        for (Territory t : nodesToPaint.keySet()) {
-            Point p = nodesToPaint.get(t);
+        for (Territory t : pointsToPaint.keySet()) {
+            Point p = pointsToPaint.get(t);
             g.setColor(Color.BLACK);
 
             int x = (int) (p.getX());
@@ -315,10 +312,10 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      *
      */
     public void placePointLabels() {
-        if (nodesToPaint==null) return;
+        if (pointsToPaint ==null) return;
 
-        for (Territory t : nodesToPaint.keySet()) {
-            Point p = nodesToPaint.get(t);
+        for (Territory t : pointsToPaint.keySet()) {
+            Point p = pointsToPaint.get(t);
             int x = (int) (p.getX());
             int y = (int) (p.getY());
             JLabel lbl = new JLabel(t.getName());
@@ -490,7 +487,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         switch (eventType) {
             case UPDATE_MAP:
                 //for selecting on our map we need a reference
-                nodesToPaint = (HashMap<Territory,Point>)trigger;
+                pointsToPaint = (HashMap<Territory,Point>)trigger;
                 board.repaint();
             case GAME_STARTED:
             case GAME_OVER:
