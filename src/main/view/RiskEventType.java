@@ -1,6 +1,7 @@
 package main.view;
 
 public enum RiskEventType {
+    UPDATE_MAP,
     GAME_STARTED,
     ATTACK_COMMENCED,
     ATTACK_COMPLETED,

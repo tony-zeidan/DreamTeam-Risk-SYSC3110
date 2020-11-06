@@ -55,6 +55,7 @@ public class GameSingleton {
         world = new WorldMap("Earth");
         myAction = new Scanner(System.in);
         currentPlayerInd = 0;
+        riskHandlers = new ArrayList<>();
     }
 
     //TODO
@@ -121,13 +122,14 @@ public class GameSingleton {
      *
      * @return
      */
-//    public Map<Territory,Point> getAllCoordinates() {
-//        return world.getAllCoordinates();
-//    }
-//    public void updateViewNeighbourPoints(Territory territory)
-//    {
-//        ((RiskFrame)riskHandlers).setPointsToPaint(getValidAttackNeighboursOwned(getCurrentPlayer(),territory));
-//    }
+    public void getAllCoordinates() {
+        System.out.println("in worldMap");
+        notifyHandlers(new RiskEvent(this,world.getAllCoordinates(),RiskEventType.UPDATE_MAP));
+    }
+    public void updateViewNeighbourPoints(Territory territory)
+    {
+        notifyHandlers(new RiskEvent(this,getValidAttackNeighboursOwned(getCurrentPlayer(),territory),RiskEventType.UPDATE_MAP));
+    }
 //    public void updateViewAllPoints()
 //    {
 //        ((RiskFrame)riskHandlers).setPointsToPaint(getAllCoordinates());
@@ -428,6 +430,8 @@ public class GameSingleton {
     }
     private void notifyHandlers(RiskEvent e)
     {
+
+        System.out.println(riskHandlers.size()+ " "+e.getType());
         for(RiskGameView rgv:riskHandlers)
         {
             rgv.handleRiskUpdate(e);
