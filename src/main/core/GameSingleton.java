@@ -83,6 +83,7 @@ public class GameSingleton {
         /*Check if colours have already been assigned to players.
         If not, then assign random colours to players.
          */
+
         if(players.get(0).getColour() == null){
             //six random colors for players
             List<RiskColour> randomColors = new LinkedList<>();
@@ -95,8 +96,8 @@ public class GameSingleton {
 
             Random rand = new Random();
 
-            /*
-            We must get all player names and generate colours.
+
+            /*We must get all player names and generate colours.
             Loop through players and obtain names through user input.
             Randomly assign colours.
             */
