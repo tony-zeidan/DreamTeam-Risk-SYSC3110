@@ -358,8 +358,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      */
     private void paintPoints(Graphics g) {
 
-
-
         /*if (pointsToPaint==null) return;
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
@@ -377,7 +375,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
             int x = (int) (p.getX());
             int y = (int) (p.getY());
             g.fillOval(x-2,y-2,16,16);
-            Player player = riskModel.getTerritoryOwner(t);
+            Player player = t.getOwner();
             g.setColor(player.getColour().getValue());
             g.fillOval(x,  y, 12, 12);
             //g.setFont(new Font("Segoe UI",Font.PLAIN,10));
@@ -419,7 +417,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
             lbl.setLocation(p.x-(lbl.getWidth()/2)+2,p.y-15);
             lbl2.setLocation(p.x+15,p.y);
             lbl.setForeground(Color.BLACK);
-            RiskColour playerColour = riskModel.getTerritoryOwner(t).getColour();
+            RiskColour playerColour = t.getOwner().getColour();
             lbl2.setForeground(playerColour.getValue());
             lbl.setBackground(Color.WHITE);
             lbl2.setBackground(Color.WHITE);
@@ -563,7 +561,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      * @param territory
      */
     public void setInfoDisplay(Territory territory) {
-        Player p = riskModel.getTerritoryOwner(territory);
+        Player p = territory.getOwner();
         clearSelectedTerritoryDisplay();
         infoModel.addRow(new String[]{"Name", territory.getName()});
         infoModel.addRow(new String[]{"Owner", p.getName()});

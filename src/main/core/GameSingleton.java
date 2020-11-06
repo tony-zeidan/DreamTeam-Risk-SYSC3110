@@ -117,7 +117,6 @@ public class GameSingleton {
                 RiskEventType.TURN_BEGAN));
     }
 
-    //TODO
     /**
      *
      * @return
@@ -132,15 +131,6 @@ public class GameSingleton {
     public void updateViewAllPoints()
     {
         ((RiskFrame)riskView).setPointsToPaint(getAllCoordinates());
-    }
-    //TODO
-    /** Returns the player who owns the given territory.
-     *
-     * @param territory The selected territory.
-     * @return the player who owns the given territory
-     */
-    public Player getTerritoryOwner(Territory territory) {
-        return world.getTerritoryOwner(territory);
     }
 
     /** Create the view for the Risk Game
@@ -210,11 +200,13 @@ public class GameSingleton {
                 RiskEventType.GAME_OVER));
     }
 
-    /** Retrieve a
+    /**
+     * Retrieves a map of all the neighbours around the given territory that can
+     * attack the given territory.
      *
-     * @param attacker The player who is currently attacking.
-     * @param defending The territory being defended.
-     * @return
+     * @param attacker The player who is currently attacking
+     * @param defending The territory being defended
+     * @return A map of valid attacking territories owned by the attacker
      */
     public Map<Territory,Point> getValidAttackNeighboursOwned(Player attacker, Territory defending) {
 
@@ -230,7 +222,8 @@ public class GameSingleton {
         return (neighboursOwned.size()>0)?neighboursOwned:null;
     }
 
-    /** Represents a battle sequence between a territory owned by the current player and
+    /**
+     * Represents a battle sequence between a territory owned by the current player and
      * an adjacent territory owned by another player.
      *
      * Completes a single attack and removes units from the territories according to the result of
@@ -239,15 +232,15 @@ public class GameSingleton {
      * attack, the territory being attacked contains no more units, then declare the attack a victory
      * for the attacker and return true.
      *
-     * @param attacking The territory that supplies the attacking units.
-     * @param defending The territory that is being attacked.
-     * @param attackDie The number of dice that the attacker has chosen to roll.
-     * @param defendDie The number of dice that the defender has chosen to roll.
-     * @return true if the battle is over, false otherwise
+     * @param attacking The territory that supplies the attacking units
+     * @param defending The territory that is being attacked
+     * @param attackDie The number of dice that the attacker has chosen to roll
+     * @param defendDie The number of dice that the defender has chosen to roll
+     * @return true if the attacker dominated the defender
      */
     public boolean battle(Territory attacking, Territory defending, int attackDie, int defendDie) {
         riskView.handleRiskUpdate(new RiskEvent(this,
-                "Attack has started between "+world.getTerritoryOwner(attacking).getName()+" and "+world.getTerritoryOwner(defending).getName(),
+                "Attack has started between "+attacking.getOwner().getName()+" and "+defending.getOwner().getName(),
                 RiskEventType.ATTACK_COMMENCED));
 
         int[] lost = attack(attackDie, defendDie);
@@ -255,19 +248,18 @@ public class GameSingleton {
         defending.removeUnits(lost[1]);
 
         riskView.handleRiskUpdate(new RiskEvent(this,
-                world.getTerritoryOwner(attacking).getName()+" lost "+lost[0]+" units and "+world.getTerritoryOwner(defending).getName()+" lost "+lost[1]+" units!",
+                attacking.getOwner().getName()+" lost "+lost[0]+" units and "+defending.getOwner().getName()+" lost "+lost[1]+" units!",
                 RiskEventType.ATTACK_COMPLETED));
 
         if(attacking.getUnits()==1){
             riskView.handleRiskUpdate(new RiskEvent(this,
                     defending.getName()+" fended off the attack from "+attacking.getName()+"!",
                     RiskEventType.TERRITORY_DEFENDED));
-            return false;
         }
 
         if (defending.getUnits()==0) {
             riskView.handleRiskUpdate(new RiskEvent(this,
-                    world.getTerritoryOwner(attacking).getName()+" obliterated "+world.getTerritoryOwner(defending).getName(),
+                    attacking.getOwner().getName()+" obliterated "+defending.getOwner().getName(),
                     RiskEventType.TERRITORY_DOMINATION));
             return true;
         }
@@ -391,8 +383,8 @@ public class GameSingleton {
         initialT.removeUnits(numUnits);
         finalT.addUnits(numUnits);
 
-        Player attacker = world.getTerritoryOwner(initialT);
-        Player defender = world.getTerritoryOwner(finalT);
+        Player attacker = initialT.getOwner();
+        Player defender = finalT.getOwner();
 
         //Gives the victor the claimed territory
         attacker.addTerritory(finalT);

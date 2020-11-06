@@ -127,12 +127,6 @@ public class WorldMap {
         }
     }
 
-    public void addPlayerOwned(Player player,Territory territory) {
-        Player previousOwner = getTerritoryOwner(territory);
-        removePlayerOwned(previousOwner,territory);
-        player.addTerritory(territory);
-    }
-
     public void removePlayerOwned(Player player,Territory territory) {
         if (player==null) return;
         player.removeTerritory(territory);
@@ -155,13 +149,6 @@ public class WorldMap {
      */
     public Map<Territory,Point> getAllCoordinates() {
         return allCoordinates;
-    }
-
-    public Player getTerritoryOwner(Territory territory) {
-        for (Player p : players) {
-            if (p.ownsTerritory(territory)) return p;
-        }
-        return null;
     }
 
     /**
@@ -195,7 +182,7 @@ public class WorldMap {
 
             Territory t = allTerrs.get(rand.nextInt(allTerrs.size()));
             //set current player to territory, add a unit and remove territory from free territories
-            addPlayerOwned(players.get(playerInd),t);
+            t.setOwner(players.get(playerInd));
             t.addUnits(1);
             allTerrs.remove(t);
         }
