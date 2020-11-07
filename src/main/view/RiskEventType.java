@@ -2,14 +2,8 @@ package main.view;
 
 public enum RiskEventType {
     UPDATE_MAP,
-    GAME_STARTED,
-    ATTACK_COMMENCED,
-    ATTACK_COMPLETED,
-    TERRITORY_DOMINATION,
-    TERRITORY_DEFENDED,
-    UNITS_MOVED,
-    DIE_ROLLED,
+    ADD_EVENT,
+    RESTORE_GUI,
     TURN_BEGAN,
-    TURN_ENDED,
     GAME_OVER
 }
