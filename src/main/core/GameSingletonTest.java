@@ -77,4 +77,35 @@ public class GameSingletonTest {
         assertEquals("Tony", tony.getName());
         //NOTE: Test passes if order of players is not shuffled in setUpGame()
     }
+
+    /**
+     * Test fortifyPosition() in GameSingleton class
+     *
+     * NOTE: In order to test fortifyPosition(), we need to check
+     * whether the method works through access to the number of units
+     * in the Territory class.
+     * Therefore, testFortifyPosition() must be run separately to
+     * succeed. Running the entire GameSingletonTest.java won't work.
+     */
+    @Test
+    public void testFortifyPosition(){
+        Player ethan = players.get(0);
+        Player anthony = players.get(1);
+
+        Territory t1 = new Territory("Earth");
+        t1.setUnits(4);
+        assertEquals(4, t1.getUnits());
+        t1.setOwner(ethan);
+        assertEquals(ethan, t1.getOwner());
+
+        Territory t2 = new Territory("Pluto");
+        t2.setUnits(5);
+        assertEquals(5, t2.getUnits());
+        t2.setOwner(anthony);
+        assertEquals(anthony, t2.getOwner());
+        gsm.fortifyPosition(t1,t2,2);
+
+        assertEquals(2,t1.getUnits());
+        assertEquals(7,t2.getUnits());
+    }
 }
