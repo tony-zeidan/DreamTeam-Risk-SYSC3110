@@ -65,7 +65,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         super("RISK");
         //TODO: Call GameSingleton.getGameInstance() instead
         riskModel = GameSingleton.getGameInstance(getPlayers(getNumOfPlayers()));
-        board = new RiskMapPane();
         setLayout(new BorderLayout());
         selectedAction = -1;
         composeFrame();
@@ -81,10 +80,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 
         RiskController rc = new RiskController(riskModel,this);
         riskModel.addHandler(this);
-
-        board.addMouseListener(rc);
-        board.setLayout(null);
-
+        board = new RiskMapPane(rc);
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Options");
         menuBar.add(menu);
@@ -267,7 +263,14 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         eventPane.clearSelectedTerritoryDisplay();
         eventPane.setInfoDisplay(p,territory);
     }
-
+    public double getScalingX()
+    {
+        return board.getScalingX();
+    }
+    public double getScalingY()
+    {
+        return board.getScalingY();
+    }
     //TODO
     /**
      *

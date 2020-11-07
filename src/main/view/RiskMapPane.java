@@ -23,9 +23,12 @@ public class RiskMapPane extends JPanel {
     private double scalingX;
     private double scalingY;
     private Image finalMapImage;
-    private Dimension previous = null;
-    public RiskMapPane()
+    private Dimension originalDim;
+    boolean firstTimeLoaded;
+    public RiskMapPane(RiskController rc)
     {
+        this.addMouseListener(rc);
+        this.setLayout(null);
         pointsToPaint = null;
         scalingX=1;
         scalingY=1;
@@ -37,28 +40,24 @@ public class RiskMapPane extends JPanel {
             System.out.println("RISK Board Load Failed");
             ioException.printStackTrace();
         }
-
-        Dimension og = getSize();
         finalMapImage=mapImage;
+        firstTimeLoaded = true;
     }
     protected void paintComponent(Graphics g)
     {
+        if(firstTimeLoaded)
+        {
+            originalDim = getSize();
+            firstTimeLoaded = false;
+        }
         super.paintComponent(g);
         this.removeAll();  //clears the labels off of the board
-
         Dimension current = getSize();
-        if (previous!=null && !(current.equals(previous))) {
-            scalingX = current.getWidth()/previous.getWidth();
-            scalingY = current.getHeight()/previous.getHeight();
-            scaleWorld(scalingX,scalingY);
-        }
-        previous = current;
-
+        scalingX = current.getWidth()/originalDim.getWidth();
+        scalingY = current.getHeight()/originalDim.getHeight();
         //draws the scaled version of the map image
         g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),
                 Image.SCALE_SMOOTH), 0, 0, null);
-
-        System.out.println("asd");
         paintPoints(g);     //paint points representing territories
         placePointLabels();     //paint the labels to go with the points
     }
@@ -71,9 +70,8 @@ public class RiskMapPane extends JPanel {
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
             g.setColor(Color.BLACK);
-
-            int x = (int) (p.getX());
-            int y = (int) (p.getY());
+            int x = (int) (p.getX() * scalingX);
+            int y = (int) (p.getY() * scalingY);
             g.fillOval(x-2,y-2,16,16);
             Player player = t.getOwner();
             g.setColor(player.getColour().getValue());
@@ -86,26 +84,23 @@ public class RiskMapPane extends JPanel {
 
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
-            int x = (int) (p.getX());
-            int y = (int) (p.getY());
+            int x = (int) (p.getX() * scalingX);
+            int y = (int) (p.getY() * scalingY);
             JLabel lbl = new JLabel(t.getName());
             JLabel lbl2 = new JLabel(String.valueOf(t.getUnits()));
 
             lbl.setFont(new Font("Segoe UI",Font.BOLD,9));
             lbl2.setFont(new Font("Segoe UI",Font.BOLD,11));
-
             Insets insets = this.getInsets();
             Dimension lblSize = lbl.getPreferredSize();
             Dimension lblSize2 = lbl2.getPreferredSize();
-            lbl.setBounds(25 + insets.left, 5 + insets.top,
-                    lblSize.width, lblSize.height);
-            lbl2.setBounds(30 + insets.left, 5 + insets.top,
-                    lblSize2.width, lblSize2.height);
+            lbl.setBounds(25 + insets.left, 5 + insets.top, lblSize.width, lblSize.height);
+            lbl2.setBounds(30 + insets.left, 5 + insets.top, lblSize2.width, lblSize2.height);
 
             Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 
-            lbl.setLocation(p.x-(lbl.getWidth()/2)+2,p.y-15);
-            lbl2.setLocation(p.x+15,p.y);
+            lbl.setLocation(x-(lbl.getWidth()/2)+2,y-15);
+            lbl2.setLocation(x+15,y);
             lbl.setForeground(Color.BLACK);
             RiskColour playerColour = t.getOwner().getColour();
             lbl2.setForeground(playerColour.getValue());
@@ -128,9 +123,12 @@ public class RiskMapPane extends JPanel {
     {
         return pointsToPaint;
     }
-    public void scaleWorld(double sX,double sY) {
-//        for (Point p : riskModel.getAllCoordinates().values()) {
-//            p.setLocation(p.x*scalingX,p.y*scalingY);
-//        }
+    public double getScalingX()
+    {
+        return scalingX;
+    }
+    public double getScalingY()
+    {
+        return scalingY;
     }
 }
