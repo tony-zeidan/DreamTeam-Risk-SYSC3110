@@ -80,7 +80,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 
         RiskController rc = new RiskController(riskModel,this);
         riskModel.addHandler(this);
-        board = new RiskMapPane(rc);
+
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Options");
         menuBar.add(menu);
@@ -108,7 +108,9 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         buttonPane.add(attack);
         buttonPane.add(endTurn);
 
+        board = new RiskMapPane(rc);
         eventPane = new RiskEventPane();
+        riskModel.addHandler(eventPane);
 
         //add everything to the main content pane
         getContentPane().add(BorderLayout.CENTER,board);
@@ -121,7 +123,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         //set size of frame
         setSize(new Dimension(1200,800));
 
-        rc.gameStart();
         //just to make sure everything has been reset for the start of the game
         restoreGUI();
         //prepare
@@ -282,6 +283,8 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         attack.setEnabled(false);
         endTurn.setEnabled(true);
         eventPane.clearSelectedTerritoryDisplay();
+        eventPane.setCurrentInstruction(RiskEventPane.DEFAULT_INSTRUCTION);
+        //TODO: add restore seperate panels
     }
 
     //TODO
@@ -319,32 +322,30 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     @Override
     public void handleRiskUpdate(RiskEvent e) {
         RiskEventType eventType = e.getType();
-        Object trigger = e.getTrigger();
+        Object[] info = e.getEventInfo();
         //if (eventDescriptions.getSize()==25) eventDescriptions.clear();
 
         System.out.println(eventType);
         //TODO: only tell game board to repaint when necessary
         switch (eventType) {
-            case ADD_EVENT:
-                eventPane.addEvent((String)trigger);
-                break;
+
             case UPDATE_MAP:
                 //for selecting on our map we need a reference
-                board.setPointsToPaint((HashMap<Territory,Point>)trigger);
+                board.setPointsToPaint((HashMap<Territory,Point>)info[0]);
                 board.repaint();
+                board.revalidate();
                 break;
             case GAME_OVER:
                 break;
             case TURN_BEGAN:
-                Player beganPlayer = (Player) trigger;
+                Player beganPlayer = (Player) info[0];
                 Color playerColour = beganPlayer.getColour().getValue();
-                eventPane.addEvent(String.format("%s's turn has began", beganPlayer.getName()));
+
                 playerTurnLbl.setText("it is : "+beganPlayer.getName()+"'s turn.        ");
                 playerTurnLbl.setBackground(playerColour);
                 playerTurnLbl.setForeground(getContrastColor(playerColour));
                 break;
             case RESTORE_GUI:
-                eventPane.addEvent((String)trigger);
                 restoreGUI();
             default:
                 return;
