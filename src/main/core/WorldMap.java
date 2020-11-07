@@ -1,5 +1,8 @@
 package main.core;
 
+import jdk.jfr.ValueDescriptor;
+import org.w3c.dom.Attr;
+
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -80,7 +83,7 @@ public class WorldMap {
 
         //attempt to read the file
         try {
-            File myObj = new File("src/resources/map.txt");
+            File myObj = new File("src/resources/map_packages/main_package/map.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
@@ -125,6 +128,8 @@ public class WorldMap {
                 }
             }
         }
+
+        writeXML();
     }
 
     public void removePlayerOwned(Player player,Territory territory) {
@@ -208,6 +213,41 @@ public class WorldMap {
                 numOfTroops++;
             }
         }
+    }
+
+    /**
+     * Please ignore this method for now.
+     * Testing map xml generation.
+     *
+     * @deprecated
+     */
+    private void writeXML() {
+        /*Document doc = new Document("world");
+        Attribute docName = new Attribute("id",getName());
+        int i = 1;
+        for (Territory t : allCoordinates.keySet()) {
+            Point p = allCoordinates.get(t);
+            Element terrElem = new Element("territory");
+            Attribute terrElemId = new Attribute("id",i+"");
+            terrElem.addAttribute(terrElemId);
+            ValuedElement terrElemName = new ValuedElement("name",t.getName());
+            terrElem.addChild(terrElemName);
+            ValuedElement terrElemPoint = new ValuedElement("point",p.x + "," + p.y);
+            terrElem.addChild(terrElemPoint);
+            ValuedElement terrElemUnits = new ValuedElement("units","1");
+            terrElem.addChild(terrElemUnits);
+            ValuedElement terrElemOwner = new ValuedElement("owner","null");
+            terrElem.addChild(terrElemOwner);
+            Element terrElemNeighbours = new Element("neighbours");
+            for (Territory n : t.getNeighbours()) {
+                ValuedElement neighboursElemName = new ValuedElement("name",n.getName());
+                terrElemNeighbours.addChild(neighboursElemName);
+            }
+            terrElem.addChild(terrElemNeighbours);
+            doc.addChild(terrElem);
+            i ++;
+        }
+        System.out.println(doc.toString());*/
     }
 
 }
