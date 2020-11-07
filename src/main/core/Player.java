@@ -1,7 +1,6 @@
 package main.core;
 
-import java.awt.*;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 
 /**
