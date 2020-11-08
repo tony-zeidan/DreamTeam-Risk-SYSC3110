@@ -150,6 +150,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 
     /**
      * Sets the selected action
+     *
      * @param selectedAction the number corresponding to the action
      */
     public void setSelectedAction(int selectedAction) {
@@ -158,7 +159,8 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 
     /**
      * Enables or disables the Attack Button
-     * @param enabled
+     *
+     * @param enabled Determines if the attack button will be enabled
      */
     public void setAttackable(boolean enabled) {
         attack.setEnabled(enabled);
@@ -186,6 +188,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     /**
      * Gets a contrasting color to be used for the colour display
      * for whose turn it is
+     *
      * @param color The colour of the player
      * @return A contrasting colour
      */
@@ -323,7 +326,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     /**
      * Handles any type of update made to the game.
      * Through either the game being over, a players turn
-     * beginning, or updating what is attakable
+     * beginning, or updating what territory is attakable
      *
      * @param e The Risk Event
      */
