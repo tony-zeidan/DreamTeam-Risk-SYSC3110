@@ -2,10 +2,8 @@ package main.core;
 
 import main.view.RiskEvent;
 import main.view.RiskEventType;
-import main.view.RiskFrame;
 import main.view.RiskGameView;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -112,7 +110,7 @@ public class GameSingleton {
             }
         }
 
-
+        System.out.println(riskHandlers.size());
         //shuffle the order of the players
         shufflePlayers();
         world.setUp(players);
@@ -219,6 +217,14 @@ public class GameSingleton {
         }
         for (Territory t : invalid) {
             neighboursOwned.remove(t);
+        }
+        if(neighboursOwned.size() ==0)
+        {
+            notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_ATTACKABLE,false));
+        }
+        else
+        {
+            notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_ATTACKABLE,true));
         }
         return (neighboursOwned.size()>0)?neighboursOwned:null;
     }
@@ -392,7 +398,7 @@ public class GameSingleton {
                 initialT, finalT, numUnits));
 
         //Check to see if their is only one player remaining
-        updateNumActivePlayer();
+        updateNumActivePlayers();
         if (this.getNumActivePlayer() == 1){
             endGame();
         }
@@ -402,7 +408,7 @@ public class GameSingleton {
     /**
      * Update the number of players active.
      */
-    public void updateNumActivePlayer() {
+    public void updateNumActivePlayers() {
         //Check to see if each player has at least one territory of their own, if not they are removed from the game
         int numActive = 0;
         for (Player player : players) {

@@ -41,7 +41,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     /**
      * JPanel containing the game board (the map).
      */
-    private RiskMapPane board;
+    private RiskMapPane mapPane;
 
     /**
      * The button for attacking. It is a field as it needs to be
@@ -108,12 +108,13 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         buttonPane.add(attack);
         buttonPane.add(endTurn);
 
-        board = new RiskMapPane(rc);
+        mapPane = new RiskMapPane(rc);
         eventPane = new RiskEventPane();
+        riskModel.addHandler(mapPane);
         riskModel.addHandler(eventPane);
 
         //add everything to the main content pane
-        getContentPane().add(BorderLayout.CENTER,board);
+        getContentPane().add(BorderLayout.CENTER,mapPane);
         getContentPane().add(BorderLayout.SOUTH,buttonPane);
         getContentPane().add(BorderLayout.WEST,eventPane);
 
@@ -178,7 +179,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      * @return
      */
     public Map<Territory,Point> getPointsToPaint() {
-        return board.getPointsToPaint();
+        return mapPane.getPointsToPaint();
     }
 
     //TODO
@@ -266,11 +267,11 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     }
     public double getScalingX()
     {
-        return board.getScalingX();
+        return mapPane.getScalingX();
     }
     public double getScalingY()
     {
-        return board.getScalingY();
+        return mapPane.getScalingY();
     }
     //TODO
     /**
@@ -328,14 +329,11 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         System.out.println(eventType);
         //TODO: only tell game board to repaint when necessary
         switch (eventType) {
-
-            case UPDATE_MAP:
-                //for selecting on our map we need a reference
-                board.setPointsToPaint((HashMap<Territory,Point>)info[0]);
-                board.repaint();
-                board.revalidate();
-                break;
             case GAME_OVER:
+                JOptionPane alert= new JOptionPane();
+                alert.showMessageDialog(this,"GAME OVER "+info[0]+ " has won!!!");
+                setAttackable(false);
+                setEndable(false);
                 break;
             case TURN_BEGAN:
                 Player beganPlayer = (Player) info[0];
@@ -347,6 +345,9 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
                 break;
             case RESTORE_GUI:
                 restoreGUI();
+                break;
+            case UPDATE_ATTACKABLE:
+                setAttackable((boolean)info[0]);
             default:
                 return;
         }

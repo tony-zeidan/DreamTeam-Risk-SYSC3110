@@ -23,6 +23,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
     private GameSingleton riskModel;
     private RiskFrame riskView;
+    private static final int clickDistance = 20;
 
     /**
      * Constructor for instances of the RiskController.
@@ -115,9 +116,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
         if (clickedTerritory!=null) {
             riskView.setInfoDisplay(clickedTerritory);
             //we still access the model here
-            Map<Territory,Point> validAttackers = riskModel.getValidAttackNeighboursOwned(
-                    currentPlayer, clickedTerritory);
-            riskView.setAttackable(validAttackers!=null);
+            riskModel.getValidAttackNeighboursOwned(currentPlayer, clickedTerritory);
         }
 
         if (selectedAction==1) {
@@ -173,7 +172,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
         Map<Territory,Point> cords = riskView.getPointsToPaint();
         for (Territory t : cords.keySet()) {
             Point p = cords.get(t);
-            if (p.distance(newpoint)<20) {
+            if (p.distance(newpoint)<clickDistance) {
                 return t;
             }
         }
