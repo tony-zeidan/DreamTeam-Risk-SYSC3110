@@ -21,7 +21,6 @@ public class GameSingletonTest {
         players.add(new Player("Anthony", RiskColour.BLUE));
         players.add(new Player("Tony", RiskColour.YELLOW));
         gsm = GameSingleton.getGameInstance(players);
-        gsm.setUpGame();
     }
 
     /**
@@ -31,6 +30,7 @@ public class GameSingletonTest {
      */
     @Test
     public void getNumActivePlayerStatus() {
+        gsm.setUpGame();
         assertEquals(3, gsm.getNumActivePlayer());
     }
 
@@ -51,13 +51,14 @@ public class GameSingletonTest {
      */
     @Test
     public void getColoursTest(){
+        //NOTE: Test passes if order of players is not shuffled in setUpGame()
         Player ethan = players.get(0);
         Player anthony = players.get(1);
         Player tony = players.get(2);
+        gsm.setUpGame();
         assertEquals(RiskColour.RED, ethan.getColour());
         assertEquals(RiskColour.BLUE, anthony.getColour());
         assertEquals(RiskColour.YELLOW, tony.getColour());
-        //NOTE: Test passes if order of players is not shuffled in setUpGame()
     }
 
     /**
@@ -69,13 +70,14 @@ public class GameSingletonTest {
      */
     @Test
     public void getNameTest(){
+        //NOTE: Test passes if order of players is not shuffled in setUpGame()
         Player ethan = players.get(0);
         Player anthony = players.get(1);
         Player tony = players.get(2);
+        gsm.setUpGame();
         assertEquals("Ethan", ethan.getName());
         assertEquals("Anthony", anthony.getName());
         assertEquals("Tony", tony.getName());
-        //NOTE: Test passes if order of players is not shuffled in setUpGame()
     }
 
     /**
@@ -103,8 +105,11 @@ public class GameSingletonTest {
         assertEquals(5, t2.getUnits());
         t2.setOwner(anthony);
         assertEquals(anthony, t2.getOwner());
+
         gsm.fortifyPosition(t1,t2,2);
 
+        assertEquals(ethan,t1.getOwner());
+        assertEquals(ethan,t2.getOwner());
         assertEquals(2,t1.getUnits());
         assertEquals(7,t2.getUnits());
     }
