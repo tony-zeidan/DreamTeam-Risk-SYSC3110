@@ -37,11 +37,6 @@ public class RiskController extends MouseAdapter implements ActionListener {
         this.riskModel=riskModel;
     }
 
-
-    public void gameStart()
-    {
-        riskModel.getAllCoordinates();
-    }
     //TODO
     /**
      *
@@ -72,14 +67,14 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 riskView.setCurrentInstruction("Select a territory to attack");
                 Territory selected = riskView.getSelectedTerritory();
                 if (selected!=null) {
-                    riskModel.getNeighbourCoordinates(selected);
+                    riskModel.notifyMapUpdateAttackingNeighbourCoordinates(selected);
                     jb.setText("Cancel");
                     riskView.setEndable(false);
                 }
                 riskView.setSelectedAction(1);
             } else if (jb.getText().equals("Cancel")) {
-                riskModel.updateGUI();
-                riskModel.getAllCoordinates();
+                riskView.restoreGUI();
+                riskModel.notifyMapUpdateAllCoordinates();
             } else if (jb.getText().equals("End Turn")) {
                 riskModel.nextPlayer();
             }
@@ -112,17 +107,16 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 clicked.x,clicked.y,selectedAction,clickedTerritory,previousTerritory));
 
         if (clickedTerritory==null) {
-            riskModel.updateGUI();
-            riskModel.getAllCoordinates();
+            riskView.restoreGUI();
+            riskModel.notifyMapUpdateAllCoordinates();
             return;
         }
 
         if (clickedTerritory!=null) {
             riskView.setInfoDisplay(clickedTerritory);
-
+            //we still access the model here
             Map<Territory,Point> validAttackers = riskModel.getValidAttackNeighboursOwned(
-                    currentPlayer, clickedTerritory
-            );
+                    currentPlayer, clickedTerritory);
             riskView.setAttackable(validAttackers!=null);
         }
 
@@ -158,8 +152,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     }
                 }
             }
-            riskModel.updateGUI();
-            riskModel.getAllCoordinates();
+            riskView.restoreGUI();
+            riskModel.notifyMapUpdateAllCoordinates();
         } else {
             riskView.setSelectedAction(-1);
             riskView.setSelectedTerritory(clickedTerritory);

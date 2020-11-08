@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RiskMapPane extends JPanel {
+public class RiskMapPane extends JPanel implements RiskGameView {
     /**
      * Stores the points that will be painted on the map.
      * It is altered constantly depending on user inputs.
@@ -130,5 +130,24 @@ public class RiskMapPane extends JPanel {
     public double getScalingY()
     {
         return scalingY;
+    }
+
+    @Override
+    public void handleRiskUpdate(RiskEvent e) {
+        RiskEventType eventType = e.getType();
+        Object[] info = e.getEventInfo();
+        //if (eventDescriptions.getSize()==25) eventDescriptions.clear();
+
+        System.out.println(eventType);
+        //TODO: only tell game board to repaint when necessary
+        switch (eventType) {
+
+            case UPDATE_MAP:
+                //for selecting on our map we need a reference
+                setPointsToPaint((HashMap<Territory, Point>) info[0]);
+                repaint();
+                revalidate();
+                break;
+        }
     }
 }
