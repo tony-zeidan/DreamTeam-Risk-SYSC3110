@@ -19,7 +19,7 @@ Kyler Verge | Events, Controller Input, Map Editing, Documentation
  
 **Project Progress**
 
-![90%](https://progress-bar.dev/90)
+![97%](https://progress-bar.dev/97)
 
 milestone 2 phase
 
