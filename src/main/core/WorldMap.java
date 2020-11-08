@@ -25,11 +25,6 @@ public class WorldMap {
     private String name;
 
     /**
-     * Container for players playing on the map.
-     */
-    private List<Player> players;
-
-    /**
      * The map containing all territories (used to implement graph).
      */
     private Map<String, Territory> allTerritories;
@@ -50,12 +45,9 @@ public class WorldMap {
      *
      * @param name The name of the World
      */
-    public WorldMap(String name)
-    {
+    public WorldMap(String name) {
         this.name = name;
-        players = null;
         rand = new Random();
-        this.players = players;
         allTerritories = new HashMap<>();
         allCoordinates = new HashMap<>();
         readMap();
@@ -171,7 +163,6 @@ public class WorldMap {
      */
     public void setUp(List<Player> players)
     {
-        this.players=players;
         assignTerritories(players);
         //place remaining troops on each of the territories
         int max = 50;
