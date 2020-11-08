@@ -204,12 +204,22 @@ public class WorldMap {
         for (Player player: players)
         {
             //numOfTroops depends on how many territories each player got, as there can be a 1 difference
-            List<Territory> playerTerritories = player.getOwnedTerritories();
+            Set<Territory> playerTerritories = player.getOwnedTerritories();
             int numOfTroops =playerTerritories.size();
             while(numOfTroops != max)
             {
-                //get the player's arraylist of territories and randomly select one to then add 1 unit to
-                (playerTerritories.get(rand.nextInt(playerTerritories.size()))).addUnits(1);
+                int territoryInd = rand.nextInt(playerTerritories.size());
+                int counter = 0;
+                //iterate to a randomly selected territory and add one unit to it
+                for (Territory terr: playerTerritories)
+                {
+                    if(counter == territoryInd)
+                    {
+                        terr.addUnits(1);
+                        break;
+                    }
+                        counter++;
+                }
                 numOfTroops++;
             }
         }

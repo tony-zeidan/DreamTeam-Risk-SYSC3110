@@ -131,13 +131,18 @@ public class GameSingleton {
     public void notifyMapUpdateAllCoordinates() {
         notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_MAP,world.getAllCoordinates()));
     }
+
+    /**
+     *
+     * @param territory
+     */
     public void notifyMapUpdateAttackingNeighbourCoordinates(Territory territory) {
         notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_MAP,getValidAttackNeighboursOwned(getCurrentPlayer(),territory)));
     }
 
     /** Create the view for the Risk Game
      *
-     * @param rgv
+     * @param rgv A riskgameview
      */
     public void addHandler(RiskGameView rgv) {
         riskHandlers.add(rgv);
@@ -431,6 +436,11 @@ public class GameSingleton {
     public int getNumActivePlayer() {
         return numActivePlayer;
     }
+
+    /**
+     * Notifies the event handlers
+     * @param e RiskEvent
+     */
     private void notifyHandlers(RiskEvent e) {
         for(RiskGameView rgv:riskHandlers) {
             rgv.handleRiskUpdate(e);

@@ -28,7 +28,7 @@ public class Player {
     /**
      * List of territories that the player owns.
      */
-    private List<Territory> owned;
+    private Set<Territory> owned;
 
     /**
      * Contains whether the player is still active in the game.
@@ -43,7 +43,7 @@ public class Player {
         this.name = name;
         this.colour = null;
         this.active = true;
-        owned = new LinkedList<>();
+        owned = new HashSet<>();
     }
 
 
@@ -55,7 +55,7 @@ public class Player {
         this.name = name;
         this.colour = colour;
         this.active = true;
-        owned = new LinkedList<>();
+        owned = new HashSet<>();
     }
 
     /**
@@ -106,7 +106,7 @@ public class Player {
      *
      * @return The list of owned territories
      */
-    public List<Territory> getOwnedTerritories()
+    public Set<Territory> getOwnedTerritories()
     {
         return owned;
     }

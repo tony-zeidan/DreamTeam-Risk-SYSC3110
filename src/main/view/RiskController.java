@@ -38,13 +38,14 @@ public class RiskController extends MouseAdapter implements ActionListener {
         this.riskModel=riskModel;
     }
 
-    //TODO
     /**
+     * The current player has clicked attacked and all the circumstances are
+     * met to attack
      *
-     * @param attacking
-     * @param defending
-     * @param attackDie
-     * @param defendDie
+     * @param attacking The territory that is attacking the defending
+     * @param defending The territory that is defending from the attacking
+     * @param attackDie The amount of die the attacking territory can use
+     * @param defendDie The amount of die the defending territory can use
      * @return
      */
     public boolean inputBattle(Territory attacking, Territory defending, int attackDie, int defendDie) {
@@ -159,11 +160,10 @@ public class RiskController extends MouseAdapter implements ActionListener {
         }
     }
 
-    //TODO
     /**
-     *
-     * @param clicked
-     * @return
+     * Checks to see if the player clicked a territory on the map
+     * @param clicked The x, y coordinates on the map the player clicked
+     * @return Territory that was clicked
      */
     private Territory checkClickedTerritory(Point clicked) {
         double x = riskView.getScalingX();
