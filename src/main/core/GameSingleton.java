@@ -334,7 +334,7 @@ public class GameSingleton {
         return new int[]{attackLost, defendLost};
     }
 
-    public int[] rollDice(int rolls){
+    public static int[] rollDice(int rolls){
 
         Random rand = new Random();
 

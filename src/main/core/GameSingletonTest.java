@@ -113,4 +113,17 @@ public class GameSingletonTest {
         assertEquals(2,t1.getUnits());
         assertEquals(7,t2.getUnits());
     }
+
+    /**
+     * Test rollDice() in GameSingleton class
+     */
+    @Test
+    public void testRollDie(){
+        int[] theRolls = gsm.rollDice(3);
+        assertEquals(3, theRolls.length);
+        for(int i=0;i<3;i++){
+            assertTrue(theRolls[i] > 0);
+            assertTrue(theRolls[i] < 7);
+        }
+    }
 }
