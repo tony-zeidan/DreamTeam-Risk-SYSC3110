@@ -8,9 +8,8 @@ import java.util.Set;
  *
  * @author Tony Zeidan
  * @author Ethan Chase
- *
- * @since 1.00
  * @version 1.01
+ * @since 1.00
  */
 public class Territory {
 
@@ -27,18 +26,20 @@ public class Territory {
 
     private Set<Territory> neighbours;
 
-    /** Constructor for the territory object that contains a name and current player.
+    /**
+     * Constructor for the territory object that contains a name and current player.
      *
      * @param name The name of the territory
      */
-    public Territory(String name){
+    public Territory(String name) {
         this.name = name;
         units = 0;
         neighbours = new HashSet<>();
     }
 
 
-    /** Get the name of the territory.
+    /**
+     * Get the name of the territory.
      *
      * @return The name of the territory
      */
@@ -78,18 +79,14 @@ public class Territory {
      *
      * @param units The amount of units to remove
      */
-    public void removeUnits(int units){
-        this.units -= units;
-    }
-
+    public void removeUnits(int units) { this.units -= units; }
 
     public Player getOwner() {
         return owner;
     }
 
     public void setOwner(Player owner) {
-        if (this.owner!= null)
-        {
+        if (this.owner != null) {
             Player prevOwner = this.owner;
             prevOwner.removeTerritory(this);
         }
@@ -105,19 +102,17 @@ public class Territory {
      */
     @Override
     public String toString() {
-        return String.format("The main.core.Territory of %s: \n\tunits: %s",name,units);
+        return String.format("The main.core.Territory of %s: \n\tunits: %s", name, units);
     }
 
-    public void addNeighbour(Territory territory)
-    {
-        if(!(neighbours.contains(territory)))
-        {
+    public void addNeighbour(Territory territory) {
+        if (!(neighbours.contains(territory))) {
             neighbours.add(territory);
             territory.addNeighbour(this);
         }
     }
-    public Set<Territory> getNeighbours()
-    {
+
+    public Set<Territory> getNeighbours() {
         return neighbours;
     }
 }

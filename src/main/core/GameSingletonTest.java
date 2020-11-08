@@ -78,6 +78,7 @@ public class GameSingletonTest {
         assertEquals("Ethan", ethan.getName());
         assertEquals("Anthony", anthony.getName());
         assertEquals("Tony", tony.getName());
+        //NOTE: Test passes if order of players is not shuffled in setUpGame()
     }
 
     /**
@@ -105,7 +106,6 @@ public class GameSingletonTest {
         assertEquals(5, t2.getUnits());
         t2.setOwner(anthony);
         assertEquals(anthony, t2.getOwner());
-
         gsm.fortifyPosition(t1,t2,2);
 
         assertEquals(ethan,t1.getOwner());
