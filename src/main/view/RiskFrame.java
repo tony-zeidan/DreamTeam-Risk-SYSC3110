@@ -345,8 +345,6 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
                 playerTurnLbl.setBackground(playerColour);
                 playerTurnLbl.setForeground(getContrastColor(playerColour));
                 break;
-            case RESTORE_GUI:
-                restoreGUI();
             default:
                 return;
         }

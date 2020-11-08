@@ -4,7 +4,6 @@ public enum RiskEventType {
     UPDATE_MAP,
     GAME_BEGAN,
     DIE_ROLLED,
-    RESTORE_GUI,
     ATTACK_COMMENCED,
     ATTACK_COMPLETED,
     TERRITORY_DOMINATED,
