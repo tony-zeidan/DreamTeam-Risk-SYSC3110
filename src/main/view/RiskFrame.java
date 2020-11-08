@@ -130,10 +130,9 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         //pack();
     }
 
-    //TODO
     /**
-     *
-     * @return
+     * Gets the selected territory
+     * @return The territory that was selected
      */
     public Territory getSelectedTerritory() {
         return selectedTerritory;
@@ -148,10 +147,9 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         return selectedAction;
     }
 
-    //TODO
     /**
-     *
-     * @param selectedAction
+     * Sets the selected action
+     * @param selectedAction the number corresponding to the action
      */
     public void setSelectedAction(int selectedAction) {
         this.selectedAction = selectedAction;
@@ -182,26 +180,30 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         return mapPane.getPointsToPaint();
     }
 
-    //TODO
     /**
-     *
-     * @param color
-     * @return
+     * Gets a contrasting color to be used for the colour display
+     * for whose turn it is
+     * @param color The colour of the player
+     * @return A contrasting colour
      */
     private static Color getContrastColor(Color color) {
         double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
         return y >= 128 ? Color.black : Color.white;
     }
 
+    /**
+     * Makes the games window visible and eligible to resize
+     */
     public void showFrame() {
         setResizable(true);
         setVisible(true);
     }
 
-    //TODO
     /**
+     * Creates a Window to pop up asking how many players will be playing this game
+     * only allows the user to pick between 2 - 6
      *
-     * @return
+     * @return The number of players
      */
     private int getNumOfPlayers()
     {
