@@ -137,6 +137,14 @@ public class WorldMap {
         player.removeTerritory(territory);
     }
 
+    /**
+     * Gets the neighbouring territories that the current player owns
+     * when attacking a territory
+     *
+     * @param player The player in question
+     * @param territory The territory that was selected to be attacked
+     * @return The map with only the neighbouring territories owned
+     */
     public Map<Territory,Point> getNeighbourNodesOwned(Player player, Territory territory) {
         HashMap<Territory,Point> neighbours = new HashMap<>();
         for (Territory terr : territory.getNeighbours()) {
