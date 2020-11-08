@@ -57,14 +57,14 @@ public class GameSingleton {
     }
 
     //TODO
+
     /**
-     *
      * @param players
      * @return
      */
-    public static GameSingleton getGameInstance(List<Player> players){
+    public static GameSingleton getGameInstance(List<Player> players) {
         //if an instance doesn't exist, create only one instance
-        if(gameInstance == null){
+        if (gameInstance == null) {
             gameInstance = new GameSingleton(players);
         }
         return gameInstance;
@@ -83,7 +83,7 @@ public class GameSingleton {
         If not, then assign random colours to players.
          */
 
-        if(players.get(0).getColour() == null){
+        if (players.get(0).getColour() == null) {
             //six random colors for players
             List<RiskColour> randomColors = new LinkedList<>();
             randomColors.add(RiskColour.RED);
@@ -126,29 +126,31 @@ public class GameSingleton {
     }
 
     /**
-     *
      * @return
      */
     public void notifyMapUpdateAllCoordinates() {
-        notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_MAP,world.getAllCoordinates()));
+        notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_MAP, world.getAllCoordinates()));
     }
 
     /**
-     *
      * @param territory
      */
     public void notifyMapUpdateAttackingNeighbourCoordinates(Territory territory) {
-        notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_MAP,getValidAttackNeighboursOwned(getCurrentPlayer(),territory)));
+        notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_MAP, getValidAttackNeighboursOwned(getCurrentPlayer(), territory)));
     }
 
-    /** Create the view for the Risk Game
+    /**
+     * Create the view for the Risk Game
      *
      * @param rgv A riskgameview
      */
     public void addHandler(RiskGameView rgv) {
         riskHandlers.add(rgv);
     }
-    public void removeHandler(RiskGameView rgv){riskHandlers.remove(rgv);}
+
+    public void removeHandler(RiskGameView rgv) {
+        riskHandlers.remove(rgv);
+    }
 
     /**
      * Generates a random order for the players.
@@ -168,21 +170,21 @@ public class GameSingleton {
     /**
      * Get the next player who has not yet been eliminated from the game.
      */
-    public void nextPlayer()
-    {
+    public void nextPlayer() {
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_ENDED, getCurrentPlayer()));
 
-        currentPlayerInd = (currentPlayerInd+1)%players.size();
-        while(!(players.get(currentPlayerInd).isActive())){
-            currentPlayerInd = (currentPlayerInd+1)%players.size();
+        currentPlayerInd = (currentPlayerInd + 1) % players.size();
+        while (!(players.get(currentPlayerInd).isActive())) {
+            currentPlayerInd = (currentPlayerInd + 1) % players.size();
         }
 
         notifyHandlers(new RiskEvent(this,
-                RiskEventType.TURN_BEGAN,getCurrentPlayer()));
+                RiskEventType.TURN_BEGAN, getCurrentPlayer()));
     }
 
-    /** Get the player who is currently on their turn.
+    /**
+     * Get the player who is currently on their turn.
      *
      * @return the player who is currently on their turn
      */
@@ -193,7 +195,7 @@ public class GameSingleton {
     /**
      * Game has finished and determine the player who won.
      */
-    private void endGame(){
+    private void endGame() {
         Player winner = null;
 
         for (Player p : players) {
@@ -202,43 +204,40 @@ public class GameSingleton {
 
         //notify all views that the game is over
         notifyHandlers(new RiskEvent(this,
-                RiskEventType.GAME_OVER,winner,world.getName()));
+                RiskEventType.GAME_OVER, winner, world.getName()));
     }
 
     /**
      * Retrieves a map of all the neighbours around the given territory that can
      * attack the given territory.
      *
-     * @param attacker The player who is currently attacking
+     * @param attacker  The player who is currently attacking
      * @param defending The territory being defended
      * @return A map of valid attacking territories owned by the attacker
      */
-    public Map<Territory,Point> getValidAttackNeighboursOwned(Player attacker, Territory defending) {
+    public Map<Territory, Point> getValidAttackNeighboursOwned(Player attacker, Territory defending) {
 
         if (attacker.ownsTerritory(defending)) return null;
-        Map<Territory,Point> neighboursOwned = world.getNeighbourNodesOwned(attacker,defending);
+        Map<Territory, Point> neighboursOwned = world.getNeighbourNodesOwned(attacker, defending);
         List<Territory> invalid = new ArrayList<>();
         for (Territory t : neighboursOwned.keySet()) {
-            if (t.getUnits()==1) invalid.add(t);
+            if (t.getUnits() == 1) invalid.add(t);
         }
         for (Territory t : invalid) {
             neighboursOwned.remove(t);
         }
-        if(neighboursOwned.size() ==0)
-        {
-            notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_ATTACKABLE,false));
+        if (neighboursOwned.size() == 0) {
+            notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_ATTACKABLE, false));
+        } else {
+            notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_ATTACKABLE, true));
         }
-        else
-        {
-            notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_ATTACKABLE,true));
-        }
-        return (neighboursOwned.size()>0)?neighboursOwned:null;
+        return (neighboursOwned.size() > 0) ? neighboursOwned : null;
     }
 
     /**
      * Represents a battle sequence between a territory owned by the current player and
      * an adjacent territory owned by another player.
-     *
+     * <p>
      * Completes a single attack and removes units from the territories according to the result of
      * the attack. If, after the attack, the territory owned by a current player loses all but one
      * unit, then declare the attack a victory for the defender and return true. If, after the
@@ -266,11 +265,11 @@ public class GameSingleton {
         notifyHandlers(new RiskEvent(this, RiskEventType.ATTACK_COMPLETED,
                 attacker, defender, lost));
 
-        if(attacking.getUnits()==1){
+        if (attacking.getUnits() == 1) {
             notifyHandlers(new RiskEvent(this, RiskEventType.TERRITORY_DEFENDED,
                     attacker, defender, lost));
 
-        } else if (defending.getUnits()==0) {
+        } else if (defending.getUnits() == 0) {
             notifyHandlers(new RiskEvent(this, RiskEventType.TERRITORY_DOMINATED,
                     attacker, defender));
             notifyMapUpdateAllCoordinates();
@@ -344,7 +343,7 @@ public class GameSingleton {
     /**
      * Gets the max amount of dice the attacker/defender can roll
      *
-     * @param numUnits The number of units on the territory
+     * @param numUnits  The number of units on the territory
      * @param attacking Whether the player is attacking or defending
      * @return The max number of dice the player can roll
      */
@@ -383,7 +382,7 @@ public class GameSingleton {
      * territory has been claimed.
      *
      * @param initialT The territory that will move units out
-     * @param finalT The territory that will add units
+     * @param finalT   The territory that will add units
      * @param numUnits The number of units that the attacker wants to move
      */
     public void fortifyPosition(Territory initialT, Territory finalT, int numUnits) {
@@ -405,7 +404,7 @@ public class GameSingleton {
 
         //Check to see if their is only one player remaining
         updateNumActivePlayers();
-        if (this.getNumActivePlayer() == 1){
+        if (this.getNumActivePlayer() == 1) {
             endGame();
         }
 
@@ -430,7 +429,8 @@ public class GameSingleton {
         numActivePlayer = numActive;
     }
 
-    /** Returns the number of players who have not yet been eliminated.
+    /**
+     * Returns the number of players who have not yet been eliminated.
      *
      * @return The number of active players
      */
@@ -440,10 +440,11 @@ public class GameSingleton {
 
     /**
      * Notifies the event handlers
+     *
      * @param e RiskEvent
      */
     private void notifyHandlers(RiskEvent e) {
-        for(RiskGameView rgv:riskHandlers) {
+        for (RiskGameView rgv : riskHandlers) {
             rgv.handleRiskUpdate(e);
         }
     }

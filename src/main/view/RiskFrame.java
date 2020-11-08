@@ -16,24 +16,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+
 /**
  * This class represents a GUI for the game risk, including the feature of
- *  an interactive map.
+ * an interactive map.
  *
  * @author Tony Zeidan
  */
-public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
+public class RiskFrame extends JFrame implements RiskGameView, ActionListener {
     private GameSingleton riskModel;
     private JLabel playerTurnLbl;
     private RiskEventPane eventPane;
     /**
      * Stores the territory clicked on by the user.
+     *
      * @see RiskController
      */
     private Territory selectedTerritory;
 
     /**
      * Stores the action selected by the user.
+     *
      * @see RiskController
      */
     private int selectedAction;
@@ -57,7 +60,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 
     /**
      * Constructor for instances of main.view.RiskFrame, constructs a new GUI.
-     *
+     * <p>
      * NEEDS ALTERING FOR COMMUNICATION WITH MODEL AND
      * CONTROLLER
      */
@@ -78,7 +81,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      */
     private void composeFrame() {
 
-        RiskController rc = new RiskController(riskModel,this);
+        RiskController rc = new RiskController(riskModel, this);
         riskModel.addHandler(this);
 
         JMenuBar menuBar = new JMenuBar();
@@ -100,7 +103,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         This panel contains the buttons for the players turn.
             - we must enable them and disable them accordingly
          */
-        JPanel buttonPane = new JPanel(new GridLayout(2,1));
+        JPanel buttonPane = new JPanel(new GridLayout(2, 1));
         attack = new JButton("Attack");
         endTurn = new JButton("End Turn");
         attack.addActionListener(rc);
@@ -114,15 +117,15 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         riskModel.addHandler(eventPane);
 
         //add everything to the main content pane
-        getContentPane().add(BorderLayout.CENTER,mapPane);
-        getContentPane().add(BorderLayout.SOUTH,buttonPane);
-        getContentPane().add(BorderLayout.WEST,eventPane);
+        getContentPane().add(BorderLayout.CENTER, mapPane);
+        getContentPane().add(BorderLayout.SOUTH, buttonPane);
+        getContentPane().add(BorderLayout.WEST, eventPane);
 
         //make the program terminate when frame is closed
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //set size of frame
-        setSize(new Dimension(1200,800));
+        setSize(new Dimension(1200, 800));
 
         //just to make sure everything has been reset for the start of the game
         restoreGUI();
@@ -181,7 +184,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      *
      * @return The map with the updated points
      */
-    public Map<Territory,Point> getPointsToPaint() {
+    public Map<Territory, Point> getPointsToPaint() {
         return mapPane.getPointsToPaint();
     }
 
@@ -211,15 +214,14 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      *
      * @return The number of players
      */
-    private int getNumOfPlayers()
-    {
+    private int getNumOfPlayers() {
         String input;
         int numOfPlayers = 0;
         Object[] options = {"2", "3", "4", "5", "6"};
-        input  = (String) JOptionPane.showInputDialog(this,"How many players?","Number of Players",
-                JOptionPane.QUESTION_MESSAGE,null,options,"2");
+        input = (String) JOptionPane.showInputDialog(this, "How many players?", "Number of Players",
+                JOptionPane.QUESTION_MESSAGE, null, options, "2");
         //User pressed close or cancel
-        if(input == null){
+        if (input == null) {
             System.exit(0);
         }
         return numOfPlayers = Integer.parseInt(input);
@@ -231,13 +233,12 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
      * @param numPlayers The number of players playing the game
      * @return List of all the players in the game
      */
-    private List<Player> getPlayers(int numPlayers)
-    {
+    private List<Player> getPlayers(int numPlayers) {
         ArrayList<Player> players = new ArrayList<>();
-        for(int i= 0; i<numPlayers;i++) {
+        for (int i = 0; i < numPlayers; i++) {
             String input = null;
-            while(input == null || input.length() == 0){
-                input = JRiskOptionPane.showPlayerNameDialog(this,i+1);
+            while (input == null || input.length() == 0) {
+                input = JRiskOptionPane.showPlayerNameDialog(this, i + 1);
             }
             players.add(new Player(input));
         }
@@ -246,7 +247,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 
     /**
      * We need some sort of updating methods that will do the following.
-     *
+     * <p>
      * 1) update the lists when a territory is selected
      */
 
@@ -271,14 +272,14 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     public void setInfoDisplay(Territory territory) {
         Player p = territory.getOwner();
         eventPane.clearSelectedTerritoryDisplay();
-        eventPane.setInfoDisplay(p,territory);
+        eventPane.setInfoDisplay(p, territory);
     }
-    public double getScalingX()
-    {
+
+    public double getScalingX() {
         return mapPane.getScalingX();
     }
-    public double getScalingY()
-    {
+
+    public double getScalingY() {
         return mapPane.getScalingY();
     }
 
@@ -306,8 +307,8 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     }
 
     //TODO
+
     /**
-     *
      * @param e The action event
      */
     @Override
@@ -317,7 +318,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         if (fs.isSelected()) {
             setExtendedState(JFrame.MAXIMIZED_BOTH);
         } else {
-            setPreferredSize(new Dimension(1200,800));
+            setPreferredSize(new Dimension(1200, 800));
         }
         setUndecorated(fs.isSelected());
         setVisible(true);
@@ -340,8 +341,8 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         //TODO: only tell game board to repaint when necessary
         switch (eventType) {
             case GAME_OVER:
-                JOptionPane alert= new JOptionPane();
-                alert.showMessageDialog(this,"GAME OVER "+info[0]+ " has won!!!");
+                JOptionPane alert = new JOptionPane();
+                alert.showMessageDialog(this, "GAME OVER " + info[0] + " has won!!!");
                 setAttackable(false);
                 setEndable(false);
                 break;
@@ -349,7 +350,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
                 Player beganPlayer = (Player) info[0];
                 Color playerColour = beganPlayer.getColour().getValue();
 
-                playerTurnLbl.setText("it is : "+beganPlayer.getName()+"'s turn.        ");
+                playerTurnLbl.setText("it is : " + beganPlayer.getName() + "'s turn.        ");
                 playerTurnLbl.setBackground(playerColour);
                 playerTurnLbl.setForeground(getContrastColor(playerColour));
                 break;
@@ -357,7 +358,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
                 restoreGUI();
                 break;
             case UPDATE_ATTACKABLE:
-                setAttackable((boolean)info[0]);
+                setAttackable((boolean) info[0]);
             default:
                 return;
         }

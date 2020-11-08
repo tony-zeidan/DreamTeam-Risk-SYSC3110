@@ -9,9 +9,8 @@ import java.util.List;
  * @author Tony Zeidan
  * @author Ethan Chase
  * @author Anthony Dooley
- *
- * @since 1.00
  * @version 1.00
+ * @since 1.00
  */
 public class Player {
 
@@ -37,8 +36,9 @@ public class Player {
 
     /**
      * Constructor for instances of Player class with name.
-     *  @param name   The name of the player
-    */
+     *
+     * @param name The name of the player
+     */
     public Player(String name) {
         this.name = name;
         this.colour = null;
@@ -49,8 +49,10 @@ public class Player {
 
     /**
      * Constructor for instances of main.core.Player class with name and colour.
-     *  @param name   The name of the player
-     * @param colour The colour of the units that the player owns*/
+     *
+     * @param name   The name of the player
+     * @param colour The colour of the units that the player owns
+     */
     public Player(String name, RiskColour colour) {
         this.name = name;
         this.colour = colour;
@@ -80,7 +82,7 @@ public class Player {
      * Sets the colour of the units that the player owns.
      */
     public void setColour(RiskColour colour) {
-        this.colour=colour;
+        this.colour = colour;
     }
 
     /**
@@ -106,10 +108,10 @@ public class Player {
      *
      * @return The list of owned territories
      */
-    public Set<Territory> getOwnedTerritories()
-    {
+    public Set<Territory> getOwnedTerritories() {
         return owned;
     }
+
     /**
      * Determine if the player is out of the game or not.
      *
@@ -135,7 +137,7 @@ public class Player {
      */
     @Override
     public String toString() {
-        return String.format("%s of %s",name,colour);
+        return String.format("%s of %s", name, colour);
     }
 
     /**

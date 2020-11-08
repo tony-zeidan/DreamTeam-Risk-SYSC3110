@@ -19,19 +19,19 @@ public class RiskMapPane extends JPanel implements RiskGameView {
      * Stores the points that will be painted on the map.
      * It is altered constantly depending on user inputs.
      */
-    private Map<Territory,Point> pointsToPaint;
+    private Map<Territory, Point> pointsToPaint;
     private double scalingX;
     private double scalingY;
     private Image finalMapImage;
     private Dimension originalDim;
     boolean firstTimeLoaded;
-    public RiskMapPane(RiskController rc)
-    {
+
+    public RiskMapPane(RiskController rc) {
         this.addMouseListener(rc);
         this.setLayout(null);
         pointsToPaint = null;
-        scalingX=1;
-        scalingY=1;
+        scalingX = 1;
+        scalingY = 1;
         //attempt to read the map file
         BufferedImage mapImage = null;
         try {
@@ -40,30 +40,29 @@ public class RiskMapPane extends JPanel implements RiskGameView {
             System.out.println("RISK Board Load Failed");
             ioException.printStackTrace();
         }
-        finalMapImage=mapImage;
+        finalMapImage = mapImage;
         firstTimeLoaded = true;
     }
-    protected void paintComponent(Graphics g)
-    {
-        if(firstTimeLoaded)
-        {
+
+    protected void paintComponent(Graphics g) {
+        if (firstTimeLoaded) {
             originalDim = getSize();
             firstTimeLoaded = false;
         }
         super.paintComponent(g);
         this.removeAll();  //clears the labels off of the board
         Dimension current = getSize();
-        scalingX = current.getWidth()/originalDim.getWidth();
-        scalingY = current.getHeight()/originalDim.getHeight();
+        scalingX = current.getWidth() / originalDim.getWidth();
+        scalingY = current.getHeight() / originalDim.getHeight();
         //draws the scaled version of the map image
-        g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),
+        g.drawImage(finalMapImage.getScaledInstance(getWidth(), getHeight(),
                 Image.SCALE_SMOOTH), 0, 0, null);
         paintPoints(g);     //paint points representing territories
         placePointLabels();     //paint the labels to go with the points
     }
     //TODO
+
     /**
-     *
      * @param
      */
     private void paintPoints(Graphics g) {
@@ -72,15 +71,16 @@ public class RiskMapPane extends JPanel implements RiskGameView {
             g.setColor(Color.BLACK);
             int x = (int) (p.getX() * scalingX);
             int y = (int) (p.getY() * scalingY);
-            g.fillOval(x-2,y-2,16,16);
+            g.fillOval(x - 2, y - 2, 16, 16);
             Player player = t.getOwner();
             g.setColor(player.getColour().getValue());
-            g.fillOval(x,  y, 12, 12);
+            g.fillOval(x, y, 12, 12);
         }
         System.out.println("1");
     }
+
     public void placePointLabels() {
-        if (pointsToPaint ==null) return;
+        if (pointsToPaint == null) return;
 
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
@@ -89,8 +89,8 @@ public class RiskMapPane extends JPanel implements RiskGameView {
             JLabel lbl = new JLabel(t.getName());
             JLabel lbl2 = new JLabel(String.valueOf(t.getUnits()));
 
-            lbl.setFont(new Font("Segoe UI",Font.BOLD,9));
-            lbl2.setFont(new Font("Segoe UI",Font.BOLD,11));
+            lbl.setFont(new Font("Segoe UI", Font.BOLD, 9));
+            lbl2.setFont(new Font("Segoe UI", Font.BOLD, 11));
             Insets insets = this.getInsets();
             Dimension lblSize = lbl.getPreferredSize();
             Dimension lblSize2 = lbl2.getPreferredSize();
@@ -99,8 +99,8 @@ public class RiskMapPane extends JPanel implements RiskGameView {
 
             Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 
-            lbl.setLocation(x-(lbl.getWidth()/2)+2,y-15);
-            lbl2.setLocation(x+15,y);
+            lbl.setLocation(x - (lbl.getWidth() / 2) + 2, y - 15);
+            lbl2.setLocation(x + 15, y);
             lbl.setForeground(Color.BLACK);
             RiskColour playerColour = t.getOwner().getColour();
             lbl2.setForeground(playerColour.getValue());
@@ -115,20 +115,20 @@ public class RiskMapPane extends JPanel implements RiskGameView {
         }
         System.out.println("a");
     }
-    public void setPointsToPaint(HashMap<Territory,Point> mapping)
-    {
+
+    public void setPointsToPaint(HashMap<Territory, Point> mapping) {
         pointsToPaint = mapping;
     }
-    public Map<Territory,Point> getPointsToPaint()
-    {
+
+    public Map<Territory, Point> getPointsToPaint() {
         return pointsToPaint;
     }
-    public double getScalingX()
-    {
+
+    public double getScalingX() {
         return scalingX;
     }
-    public double getScalingY()
-    {
+
+    public double getScalingY() {
         return scalingY;
     }
 

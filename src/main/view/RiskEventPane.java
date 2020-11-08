@@ -23,7 +23,7 @@ public class RiskEventPane extends JPanel implements RiskGameView {
     private JScrollPane gameEventScroller;
 
     public RiskEventPane() {
-        super(new GridLayout(3,1));
+        super(new GridLayout(3, 1));
 
         JPanel top = new JPanel(new BorderLayout());
         JPanel middle = new JPanel(new BorderLayout());
@@ -35,23 +35,23 @@ public class RiskEventPane extends JPanel implements RiskGameView {
         infoTable = new JTable(infoModel);
         infoModel.addColumn("Info");
         infoModel.addColumn("Value");
-        top.add(BorderLayout.NORTH,new JLabel("Selected Territory Information"));
-        top.add(BorderLayout.CENTER,infoTable);
+        top.add(BorderLayout.NORTH, new JLabel("Selected Territory Information"));
+        top.add(BorderLayout.CENTER, infoTable);
 
         eventList = new JList(eventModel);
         eventList.setVisibleRowCount(0);
-        middle.add(BorderLayout.NORTH,new JLabel("In-Game Events"));
+        middle.add(BorderLayout.NORTH, new JLabel("In-Game Events"));
         gameEventScroller = new JScrollPane(eventList);
         gameEventScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         gameEventScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        middle.add(BorderLayout.CENTER,gameEventScroller);
+        middle.add(BorderLayout.CENTER, gameEventScroller);
 
         instructionsText = new JTextArea();
         instructionsText.setEditable(false);
         instructionsText.setLineWrap(true);
         instructionsText.setWrapStyleWord(true);
-        bottom.add(BorderLayout.NORTH,new JLabel("In-Game Instructor"));
-        bottom.add(BorderLayout.CENTER,instructionsText);
+        bottom.add(BorderLayout.NORTH, new JLabel("In-Game Instructor"));
+        bottom.add(BorderLayout.CENTER, instructionsText);
 
         Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
         top.setBorder(raisedEtched);
@@ -61,14 +61,14 @@ public class RiskEventPane extends JPanel implements RiskGameView {
         this.add(middle);
         this.add(bottom);
         //set event pane size
-        setPreferredSize(new Dimension(200,800));
+        setPreferredSize(new Dimension(200, 800));
     }
 
     public void setInfoDisplay(Player player, Territory territory) {
-        infoModel.addRow(new Object[]{"Name",territory.getName()});
-        infoModel.addRow(new Object[]{"Owner",player.getName()});
+        infoModel.addRow(new Object[]{"Name", territory.getName()});
+        infoModel.addRow(new Object[]{"Owner", player.getName()});
         infoModel.addRow(new String[]{"Colour", player.getColour().getName()});
-        infoModel.addRow(new Object[]{"Units",territory.getUnits()});
+        infoModel.addRow(new Object[]{"Units", territory.getUnits()});
     }
 
     public void addEvent(String event) {
@@ -78,8 +78,8 @@ public class RiskEventPane extends JPanel implements RiskGameView {
     public void setCurrentInstruction(String instruction) {
         instructionsText.setText(instruction);
     }
-    public void clearSelectedTerritoryDisplay()
-    {
+
+    public void clearSelectedTerritoryDisplay() {
         if (infoModel.getRowCount() > 0) {
             for (int i = infoModel.getRowCount() - 1; i > -1; i--) {
                 infoModel.removeRow(i);
@@ -88,11 +88,11 @@ public class RiskEventPane extends JPanel implements RiskGameView {
     }
 
     private void setEventHighlight() {
-        eventList.setSelectedIndex(eventModel.getSize()-1);
+        eventList.setSelectedIndex(eventModel.getSize() - 1);
     }
 
     private void checkCapacityExceeded() {
-        if (eventModel.getSize()>EVENT_HISTORY_CAPACITY) eventModel.clear();
+        if (eventModel.getSize() > EVENT_HISTORY_CAPACITY) eventModel.clear();
     }
 
     @Override
@@ -102,14 +102,14 @@ public class RiskEventPane extends JPanel implements RiskGameView {
         Object[] info = e.getEventInfo();
 
         checkCapacityExceeded();
-        switch(type) {
+        switch (type) {
             case GAME_BEGAN:
                 addEvent("The game has began! Welcome to the world of " + info[0] + "!");
                 break;
             case TURN_BEGAN:
                 Player beganPlayer = (Player) info[0];
                 addEvent(String.format("%s's turn has began", beganPlayer.getName()));
-                setCurrentInstruction(beganPlayer.getName()+", please select a territory or end your turn.");
+                setCurrentInstruction(beganPlayer.getName() + ", please select a territory or end your turn.");
                 System.out.println("Displayed");
                 break;
             case TURN_ENDED:
@@ -120,13 +120,13 @@ public class RiskEventPane extends JPanel implements RiskGameView {
             case ATTACK_COMMENCED:
                 Player attacker = (Player) info[0];
                 Player defender = (Player) info[1];
-                addEvent(String.format("A battle has broken out between %s and %s!",attacker.getName(),defender.getName()));
+                addEvent(String.format("A battle has broken out between %s and %s!", attacker.getName(), defender.getName()));
                 break;
             case ATTACK_COMPLETED:
                 attacker = (Player) info[0];
                 defender = (Player) info[1];
-                addEvent(String.format("The battle has ended between %s and %s!",attacker.getName(),defender.getName()));
-                setCurrentInstruction(attacker.getName()+", please select a territory or end your turn.");
+                addEvent(String.format("The battle has ended between %s and %s!", attacker.getName(), defender.getName()));
+                setCurrentInstruction(attacker.getName() + ", please select a territory or end your turn.");
                 System.out.println("Displayed");
                 break;
             case DIE_ROLLED:
@@ -135,23 +135,23 @@ public class RiskEventPane extends JPanel implements RiskGameView {
                 for (int roll : die) {
                     rolled += roll + ",";
                 }
-                addEvent(rolled.substring(0,rolled.length()-1));
+                addEvent(rolled.substring(0, rolled.length() - 1));
                 break;
             case TERRITORY_DOMINATED:
                 attacker = (Player) info[0];
                 defender = (Player) info[1];
-                addEvent(String.format("%s dominated %s in battle!",attacker.getName(),defender.getName()));
+                addEvent(String.format("%s dominated %s in battle!", attacker.getName(), defender.getName()));
                 break;
             case TERRITORY_DEFENDED:
                 attacker = (Player) info[0];
                 defender = (Player) info[1];
-                addEvent(String.format("%s defended his territory against %s!",attacker.getName(),defender.getName()));
+                addEvent(String.format("%s defended his territory against %s!", attacker.getName(), defender.getName()));
                 break;
             case UNITS_MOVED:
                 Territory initialT = (Territory) info[0];
                 Territory finalT = (Territory) info[1];
                 int num = (int) info[2];
-                addEvent(String.format("%s units have been moved from %s to %s!",num,initialT.getName(),finalT.getName()));
+                addEvent(String.format("%s units have been moved from %s to %s!", num, initialT.getName(), finalT.getName()));
                 break;
             case GAME_OVER:
                 gameEventScroller.setEnabled(false);

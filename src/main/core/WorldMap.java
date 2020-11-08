@@ -32,14 +32,15 @@ public class WorldMap {
     /**
      * The map containing the coordinates of each region.
      */
-    private Map<Territory,Point> allCoordinates;
+    private Map<Territory, Point> allCoordinates;
 
     /**
      * Random variable for assigning territories in setup.
      */
     private static Random rand;
 
-    /**'
+    /**
+     * '
      * Constructor for instances of main.core.WorldMap.
      * Creates a new World with the name given (hardcoded map).
      *
@@ -52,6 +53,7 @@ public class WorldMap {
         allCoordinates = new HashMap<>();
         readMap();
     }
+
     /**
      * Retrieves the name of the world.
      *
@@ -124,8 +126,8 @@ public class WorldMap {
         writeXML();
     }
 
-    public void removePlayerOwned(Player player,Territory territory) {
-        if (player==null) return;
+    public void removePlayerOwned(Player player, Territory territory) {
+        if (player == null) return;
         player.removeTerritory(territory);
     }
 
@@ -133,12 +135,12 @@ public class WorldMap {
      * Gets the neighbouring territories that the current player owns
      * when attacking a territory
      *
-     * @param player The player in question
+     * @param player    The player in question
      * @param territory The territory that was selected to be attacked
      * @return The map with only the neighbouring territories owned
      */
-    public Map<Territory,Point> getNeighbourNodesOwned(Player player, Territory territory) {
-        HashMap<Territory,Point> neighbours = new HashMap<>();
+    public Map<Territory, Point> getNeighbourNodesOwned(Player player, Territory territory) {
+        HashMap<Territory, Point> neighbours = new HashMap<>();
         for (Territory terr : territory.getNeighbours()) {
             if (player.ownsTerritory(terr)) {
                 neighbours.put(terr, allCoordinates.get(terr));
@@ -152,7 +154,7 @@ public class WorldMap {
      *
      * @return A map collection of territories and points.
      */
-    public Map<Territory,Point> getAllCoordinates() {
+    public Map<Territory, Point> getAllCoordinates() {
         return allCoordinates;
     }
 
@@ -161,14 +163,13 @@ public class WorldMap {
      *
      * @param players the players playing the game
      */
-    public void setUp(List<Player> players)
-    {
+    public void setUp(List<Player> players) {
         assignTerritories(players);
         //place remaining troops on each of the territories
         int max = 50;
         if (players.size() != 2)
-            max = -5*players.size() +50;
-        placeTroops(players,max);
+            max = -5 * players.size() + 50;
+        placeTroops(players, max);
     }
 
     /**
@@ -179,10 +180,9 @@ public class WorldMap {
     private void assignTerritories(List<Player> players) {
         ArrayList<Territory> allTerrs = new ArrayList<>(allTerritories.values());
         int playerInd = -1;
-        while(allTerrs.size() != 0)
-        {
+        while (allTerrs.size() != 0) {
             //rotate through players and randomly get a free territory
-            playerInd = (playerInd +1)%players.size();
+            playerInd = (playerInd + 1) % players.size();
 
             Territory t = allTerrs.get(rand.nextInt(allTerrs.size()));
             //set current player to territory, add a unit and remove territory from free territories
@@ -196,28 +196,23 @@ public class WorldMap {
      * Randomly places the troops for each player on each territory.
      *
      * @param players The list of players in the world
-     * @param max The amount of units for each player
+     * @param max     The amount of units for each player
      */
-    private void placeTroops(List<Player> players,int max)
-    {
-        for (Player player: players)
-        {
+    private void placeTroops(List<Player> players, int max) {
+        for (Player player : players) {
             //numOfTroops depends on how many territories each player got, as there can be a 1 difference
             Set<Territory> playerTerritories = player.getOwnedTerritories();
-            int numOfTroops =playerTerritories.size();
-            while(numOfTroops != max)
-            {
+            int numOfTroops = playerTerritories.size();
+            while (numOfTroops != max) {
                 int territoryInd = rand.nextInt(playerTerritories.size());
                 int counter = 0;
                 //iterate to a randomly selected territory and add one unit to it
-                for (Territory terr: playerTerritories)
-                {
-                    if(counter == territoryInd)
-                    {
+                for (Territory terr : playerTerritories) {
+                    if (counter == territoryInd) {
                         terr.addUnits(1);
                         break;
                     }
-                        counter++;
+                    counter++;
                 }
                 numOfTroops++;
             }
