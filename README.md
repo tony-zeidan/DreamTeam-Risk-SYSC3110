@@ -3,10 +3,10 @@
 ### Team Members:
 Name | Main Contributions
 ------------ | -------------
-Tony Abou-Zeidan | GUI, Controller, Events
+Tony Abou-Zeidan | GUI, Controller, Events, Territory Refactoring
 Anthony Dooley | Controller, Events, Territory Refactoring
-Ethan Chase | Events, Singleton Model, Map Editing
-Kyler Verge | Events, Controller Input, Map Editing
+Ethan Chase | Events, Singleton Model, Map Editing, Testing
+Kyler Verge | Events, Controller Input, Map Editing, Documentation
 
 ### Project Description:
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
