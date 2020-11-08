@@ -45,7 +45,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
      * @param defending
      * @param attackDie
      * @param defendDie
-     * @return
+     * @return If the attacker won the battle
      */
     public boolean inputBattle(Territory attacking, Territory defending, int attackDie, int defendDie) {
         return riskModel.battle(attacking,defending, attackDie, defendDie);

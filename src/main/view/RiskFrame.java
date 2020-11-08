@@ -132,16 +132,17 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 
     /**
      * Gets the selected territory
+     *
      * @return The territory that was selected
      */
     public Territory getSelectedTerritory() {
         return selectedTerritory;
     }
 
-    //TODO
     /**
+     * Gets the action that was selected by the current player
      *
-     * @return
+     * @return The number corresponding to the action
      */
     public int getSelectedAction() {
         return selectedAction;
@@ -165,16 +166,18 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
 
     /**
      * Enables or disables the End Turn Button
-     * @param enabled
+     *
+     * @param enabled Determines if the End Turn button is enabled
      */
     public void setEndable(boolean enabled) {
         endTurn.setEnabled(enabled);
     }
 
-    //TODO
     /**
+     * Get the points on the map to update the colour
+     * of their points
      *
-     * @return
+     * @return The map with the updated points
      */
     public Map<Territory,Point> getPointsToPaint() {
         return mapPane.getPointsToPaint();
@@ -219,11 +222,11 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         return numOfPlayers = Integer.parseInt(input);
     }
 
-    //TODO
     /**
+     * Gets a list of all the players currently playing the game
      *
-     * @param numPlayers
-     * @return
+     * @param numPlayers The number of players playing the game
+     * @return List of all the players in the game
      */
     private List<Player> getPlayers(int numPlayers)
     {
@@ -248,19 +251,19 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         RiskFrame rf = new RiskFrame();
     }
 
-    //TODO
     /**
+     * Updates the event pane to instruct the player of their choices
      *
-     * @param info
+     * @param info Message of the the players current instruction
      */
     public void setCurrentInstruction(String info) {
         eventPane.setCurrentInstruction(info);
     }
 
-    //TODO
     /**
+     * Displays the selected territories information in an event pane
      *
-     * @param territory
+     * @param territory The selected territory
      */
     public void setInfoDisplay(Territory territory) {
         Player p = territory.getOwner();
@@ -275,9 +278,9 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     {
         return mapPane.getScalingY();
     }
-    //TODO
+
     /**
-     *
+     * Restores the GUI to its default state
      */
     public void restoreGUI() {
         selectedAction = -1;
@@ -290,10 +293,10 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         //TODO: add restore seperate panels
     }
 
-    //TODO
     /**
+     * Sets the selected territory to the most current selected territory
      *
-     * @param selectedTerritory
+     * @param selectedTerritory The territory that was currently selected
      */
     public void setSelectedTerritory(Territory selectedTerritory) {
         this.selectedTerritory = selectedTerritory;
@@ -302,7 +305,7 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
     //TODO
     /**
      *
-     * @param e
+     * @param e The action event
      */
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -317,10 +320,12 @@ public class RiskFrame extends JFrame implements RiskGameView,ActionListener {
         setVisible(true);
     }
 
-    //TODO
     /**
+     * Handles any type of update made to the game.
+     * Through either the game being over, a players turn
+     * beginning, or updating what is attakable
      *
-     * @param e
+     * @param e The Risk Event
      */
     @Override
     public void handleRiskUpdate(RiskEvent e) {

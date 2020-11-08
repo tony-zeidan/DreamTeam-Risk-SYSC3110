@@ -70,9 +70,10 @@ public class GameSingleton {
         return gameInstance;
     }
 
-    //TODO
     /**
-     *
+     * Sets up the game through setting up initial amount of players
+     * assigning random colours, setting up the world map
+     * and notifying all event handlers.
      */
     public void setUpGame() {
         //set the initial amount of active players accordingly
