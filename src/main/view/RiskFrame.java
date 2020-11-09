@@ -3,16 +3,10 @@ package main.view;
 
 import main.core.*;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -23,7 +17,7 @@ import java.util.Map;
  *
  * @author Tony Zeidan
  */
-public class RiskFrame extends JFrame implements RiskGameView, ActionListener {
+public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener {
     private GameSingleton riskModel;
     private JLabel playerTurnLbl;
     private RiskEventPane eventPane;

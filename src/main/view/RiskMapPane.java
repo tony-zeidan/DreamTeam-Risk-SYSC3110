@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RiskMapPane extends JPanel implements RiskGameView {
+public class RiskMapPane extends JPanel implements RiskGameHandler {
     /**
      * Stores the points that will be painted on the map.
      * It is altered constantly depending on user inputs.
