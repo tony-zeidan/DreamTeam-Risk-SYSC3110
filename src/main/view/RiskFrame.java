@@ -18,7 +18,15 @@ import java.util.Map;
  * @author Tony Zeidan
  */
 public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener {
+
+    /**
+     * The model for this view.
+     */
     private GameSingleton riskModel;
+
+    /**
+     * Stores whose turn it is on the panel.
+     */
     private JLabel playerTurnLbl;
 
     /**
