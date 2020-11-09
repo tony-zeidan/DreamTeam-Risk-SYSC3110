@@ -19,19 +19,19 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
      * Stores the points that will be painted on the map.
      * It is altered constantly depending on user inputs.
      */
-    private Map<Territory, Point> pointsToPaint;
+    private Map<Territory,Point> pointsToPaint;
     private double scalingX;
     private double scalingY;
     private Image finalMapImage;
     private Dimension originalDim;
     boolean firstTimeLoaded;
-
-    public RiskMapPane(RiskController rc) {
+    public RiskMapPane(RiskController rc)
+    {
         this.addMouseListener(rc);
         this.setLayout(null);
         pointsToPaint = null;
-        scalingX = 1;
-        scalingY = 1;
+        scalingX=1;
+        scalingY=1;
         //attempt to read the map file
         BufferedImage mapImage = null;
         try {
@@ -40,30 +40,31 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
             System.out.println("RISK Board Load Failed");
             ioException.printStackTrace();
         }
-        finalMapImage = mapImage;
+        finalMapImage=mapImage;
         firstTimeLoaded = true;
     }
-
-    protected void paintComponent(Graphics g) {
-        if (firstTimeLoaded) {
+    protected void paintComponent(Graphics g)
+    {
+        if(firstTimeLoaded)
+        {
             originalDim = getSize();
             firstTimeLoaded = false;
         }
         super.paintComponent(g);
         this.removeAll();  //clears the labels off of the board
         Dimension current = getSize();
-        scalingX = current.getWidth() / originalDim.getWidth();
-        scalingY = current.getHeight() / originalDim.getHeight();
+        scalingX = current.getWidth()/originalDim.getWidth();
+        scalingY = current.getHeight()/originalDim.getHeight();
         //draws the scaled version of the map image
-        g.drawImage(finalMapImage.getScaledInstance(getWidth(), getHeight(),
+        g.drawImage(finalMapImage.getScaledInstance(getWidth(),getHeight(),
                 Image.SCALE_SMOOTH), 0, 0, null);
         paintPoints(g);     //paint points representing territories
         placePointLabels();     //paint the labels to go with the points
     }
-    //TODO
 
     /**
-     * @param
+     *
+     * @param g Graphics draws the points of the territories with their colour
      */
     private void paintPoints(Graphics g) {
         for (Territory t : pointsToPaint.keySet()) {
@@ -71,16 +72,20 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
             g.setColor(Color.BLACK);
             int x = (int) (p.getX() * scalingX);
             int y = (int) (p.getY() * scalingY);
-            g.fillOval(x - 2, y - 2, 16, 16);
+            g.fillOval(x-2,y-2,16,16);
             Player player = t.getOwner();
             g.setColor(player.getColour().getValue());
-            g.fillOval(x, y, 12, 12);
+            g.fillOval(x,  y, 12, 12);
         }
         System.out.println("1");
     }
 
+    /**
+     * draws the labels one with the name of the territory and a label with
+     * the number of units that are on that territory
+     */
     public void placePointLabels() {
-        if (pointsToPaint == null) return;
+        if (pointsToPaint ==null) return;
 
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
@@ -89,8 +94,8 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
             JLabel lbl = new JLabel(t.getName());
             JLabel lbl2 = new JLabel(String.valueOf(t.getUnits()));
 
-            lbl.setFont(new Font("Segoe UI", Font.BOLD, 9));
-            lbl2.setFont(new Font("Segoe UI", Font.BOLD, 11));
+            lbl.setFont(new Font("Segoe UI",Font.BOLD,9));
+            lbl2.setFont(new Font("Segoe UI",Font.BOLD,11));
             Insets insets = this.getInsets();
             Dimension lblSize = lbl.getPreferredSize();
             Dimension lblSize2 = lbl2.getPreferredSize();
@@ -99,8 +104,8 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
 
             Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 
-            lbl.setLocation(x - (lbl.getWidth() / 2) + 2, y - 15);
-            lbl2.setLocation(x + 15, y);
+            lbl.setLocation(x-(lbl.getWidth()/2)+2,y-15);
+            lbl2.setLocation(x+15,y);
             lbl.setForeground(Color.BLACK);
             RiskColour playerColour = t.getOwner().getColour();
             lbl2.setForeground(playerColour.getValue());
@@ -116,22 +121,42 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
         System.out.println("a");
     }
 
-    public void setPointsToPaint(HashMap<Territory, Point> mapping) {
+    /**
+     * sets the mapping of the territory to the point that should be painted, when repaint called.
+     * @param mapping is the mapping of the territory to the coordinate it should be at
+     */
+    public void setPointsToPaint(Map<Territory,Point> mapping)
+    {
         pointsToPaint = mapping;
     }
 
+    /**
+     * returns the mapping of the territory to its location/point.
+     * @return Map of the territory and where its is located.
+     */
     public Map<Territory, Point> getPointsToPaint() {
         return pointsToPaint;
     }
 
+    /**
+     * gets the current scaling that the points are being painted by on the JPanel
+     * @return double, the scaling of x that the points are being painted by
+     */
     public double getScalingX() {
         return scalingX;
     }
-
+    /**
+     * gets the current scaling that the points are being painted by on the JPanel
+     * @return double, the scaling of y that the points are being painted by
+     */
     public double getScalingY() {
         return scalingY;
     }
 
+    /**
+     * handles the event that the model provides, from actions done to the risk model.
+     * @param e the RiskEvent that provides the type of event it is and information where applicable
+     */
     @Override
     public void handleRiskUpdate(RiskEvent e) {
         RiskEventType eventType = e.getType();
