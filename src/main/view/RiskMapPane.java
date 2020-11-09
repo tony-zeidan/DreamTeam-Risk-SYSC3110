@@ -43,6 +43,7 @@ public class RiskMapPane extends JPanel implements RiskGameView {
         finalMapImage=mapImage;
         firstTimeLoaded = true;
     }
+    @Override
     protected void paintComponent(Graphics g)
     {
         if(firstTimeLoaded)
@@ -79,7 +80,7 @@ public class RiskMapPane extends JPanel implements RiskGameView {
         }
         System.out.println("1");
     }
-    public void placePointLabels() {
+    private void placePointLabels() {
         if (pointsToPaint ==null) return;
 
         for (Territory t : pointsToPaint.keySet()) {
@@ -115,7 +116,7 @@ public class RiskMapPane extends JPanel implements RiskGameView {
         }
         System.out.println("a");
     }
-    public void setPointsToPaint(HashMap<Territory,Point> mapping)
+    public void setPointsToPaint(Map<Territory,Point> mapping)
     {
         pointsToPaint = mapping;
     }
