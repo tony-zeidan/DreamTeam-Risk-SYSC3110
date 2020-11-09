@@ -18,6 +18,15 @@ public enum RiskColour {
         this.name=name;
     }
 
+    /**
+     *getter for colour
+     * @return Colour
+     */
     public Color getValue() { return colour; }
+
+    /**
+     * getter for colour name
+     * @return String
+     */
     public String getName() { return name; }
 }

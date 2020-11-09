@@ -64,6 +64,11 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
         setPreferredSize(new Dimension(200, 800));
     }
 
+    /**
+     * Shows the current territory selected
+     * @param player
+     * @param territory
+     */
     public void setInfoDisplay(Player player, Territory territory) {
         infoModel.addRow(new Object[]{"Name", territory.getName()});
         infoModel.addRow(new Object[]{"Owner", player.getName()});
@@ -71,14 +76,25 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
         infoModel.addRow(new Object[]{"Units", territory.getUnits()});
     }
 
+    /**
+     * Adds the event description to the DefaultListModel
+     * @param event
+     */
     public void addEvent(String event) {
         eventModel.addElement(event);
     }
 
+    /**
+     * Sets the instruction for the user
+     * @param instruction
+     */
     public void setCurrentInstruction(String instruction) {
         instructionsText.setText(instruction);
     }
 
+    /**
+     * clears the selected territory
+     */
     public void clearSelectedTerritoryDisplay() {
         if (infoModel.getRowCount() > 0) {
             for (int i = infoModel.getRowCount() - 1; i > -1; i--) {
@@ -87,14 +103,24 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
         }
     }
 
+    /**
+     * highlights the newest event description
+     */
     private void setEventHighlight() {
         eventList.setSelectedIndex(eventModel.getSize() - 1);
     }
 
+    /**
+     * clears event description list if greater EVENT_HISTORY_CAPACITY
+     */
     private void checkCapacityExceeded() {
         if (eventModel.getSize() > EVENT_HISTORY_CAPACITY) eventModel.clear();
     }
 
+    /**
+     * handles event updates from the model, when certain events are triggered.
+     * @param e
+     */
     @Override
     public void handleRiskUpdate(RiskEvent e) {
         GameSingleton model = (GameSingleton) e.getSource();
