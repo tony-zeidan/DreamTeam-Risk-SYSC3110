@@ -1,6 +1,7 @@
 package main.view;
 
 import main.core.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -12,11 +13,10 @@ import java.util.Map;
  * and then uses that input to update the Model.
  *
  * @see GameSingleton
- *
+ * <p>
  * The thought process behind its implementation is that two types GUI events
  * (i.e. buttons being pressed and specific points on the map board being clicked)
  * We override the method in MouseAdapter (in order to only listen to mouse "clicks".
- *
  * @see RiskFrame
  */
 public class RiskController extends MouseAdapter implements ActionListener {
@@ -31,11 +31,11 @@ public class RiskController extends MouseAdapter implements ActionListener {
      * update the model with more prompted user inputs.
      *
      * @param riskModel The model to get data from and update
-     * @param riskView The view to obtain
+     * @param riskView  The view to obtain
      */
     public RiskController(GameSingleton riskModel, RiskFrame riskView) {
-        this.riskView=riskView;
-        this.riskModel=riskModel;
+        this.riskView = riskView;
+        this.riskModel = riskModel;
     }
 
     /**
@@ -49,7 +49,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
      * @return If the attacker won the battle
      */
     public boolean inputBattle(Territory attacking, Territory defending, int attackDie, int defendDie) {
-        return riskModel.battle(attacking,defending, attackDie, defendDie);
+        return riskModel.battle(attacking, defending, attackDie, defendDie);
     }
 
     /**
@@ -68,7 +68,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
             if (jb.getText().equals("Attack")) {
                 riskView.setCurrentInstruction("Select a territory to attack");
                 Territory selected = riskView.getSelectedTerritory();
-                if (selected!=null) {
+                if (selected != null) {
                     riskModel.notifyMapUpdateAttackingNeighbourCoordinates(selected);
                     jb.setText("Cancel");
                     riskView.setEndable(false);
@@ -95,7 +95,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
     public void mouseClicked(MouseEvent e) {
 
         //Make a point right where the user clicked
-        Point clicked = new Point(e.getX(),e.getY());
+        Point clicked = new Point(e.getX(), e.getY());
         Player currentPlayer = riskModel.getCurrentPlayer();
 
         //compare the point with others on the map to see if the user selected a territory
@@ -106,23 +106,23 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
         //debug printing
         System.out.println(String.format("\nCLICK REGISTERED:\nCoordinates: (%s,%s)\nSelected Action: %s\nCurrent Territory Selected: %s\nPrevious Territory Selected: %s\n",
-                clicked.x,clicked.y,selectedAction,clickedTerritory,previousTerritory));
+                clicked.x, clicked.y, selectedAction, clickedTerritory, previousTerritory));
 
-        if (clickedTerritory==null) {
+        if (clickedTerritory == null) {
             riskView.restoreGUI();
             riskModel.notifyMapUpdateAllCoordinates();
             return;
         }
 
-        if (clickedTerritory!=null) {
+        if (clickedTerritory != null) {
             riskView.setInfoDisplay(clickedTerritory);
             //we still access the model here
             riskModel.getValidAttackNeighboursOwned(currentPlayer, clickedTerritory);
         }
 
-        if (selectedAction==1) {
-            if (previousTerritory!=null) {
-                if (clickedTerritory!=null) {
+        if (selectedAction == 1) {
+            if (previousTerritory != null) {
+                if (clickedTerritory != null) {
                     //Attack was pressed
                     //Attacker Set Up
                     //Get Max Attack Die
@@ -137,7 +137,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
                     boolean won = inputBattle(clickedTerritory, previousTerritory, amountOfAttackDie, amountOfDefendDie);
                     riskView.setSelectedTerritory(null);
-                   // riskModel.updateViewAllPoints();
+                    // riskModel.updateViewAllPoints();
 
                     riskView.setSelectedAction(-1);
                     riskView.setInfoDisplay(clickedTerritory);
@@ -145,10 +145,10 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     //If Defending Territory Has Been Wiped Out, Start Fortifying Process
                     if (won) {
                         //Get the Number of Units the Victor wishes to move to their newly claimed territory
-                        int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView,currentPlayer,clickedTerritory,
-                                previousTerritory,amountOfAttackDie,false);
+                        int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView, currentPlayer, clickedTerritory,
+                                previousTerritory, amountOfAttackDie, false);
                         //Move chosen number of units from the attacking territory to the claimed territory and gives rightful ownership
-                        riskModel.fortifyPosition(clickedTerritory,previousTerritory,fortifyUnits);
+                        riskModel.fortifyPosition(clickedTerritory, previousTerritory, fortifyUnits);
                     }
                 }
             }
@@ -162,17 +162,18 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
     /**
      * Checks to see if the player clicked a territory on the map
+     *
      * @param clicked The x, y coordinates on the map the player clicked
      * @return Territory that was clicked
      */
     private Territory checkClickedTerritory(Point clicked) {
         double x = riskView.getScalingX();
         double y = riskView.getScalingY();
-        Point newpoint = new Point((int)(clicked.getX()/x),(int)(clicked.getY()/y));
-        Map<Territory,Point> cords = riskView.getPointsToPaint();
+        Point newpoint = new Point((int) (clicked.getX() / x), (int) (clicked.getY() / y));
+        Map<Territory, Point> cords = riskView.getPointsToPaint();
         for (Territory t : cords.keySet()) {
             Point p = cords.get(t);
-            if (p.distance(newpoint)<clickDistance) {
+            if (p.distance(newpoint) < clickDistance) {
                 return t;
             }
         }
