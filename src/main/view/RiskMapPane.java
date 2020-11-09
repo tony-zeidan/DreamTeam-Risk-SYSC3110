@@ -61,10 +61,10 @@ public class RiskMapPane extends JPanel implements RiskGameView {
         paintPoints(g);     //paint points representing territories
         placePointLabels();     //paint the labels to go with the points
     }
-    //TODO
+
     /**
      *
-     * @param
+     * @param g Graphics draws the points of the territories with their colour
      */
     private void paintPoints(Graphics g) {
         for (Territory t : pointsToPaint.keySet()) {
@@ -79,6 +79,11 @@ public class RiskMapPane extends JPanel implements RiskGameView {
         }
         System.out.println("1");
     }
+
+    /**
+     * draws the labels one with the name of the territory and a label with
+     * the number of units that are on that territory
+     */
     public void placePointLabels() {
         if (pointsToPaint ==null) return;
 
@@ -116,23 +121,42 @@ public class RiskMapPane extends JPanel implements RiskGameView {
         System.out.println("a");
     }
 
+    /**
+     * sets the mapping of the territory to the point that should be painted, when repaint called.
+     * @param mapping is the mapping of the territory to the coordinate it should be at
+     */
     public void setPointsToPaint(Map<Territory,Point> mapping)
     {
         pointsToPaint = mapping;
     }
 
+    /**
+     * returns the mapping of the territory to its location/point.
+     * @return Map of the territory and where its is located.
+     */
     public Map<Territory, Point> getPointsToPaint() {
         return pointsToPaint;
     }
 
+    /**
+     * gets the current scaling that the points are being painted by on the JPanel
+     * @return double, the scaling of x that the points are being painted by
+     */
     public double getScalingX() {
         return scalingX;
     }
-
+    /**
+     * gets the current scaling that the points are being painted by on the JPanel
+     * @return double, the scaling of y that the points are being painted by
+     */
     public double getScalingY() {
         return scalingY;
     }
 
+    /**
+     * handles the event that the model provides, from actions done to the risk model.
+     * @param e the RiskEvent that provides the type of event it is and information where applicable
+     */
     @Override
     public void handleRiskUpdate(RiskEvent e) {
         RiskEventType eventType = e.getType();
