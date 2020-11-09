@@ -18,9 +18,18 @@ public class RiskEvent extends EventObject {
         this.type = type;
     }
 
+    /**
+     * getter for the type of event passed
+     * @return RiskEventType
+     */
     public RiskEventType getType() {
         return type;
     }
+
+    /**
+     * getter for additional information of
+     * @return Object[]
+     */
     public Object[] getEventInfo() {
         return eventInfo;
     }
