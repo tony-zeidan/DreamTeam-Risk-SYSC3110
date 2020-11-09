@@ -30,7 +30,7 @@ public class GameSingletonTest {
      * Check how many players not yet eliminated in the game.
      */
     @Test
-    public void getNumActivePlayerStatus() {
+    public void testGetNumActivePlayer() {
         gsm.setUpGame();
         assertEquals(4, gsm.getNumActivePlayer());
     }
@@ -39,7 +39,7 @@ public class GameSingletonTest {
      * Test getMaxBattleDie()
      */
     @Test
-    public void getMaxBattleDieStatus(){
+    public void testGetMaxBattleDie(){
         //Attacking, 3 Units -> 2 Dice
         assertEquals(2, gsm.getMaxBattleDie(3,true));
         //Attacking 4 Units -> 3 Dice
@@ -56,7 +56,7 @@ public class GameSingletonTest {
      * Test getColour() in Player class
      */
     @Test
-    public void getColoursTest(){
+    public void testGetColours(){
         //NOTE: Test passes if order of players is not shuffled in setUpGame()
         Player ethan = players.get(0);
         Player anthony = players.get(1);
@@ -71,7 +71,7 @@ public class GameSingletonTest {
      * Test getName() in Player class
      */
     @Test
-    public void getNameTest(){
+    public void testGetPlayerName(){
         //NOTE: Test passes if order of players is not shuffled in setUpGame()
         Player ethan = players.get(0);
         Player anthony = players.get(1);
