@@ -40,6 +40,21 @@ Player class is to show ownership, with name, and color. As well as a list of te
 maiGame class holds a WorldMap object and a list of main.core.Player Objects. The list of Player objects is implemented using an array list as it is more efficient to traverse and there will be no deletions. But again, this efficiency will not be noticeable. The main.core.Game class also hold attack,fortify and end turn functionalities, with the game loop. 
     Later we try to remove responsibilities from main.core.Game class as it has a lot.
     
+### Decision Making: MileStone 2:
+   From Milestone one:
+     Nieghbours in Territory class was changed from a Map to a set, as there was never any look up being used and a set is a better data structure as the Territory can not have the same neighbour twice.
+     As well as in the Player's class where the owned also was changed to a set, as it should not have duplicates of the same territory.Game class was changed to a singleton class, so that only one Game can be instantiated at one time.
+     In WorldMap class the setting up of territories acts more like a parser now, reading in a text file. As well as the worldMap
+     having a Mapping of Territories to their coordinates.
+   
+   The GUI and risk game is implemented using a MVC approach.
+   we created a RiskFrame, which is the main view that holds two other JPanels, RiskMapPane that handles the map points and labels updates, and 
+   RiskEventPane which deals with the event descriptions updates, such as dice rolls and unit losses. Each JPanel is added to the 
+   GameSingleton class (which is our model) as a RiskGameHandler, placed in an ArrayList as it is efficient at iterating over items
+   and for our design we do not remove any items at any time. Our controller RiskController listens for territory selections, attack or end turn button clicks and 
+   passes this information to the model to perform the appropriate action.
+    
+    
 ### Milestones:
 - [x] Milestone 1: A text-based playable version of the game, i.e., players should be able to play the game via the console using the keyboard.
     >A text-based playable version of the game, i.e., players should be able to
