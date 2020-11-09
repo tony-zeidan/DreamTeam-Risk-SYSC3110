@@ -20,6 +20,7 @@ public class GameSingletonTest {
         players.add(new Player("Ethan", RiskColour.RED));
         players.add(new Player("Anthony", RiskColour.BLUE));
         players.add(new Player("Tony", RiskColour.YELLOW));
+        players.add(new Player("kyler",RiskColour.BLACK));
         gsm = GameSingleton.getGameInstance(players);
     }
 
@@ -145,5 +146,42 @@ public class GameSingletonTest {
 
         gsm.endGame();
         assertEquals(1, gsm.getNumActivePlayer());
+    }
+
+    /**
+     * Test nextPlayer() method in GameSingleton class
+     */
+    @Test
+    public void testNextPlayer(){
+        //Four Player Game
+        Player ethan = players.get(0);
+        Player anthony = players.get(1);
+        Player tony = players.get(2);
+        Player kyler = players.get(3);
+
+        gsm.setUpGame();
+
+        //Test 1, First Player -> Second Player
+        Player first = gsm.getCurrentPlayer();
+        gsm.nextPlayer();
+        assertNotEquals(first,gsm.getCurrentPlayer());
+
+        //Test 2 Second Player -> Third Player
+        Player second = gsm.getCurrentPlayer();
+        gsm.nextPlayer();
+        assertNotEquals(second,gsm.getCurrentPlayer());
+
+        //Test 3 Third Player -> Fourth Player
+        Player third = gsm.getCurrentPlayer();
+        gsm.nextPlayer();
+        assertNotEquals(third,gsm.getCurrentPlayer());
+
+        //Test 4 Fourth Player -> First Player
+        Player fourth = gsm.getCurrentPlayer();
+        gsm.nextPlayer();
+        assertNotEquals(fourth,gsm.getCurrentPlayer());
+
+        //Test 5, First Player IS the First Player (Looped through all players)
+        assertEquals(first,gsm.getCurrentPlayer());
     }
 }
