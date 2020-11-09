@@ -2,7 +2,7 @@ package main.core;
 
 import main.view.RiskEvent;
 import main.view.RiskEventType;
-import main.view.RiskGameView;
+import main.view.RiskGameHandler;
 
 import java.awt.*;
 import java.util.*;
@@ -40,7 +40,7 @@ public class GameSingleton {
      */
     private static Scanner myAction;
     private int currentPlayerInd;
-    private ArrayList<RiskGameView> riskHandlers;
+    private ArrayList<RiskGameHandler> riskHandlers;
 
     /**
      * Default constructor for instances of main.core.Game class.
@@ -152,11 +152,11 @@ public class GameSingleton {
      *
      * @param rgv A riskgameview
      */
-    public void addHandler(RiskGameView rgv) {
+    public void addHandler(RiskGameHandler rgv) {
         riskHandlers.add(rgv);
     }
 
-    public void removeHandler(RiskGameView rgv) {
+    public void removeHandler(RiskGameHandler rgv) {
         riskHandlers.remove(rgv);
     }
 
@@ -459,7 +459,7 @@ public class GameSingleton {
      * @param e RiskEvent
      */
     private void notifyHandlers(RiskEvent e) {
-        for (RiskGameView rgv : riskHandlers) {
+        for (RiskGameHandler rgv : riskHandlers) {
             rgv.handleRiskUpdate(e);
         }
     }

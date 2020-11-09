@@ -10,7 +10,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class RiskEventPane extends JPanel implements RiskGameView {
+public class RiskEventPane extends JPanel implements RiskGameHandler {
 
     private static final int EVENT_HISTORY_CAPACITY = 25;
     public static final String DEFAULT_INSTRUCTION = "Please select a territory or end your turn.";

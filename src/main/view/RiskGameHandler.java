@@ -1,5 +1,5 @@
 package main.view;
 
-public interface RiskGameView {
+public interface RiskGameHandler {
     void handleRiskUpdate(RiskEvent e);
 }
