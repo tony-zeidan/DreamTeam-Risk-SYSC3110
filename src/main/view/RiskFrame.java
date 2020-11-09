@@ -18,9 +18,17 @@ import java.util.Map;
  * @author Tony Zeidan
  */
 public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener {
+
+    /**
+     * The model for this view.
+     */
     private GameSingleton riskModel;
+
+    /**
+     * Stores whose turn it is on the panel.
+     */
     private JLabel playerTurnLbl;
-    private RiskEventPane eventPane;
+
     /**
      * Stores the territory clicked on by the user.
      *
@@ -40,6 +48,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
      */
     private RiskMapPane mapPane;
 
+    private RiskEventPane eventPane;
+
     /**
      * The button for attacking. It is a field as it needs to be
      * altered in other methods.
@@ -54,13 +64,12 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
 
     /**
      * Constructor for instances of main.view.RiskFrame, constructs a new GUI.
-     * <p>
+     *
      * NEEDS ALTERING FOR COMMUNICATION WITH MODEL AND
      * CONTROLLER
      */
     public RiskFrame() {
         super("RISK");
-        //TODO: Call GameSingleton.getGameInstance() instead
         riskModel = GameSingleton.getGameInstance(getPlayers(getNumOfPlayers()));
         setLayout(new BorderLayout());
         selectedAction = -1;
@@ -244,9 +253,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
      * 1) update the lists when a territory is selected
      */
 
-    public static void main(String[] args) {
-        RiskFrame rf = new RiskFrame();
-    }
 
     /**
      * Updates the event pane to instruct the player of their choices
@@ -356,4 +362,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
                 return;
         }
     }
+
+    public static void main(String[] args) {
+        RiskFrame rf = new RiskFrame();
+    }
+
 }
