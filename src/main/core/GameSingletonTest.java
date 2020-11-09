@@ -44,10 +44,6 @@ public class GameSingletonTest {
 
     /**
      * Test getColour() in Player class
-     *
-     * NOTE: In order to test getColour from the Player class, you
-     * have to run getColoursTest() only. Running the entire
-     * GameSingletonTest.java won't work.
      */
     @Test
     public void getColoursTest(){
@@ -63,10 +59,6 @@ public class GameSingletonTest {
 
     /**
      * Test getName() in Player class
-     *
-     * NOTE: In order to test getName from the Player class, you
-     * have to run getNameTest() only. Running the entire
-     * GameSingletonTest.java won't work.
      */
     @Test
     public void getNameTest(){
@@ -83,12 +75,6 @@ public class GameSingletonTest {
 
     /**
      * Test fortifyPosition() in GameSingleton class
-     *
-     * NOTE: In order to test fortifyPosition(), we need to check
-     * whether the method works through access to the number of units
-     * in the Territory class.
-     * Therefore, testFortifyPosition() must be run separately to
-     * succeed. Running the entire GameSingletonTest.java won't work.
      */
     @Test
     public void testFortifyPosition(){
@@ -106,8 +92,11 @@ public class GameSingletonTest {
         assertEquals(5, t2.getUnits());
         t2.setOwner(anthony);
         assertEquals(anthony, t2.getOwner());
+
         gsm.fortifyPosition(t1,t2,2);
 
+        assertEquals("Earth",t1.getName());
+        assertEquals("Pluto",t2.getName());
         assertEquals(ethan,t1.getOwner());
         assertEquals(ethan,t2.getOwner());
         assertEquals(2,t1.getUnits());
