@@ -44,13 +44,13 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
      * The button for attacking. It is a field as it needs to be
      * altered in other methods.
      */
-    private JButton attack;
+    private JButton attackbtn;
 
     /**
      * The button for ending turn. It is a field as it needs to be
      * altered in other methods.
      */
-    private JButton endTurn;
+    private JButton endTurnbtn;
 
     /**
      * Constructor for instances of main.view.RiskFrame, constructs a new GUI.
@@ -98,12 +98,12 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
             - we must enable them and disable them accordingly
          */
         JPanel buttonPane = new JPanel(new GridLayout(2, 1));
-        attack = new JButton("Attack");
-        endTurn = new JButton("End Turn");
-        attack.addActionListener(rc);
-        endTurn.addActionListener(rc);
-        buttonPane.add(attack);
-        buttonPane.add(endTurn);
+        attackbtn = new JButton("Attack");
+        endTurnbtn = new JButton("End Turn");
+        attackbtn.addActionListener(rc);
+        endTurnbtn.addActionListener(rc);
+        buttonPane.add(attackbtn);
+        buttonPane.add(endTurnbtn);
 
         mapPane = new RiskMapPane(rc);
         eventPane = new RiskEventPane();
@@ -160,7 +160,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
      * @param enabled Determines if the attack button will be enabled
      */
     public void setAttackable(boolean enabled) {
-        attack.setEnabled(enabled);
+        attackbtn.setEnabled(enabled);
     }
 
     /**
@@ -169,7 +169,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
      * @param enabled Determines if the End Turn button is enabled
      */
     public void setEndable(boolean enabled) {
-        endTurn.setEnabled(enabled);
+        endTurnbtn.setEnabled(enabled);
     }
 
     /**
@@ -283,9 +283,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
     public void restoreGUI() {
         selectedAction = -1;
         selectedTerritory = null;
-        attack.setText("Attack");
-        attack.setEnabled(false);
-        endTurn.setEnabled(true);
+        attackbtn.setText("Attack");
+        attackbtn.setEnabled(false);
+        endTurnbtn.setEnabled(true);
         eventPane.clearSelectedTerritoryDisplay();
         eventPane.setCurrentInstruction(RiskEventPane.DEFAULT_INSTRUCTION);
         //TODO: add restore seperate panels
