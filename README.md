@@ -8,6 +8,8 @@ Anthony Dooley | Controller, Events, Territory Refactoring
 Ethan Chase | Events, Singleton Model, Map Editing, Testing
 Kyler Verge | Events, Controller Input, Map Editing, Documentation
 
+
+
 ###TODOS:
 - Fix Javadoc documentation
 - Write explanation of structures from Milestone 1 UML
