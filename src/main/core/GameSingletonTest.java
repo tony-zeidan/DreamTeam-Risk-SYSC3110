@@ -116,10 +116,15 @@ public class GameSingletonTest {
         }
     }
 
+    /**
+     * Test updateNumActivePlayer() in GameSingleton class
+     */
     @Test
     public void testUpdateNumActivePlayer(){
         Player ethan = players.get(0);
         Player anthony = players.get(1);
+
+        gsm.setNumActivePlayer(players.size());
 
         Territory t1 = new Territory("Earth");
         t1.setUnits(4);
@@ -128,22 +133,17 @@ public class GameSingletonTest {
         assertEquals(ethan, t1.getOwner());
 
         Territory t2 = new Territory("Pluto");
-        for(int i=0;i<3;i++){
-            players.get(i).setActive(true);
-        }
+        t2.setUnits(5);
+        assertEquals(5, t2.getUnits());
+        t2.setOwner(anthony);
+        assertEquals(anthony, t2.getOwner());
 
-        gsm.setNumActivePlayer(players.size());
-        players.get(1).setActive(false);
-        assertEquals(false,players.get(1).isActive());
         gsm.updateNumActivePlayers();
         assertEquals(2, gsm.getNumActivePlayer());
 
-        //players.get(0).setActive(false);
-        assertEquals(false,players.get(0).isActive());
+        anthony.removeTerritory(t2);
         gsm.updateNumActivePlayers();
-        assertEquals(1, gsm.getNumActivePlayer());
-
-        gsm.endGame();
+        assertEquals(false,anthony.isActive());
         assertEquals(1, gsm.getNumActivePlayer());
     }
 }

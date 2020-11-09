@@ -203,7 +203,7 @@ public class GameSingleton {
     /**
      * Game has finished and determine the player who won.
      */
-    public void endGame() {
+    private void endGame() {
         Player winner = null;
 
         for (Player p : players) {
