@@ -115,4 +115,35 @@ public class GameSingletonTest {
             assertTrue(theRolls[i] < 7);
         }
     }
+
+    @Test
+    public void testUpdateNumActivePlayer(){
+        Player ethan = players.get(0);
+        Player anthony = players.get(1);
+
+        Territory t1 = new Territory("Earth");
+        t1.setUnits(4);
+        assertEquals(4, t1.getUnits());
+        t1.setOwner(ethan);
+        assertEquals(ethan, t1.getOwner());
+
+        Territory t2 = new Territory("Pluto");
+        for(int i=0;i<3;i++){
+            players.get(i).setActive(true);
+        }
+
+        gsm.setNumActivePlayer(players.size());
+        players.get(1).setActive(false);
+        assertEquals(false,players.get(1).isActive());
+        gsm.updateNumActivePlayers();
+        assertEquals(2, gsm.getNumActivePlayer());
+
+        //players.get(0).setActive(false);
+        assertEquals(false,players.get(0).isActive());
+        gsm.updateNumActivePlayers();
+        assertEquals(1, gsm.getNumActivePlayer());
+
+        gsm.endGame();
+        assertEquals(1, gsm.getNumActivePlayer());
+    }
 }

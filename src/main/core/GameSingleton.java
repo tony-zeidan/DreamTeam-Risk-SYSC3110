@@ -77,7 +77,7 @@ public class GameSingleton {
      */
     public void setUpGame() {
         //set the initial amount of active players accordingly
-        numActivePlayer = players.size();
+        setNumActivePlayer(players.size());
 
         /*Check if colours have already been assigned to players.
         If not, then assign random colours to players.
@@ -123,6 +123,14 @@ public class GameSingleton {
 
         notifyHandlers(new RiskEvent(this, RiskEventType.TURN_BEGAN,
                 getCurrentPlayer()));
+    }
+
+    /**
+     * Set the number of currently active players
+     * @param numActivePlayer Number of active players
+     */
+    public void setNumActivePlayer(int numActivePlayer){
+        this.numActivePlayer = numActivePlayer;
     }
 
     /**
@@ -195,7 +203,7 @@ public class GameSingleton {
     /**
      * Game has finished and determine the player who won.
      */
-    private void endGame() {
+    public void endGame() {
         Player winner = null;
 
         for (Player p : players) {
