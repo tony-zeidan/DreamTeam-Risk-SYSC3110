@@ -20,7 +20,7 @@ public class GameSingletonTest {
         players.add(new Player("Ethan", RiskColour.RED));
         players.add(new Player("Anthony", RiskColour.BLUE));
         players.add(new Player("Tony", RiskColour.YELLOW));
-        players.add(new Player("kyler",RiskColour.BLACK));
+        players.add(new Player("Kyler",RiskColour.BLACK));
         gsm = GameSingleton.getGameInstance(players);
     }
 
@@ -32,7 +32,7 @@ public class GameSingletonTest {
     @Test
     public void getNumActivePlayerStatus() {
         gsm.setUpGame();
-        assertEquals(3, gsm.getNumActivePlayer());
+        assertEquals(4, gsm.getNumActivePlayer());
     }
 
     /**
@@ -40,7 +40,16 @@ public class GameSingletonTest {
      */
     @Test
     public void getMaxBattleDieStatus(){
+        //Attacking, 3 Units -> 2 Dice
         assertEquals(2, gsm.getMaxBattleDie(3,true));
+        //Attacking 4 Units -> 3 Dice
+        assertEquals(3,gsm.getMaxBattleDie(4,true));
+        //Attacking 2 Units -> 1 Dice
+        assertEquals(1,gsm.getMaxBattleDie(2,true));
+        //Defending 2 Units -> 1 Dice
+        assertEquals(1,gsm.getMaxBattleDie(2,false));
+        //Defending 3 Units -> 2 Dice
+        assertEquals(2,gsm.getMaxBattleDie(3,false));
     }
 
     /**
@@ -67,10 +76,12 @@ public class GameSingletonTest {
         Player ethan = players.get(0);
         Player anthony = players.get(1);
         Player tony = players.get(2);
+        Player kyler = players.get(3);
         gsm.setUpGame();
         assertEquals("Ethan", ethan.getName());
         assertEquals("Anthony", anthony.getName());
         assertEquals("Tony", tony.getName());
+        assertEquals("Kyler", kyler.getName());
         //NOTE: Test passes if order of players is not shuffled in setUpGame()
     }
 
@@ -159,6 +170,7 @@ public class GameSingletonTest {
         Player tony = players.get(2);
         Player kyler = players.get(3);
 
+        //Shuffles Player Order
         gsm.setUpGame();
 
         //Test 1, First Player -> Second Player
