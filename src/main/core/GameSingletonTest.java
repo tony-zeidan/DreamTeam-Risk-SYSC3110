@@ -156,6 +156,9 @@ public class GameSingletonTest {
         gsm.updateNumActivePlayers();
         assertEquals(2, gsm.getNumActivePlayer());
 
+        /* Remove territory from one of the two active players
+        Now check if only one player is left.
+         */
         anthony.removeTerritory(t2);
         gsm.updateNumActivePlayers();
         assertEquals(false,anthony.isActive());
