@@ -48,6 +48,14 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
      * Checks to see if it has been loaded before to set up variables
      */
     boolean firstTimeLoaded;
+
+    /**
+     * Constructor for instances of RiskMapPane.
+     * Creates a new map pane (meant to be embedded within RiskFrame)
+     * that uses the same RiskController.
+     *
+     * @param rc The risk controller that this pane listens to
+     */
     public RiskMapPane(RiskController rc)
     {
         this.addMouseListener(rc);
@@ -66,6 +74,14 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
         finalMapImage=mapImage;
         firstTimeLoaded = true;
     }
+
+    /**
+     * Overwritten method.
+     * Paints the board, with the scaled map and points.
+     *
+     * @param g The graphics object for this component
+     */
+    @Override
     protected void paintComponent(Graphics g)
     {
         if(firstTimeLoaded)
