@@ -19,10 +19,20 @@ import static org.junit.Assert.*;
  */
 public class GameSingletonTest {
 
+    /**
+     * Single instance of the game model
+     */
     private GameSingleton gsm;
 
+    /**
+     * List of players in the game
+     */
     List<Player> players;
 
+    /**
+     * Sets up list of players in a single Game of RISK in order
+     * to test methods in the Game model class.
+     */
     @Before
     public void setUp(){
         players = new ArrayList<>();
@@ -36,7 +46,8 @@ public class GameSingletonTest {
     /**
      * Test getNumActivePlayer():
      *
-     * Check how many players not yet eliminated in the game.
+     * Check how many players are not yet eliminated from the game
+     * through getNumActivePlayer() in GameSingleton.java
      */
     @Test
     public void testGetNumActivePlayer() {
@@ -46,6 +57,10 @@ public class GameSingletonTest {
 
     /**
      * Test getMaxBattleDie()
+     *
+     * Calls getMaxBattleDie() in GameSingleton.java to check if it
+     * returns the maximum amount of dice the attacker/defender can roll
+     * based on the number of units used in the attack sequence.
      */
     @Test
     public void testGetMaxBattleDie(){
@@ -62,40 +77,12 @@ public class GameSingletonTest {
     }
 
     /**
-     * Test getColour() in Player class
-     */
-    @Test
-    public void testGetColours(){
-        //NOTE: Test passes if order of players is not shuffled in setUpGame()
-        Player ethan = players.get(0);
-        Player anthony = players.get(1);
-        Player tony = players.get(2);
-        gsm.setUpGame();
-        assertEquals(RiskColour.RED, ethan.getColour());
-        assertEquals(RiskColour.BLUE, anthony.getColour());
-        assertEquals(RiskColour.YELLOW, tony.getColour());
-    }
-
-    /**
-     * Test getName() in Player class
-     */
-    @Test
-    public void testGetPlayerName(){
-        //NOTE: Test passes if order of players is not shuffled in setUpGame()
-        Player ethan = players.get(0);
-        Player anthony = players.get(1);
-        Player tony = players.get(2);
-        Player kyler = players.get(3);
-        gsm.setUpGame();
-        assertEquals("Ethan", ethan.getName());
-        assertEquals("Anthony", anthony.getName());
-        assertEquals("Tony", tony.getName());
-        assertEquals("Kyler", kyler.getName());
-        //NOTE: Test passes if order of players is not shuffled in setUpGame()
-    }
-
-    /**
      * Test fortifyPosition() in GameSingleton class
+     *
+     * Creates two territories with different names, owners and number of units.
+     * These territories are passed as parameters to fortifyPosition() in
+     * GameSingleton.java with the number of units to move. Checks
+     * if the units are moved properly.
      */
     @Test
     public void testFortifyPosition(){
@@ -126,6 +113,9 @@ public class GameSingletonTest {
 
     /**
      * Test rollDice() in GameSingleton class
+     *
+     * Checks that when a set of dice are rolled, that the results
+     * are within and including 1 and 6.
      */
     @Test
     public void testRollDie(){
@@ -139,6 +129,10 @@ public class GameSingletonTest {
 
     /**
      * Test updateNumActivePlayer() in GameSingleton class
+     *
+     * Creates two territories with different names, owners and units. Only
+     * two of the four total players own territories, so the getNumActivePlayer()
+     * should return the proper amount.
      */
     @Test
     public void testUpdateNumActivePlayer(){

@@ -277,10 +277,18 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         eventPane.setInfoDisplay(p, territory);
     }
 
+    /**
+     * getter for the scaling in the x-direction of the RiskMapPane JPanel
+     * @return double
+     */
     public double getScalingX() {
         return mapPane.getScalingX();
     }
 
+    /**
+     * getter for the scaling in the y-direction of the RiskMapPane JPanel
+     * @return double
+     */
     public double getScalingY() {
         return mapPane.getScalingY();
     }
@@ -308,9 +316,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         this.selectedTerritory = selectedTerritory;
     }
 
-    //TODO
-
     /**
+     * Maximizes and minimizes the
      * @param e The action event
      */
     @Override
