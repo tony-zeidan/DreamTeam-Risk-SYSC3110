@@ -2,6 +2,15 @@ package main.view;
 
 import java.util.EventObject;
 
+/**
+ * This class is used when handling the update of the model, specifying the type
+ * of event that occurred and necessary information to process the event in each view.
+ *
+ * @author Kyler Verge
+ * @author Ethan Chase
+ * @author Anthony Dooley
+ * @author Tony Zeidan
+ */
 public class RiskEvent extends EventObject {
     private RiskEventType type;
     private Object[] eventInfo;

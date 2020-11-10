@@ -9,7 +9,15 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-
+/**
+ * This class is the JPanel that displays the event descriptions and is a part of the RiskFrame. RiskEventPane is
+ * also a view that updates the event descriptions after certain events are done in the model.
+ *
+ * @author Kyler Verge
+ * @author Ethan Chase
+ * @author Anthony Dooley
+ * @author Tony Zeidan
+ */
 public class RiskEventPane extends JPanel implements RiskGameHandler {
 
     private static final int EVENT_HISTORY_CAPACITY = 25;
@@ -22,6 +30,10 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
     private JTable infoTable;
     private JScrollPane gameEventScroller;
 
+    /**
+     * Creates a Jpanel with the events descriptions and adds it as a view in the model
+     * to update model events.
+     */
     public RiskEventPane() {
         super(new GridLayout(3, 1));
 

@@ -13,7 +13,15 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * This class is a part of RiskFrame and contains the Map with its points and labels. RiskMapPane is also a view
+ * and handles the update of the Map GUI when certain events in the model happen.
+ *
+ * @author Kyler Verge
+ * @author Ethan Chase
+ * @author Anthony Dooley
+ * @author Tony Zeidan
+ */
 public class RiskMapPane extends JPanel implements RiskGameHandler {
     /**
      * Stores the points that will be painted on the map.
