@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
  *
  * @author Anthony Dooley
  * @author Tony Zeidan
+ * @author Ethan Chase
+ * @author Kyler Verge
  */
 public class WorldMap {
 

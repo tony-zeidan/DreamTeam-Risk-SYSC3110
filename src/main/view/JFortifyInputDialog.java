@@ -20,6 +20,9 @@ import java.awt.event.*;
  * instead of the commonly used JOptionPane.
  *
  * @author Tony Zeidan
+ * @author Anthony Dooley
+ * @author Ethan Chase
+ * @author Kyler Verge
  */
 public class JFortifyInputDialog extends JDialog implements ActionListener,ChangeListener {
 

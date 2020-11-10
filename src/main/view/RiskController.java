@@ -18,6 +18,11 @@ import java.util.Map;
  * (i.e. buttons being pressed and specific points on the map board being clicked)
  * We override the method in MouseAdapter (in order to only listen to mouse "clicks".
  * @see RiskFrame
+ *
+ * @author Ethan Chase
+ * @author Anthony Dooley
+ * @author Kyler Verge
+ * @author Tony Zeidan
  */
 public class RiskController extends MouseAdapter implements ActionListener {
 
