@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.List;
 
 /**
- * Class main.core.Player represents the user within the {@link GameSingleton}.
+ * Class Player represents the user within the {@link GameSingleton}.
  *
  * @author Tony Zeidan
  * @author Ethan Chase

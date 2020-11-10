@@ -349,9 +349,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
                 playerTurnLbl.setBackground(playerColour);
                 playerTurnLbl.setForeground(getContrastColor(playerColour));
                 break;
-            case RESTORE_GUI:
-                restoreGUI();
-                break;
             case UPDATE_ATTACKABLE:
                 setAttackable((boolean) info[0]);
             default:

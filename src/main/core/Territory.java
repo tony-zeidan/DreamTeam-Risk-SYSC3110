@@ -4,10 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Class main.core.Territory represents the individual Territories found within the map.
+ * Class Territory represents the individual Territories found within the map.
  *
  * @author Tony Zeidan
  * @author Ethan Chase
+ * @author Anthony Dooley
+ * @author Kyler Verge
  * @version 1.01
  * @since 1.00
  */

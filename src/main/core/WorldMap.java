@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * main.core.WorldMap represents the entire map of that the main.core.Game contains.
+ * WorldMap represents the entire map of that the main.core.Game contains.
  *
  * @author Anthony Dooley
  * @author Tony Zeidan
