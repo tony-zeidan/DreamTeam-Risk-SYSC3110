@@ -2,6 +2,15 @@ package main.core;
 
 import java.awt.*;
 
+/**
+ * This class represents the custom colours made for our version of RISK
+ * A colour has a string name that corresponds to its colour
+ *
+ * @author Tony Zeidan
+ * @author Kyler Verge
+ * @author Anthony Dooley
+ * @author Ethan Chase
+ */
 public enum RiskColour {
     RED(new Color(125, 1, 22),"RED"),
     GRAY(Color.GRAY,"GRAY"),

@@ -9,6 +9,8 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
+ * JUnit Testing class, tests some of the games functions
+ * and ensures everything is working as expected
  *
  * @author Ethan Chase
  * @author Kyler Verge
