@@ -26,9 +26,15 @@ import java.util.Map;
  */
 public class RiskController extends MouseAdapter implements ActionListener {
 
+    /**
+     * GameSingleton is the model of the MVC pattern
+     * RiskFrame is the view of the MVC pattern
+     * CLICK_DISTANCE is the minimum distance away from point
+     * to register a click
+     */
     private GameSingleton riskModel;
     private RiskFrame riskView;
-    private static final int clickDistance = 20;
+    private static final int CLICK_DISTANCE = 20;
 
     /**
      * Constructor for instances of the RiskController.
@@ -178,7 +184,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
         Map<Territory, Point> cords = riskView.getPointsToPaint();
         for (Territory t : cords.keySet()) {
             Point p = cords.get(t);
-            if (p.distance(newpoint) < clickDistance) {
+            if (p.distance(newpoint) < CLICK_DISTANCE) {
                 return t;
             }
         }
