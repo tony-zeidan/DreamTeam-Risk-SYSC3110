@@ -28,12 +28,16 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
     /**
      * GameSingleton is the model of the MVC pattern
+     */
+    private GameSingleton riskModel;
+    /**
      * RiskFrame is the view of the MVC pattern
+     */
+    private RiskFrame riskView;
+    /**
      * CLICK_DISTANCE is the minimum distance away from point
      * to register a click
      */
-    private GameSingleton riskModel;
-    private RiskFrame riskView;
     private static final int CLICK_DISTANCE = 20;
 
     /**
