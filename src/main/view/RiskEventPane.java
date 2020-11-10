@@ -20,14 +20,37 @@ import java.awt.*;
  */
 public class RiskEventPane extends JPanel implements RiskGameHandler {
 
+    /**
+     * The constant for how many events can be displayed at a given time.
+     */
     private static final int EVENT_HISTORY_CAPACITY = 25;
+    /**
+     * The constant for the default instruction to be displayed.
+     */
     public static final String DEFAULT_INSTRUCTION = "Please select a territory or end your turn.";
-
+    /**
+     * Model for the selected territory info display.
+     */
     private DefaultTableModel infoModel;
+    /**
+     * Model for the events occurring in-game.
+     */
     private DefaultListModel<String> eventModel;
+    /**
+     * Text field for the instructions display.
+     */
     private JTextArea instructionsText;
+    /**
+     * Actual list component for in-game events.
+     */
     private JList eventList;
+    /**
+     * Actual table component for selected territory display.
+     */
     private JTable infoTable;
+    /**
+     * Actual component for scrolling in the selected territory display component.
+     */
     private JScrollPane gameEventScroller;
 
     /**
