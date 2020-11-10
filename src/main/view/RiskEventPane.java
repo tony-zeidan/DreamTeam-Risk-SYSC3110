@@ -100,11 +100,12 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
     }
 
     /**
-     * Shows the current territory selected
-     * @param player
-     * @param territory
+     * Shows the current territory selected.
+     * @param player The player this territory belongs to
+     * @param territory The territory that is being displayed
      */
     public void setInfoDisplay(Player player, Territory territory) {
+        //law of demeter not broken here
         infoModel.addRow(new Object[]{"Name", territory.getName()});
         infoModel.addRow(new Object[]{"Owner", player.getName()});
         infoModel.addRow(new String[]{"Colour", player.getColour().getName()});
@@ -112,16 +113,18 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
     }
 
     /**
-     * Adds the event description to the DefaultListModel
-     * @param event
+     * Adds the event description to the DefaultListModel.
+     *
+     * @param event The string representation of the event to display
      */
     public void addEvent(String event) {
         eventModel.addElement(event);
     }
 
     /**
-     * Sets the instruction for the user
-     * @param instruction
+     * Sets the instruction for the user.
+     *
+     * @param instruction The string representation of the instruction to display
      */
     public void setCurrentInstruction(String instruction) {
         instructionsText.setText(instruction);
@@ -154,7 +157,8 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
 
     /**
      * handles event updates from the model, when certain events are triggered.
-     * @param e
+     *
+     * @param e The event that was triggered
      */
     @Override
     public void handleRiskUpdate(RiskEvent e) {

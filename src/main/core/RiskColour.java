@@ -12,11 +12,29 @@ import java.awt.*;
  * @author Ethan Chase
  */
 public enum RiskColour {
+    /**
+     * The risk colour red.
+     */
     RED(new Color(125, 1, 22),"RED"),
+    /**
+     * The risk colour gray.
+     */
     GRAY(Color.GRAY,"GRAY"),
+    /**
+     * The risk colour blue.
+     */
     BLUE(Color.BLUE,"BLUE"),
+    /**
+     * The risk colour yellow.
+     */
     YELLOW(new Color(191, 176, 12),"YELLOW"),
+    /**
+     * The risk colour black.
+     */
     BLACK(new Color(15,0,0),"BLACK"),
+    /**
+     * The risk colour green.
+     */
     GREEN(new Color(10, 142, 1),"GREEN");
 
     /**
@@ -30,8 +48,8 @@ public enum RiskColour {
 
     /**
      * Assigns to a color and its colour name
-     * @param colour
-     * @param name color name
+     * @param colour The awt colour
+     * @param name The colour's name
      */
     RiskColour(Color colour, String name) {
         this.colour=colour;

@@ -85,10 +85,18 @@ public class Territory {
      */
     public void removeUnits(int units) { this.units -= units; }
 
-    public Player getOwner() {
-        return owner;
-    }
+    /**
+     * Retrieves the owner for this territory.
+     *
+     * @return The owner
+     */
+    public Player getOwner() { return owner; }
 
+    /**
+     * Sets the owner of this territory.
+     *
+     * @param owner The owner
+     */
     public void setOwner(Player owner) {
         if (this.owner != null) {
             Player prevOwner = this.owner;
@@ -98,6 +106,26 @@ public class Territory {
         owner.addTerritory(this);
     }
 
+    /**
+     * Adds a neighbouring territory to this one.
+     *
+     * @param territory The territory to add as a neighbour
+     */
+    public void addNeighbour(Territory territory) {
+        if (!(neighbours.contains(territory))) {
+            neighbours.add(territory);
+            territory.addNeighbour(this);
+        }
+    }
+
+    /**
+     * Retrieves a collection of this territories neighbours.
+     *
+     * @return The neighbours of this territory
+     */
+    public Set<Territory> getNeighbours() {
+        return neighbours;
+    }
 
     /**
      * Retrieves a string representation of the territory.
@@ -107,16 +135,5 @@ public class Territory {
     @Override
     public String toString() {
         return String.format("The main.core.Territory of %s: \n\tunits: %s", name, units);
-    }
-
-    public void addNeighbour(Territory territory) {
-        if (!(neighbours.contains(territory))) {
-            neighbours.add(territory);
-            territory.addNeighbour(this);
-        }
-    }
-
-    public Set<Territory> getNeighbours() {
-        return neighbours;
     }
 }

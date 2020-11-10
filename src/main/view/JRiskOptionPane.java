@@ -19,11 +19,9 @@ import java.util.List;
  */
 public class JRiskOptionPane {
 
-    public static int ONE_DICE = 0;
-    public static int TWO_DIE = 1;
-    public static int THREE_DIE = 2;
-
-
+    /**
+     * The options the user could input while using a die count dialog.
+     */
     public static final Object[] dieRollOptions = {
             "One", "Two", "Three"
     };
@@ -98,6 +96,7 @@ public class JRiskOptionPane {
      * @param moving The territory that will lose units
      * @param destination The territory that will gain units
      * @param minMove The minimum amount of units the player has to move
+     * @param cancelable Determines if the user can cancel this dialog
      * @return The user's input (number of units or -1)
      */
     public static int showFortifyInputDialog(JFrame frame,Player player,Territory moving,Territory destination,int minMove,boolean cancelable) {

@@ -80,6 +80,8 @@ public class Player {
 
     /**
      * Sets the colour of the units that the player owns.
+     *
+     * @param colour The colour of this player
      */
     public void setColour(RiskColour colour) {
         this.colour = colour;

@@ -128,11 +128,6 @@ public class WorldMap {
         writeXML();
     }
 
-    public void removePlayerOwned(Player player, Territory territory) {
-        if (player == null) return;
-        player.removeTerritory(territory);
-    }
-
     /**
      * Gets the neighbouring territories that the current player owns
      * when attacking a territory

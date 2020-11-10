@@ -8,5 +8,11 @@ package main.view;
  * @author Tony Zeidan
  */
 public interface RiskGameHandler {
+
+    /**
+     * Each handler for the risk model shall implement a handling of its updates.
+     *
+     * @param e The event that was triggered
+     */
     void handleRiskUpdate(RiskEvent e);
 }
