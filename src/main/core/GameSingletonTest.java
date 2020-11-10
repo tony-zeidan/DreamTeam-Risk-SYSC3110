@@ -167,14 +167,14 @@ public class GameSingletonTest {
 
     /**
      * Test nextPlayer() method in GameSingleton class
+     *
+     * Starts a new four player game, when the game is starting
+     * the order of players is shuffled, tests to see
+     * if the nextPlayer method will cycle through
+     * all the players when every player presses end turn
      */
     @Test
     public void testNextPlayer(){
-        //Four Player Game
-        Player ethan = players.get(0);
-        Player anthony = players.get(1);
-        Player tony = players.get(2);
-        Player kyler = players.get(3);
 
         //Shuffles Player Order
         gsm.setUpGame();
