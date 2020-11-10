@@ -27,7 +27,7 @@ public enum RiskColour {
      * @param colour
      * @param name color name
      */
-    private RiskColour(Color colour, String name) {
+    RiskColour(Color colour, String name) {
         this.colour=colour;
         this.name=name;
     }
