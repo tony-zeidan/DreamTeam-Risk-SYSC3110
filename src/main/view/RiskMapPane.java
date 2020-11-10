@@ -77,7 +77,6 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
             g.setColor(player.getColour().getValue());
             g.fillOval(x,  y, 12, 12);
         }
-        System.out.println("1");
     }
 
     /**
@@ -118,7 +117,6 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
             this.add(lbl);
             this.add(lbl2);
         }
-        System.out.println("a");
     }
 
     /**
