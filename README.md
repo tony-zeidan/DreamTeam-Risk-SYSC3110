@@ -47,7 +47,7 @@ GameSingleton class holds a WorldMap object and a list of Player Objects. The li
     
 ### Decision Making: MileStone 2:
    From Milestone one:
-     Nieghbours in Territory class was changed from a Map to a set, as there was never any look up being used and a set is a better data structure as the Territory can not have the same neighbour twice.
+     Neighbours in Territory class was changed from a Map to a set, as there was never any look up being used and a set is a better data structure as the Territory can not have the same neighbour twice.
      As well as in the Player's class where the owned also was changed to a set, as it should not have duplicates of the same territory.Game class was changed to a singleton class, so that only one Game can be instantiated at one time.
      In WorldMap class the setting up of territories acts more like a parser now, reading in a text file. As well as the worldMap
      having a Mapping of Territories to their coordinates.
