@@ -43,8 +43,7 @@ WorldMap to hold a set of Territory objects and a name for the map. As well as p
 
 Player class is to show ownership, with name, and color. As well as a list of territories to be able to check if a main.core.Player is still in the game. This is because a player loses when they have 0 territories, this list is implemented with a LinkedList because there will be a fair bit of adds and removes, and LinkedList are more efficient when removing. But, because there will not be many removes in a row between user input the efficiency will not be noticeable. Also in the main.core.Player class holds a Boolean active.
 
-maiGame class holds a WorldMap object and a list of main.core.Player Objects. The list of Player objects is implemented using an array list as it is more efficient to traverse and there will be no deletions. But again, this efficiency will not be noticeable. The main.core.Game class also hold attack,fortify and end turn functionalities, with the game loop. 
-    Later we try to remove responsibilities from main.core.Game class as it has a lot.
+GameSingleton class holds a WorldMap object and a list of Player Objects. The list of Player objects is implemented using an array list as it is more efficient to traverse and there will be no deletions. But again, this efficiency will not be noticeable. The GameSingleton class also hold attack,fortify and end turn functionalities, with the game loop. 
     
 ### Milestones:
 - [x] Milestone 1: A text-based playable version of the game, i.e., players should be able to play the game via the console using the keyboard.
