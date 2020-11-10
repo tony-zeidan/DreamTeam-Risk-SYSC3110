@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.LinkedList;
 
 /**
+ * This class represents the model for the program, notifies
+ * the view of changes made to the game, is responsible
+ * for the core functionality of the game.
  *
  * @author Kyler Verge
  * @author Ethan Chase
@@ -63,11 +66,11 @@ public class GameSingleton {
         riskHandlers = new ArrayList<>();
     }
 
-    //TODO
-
     /**
-     * @param players
-     * @return
+     * Gets an instance of the GameSingleton class (Game)
+     *
+     * @param players List of the players
+     * @return GameSingleton, the model of the program
      */
     public static GameSingleton getGameInstance(List<Player> players) {
         //if an instance doesn't exist, create only one instance
