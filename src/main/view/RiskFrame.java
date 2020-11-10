@@ -290,7 +290,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         endTurnBtn.setEnabled(true);
         eventPane.clearSelectedTerritoryDisplay();
         eventPane.setCurrentInstruction(RiskEventPane.DEFAULT_INSTRUCTION);
-        //TODO: add restore seperate panels
     }
 
     /**
@@ -330,10 +329,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
     public void handleRiskUpdate(RiskEvent e) {
         RiskEventType eventType = e.getType();
         Object[] info = e.getEventInfo();
-        //if (eventDescriptions.getSize()==25) eventDescriptions.clear();
 
         System.out.println(eventType);
-        //TODO: only tell game board to repaint when necessary
         switch (eventType) {
             case GAME_OVER:
                 JOptionPane alert = new JOptionPane();
