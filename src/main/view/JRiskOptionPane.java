@@ -11,6 +11,11 @@ import java.util.List;
 
 /**
  * This class contains implementations for popup dialogs.
+ *
+ * @author Kyler Verge
+ * @author Tony Zeidan
+ * @author Ethan Chase
+ * @author Anthony Dooley
  */
 public class JRiskOptionPane {
 

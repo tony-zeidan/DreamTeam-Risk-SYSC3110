@@ -8,6 +8,13 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ *
+ * @author Ethan Chase
+ * @author Kyler Verge
+ * @author Anthony Dooley
+ * @author Tony Zeidan
+ */
 public class GameSingletonTest {
 
     private GameSingleton gsm;

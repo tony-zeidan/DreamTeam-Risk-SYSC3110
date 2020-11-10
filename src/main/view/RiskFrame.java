@@ -16,6 +16,9 @@ import java.util.Map;
  * an interactive map.
  *
  * @author Tony Zeidan
+ * @author Anthony Dooley
+ * @author Kyler Verge
+ * @author Ethan Chase
  */
 public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener {
 

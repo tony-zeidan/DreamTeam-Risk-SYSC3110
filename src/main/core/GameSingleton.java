@@ -9,6 +9,13 @@ import java.util.*;
 import java.util.List;
 import java.util.LinkedList;
 
+/**
+ *
+ * @author Kyler Verge
+ * @author Ethan Chase
+ * @author Anthony Dooley
+ * @author Tony Zeidan
+ */
 public class GameSingleton {
 
     /**
