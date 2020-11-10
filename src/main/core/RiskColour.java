@@ -13,6 +13,11 @@ public enum RiskColour {
     private Color colour;
     private String name;
 
+    /**
+     * Assigns to a color and its colour name
+     * @param colour
+     * @param name color name
+     */
     private RiskColour(Color colour, String name) {
         this.colour=colour;
         this.name=name;
