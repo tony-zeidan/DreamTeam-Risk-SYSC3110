@@ -131,7 +131,11 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
         if (clickedTerritory != null) {
             riskView.setInfoDisplay(clickedTerritory);
-            //we still access the model here
+            /*
+            We access model data here, only to prevent the user from clicking anything that
+            they shouldn't be. This could be substituted for for a user dialog that lets the user know
+            they can not perform that action. We went with this approach as it provides smoother gameplay.
+             */
             riskModel.getValidAttackNeighboursOwned(currentPlayer, clickedTerritory);
         }
 
