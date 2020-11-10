@@ -28,10 +28,25 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
      * It is altered constantly depending on user inputs.
      */
     private Map<Territory,Point> pointsToPaint;
+    /**
+     * The stretching of the JPane in the X direction
+     */
     private double scalingX;
+    /**
+     * The stretching of the JPane in the Y direction
+     */
     private double scalingY;
+    /**
+     * Image of the Map
+     */
     private Image finalMapImage;
+    /**
+     * The Original Dimensions without stretching in x and y
+     */
     private Dimension originalDim;
+    /**
+     * Checks to see if it has been loaded before to set up variables
+     */
     boolean firstTimeLoaded;
     public RiskMapPane(RiskController rc)
     {

@@ -19,7 +19,13 @@ public enum RiskColour {
     BLACK(new Color(15,0,0),"BLACK"),
     GREEN(new Color(10, 142, 1),"GREEN");
 
+    /**
+     * the colour value
+     */
     private Color colour;
+    /**
+     * the colour name
+     */
     private String name;
 
     /**

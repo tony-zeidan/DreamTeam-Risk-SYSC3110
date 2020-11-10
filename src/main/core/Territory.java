@@ -21,9 +21,13 @@ public class Territory {
      * The units that occupy this territory.
      */
     private int units;
-
+    /**
+     * The current Player that owns the Territory
+     */
     private Player owner;
-
+    /**
+     * The Neighbouring Territories of the Territory
+     */
     private Set<Territory> neighbours;
 
     /**
