@@ -201,7 +201,6 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
         //if (eventDescriptions.getSize()==25) eventDescriptions.clear();
 
         System.out.println(eventType);
-        //TODO: only tell game board to repaint when necessary
         switch (eventType) {
 
             case UPDATE_MAP:
