@@ -11,7 +11,7 @@ Kyler Verge | Events, Controller Input, Map Editing, Documentation
 
 
 ###TODOS:
-- Address remarks from TA about Milestone 2 submission
+- Address remarks from TA about Milestone 2 submission and refine code where necessary
 - Implement AI player
 - Reinforcement bonuses at beginning of player's turn
 - Bonus points for continent control
