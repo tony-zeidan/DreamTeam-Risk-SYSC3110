@@ -13,18 +13,49 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * This class is a part of RiskFrame and contains the Map with its points and labels. RiskMapPane is also a view
+ * and handles the update of the Map GUI when certain events in the model happen.
+ *
+ * @author Kyler Verge
+ * @author Ethan Chase
+ * @author Anthony Dooley
+ * @author Tony Zeidan
+ */
 public class RiskMapPane extends JPanel implements RiskGameHandler {
     /**
      * Stores the points that will be painted on the map.
      * It is altered constantly depending on user inputs.
      */
     private Map<Territory,Point> pointsToPaint;
+    /**
+     * The stretching of the JPane in the X direction
+     */
     private double scalingX;
+    /**
+     * The stretching of the JPane in the Y direction
+     */
     private double scalingY;
+    /**
+     * Image of the Map
+     */
     private Image finalMapImage;
+    /**
+     * The Original Dimensions without stretching in x and y
+     */
     private Dimension originalDim;
+    /**
+     * Checks to see if it has been loaded before to set up variables
+     */
     boolean firstTimeLoaded;
+
+    /**
+     * Constructor for instances of RiskMapPane.
+     * Creates a new map pane (meant to be embedded within RiskFrame)
+     * that uses the same RiskController.
+     *
+     * @param rc The risk controller that this pane listens to
+     */
     public RiskMapPane(RiskController rc)
     {
         this.addMouseListener(rc);
@@ -43,6 +74,14 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
         finalMapImage=mapImage;
         firstTimeLoaded = true;
     }
+
+    /**
+     * Overwritten method.
+     * Paints the board, with the scaled map and points.
+     *
+     * @param g The graphics object for this component
+     */
+    @Override
     protected void paintComponent(Graphics g)
     {
         if(firstTimeLoaded)
@@ -77,7 +116,6 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
             g.setColor(player.getColour().getValue());
             g.fillOval(x,  y, 12, 12);
         }
-        System.out.println("1");
     }
 
     /**
@@ -118,7 +156,6 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
             this.add(lbl);
             this.add(lbl2);
         }
-        System.out.println("a");
     }
 
     /**
@@ -164,7 +201,6 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
         //if (eventDescriptions.getSize()==25) eventDescriptions.clear();
 
         System.out.println(eventType);
-        //TODO: only tell game board to repaint when necessary
         switch (eventType) {
 
             case UPDATE_MAP:

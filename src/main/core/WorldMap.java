@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * main.core.WorldMap represents the entire map of that the main.core.Game contains.
+ * WorldMap represents the entire map of that the main.core.Game contains.
  *
  * @author Anthony Dooley
  * @author Tony Zeidan
@@ -126,11 +126,6 @@ public class WorldMap {
         }
 
         writeXML();
-    }
-
-    public void removePlayerOwned(Player player, Territory territory) {
-        if (player == null) return;
-        player.removeTerritory(territory);
     }
 
     /**

@@ -3,7 +3,6 @@ package main.core;
 import main.view.RiskEvent;
 import main.view.RiskEventType;
 import main.view.RiskGameHandler;
-
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -25,43 +24,42 @@ public class GameSingleton {
      * Single instance of the game itself
      */
     private static GameSingleton gameInstance;
-
     /**
      * The list of players that may or may not be active throughout the game.
      *
      * @see Player
      */
     private List<Player> players;
-
     /**
      * The world that the players will be playing on.
      *
      * @see WorldMap
      */
     private WorldMap world;
-
     /**
      * Contains the current number of active players.
      */
     private int numActivePlayer;
-
     /**
-     * Scanner for user input.
+     * Stores the location of the current player in the list of players.
      */
-    private static Scanner myAction;
     private int currentPlayerInd;
-    private ArrayList<RiskGameHandler> riskHandlers;
+    /**
+     * A list of all handlers that listen to this model.
+     */
+    private List<RiskGameHandler> riskHandlers;
 
     /**
      * Default constructor for instances of main.core.Game class.
      * (For now) Creates a new game with the hardcoded map and the players that
      * the user inputs.
+     *
+     * @param players The list of participants for this game
      */
     private GameSingleton(List<Player> players) {
         //initialize map, player list, and scanner
         this.players = players;
         world = new WorldMap("Earth");
-        myAction = new Scanner(System.in);
         currentPlayerInd = 0;
         riskHandlers = new ArrayList<>();
     }
@@ -144,28 +142,34 @@ public class GameSingleton {
     }
 
     /**
-     * @return
+     * Notify all views to reset displayable coordinates/territories.
      */
     public void notifyMapUpdateAllCoordinates() {
         notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_MAP, world.getAllCoordinates()));
     }
 
     /**
-     * @param territory
+     * Notify all views to set displayable coordinates/territories.
+     * @param territory The territory that determines the other displayable territories
      */
     public void notifyMapUpdateAttackingNeighbourCoordinates(Territory territory) {
         notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_MAP, getValidAttackNeighboursOwned(getCurrentPlayer(), territory)));
     }
 
     /**
-     * Create the view for the Risk Game
+     * Add a listener to this model.
      *
-     * @param rgv A riskgameview
+     * @param rgv The handler to add
      */
     public void addHandler(RiskGameHandler rgv) {
         riskHandlers.add(rgv);
     }
 
+    /**
+     * Remove a listener from this model.
+     *
+     * @param rgv The handler to remove
+     */
     public void removeHandler(RiskGameHandler rgv) {
         riskHandlers.remove(rgv);
     }
@@ -352,6 +356,12 @@ public class GameSingleton {
         return new int[]{attackLost, defendLost};
     }
 
+    /**
+     * Simulates the rolling of a given amount of die.
+     *
+     * @param rolls The amount of die to roll
+     * @return The results of each roll
+     */
     public static int[] rollDice(int rolls){
 
         Random rand = new Random();

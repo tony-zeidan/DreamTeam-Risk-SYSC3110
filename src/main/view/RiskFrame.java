@@ -26,39 +26,35 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
      * The model for this view.
      */
     private GameSingleton riskModel;
-
     /**
      * Stores whose turn it is on the panel.
      */
     private JLabel playerTurnLbl;
-
     /**
      * Stores the territory clicked on by the user.
      *
      * @see RiskController
      */
     private Territory selectedTerritory;
-
     /**
      * Stores the action selected by the user.
      *
      * @see RiskController
      */
     private int selectedAction;
-
     /**
      * JPanel containing the game board (the map).
      */
     private RiskMapPane mapPane;
-
+    /**
+     * JPanel containing the in-game event, and selected territory display.
+     */
     private RiskEventPane eventPane;
-
     /**
      * The button for attacking. It is a field as it needs to be
      * altered in other methods.
      */
     private JButton attackBtn;
-
     /**
      * The button for ending turn. It is a field as it needs to be
      * altered in other methods.
@@ -66,10 +62,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
     private JButton endTurnBtn;
 
     /**
-     * Constructor for instances of main.view.RiskFrame, constructs a new GUI.
-     *
-     * NEEDS ALTERING FOR COMMUNICATION WITH MODEL AND
-     * CONTROLLER
+     * Constructor for instances of RiskFrame, constructs a new GUI.
      */
     public RiskFrame() {
         super("RISK");
@@ -251,13 +244,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
     }
 
     /**
-     * We need some sort of updating methods that will do the following.
-     * <p>
-     * 1) update the lists when a territory is selected
-     */
-
-
-    /**
      * Updates the event pane to instruct the player of their choices
      *
      * @param info Message of the the players current instruction
@@ -304,7 +290,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         endTurnBtn.setEnabled(true);
         eventPane.clearSelectedTerritoryDisplay();
         eventPane.setCurrentInstruction(RiskEventPane.DEFAULT_INSTRUCTION);
-        //TODO: add restore seperate panels
     }
 
     /**
@@ -344,10 +329,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
     public void handleRiskUpdate(RiskEvent e) {
         RiskEventType eventType = e.getType();
         Object[] info = e.getEventInfo();
-        //if (eventDescriptions.getSize()==25) eventDescriptions.clear();
 
         System.out.println(eventType);
-        //TODO: only tell game board to repaint when necessary
         switch (eventType) {
             case GAME_OVER:
                 JOptionPane alert = new JOptionPane();
@@ -363,9 +346,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
                 playerTurnLbl.setBackground(playerColour);
                 playerTurnLbl.setForeground(getContrastColor(playerColour));
                 break;
-            case RESTORE_GUI:
-                restoreGUI();
-                break;
             case UPDATE_ATTACKABLE:
                 setAttackable((boolean) info[0]);
             default:
@@ -373,6 +353,10 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         }
     }
 
+    /**
+     * Main method for this view. (Testing)
+     * @param args n/a
+     */
     public static void main(String[] args) {
         RiskFrame rf = new RiskFrame();
     }

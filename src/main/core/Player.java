@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.List;
 
 /**
- * Class main.core.Player represents the user within the {@link GameSingleton}.
+ * Class Player represents the user within the {@link GameSingleton}.
  *
  * @author Tony Zeidan
  * @author Ethan Chase
@@ -80,6 +80,8 @@ public class Player {
 
     /**
      * Sets the colour of the units that the player owns.
+     *
+     * @param colour The colour of this player
      */
     public void setColour(RiskColour colour) {
         this.colour = colour;

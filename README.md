@@ -28,7 +28,7 @@ Kyler Verge | Events, Controller Input, Map Editing, Documentation
  
 **Project Progress**
 
-![97%](https://progress-bar.dev/97)
+![99%](https://progress-bar.dev/99)
 
 milestone 2 phase
 
@@ -80,7 +80,7 @@ GameSingleton class holds a WorldMap object and a list of Player Objects. The li
       a jar file) + UML diagrams + documentation, all in one zip file. 
     - Deadline: Friday Oct 23rd. Weight: 15% of the overall project grade.
     
-- [ ] Milestone 2: A GUI-based version of the game using Java Swing components.
+- [x] Milestone 2: A GUI-based version of the game using Java Swing components.
     > GUI-based version (now you’re adding the View and the Controller!) of the
       game. Display must be in a JFrame, and user input is via the mouse. You have freedom
       for other GUI decisions. Also required: Unit tests for the Model. 

@@ -345,22 +345,4 @@ public class JFortifyInputDialog extends JDialog implements ActionListener,Chang
     private void close() {
         this.dispose();
     }
-
-    /*
-    Testing
-     */
-    public static void main(String[] args) {
-        Territory t1 = new Territory("EARTH");
-        t1.setUnits(50);
-        Territory t2 = new Territory("MARS");
-        t2.setUnits(5);
-        JFortifyInputDialog f1 = new JFortifyInputDialog(null)
-                .setPlayer(new Player("Tony", RiskColour.RED))
-                .setTerritories(t1,t2)
-                .setMinimumMove(3)
-                .setCancellable(true);
-        int result = f1.showInputDialog();
-        System.out.print(String.format("Selected Unit Amount: %s",
-                result));
-    }
 }
