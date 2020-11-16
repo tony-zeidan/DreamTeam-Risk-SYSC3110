@@ -11,8 +11,11 @@ Kyler Verge | Events, Controller Input, Map Editing, Documentation
 
 
 ###TODOS:
-- Fix Javadoc documentation
-- Write explanation of structures from Milestone 1 UML
+- Address remarks from TA about Milestone 2 submission
+- Implement AI player
+- Reinforcement bonuses at beginning of player's turn
+- Bonus points for continent control
+- Update documentation
 
 ### Project Description:
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
