@@ -256,6 +256,25 @@ public class GameSingleton {
         return (neighboursOwned.size() > 0) ? neighboursOwned : null;
     }
 
+    public List<Territory> getValidTroupeMovementTerritories(Territory initial) {
+        List<Territory> queue = new LinkedList<>();
+        List<Territory> visited = new ArrayList<>();
+        queue.add(initial);
+        while(!queue.isEmpty()) {
+            Territory current = queue.remove(0);
+            Map<Territory, Point> validNeighbours = world.getNeighbourNodesOwned(initial.getOwner(),current);
+
+            visited.add(current);
+            // Or you can store a set of visited vertices somewhere
+            for (Territory t : validNeighbours.keySet()) {
+                if (!visited.contains(t)) {
+                    queue.add(t);
+                }
+            }
+        }
+        return visited.subList(1,visited.size());
+    }
+
     /**
      * Represents a battle sequence between a territory owned by the current player and
      * an adjacent territory owned by another player.
