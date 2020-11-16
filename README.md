@@ -10,12 +10,12 @@ Kyler Verge | Events, Controller Input, Map Editing, Documentation
 
 
 
-###TODOS:
+### TODOS:
 - Address remarks from TA about Milestone 2 submission and refine code where necessary
-- Implement AI player
-- Reinforcement bonuses at beginning of player's turn
-- Bonus points for continent control
-- Update documentation
+- Implement an algorithm for maximum utility (AI Player)
+- Algorithms for bonus troupe placement
+- Algorithms for continent conquering bonus
+- Fortification process needs to be changed (moving units across territories) 
 
 ### Project Description:
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
