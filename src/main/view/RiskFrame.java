@@ -66,7 +66,10 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
      */
     public RiskFrame() {
         super("RISK");
-        riskModel = GameSingleton.getGameInstance(getPlayers(getNumOfPlayers()));
+        int numPlayers = getNumOfPlayers();
+        List<Player> players = getPlayers(numPlayers);
+        addAIsToList(numOfAIs(numPlayers),players);
+        riskModel = GameSingleton.getGameInstance(players);
         setLayout(new BorderLayout());
         selectedAction = -1;
         composeFrame();
@@ -215,7 +218,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
      */
     private int getNumOfPlayers() {
         String input;
-        Object[] options = {"2", "3", "4", "5", "6"};
+        Object[] options = {"1","2", "3", "4", "5", "6"};
         input = (String) JOptionPane.showInputDialog(this, "How many players?", "Number of Players",
                 JOptionPane.QUESTION_MESSAGE, null, options, "2");
         //User pressed close or cancel
@@ -242,7 +245,32 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         }
         return players;
     }
-
+    //refactor
+    private int numOfAIs(int numSpotsTaken)
+    {
+        String[] options = new String[6-numSpotsTaken];
+        for(int i = 0; i<6-numSpotsTaken;i++)
+        {
+            options[i] = Integer.toString((i+1));
+        }
+        String input = (String) JOptionPane.showInputDialog(this, "How many AIs?", "Number of AIs",
+                JOptionPane.QUESTION_MESSAGE, null, options, "2");
+        //User pressed close or cancel
+        if (input == null) {
+            System.exit(0);
+        }
+        return Integer.parseInt(input);
+    }
+    private void addAIsToList(int numAIs,List<Player> players)
+    {
+        for (int i = 0; i < numAIs; i++) {
+            String input = null;
+            while (input == null || input.length() == 0) {
+                input = JRiskOptionPane.showPlayerNameDialog(this, i + 1);
+            }
+            players.add(new AIPlayer(input));
+        }
+    }
     /**
      * Updates the event pane to instruct the player of their choices
      *

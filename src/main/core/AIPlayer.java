@@ -20,4 +20,27 @@ public class AIPlayer extends Player {
     public AIPlayer(String name, RiskColour colour) {
         super(name, colour);
     }
+    public void doAIsTurn()
+    {
+
+    }
+    private void placeUnits(int numUnits){
+
+    }
+    private Territory territoryToAttack()
+    {
+        return null;
+    }
+    private void assessAttack()
+    {
+
+    }
+    private void moveTroops()
+    {
+
+    }
+    private boolean noEnemyNeighbours(Territory territory)
+    {
+        return true;
+    }
 }

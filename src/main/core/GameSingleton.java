@@ -200,9 +200,15 @@ public class GameSingleton {
         while (!(players.get(currentPlayerInd).isActive())) {
             currentPlayerInd = (currentPlayerInd + 1) % players.size();
         }
+        if (getCurrentPlayer() instanceof AIPlayer)
+        {
 
-        notifyHandlers(new RiskEvent(this,
-                RiskEventType.TURN_BEGAN, getCurrentPlayer()));
+        }
+        else
+            {
+            notifyHandlers(new RiskEvent(this,
+                    RiskEventType.TURN_BEGAN, getCurrentPlayer()));
+        }
     }
 
     /**
