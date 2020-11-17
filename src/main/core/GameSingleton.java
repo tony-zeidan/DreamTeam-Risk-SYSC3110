@@ -230,6 +230,21 @@ public class GameSingleton {
     }
 
     /**
+     * Gets the number of bonus units a player receives at the start of their turn
+     *
+     * @param current The current Player
+     */
+    public int getBonusUnits(Player current){
+        int territoryBonus = current.getOwnedTerritories().size() / 3;
+        if(territoryBonus < 3){
+            territoryBonus = 3;
+        }
+        //Loop through each continents territories?
+
+        return (territoryBonus); //+ continent bonus;
+    }
+
+    /**
      * Retrieves a map of all the neighbours around the given territory that can
      * attack the given territory.
      *
