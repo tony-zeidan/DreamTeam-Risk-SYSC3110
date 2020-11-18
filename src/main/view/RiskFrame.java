@@ -33,6 +33,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
     private JLabel playerBonusUnitsLbl;
 
+    private JLabel gamePhaseLbl;
+
     /**
      * JPanel containing the game board (the map).
      */
@@ -87,6 +89,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         menu.add(fs);
 
         //create a massive separator in the menu bar
+        gamePhaseLbl = new JLabel();
+        menuBar.add(gamePhaseLbl);
         menuBar.add(Box.createHorizontalGlue());
         playerBonusUnitsLbl = new JLabel();
         playerBonusUnitsLbl.setOpaque(true);
@@ -258,7 +262,11 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
     }
 
     public int getBonusUnits() {
-        return Integer.parseInt(playerBonusUnitsLbl.getName());
+        try {
+            return Integer.parseInt(playerBonusUnitsLbl.getName());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 
     public void setBonusUnits(int units) {
@@ -331,7 +339,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 setAttackable((boolean) info[0]);
                 break;
             case PHASE_CHANGE:
-                phase = (GameSingleton.Phase) info[0];
+                this.phase = (GameSingleton.Phase) info[0];
+                gamePhaseLbl.setText(phase.toString());
                 switch (phase) {
                     case BONUS_TROUPE:
                         attackBtn.setEnabled(false);
@@ -340,6 +349,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                         endTurnBtn.setText("End Turn");
                         break;
                     case ATTACK:
+                        System.out.println("Worked");
                         attackBtn.setEnabled(false);
                         endTurnBtn.setEnabled(true);
                         break;
@@ -352,11 +362,11 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                         endTurnBtn.setEnabled(true);
                         break;
                 }
+
                 break;
-            default:
-                return;
         }
     }
+
 
     private void restoreAttackPhase() {
 

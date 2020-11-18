@@ -68,7 +68,7 @@ public class GameSingleton {
         this.players = players;
         world = new WorldMap("Earth");
         currentPlayerInd = 0;
-        roundNumber=1;
+        roundNumber=0;
         gamePhase = null;
         riskHandlers = new ArrayList<>();
     }
@@ -112,7 +112,6 @@ public class GameSingleton {
 
             Random rand = new Random();
 
-
             /*We must get all player names and generate colours.
             Loop through players and obtain names through user input.
             Randomly assign colours.
@@ -132,14 +131,18 @@ public class GameSingleton {
         shufflePlayers();
         world.setUp(players);
 
-        gamePhase = Phase.START_GAME;
-        nextPhase();
-
         notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,
                 world.getName()));
 
-        notifyHandlers(new RiskEvent(this, RiskEventType.TURN_BEGAN,
-                getCurrentPlayer(),getBonusUnits(getCurrentPlayer())));
+        gamePhase = Phase.START_GAME;
+        nextPhase();
+        nextPhase();
+
+
+        notifyHandlers(new RiskEvent(this,
+                RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
+        notifyMapUpdateOwnedCoordinates();
+
     }
 
     /**
@@ -210,15 +213,15 @@ public class GameSingleton {
         switch (gamePhase) {
             case START_GAME:
             case MOVE_UNITS:
-                gamePhase=Phase.BONUS_TROUPE;
+                this.gamePhase=Phase.BONUS_TROUPE;
                 notifyMapUpdateOwnedCoordinates();
                 break;
             case BONUS_TROUPE:
-                gamePhase=Phase.ATTACK;
+                this.gamePhase=Phase.ATTACK;
                 notifyMapUpdateAllCoordinates();
                 break;
             case ATTACK:
-                gamePhase=Phase.MOVE_UNITS;
+                this.gamePhase=Phase.MOVE_UNITS;
                 notifyMapUpdateOwnedCoordinates();
                 break;
         }
@@ -233,19 +236,18 @@ public class GameSingleton {
         nextPhase();
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_ENDED, getCurrentPlayer()));
-
-        currentPlayerInd = (currentPlayerInd + 1) % players.size();
-        while (!(players.get(currentPlayerInd).isActive())) {
+        do {
             currentPlayerInd = (currentPlayerInd + 1) % players.size();
-        }
-        if (currentPlayerInd==0) {
-            roundNumber++;
-        }
+            if(currentPlayerInd == 0) roundNumber ++;
+        } while (!(players.get((currentPlayerInd+1)% players.size()).isActive()));
 
-        notifyHandlers(new RiskEvent(this,
-                RiskEventType.TURN_BEGAN, getCurrentPlayer(),getBonusUnits(getCurrentPlayer())));
-
-        notifyMapUpdateOwnedCoordinates();
+        if (getBonusUnits(getCurrentPlayer())==0) {
+            nextPhase();
+        } else {
+            notifyHandlers(new RiskEvent(this,
+                    RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
+            notifyMapUpdateOwnedCoordinates();
+        }
     }
 
     /**
@@ -279,13 +281,13 @@ public class GameSingleton {
      */
     public int getBonusUnits(Player current) {
         //TODO: incorporate round number into this decision
-        int territoryBonus = current.getOwnedTerritories().size() / 3;
-        if(territoryBonus < 3){
-            territoryBonus = 3;
+        if (roundNumber==1) {
+            int territoryBonus = current.getOwnedTerritories().size() / 3;
+            return (territoryBonus<3) ? 3:territoryBonus;
         }
         //Loop through each continents territories?
 
-        return (territoryBonus); //+ continent bonus;
+        return 0; //+ continent bonus;
     }
 
     public Map<Territory,Point> getAllOwnedNodes(Player player) {

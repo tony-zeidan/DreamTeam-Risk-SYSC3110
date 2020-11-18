@@ -131,6 +131,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                             riskModel.nextPlayer();
                             break;
                     }
+                    break;
             }
         } else if (o instanceof JRadioButtonMenuItem) {
             JRadioButtonMenuItem fs = (JRadioButtonMenuItem) e.getSource();
@@ -167,7 +168,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
         //debug printing
         System.out.println(String.format("\nCLICK REGISTERED:\nCoordinates: (%s,%s)\nSelected Action: %s\nCurrent Territory Selected: %s\nPrevious Territory Selected: %s\n",
                 clicked.x, clicked.y, selectedAction, clickedTerritory, selectedTerritory));
-
+        System.out.println(phase);
         switch (phase) {
             case BONUS_TROUPE:
                 int bonusUnits = riskView.getBonusUnits();
@@ -177,9 +178,6 @@ public class RiskController extends MouseAdapter implements ActionListener {
                         //TODO: actually move units in the model (only my territories displayed)
                         bonusUnits -= 1;
                         riskView.setBonusUnits(bonusUnits);
-                    }
-                    if (bonusUnits==0) {
-                        riskModel.nextPhase();
                     }
                 } else {
                     riskModel.notifyMapUpdateOwnedCoordinates();
