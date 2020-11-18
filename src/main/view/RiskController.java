@@ -235,8 +235,6 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     if (selectedTerritory != null) {
                         if (clickedTerritory != null) {
 
-                            //Defender Set Up
-                            Player defendingPlayer = selectedTerritory.getOwner();
 
                             riskView.setInfoDisplay(clickedTerritory);
                                 //Get the Number of Units the Victor wishes to move to their newly claimed territory
@@ -247,6 +245,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
                                 //TODO: actually move units in the model!
 
+                                //reset GUI after moving
                                 selectedTerritory = null;
                                 selectedAction = null;
                                 riskView.restoreGUI();
@@ -254,6 +253,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
                                 return;
                             }
 
+                            //if an invalid territory was selected, reset the GUI to display
+                            //only owned territories as we are in the movement phase
                             riskModel.notifyMapUpdateOwnedCoordinates();
                             riskView.restoreGUI();
                         }
@@ -266,7 +267,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     selectedTerritory=null;
                 } else {
                     selectedTerritory=clickedTerritory;
-                    riskModel.getValidAttackNeighboursOwned(currentPlayer,clickedTerritory);
+                    riskModel.getValidTroupeMovementTerritories(clickedTerritory);
                 }
                 break;
         }

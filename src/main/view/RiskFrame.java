@@ -303,7 +303,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         RiskEventType eventType = e.getType();
         Object[] info = e.getEventInfo();
 
-        //System.out.println(eventType);
+        System.out.println(eventType);
         switch (eventType) {
             case GAME_OVER:
                 JOptionPane alert = new JOptionPane();
