@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * WorldMap represents the entire map of that the main.core.Game contains.
+ * WorldMap represents the entire map of that the Game contains.
  *
  * @author Anthony Dooley
  * @author Tony Zeidan
@@ -42,8 +42,7 @@ public class WorldMap {
     private static Random rand;
 
     /**
-     * '
-     * Constructor for instances of main.core.WorldMap.
+     * Constructor for instances of WorldMap.
      * Creates a new World with the name given (hardcoded map).
      *
      * @param name The name of the World
@@ -130,7 +129,7 @@ public class WorldMap {
 
     /**
      * Gets the neighbouring territories that the current player owns
-     * when attacking a territory
+     * when attacking a territory.
      *
      * @param player    The player in question
      * @param territory The territory that was selected to be attacked

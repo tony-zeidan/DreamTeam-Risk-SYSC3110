@@ -34,6 +34,10 @@ public class RiskController extends MouseAdapter implements ActionListener {
      * RiskFrame is the view of the MVC pattern
      */
     private RiskFrame riskView;
+
+    private String selectedAction;
+    private Territory selectedTerritory;
+
     /**
      * CLICK_DISTANCE is the minimum distance away from point
      * to register a click
@@ -51,6 +55,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
     public RiskController(GameSingleton riskModel, RiskFrame riskView) {
         this.riskView = riskView;
         this.riskModel = riskModel;
+        selectedAction=null;
+        selectedTerritory=null;
     }
 
     /**
@@ -80,21 +86,62 @@ public class RiskController extends MouseAdapter implements ActionListener {
         Object o = e.getSource();
         if (o instanceof JButton) {
             JButton jb = (JButton) o;
-            if (jb.getText().equals("Attack")) {
-                riskView.setCurrentInstruction("Select a territory to attack");
-                Territory selected = riskView.getSelectedTerritory();
-                if (selected != null) {
-                    riskModel.notifyMapUpdateAttackingNeighbourCoordinates(selected);
-                    jb.setText("Cancel");
-                    riskView.setEndable(false);
-                }
-                riskView.setSelectedAction(1);
-            } else if (jb.getText().equals("Cancel")) {
-                riskView.restoreGUI();
-                riskModel.notifyMapUpdateAllCoordinates();
-            } else if (jb.getText().equals("End Turn")) {
-                riskModel.nextPlayer();
+            selectedAction = jb.getActionCommand();
+            GameSingleton.Phase phase = riskView.getPhase();
+            switch(phase) {
+                case ATTACK:
+                    switch (selectedAction) {
+                        case "A":
+                            riskView.setCurrentInstruction("Select a territory to attack");
+                            if (selectedTerritory != null) {
+                                riskModel.notifyMapUpdateAttackingNeighbourCoordinates(selectedTerritory);
+                                jb.setText("Cancel");
+                                jb.setActionCommand("C");
+                                riskView.setEndable(false);
+                            }
+                            break;
+                        case "C":
+                            selectedTerritory = null;
+                            riskView.restoreGUI();
+                            riskModel.notifyMapUpdateAllCoordinates();
+                            break;
+                        case "E":
+                            selectedTerritory = null;
+                            riskModel.nextPhase();
+                            break;
+                    }
+                    break;
+                case MOVE_UNITS:
+                    switch (selectedAction) {
+                        case "M":
+                            if (selectedTerritory != null) {
+                                riskModel.notifyMapUpdateTroupeMoveCoordinate(selectedTerritory);
+                                jb.setText("Cancel");
+                                jb.setActionCommand("C");
+                                riskView.setEndable(false);
+                            }
+                            break;
+                        case "C":
+                            selectedTerritory = null;
+                            riskView.restoreGUI();
+                            riskModel.notifyMapUpdateOwnedCoordinates();
+                            break;
+                        case "S":
+                            selectedTerritory = null;
+                            riskModel.nextPlayer();
+                            break;
+                    }
             }
+        } else if (o instanceof JRadioButtonMenuItem) {
+            JRadioButtonMenuItem fs = (JRadioButtonMenuItem) e.getSource();
+            riskView.dispose();
+            if (fs.isSelected()) {
+                riskView.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            } else {
+                riskView.setPreferredSize(new Dimension(1200, 800));
+            }
+            riskView.setUndecorated(fs.isSelected());
+            riskView.setVisible(true);
         }
     }
 
@@ -111,72 +158,119 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
         //Make a point right where the user clicked
         Point clicked = new Point(e.getX(), e.getY());
-        Player currentPlayer = riskModel.getCurrentPlayer();
+
+        GameSingleton.Phase phase = riskView.getPhase();
 
         //compare the point with others on the map to see if the user selected a territory
         Territory clickedTerritory = checkClickedTerritory(clicked);
 
-        Territory previousTerritory = riskView.getSelectedTerritory();
-        int selectedAction = riskView.getSelectedAction();
-
         //debug printing
         System.out.println(String.format("\nCLICK REGISTERED:\nCoordinates: (%s,%s)\nSelected Action: %s\nCurrent Territory Selected: %s\nPrevious Territory Selected: %s\n",
-                clicked.x, clicked.y, selectedAction, clickedTerritory, previousTerritory));
+                clicked.x, clicked.y, selectedAction, clickedTerritory, selectedTerritory));
 
-        if (clickedTerritory == null) {
-            riskView.restoreGUI();
-            riskModel.notifyMapUpdateAllCoordinates();
-            return;
-        }
+        switch (phase) {
+            case BONUS_TROUPE:
+                int bonusUnits = riskView.getBonusUnits();
 
-        if (clickedTerritory != null) {
-            riskView.setInfoDisplay(clickedTerritory);
-            /*
-            We access model data here, only to prevent the user from clicking anything that
-            they shouldn't be. This could be substituted for for a user dialog that lets the user know
-            they can not perform that action. We went with this approach as it provides smoother gameplay.
-             */
-            riskModel.getValidAttackNeighboursOwned(currentPlayer, clickedTerritory);
-        }
+                if (clickedTerritory!=null) {
+                    if (bonusUnits>0) {
+                        //TODO: actually move units in the model (only my territories displayed)
+                        bonusUnits -= 1;
+                        riskView.setBonusUnits(bonusUnits);
+                    }
+                    if (bonusUnits==0) {
+                        riskModel.nextPhase();
+                    }
+                } else {
+                    riskModel.notifyMapUpdateOwnedCoordinates();
+                }
+                break;
+            case ATTACK:
+                Player currentPlayer = riskModel.getCurrentPlayer();
 
-        if (selectedAction == 1) {
-            if (previousTerritory != null) {
-                if (clickedTerritory != null) {
-                    //Attack was pressed
-                    //Attacker Set Up
-                    //Get Max Attack Die
-                    int maxAttack = riskModel.getMaxBattleDie(clickedTerritory.getUnits(), true);
-                    int amountOfAttackDie = JRiskOptionPane.showDieCountDialog(riskView, currentPlayer, 1, maxAttack);
+                if (selectedAction!=null && selectedAction.equals("A")) {
+                    if (selectedTerritory != null) {
+                        if (clickedTerritory != null) {
+                            int maxAttack = riskModel.getMaxBattleDie(clickedTerritory.getUnits(), true);
+                            int amountOfAttackDie = JRiskOptionPane.showDieCountDialog(riskView, currentPlayer, 1, maxAttack);
 
-                    //Defender Set Up
-                    Player defendingPlayer = previousTerritory.getOwner();
-                    //Get Max Defend Die
-                    int maxDefend = riskModel.getMaxBattleDie(previousTerritory.getUnits(), false);
-                    int amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1, maxDefend);
+                            //Defender Set Up
+                            Player defendingPlayer = selectedTerritory.getOwner();
+                            //Get Max Defend Die
+                            int maxDefend = riskModel.getMaxBattleDie(selectedTerritory.getUnits(), false);
+                            int amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1, maxDefend);
 
-                    boolean won = inputBattle(clickedTerritory, previousTerritory, amountOfAttackDie, amountOfDefendDie);
-                    riskView.setSelectedTerritory(null);
-                    // riskModel.updateViewAllPoints();
+                            boolean won = inputBattle(clickedTerritory, selectedTerritory, amountOfAttackDie, amountOfDefendDie);
+                            riskView.setInfoDisplay(clickedTerritory);
 
-                    riskView.setSelectedAction(-1);
-                    riskView.setInfoDisplay(clickedTerritory);
-
-                    //If Defending Territory Has Been Wiped Out, Start Fortifying Process
-                    if (won) {
-                        //Get the Number of Units the Victor wishes to move to their newly claimed territory
-                        int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView, currentPlayer, clickedTerritory,
-                                previousTerritory, amountOfAttackDie, false);
-                        //Move chosen number of units from the attacking territory to the claimed territory and gives rightful ownership
-                        riskModel.fortifyPosition(clickedTerritory, previousTerritory, fortifyUnits);
+                            //If Defending Territory Has Been Wiped Out, Start Fortifying Process
+                            if (won) {
+                                //Get the Number of Units the Victor wishes to move to their newly claimed territory
+                                int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView, currentPlayer, clickedTerritory,
+                                        selectedTerritory, amountOfAttackDie, false);
+                                //Move chosen number of units from the attacking territory to the claimed territory and gives rightful ownership
+                                riskModel.fortifyPosition(clickedTerritory, selectedTerritory, fortifyUnits);
+                            }
+                            selectedTerritory = null;
+                            selectedAction = null;
+                            riskView.restoreGUI();
+                            riskModel.notifyMapUpdateAllCoordinates();
+                        }
+                        return;
                     }
                 }
-            }
-            riskView.restoreGUI();
-            riskModel.notifyMapUpdateAllCoordinates();
-        } else {
-            riskView.setSelectedAction(-1);
-            riskView.setSelectedTerritory(clickedTerritory);
+
+                if (clickedTerritory==null) {
+                    selectedAction=null;
+                    selectedTerritory=null;
+                } else {
+                    selectedTerritory=clickedTerritory;
+                    riskModel.getValidAttackNeighboursOwned(currentPlayer,clickedTerritory);
+                }
+                break;
+            case MOVE_UNITS:
+                currentPlayer = riskModel.getCurrentPlayer();
+
+                if (selectedAction!=null && selectedAction.equals("M")) {
+                    if (selectedTerritory != null) {
+                        if (clickedTerritory != null) {
+
+                            //Defender Set Up
+                            Player defendingPlayer = selectedTerritory.getOwner();
+
+                            riskView.setInfoDisplay(clickedTerritory);
+                                //Get the Number of Units the Victor wishes to move to their newly claimed territory
+                            int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView, currentPlayer, clickedTerritory,
+                                    selectedTerritory, 1, true);
+
+                            if (fortifyUnits!=-1) {
+
+                                //TODO: actually move units in the model!
+
+                                selectedTerritory = null;
+                                selectedAction = null;
+                                riskView.restoreGUI();
+                                riskModel.notifyMapUpdateAllCoordinates();
+                                return;
+                            }
+
+                            riskModel.notifyMapUpdateOwnedCoordinates();
+                            riskView.restoreGUI();
+                        }
+                        return;
+                    }
+                }
+
+                if (clickedTerritory==null) {
+                    selectedAction=null;
+                    selectedTerritory=null;
+                } else {
+                    selectedTerritory=clickedTerritory;
+                    riskModel.getValidAttackNeighboursOwned(currentPlayer,clickedTerritory);
+                }
+                break;
         }
+        selectedTerritory = clickedTerritory;
     }
 
     /**

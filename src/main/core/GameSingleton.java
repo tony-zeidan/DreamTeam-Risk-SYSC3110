@@ -44,6 +44,13 @@ public class GameSingleton {
      * Stores the location of the current player in the list of players.
      */
     private int currentPlayerInd;
+
+    private int roundNumber;
+
+    public enum Phase {START_GAME,BONUS_TROUPE,ATTACK,MOVE_UNITS};
+
+    private Phase gamePhase;
+
     /**
      * A list of all handlers that listen to this model.
      */
@@ -61,6 +68,8 @@ public class GameSingleton {
         this.players = players;
         world = new WorldMap("Earth");
         currentPlayerInd = 0;
+        roundNumber=1;
+        gamePhase = null;
         riskHandlers = new ArrayList<>();
     }
 
@@ -119,18 +128,18 @@ public class GameSingleton {
             }
         }
 
-        System.out.println(riskHandlers.size());
         //shuffle the order of the players
         shufflePlayers();
         world.setUp(players);
 
+        gamePhase = Phase.START_GAME;
+        nextPhase();
+
         notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,
                 world.getName()));
 
-        notifyMapUpdateAllCoordinates();
-
         notifyHandlers(new RiskEvent(this, RiskEventType.TURN_BEGAN,
-                getCurrentPlayer()));
+                getCurrentPlayer(),getBonusUnits(getCurrentPlayer())));
     }
 
     /**
@@ -154,6 +163,14 @@ public class GameSingleton {
      */
     public void notifyMapUpdateAttackingNeighbourCoordinates(Territory territory) {
         notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_MAP, getValidAttackNeighboursOwned(getCurrentPlayer(), territory)));
+    }
+
+    public void notifyMapUpdateOwnedCoordinates() {
+        notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_MAP,getAllOwnedNodes(getCurrentPlayer())));
+    }
+
+    public void notifyMapUpdateTroupeMoveCoordinate(Territory territory) {
+        notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_MAP, getValidTroupeMovementTerritories(territory)));
     }
 
     /**
@@ -189,10 +206,31 @@ public class GameSingleton {
         }
     }
 
+    public void nextPhase() {
+        switch (gamePhase) {
+            case START_GAME:
+            case MOVE_UNITS:
+                gamePhase=Phase.BONUS_TROUPE;
+                notifyMapUpdateOwnedCoordinates();
+                break;
+            case BONUS_TROUPE:
+                gamePhase=Phase.ATTACK;
+                notifyMapUpdateAllCoordinates();
+                break;
+            case ATTACK:
+                gamePhase=Phase.MOVE_UNITS;
+                notifyMapUpdateOwnedCoordinates();
+                break;
+        }
+        notifyHandlers(new RiskEvent(this,RiskEventType.PHASE_CHANGE,gamePhase));
+        System.out.println("NEXT PHASE: " + gamePhase.toString());
+    }
+
     /**
      * Get the next player who has not yet been eliminated from the game.
      */
     public void nextPlayer() {
+        nextPhase();
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_ENDED, getCurrentPlayer()));
 
@@ -200,9 +238,14 @@ public class GameSingleton {
         while (!(players.get(currentPlayerInd).isActive())) {
             currentPlayerInd = (currentPlayerInd + 1) % players.size();
         }
+        if (currentPlayerInd==0) {
+            roundNumber++;
+        }
 
         notifyHandlers(new RiskEvent(this,
-                RiskEventType.TURN_BEGAN, getCurrentPlayer()));
+                RiskEventType.TURN_BEGAN, getCurrentPlayer(),getBonusUnits(getCurrentPlayer())));
+
+        notifyMapUpdateOwnedCoordinates();
     }
 
     /**
@@ -234,7 +277,8 @@ public class GameSingleton {
      *
      * @param current The current Player
      */
-    public int getBonusUnits(Player current){
+    public int getBonusUnits(Player current) {
+        //TODO: incorporate round number into this decision
         int territoryBonus = current.getOwnedTerritories().size() / 3;
         if(territoryBonus < 3){
             territoryBonus = 3;
@@ -242,6 +286,15 @@ public class GameSingleton {
         //Loop through each continents territories?
 
         return (territoryBonus); //+ continent bonus;
+    }
+
+    public Map<Territory,Point> getAllOwnedNodes(Player player) {
+        Map<Territory,Point> owned = new HashMap<>();
+        for (Territory t : player.getOwnedTerritories()) {
+            Point p = world.getAllCoordinates().get(t);
+            owned.put(t,p);
+        }
+        return owned;
     }
 
     /**
@@ -265,29 +318,37 @@ public class GameSingleton {
         }
         if (neighboursOwned.size() == 0) {
             notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_ATTACKABLE, false));
+            return null;
         } else {
             notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_ATTACKABLE, true));
+            return neighboursOwned;
         }
-        return (neighboursOwned.size() > 0) ? neighboursOwned : null;
     }
 
-    public List<Territory> getValidTroupeMovementTerritories(Territory initial) {
+    public Map<Territory,Point> getValidTroupeMovementTerritories(Territory initial) {
         List<Territory> queue = new LinkedList<>();
-        List<Territory> visited = new ArrayList<>();
+        Map<Territory,Point> visited = new HashMap<>();
         queue.add(initial);
         while(!queue.isEmpty()) {
             Territory current = queue.remove(0);
             Map<Territory, Point> validNeighbours = world.getNeighbourNodesOwned(initial.getOwner(),current);
 
-            visited.add(current);
+            visited.put(current,world.getAllCoordinates().get(current));
             // Or you can store a set of visited vertices somewhere
             for (Territory t : validNeighbours.keySet()) {
-                if (!visited.contains(t)) {
+                if (!visited.containsKey(t)) {
                     queue.add(t);
                 }
             }
         }
-        return visited.subList(1,visited.size());
+        visited.remove(initial);
+        if (visited.size() == 0) {
+            notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_ATTACKABLE, false));
+            return null;
+        } else {
+            notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_ATTACKABLE, true));
+            return visited;
+        }
     }
 
     /**

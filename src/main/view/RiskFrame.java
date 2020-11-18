@@ -20,7 +20,7 @@ import java.util.Map;
  * @author Kyler Verge
  * @author Ethan Chase
  */
-public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener {
+public class RiskFrame extends JFrame implements RiskGameHandler {
 
     /**
      * The model for this view.
@@ -30,18 +30,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
      * Stores whose turn it is on the panel.
      */
     private JLabel playerTurnLbl;
-    /**
-     * Stores the territory clicked on by the user.
-     *
-     * @see RiskController
-     */
-    private Territory selectedTerritory;
-    /**
-     * Stores the action selected by the user.
-     *
-     * @see RiskController
-     */
-    private int selectedAction;
+
+    private JLabel playerBonusUnitsLbl;
+
     /**
      * JPanel containing the game board (the map).
      */
@@ -61,6 +52,10 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
      */
     private JButton endTurnBtn;
 
+    private JButton moveUnitsBtn;
+
+    private GameSingleton.Phase phase;
+
     /**
      * Constructor for instances of RiskFrame, constructs a new GUI.
      */
@@ -68,9 +63,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         super("RISK");
         riskModel = GameSingleton.getGameInstance(getPlayers(getNumOfPlayers()));
         setLayout(new BorderLayout());
-        selectedAction = -1;
         composeFrame();
         riskModel.setUpGame();
+        phase=GameSingleton.Phase.BONUS_TROUPE;
         showFrame();
     }
 
@@ -88,10 +83,14 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         menuBar.add(menu);
 
         JRadioButtonMenuItem fs = new JRadioButtonMenuItem("Fullscreen");
-        fs.addActionListener(this);
+        fs.addActionListener(rc);
         menu.add(fs);
 
         //create a massive separator in the menu bar
+        menuBar.add(Box.createHorizontalGlue());
+        playerBonusUnitsLbl = new JLabel();
+        playerBonusUnitsLbl.setOpaque(true);
+        menuBar.add(playerBonusUnitsLbl);
         menuBar.add(Box.createHorizontalGlue());
         playerTurnLbl = new JLabel();
         playerTurnLbl.setOpaque(true);
@@ -102,12 +101,18 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         This panel contains the buttons for the players turn.
             - we must enable them and disable them accordingly
          */
-        JPanel buttonPane = new JPanel(new GridLayout(2, 1));
+        JPanel buttonPane = new JPanel(new GridLayout(3, 1));
         attackBtn = new JButton("Attack");
+        moveUnitsBtn = new JButton("Move Units");
         endTurnBtn = new JButton("End Turn");
         attackBtn.addActionListener(rc);
+        moveUnitsBtn.addActionListener(rc);
         endTurnBtn.addActionListener(rc);
+        attackBtn.setActionCommand("A");
+        moveUnitsBtn.setActionCommand("MU");
+        endTurnBtn.setActionCommand("E");
         buttonPane.add(attackBtn);
+        buttonPane.add(moveUnitsBtn);
         buttonPane.add(endTurnBtn);
 
         mapPane = new RiskMapPane(rc);
@@ -127,36 +132,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         setSize(new Dimension(1200, 800));
 
         //just to make sure everything has been reset for the start of the game
-        restoreGUI();
+        //restoreGUI();
         //prepare
         //pack();
-    }
-
-    /**
-     * Gets the selected territory
-     *
-     * @return The territory that was selected
-     */
-    public Territory getSelectedTerritory() {
-        return selectedTerritory;
-    }
-
-    /**
-     * Gets the action that was selected by the current player
-     *
-     * @return The number corresponding to the action
-     */
-    public int getSelectedAction() {
-        return selectedAction;
-    }
-
-    /**
-     * Sets the selected action
-     *
-     * @param selectedAction the number corresponding to the action
-     */
-    public void setSelectedAction(int selectedAction) {
-        this.selectedAction = selectedAction;
     }
 
     /**
@@ -279,43 +257,38 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         return mapPane.getScalingY();
     }
 
+    public int getBonusUnits() {
+        return Integer.parseInt(playerBonusUnitsLbl.getName());
+    }
+
+    public void setBonusUnits(int units) {
+        playerBonusUnitsLbl.setText("Bonus Units: " + units);
+        playerBonusUnitsLbl.setName(units+"");
+    }
+
     /**
      * Restores the GUI to its default state
      */
     public void restoreGUI() {
-        selectedAction = -1;
-        selectedTerritory = null;
-        attackBtn.setText("Attack");
-        attackBtn.setEnabled(false);
-        endTurnBtn.setEnabled(true);
+        switch (phase) {
+            case MOVE_UNITS:
+                attackBtn.setEnabled(false);
+                endTurnBtn.setActionCommand("S");
+                endTurnBtn.setText("Skip");
+                break;
+            default:
+                attackBtn.setText("Attack");
+                attackBtn.setActionCommand("A");
+                attackBtn.setEnabled(false);
+                endTurnBtn.setEnabled(true);
+                break;
+        }
         eventPane.clearSelectedTerritoryDisplay();
         eventPane.setCurrentInstruction(RiskEventPane.DEFAULT_INSTRUCTION);
     }
 
-    /**
-     * Sets the selected territory to the most current selected territory
-     *
-     * @param selectedTerritory The territory that was currently selected
-     */
-    public void setSelectedTerritory(Territory selectedTerritory) {
-        this.selectedTerritory = selectedTerritory;
-    }
-
-    /**
-     * Maximizes and minimizes the
-     * @param e The action event
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JRadioButtonMenuItem fs = (JRadioButtonMenuItem) e.getSource();
-        dispose();
-        if (fs.isSelected()) {
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
-        } else {
-            setPreferredSize(new Dimension(1200, 800));
-        }
-        setUndecorated(fs.isSelected());
-        setVisible(true);
+    public GameSingleton.Phase getPhase() {
+        return phase;
     }
 
     /**
@@ -330,7 +303,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         RiskEventType eventType = e.getType();
         Object[] info = e.getEventInfo();
 
-        System.out.println(eventType);
+        //System.out.println(eventType);
         switch (eventType) {
             case GAME_OVER:
                 JOptionPane alert = new JOptionPane();
@@ -339,18 +312,54 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
                 setEndable(false);
                 break;
             case TURN_BEGAN:
+                restoreGUI();
                 Player beganPlayer = (Player) info[0];
-                Color playerColour = beganPlayer.getColour().getValue();
+                int bonusUnits = (int) info[1];
 
+                Color playerColour = beganPlayer.getColour().getValue();
+                attackBtn.setEnabled(false);
+                endTurnBtn.setEnabled(false);
+                moveUnitsBtn.setEnabled(false);
+                setBonusUnits(bonusUnits);
+                playerBonusUnitsLbl.setBackground(playerColour);
+                playerBonusUnitsLbl.setForeground(getContrastColor(playerColour));
                 playerTurnLbl.setText("it is : " + beganPlayer.getName() + "'s turn.        ");
                 playerTurnLbl.setBackground(playerColour);
                 playerTurnLbl.setForeground(getContrastColor(playerColour));
                 break;
             case UPDATE_ATTACKABLE:
                 setAttackable((boolean) info[0]);
+                break;
+            case PHASE_CHANGE:
+                phase = (GameSingleton.Phase) info[0];
+                switch (phase) {
+                    case BONUS_TROUPE:
+                        attackBtn.setEnabled(false);
+                        endTurnBtn.setEnabled(false);
+                        endTurnBtn.setActionCommand("E");
+                        endTurnBtn.setText("End Turn");
+                        break;
+                    case ATTACK:
+                        attackBtn.setEnabled(false);
+                        endTurnBtn.setEnabled(true);
+                        break;
+                    case MOVE_UNITS:
+                        attackBtn.setEnabled(false);
+                        attackBtn.setText("Move Units");
+                        attackBtn.setActionCommand("M");
+                        endTurnBtn.setActionCommand("S");
+                        endTurnBtn.setText("Skip");
+                        endTurnBtn.setEnabled(true);
+                        break;
+                }
+                break;
             default:
                 return;
         }
+    }
+
+    private void restoreAttackPhase() {
+
     }
 
     /**

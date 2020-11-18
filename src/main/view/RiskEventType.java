@@ -24,6 +24,7 @@ public enum RiskEventType {
      * Each time the attack button needs to be updated.
      */
     UPDATE_ATTACKABLE,
+    PHASE_CHANGE,
     /**
      * Each time an attack has just been commenced in the game.
      */

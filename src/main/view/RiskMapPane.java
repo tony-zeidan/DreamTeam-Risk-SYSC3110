@@ -10,6 +10,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,7 +67,7 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
         //attempt to read the map file
         BufferedImage mapImage = null;
         try {
-            mapImage = ImageIO.read(getClass().getResource("/resources/map_packages/main_package/map.png"));
+            mapImage = ImageIO.read(new File("src/resources/map_packages/main_package/map.png"));
         } catch (IOException ioException) {
             System.out.println("RISK Board Load Failed");
             ioException.printStackTrace();
@@ -200,7 +201,7 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
         Object[] info = e.getEventInfo();
         //if (eventDescriptions.getSize()==25) eventDescriptions.clear();
 
-        System.out.println(eventType);
+        //System.out.println(eventType);
         switch (eventType) {
 
             case UPDATE_MAP:

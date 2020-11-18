@@ -136,6 +136,6 @@ public class Territory {
      */
     @Override
     public String toString() {
-        return String.format("The main.core.Territory of %s: \n\tunits: %s", name, units);
+        return String.format("Territory of %s: \n\tunits: %s", name, units);
     }
 }
