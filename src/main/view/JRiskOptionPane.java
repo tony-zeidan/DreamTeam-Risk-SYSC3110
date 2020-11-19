@@ -117,15 +117,15 @@ public class JRiskOptionPane {
      * @param playerNum This players number
      * @return The user's input
      */
-    public static String showPlayerNameDialog(JFrame frame, int playerNum){
+    public static String showPlayerNameDialog(JFrame frame, int playerNum, String playerType){
         String[] options = {"OK"};
         JPanel panel = new JPanel();
-        JLabel lbl = new JLabel(String.format("Player %s's Name: ", playerNum));
+        JLabel lbl = new JLabel(String.format("%s %s's Name: ",playerType, playerNum));
         JTextField txt = new JTextField(10);
         txt.requestFocus();
         panel.add(lbl);
         panel.add(txt);
-        int selectedOption = JOptionPane.showOptionDialog(frame, panel, "Player Name", JOptionPane.OK_OPTION,
+        int selectedOption = JOptionPane.showOptionDialog(frame, panel, String.format("%s Name",playerType), JOptionPane.OK_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
         if (selectedOption == JOptionPane.OK_OPTION){
             return txt.getText();

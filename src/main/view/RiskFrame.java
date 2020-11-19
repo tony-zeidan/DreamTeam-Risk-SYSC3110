@@ -239,7 +239,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         for (int i = 0; i < numPlayers; i++) {
             String input = null;
             while (input == null || input.length() == 0) {
-                input = JRiskOptionPane.showPlayerNameDialog(this, i + 1);
+                input = JRiskOptionPane.showPlayerNameDialog(this, i + 1,"Player");
             }
             players.add(new Player(input));
         }
@@ -248,10 +248,18 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
     //refactor
     private int numOfAIs(int numSpotsTaken)
     {
-        String[] options = new String[6-numSpotsTaken];
-        for(int i = 0; i<6-numSpotsTaken;i++)
+        String[] options;
+        if (numSpotsTaken==1)
         {
-            options[i] = Integer.toString((i+1));
+            options = new String[]{"1", "2", "3", "4", "5"};
+        }
+        else
+        {
+            options = new String[7-numSpotsTaken];
+            for(int i = 0; i<7-numSpotsTaken;i++)
+            {
+                options[i] = Integer.toString((i));
+            }
         }
         String input = (String) JOptionPane.showInputDialog(this, "How many AIs?", "Number of AIs",
                 JOptionPane.QUESTION_MESSAGE, null, options, "2");
@@ -266,7 +274,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
         for (int i = 0; i < numAIs; i++) {
             String input = null;
             while (input == null || input.length() == 0) {
-                input = JRiskOptionPane.showPlayerNameDialog(this, i + 1);
+                input = JRiskOptionPane.showPlayerNameDialog(this, i + 1,"AI");
             }
             players.add(new AIPlayer(input));
         }
