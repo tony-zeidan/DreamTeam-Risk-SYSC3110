@@ -179,8 +179,11 @@ public class RiskController extends MouseAdapter implements ActionListener {
                         //TODO: actually move units in the model (only my territories displayed)
                         bonusUnits -= 1;
                         riskView.setBonusUnits(bonusUnits);
+                    } else {
+                        riskModel.nextPhase();
                     }
                 } else {
+                    //TODO: this line below may be useless
                     riskModel.notifyMapUpdateOwnedCoordinates();
                 }
                 break;

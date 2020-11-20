@@ -237,13 +237,15 @@ public class GameSingleton {
 
         nextPhase();
 
-        if (getBonusUnits(getCurrentPlayer())==0) {
-            nextPhase();
-        } else {
+        if (getBonusUnits(getCurrentPlayer()) != 0) {
             notifyHandlers(new RiskEvent(this,
                     RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
-            notifyMapUpdateOwnedCoordinates();
+        } else {
+            nextPhase();
+            notifyHandlers(new RiskEvent(this,
+                    RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
         }
+
     }
 
     /**
