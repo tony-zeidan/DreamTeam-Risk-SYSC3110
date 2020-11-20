@@ -47,9 +47,7 @@ public class GameSingleton {
 
     private int roundNumber;
 
-    public enum Phase {START_GAME,BONUS_TROUPE,ATTACK,MOVE_UNITS};
-
-    private Phase gamePhase;
+    private GamePhase gamePhase;
 
     /**
      * A list of all handlers that listen to this model.
@@ -134,15 +132,12 @@ public class GameSingleton {
         notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,
                 world.getName()));
 
-        gamePhase = Phase.START_GAME;
-        nextPhase();
-        nextPhase();
-
+        gamePhase = GamePhase.START_GAME;
+        nextPhase();    //beginning should be bonus troupe
+        nextPhase();    //no bonus for first players turn so push phase further
 
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
-        notifyMapUpdateOwnedCoordinates();
-
     }
 
     /**
@@ -213,15 +208,15 @@ public class GameSingleton {
         switch (gamePhase) {
             case START_GAME:
             case MOVE_UNITS:
-                this.gamePhase=Phase.BONUS_TROUPE;
+                this.gamePhase=GamePhase.BONUS_TROUPE;
                 notifyMapUpdateOwnedCoordinates();
                 break;
             case BONUS_TROUPE:
-                this.gamePhase=Phase.ATTACK;
+                this.gamePhase=GamePhase.ATTACK;
                 notifyMapUpdateAllCoordinates();
                 break;
             case ATTACK:
-                this.gamePhase=Phase.MOVE_UNITS;
+                this.gamePhase=GamePhase.MOVE_UNITS;
                 notifyMapUpdateOwnedCoordinates();
                 break;
         }
@@ -309,7 +304,10 @@ public class GameSingleton {
      */
     public Map<Territory, Point> getValidAttackNeighboursOwned(Player attacker, Territory defending) {
 
-        if (attacker.ownsTerritory(defending)) return null;
+        if (attacker.ownsTerritory(defending)) {
+            notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_ATTACKABLE, false));
+            return null;
+        }
         Map<Territory, Point> neighboursOwned = world.getNeighbourNodesOwned(attacker, defending);
         List<Territory> invalid = new ArrayList<>();
         for (Territory t : neighboursOwned.keySet()) {

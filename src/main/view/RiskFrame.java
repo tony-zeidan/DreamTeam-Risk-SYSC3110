@@ -1,12 +1,8 @@
 package main.view;
-
-
 import main.core.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -56,7 +52,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
     private JButton moveUnitsBtn;
 
-    private GameSingleton.Phase phase;
+    private GamePhase gamePhase;
 
     /**
      * Constructor for instances of RiskFrame, constructs a new GUI.
@@ -67,7 +63,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         setLayout(new BorderLayout());
         composeFrame();
         riskModel.setUpGame();
-        phase=GameSingleton.Phase.BONUS_TROUPE;
         showFrame();
     }
 
@@ -278,25 +273,23 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      * Restores the GUI to its default state
      */
     public void restoreGUI() {
-        switch (phase) {
-            case MOVE_UNITS:
-                attackBtn.setEnabled(false);
-                endTurnBtn.setActionCommand("S");
-                endTurnBtn.setText("Skip");
+        switch (gamePhase) {
+            case BONUS_TROUPE:
+                restoreBonusTroupe();
                 break;
-            default:
-                attackBtn.setText("Attack");
-                attackBtn.setActionCommand("A");
-                attackBtn.setEnabled(false);
-                endTurnBtn.setEnabled(true);
+            case ATTACK:
+                restoreAttack();
+                break;
+            case MOVE_UNITS:
+                restoreMoveUnits();
                 break;
         }
         eventPane.clearSelectedTerritoryDisplay();
         eventPane.setCurrentInstruction(RiskEventPane.DEFAULT_INSTRUCTION);
     }
 
-    public GameSingleton.Phase getPhase() {
-        return phase;
+    public GamePhase getPhase() {
+        return gamePhase;
     }
 
     /**
@@ -312,6 +305,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         Object[] info = e.getEventInfo();
 
         System.out.println(eventType);
+
+
         switch (eventType) {
             case GAME_OVER:
                 JOptionPane alert = new JOptionPane();
@@ -325,9 +320,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 int bonusUnits = (int) info[1];
 
                 Color playerColour = beganPlayer.getColour().getValue();
-                attackBtn.setEnabled(false);
-                endTurnBtn.setEnabled(false);
-                moveUnitsBtn.setEnabled(false);
                 setBonusUnits(bonusUnits);
                 playerBonusUnitsLbl.setBackground(playerColour);
                 playerBonusUnitsLbl.setForeground(getContrastColor(playerColour));
@@ -339,38 +331,53 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 setAttackable((boolean) info[0]);
                 break;
             case PHASE_CHANGE:
-                this.phase = (GameSingleton.Phase) info[0];
-                gamePhaseLbl.setText(phase.toString());
-                switch (phase) {
-                    case BONUS_TROUPE:
-                        attackBtn.setEnabled(false);
-                        endTurnBtn.setEnabled(false);
-                        endTurnBtn.setActionCommand("E");
-                        endTurnBtn.setText("End Turn");
-                        break;
-                    case ATTACK:
-                        System.out.println("Worked");
-                        attackBtn.setEnabled(false);
-                        endTurnBtn.setEnabled(true);
-                        break;
-                    case MOVE_UNITS:
-                        attackBtn.setEnabled(false);
-                        attackBtn.setText("Move Units");
-                        attackBtn.setActionCommand("M");
-                        endTurnBtn.setActionCommand("S");
-                        endTurnBtn.setText("Skip");
-                        endTurnBtn.setEnabled(true);
-                        break;
-                }
-
+                this.gamePhase = (GamePhase) info[0];
+                restoreGUI();
+                System.out.println("Current Phase: " + gamePhase);
                 break;
         }
     }
 
-
-    private void restoreAttackPhase() {
-
+    private void restoreAttack() {
+        attackBtn.setEnabled(false);
+        attackBtn.setActionCommand("A");
+        attackBtn.setText("Attack");
+        moveUnitsBtn.setEnabled(false);
+        moveUnitsBtn.setActionCommand("NULL");
+        moveUnitsBtn.setText("Move Units");
+        endTurnBtn.setEnabled(true);
+        endTurnBtn.setActionCommand("E");
+        endTurnBtn.setText("End Turn");
+        setBonusUnits(-1);
+        playerBonusUnitsLbl.setVisible(false);
     }
+
+    private void restoreMoveUnits() {
+        attackBtn.setEnabled(false);
+        attackBtn.setActionCommand("NULL");
+        attackBtn.setText("Attack");
+        moveUnitsBtn.setEnabled(true);
+        moveUnitsBtn.setActionCommand("M");
+        endTurnBtn.setEnabled(false);
+        endTurnBtn.setActionCommand("NULL");
+        endTurnBtn.setText("End Turn");
+        setBonusUnits(-1);
+        playerBonusUnitsLbl.setVisible(false);
+    }
+
+    private void restoreBonusTroupe() {
+        attackBtn.setEnabled(false);
+        attackBtn.setActionCommand("NULL");
+        attackBtn.setText("Attack");
+        moveUnitsBtn.setEnabled(false);
+        moveUnitsBtn.setActionCommand("NULL");
+        endTurnBtn.setEnabled(false);
+        endTurnBtn.setActionCommand("NULL");
+        endTurnBtn.setText("End Turn");
+        playerBonusUnitsLbl.setVisible(true);
+    }
+
+
 
     /**
      * Main method for this view. (Testing)

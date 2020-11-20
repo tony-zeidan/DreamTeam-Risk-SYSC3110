@@ -87,13 +87,14 @@ public class RiskController extends MouseAdapter implements ActionListener {
         if (o instanceof JButton) {
             JButton jb = (JButton) o;
             selectedAction = jb.getActionCommand();
-            GameSingleton.Phase phase = riskView.getPhase();
+            GamePhase phase = riskView.getPhase();
             switch(phase) {
                 case ATTACK:
                     switch (selectedAction) {
                         case "A":
                             riskView.setCurrentInstruction("Select a territory to attack");
                             if (selectedTerritory != null) {
+                                System.out.println("Worked");
                                 riskModel.notifyMapUpdateAttackingNeighbourCoordinates(selectedTerritory);
                                 jb.setText("Cancel");
                                 jb.setActionCommand("C");
@@ -160,7 +161,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
         //Make a point right where the user clicked
         Point clicked = new Point(e.getX(), e.getY());
 
-        GameSingleton.Phase phase = riskView.getPhase();
+        GamePhase phase = riskView.getPhase();
 
         //compare the point with others on the map to see if the user selected a territory
         Territory clickedTerritory = checkClickedTerritory(clicked);
@@ -223,6 +224,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     selectedTerritory=null;
                 } else {
                     selectedTerritory=clickedTerritory;
+                    System.out.println("Worked Here");
                     riskModel.getValidAttackNeighboursOwned(currentPlayer,clickedTerritory);
                 }
                 break;
