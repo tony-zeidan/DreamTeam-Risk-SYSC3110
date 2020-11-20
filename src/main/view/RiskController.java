@@ -119,7 +119,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                                 riskModel.notifyMapUpdateTroupeMoveCoordinate(selectedTerritory);
                                 jb.setText("Cancel");
                                 jb.setActionCommand("C");
-                                riskView.setEndable(false);
+                                //riskView.setEndable(false);
                             }
                             break;
                         case "C":
@@ -225,6 +225,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 if (clickedTerritory==null) {
                     selectedAction=null;
                     selectedTerritory=null;
+                    riskView.restoreGUI();
                 } else {
                     selectedTerritory=clickedTerritory;
                     System.out.println("Worked Here");
@@ -269,6 +270,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 if (clickedTerritory==null) {
                     selectedAction=null;
                     selectedTerritory=null;
+                    riskView.restoreGUI();
                 } else {
                     selectedTerritory=clickedTerritory;
                     riskModel.getValidTroupeMovementTerritories(clickedTerritory);

@@ -241,6 +241,7 @@ public class GameSingleton {
             notifyHandlers(new RiskEvent(this,
                     RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
         } else {
+            System.out.println("Bonus Zero");
             nextPhase();
             notifyHandlers(new RiskEvent(this,
                     RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));

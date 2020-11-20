@@ -367,11 +367,11 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         attackBtn.setEnabled(false);
         attackBtn.setActionCommand("NULL");
         attackBtn.setText("Attack");
-        moveUnitsBtn.setEnabled(true);
+        moveUnitsBtn.setEnabled(false);
         moveUnitsBtn.setActionCommand("M");
-        endTurnBtn.setEnabled(false);
-        endTurnBtn.setActionCommand("NULL");
-        endTurnBtn.setText("End Turn");
+        endTurnBtn.setEnabled(true);
+        endTurnBtn.setActionCommand("S");
+        endTurnBtn.setText("Skip");
         setBonusUnits(-1);
         playerBonusUnitsLbl.setVisible(false);
         gamePhaseLbl.setBackground(Color.BLUE);
