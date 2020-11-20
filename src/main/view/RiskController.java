@@ -248,8 +248,9 @@ public class RiskController extends MouseAdapter implements ActionListener {
                                 //reset GUI after moving
                                 selectedTerritory = null;
                                 selectedAction = null;
+                                System.out.println("Worked!!");
+                                riskModel.nextPlayer();
                                 riskView.restoreGUI();
-                                riskModel.notifyMapUpdateAllCoordinates();
                                 return;
                             }
 

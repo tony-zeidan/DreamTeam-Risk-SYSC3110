@@ -85,6 +85,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
         //create a massive separator in the menu bar
         gamePhaseLbl = new JLabel();
+        gamePhaseLbl.setOpaque(true);
         menuBar.add(gamePhaseLbl);
         menuBar.add(Box.createHorizontalGlue());
         playerBonusUnitsLbl = new JLabel();
@@ -328,10 +329,18 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 playerTurnLbl.setForeground(getContrastColor(playerColour));
                 break;
             case UPDATE_ATTACKABLE:
-                setAttackable((boolean) info[0]);
+                if (gamePhase==GamePhase.ATTACK) {
+                    setAttackable((boolean) info[0]);
+                } else if (gamePhase==GamePhase.MOVE_UNITS) {
+                    moveUnitsBtn.setEnabled((boolean) info[0]);
+                }
                 break;
             case PHASE_CHANGE:
                 this.gamePhase = (GamePhase) info[0];
+                //TODO: reset bonus units here
+                if (gamePhase==GamePhase.BONUS_TROUPE) {
+
+                }
                 restoreGUI();
                 System.out.println("Current Phase: " + gamePhase);
                 break;
@@ -350,6 +359,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         endTurnBtn.setText("End Turn");
         setBonusUnits(-1);
         playerBonusUnitsLbl.setVisible(false);
+        gamePhaseLbl.setBackground(Color.RED);
+        gamePhaseLbl.setForeground(getContrastColor(Color.RED));
     }
 
     private void restoreMoveUnits() {
@@ -363,6 +374,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         endTurnBtn.setText("End Turn");
         setBonusUnits(-1);
         playerBonusUnitsLbl.setVisible(false);
+        gamePhaseLbl.setBackground(Color.BLUE);
+        gamePhaseLbl.setForeground(getContrastColor(Color.BLUE));
     }
 
     private void restoreBonusTroupe() {
@@ -375,6 +388,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         endTurnBtn.setActionCommand("NULL");
         endTurnBtn.setText("End Turn");
         playerBonusUnitsLbl.setVisible(true);
+        gamePhaseLbl.setBackground(Color.GREEN);
+        gamePhaseLbl.setForeground(getContrastColor(Color.GREEN));
     }
 
 

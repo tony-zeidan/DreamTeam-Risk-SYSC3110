@@ -228,13 +228,14 @@ public class GameSingleton {
      * Get the next player who has not yet been eliminated from the game.
      */
     public void nextPlayer() {
-        nextPhase();
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_ENDED, getCurrentPlayer()));
         do {
             currentPlayerInd = (currentPlayerInd + 1) % players.size();
             if(currentPlayerInd == 0) roundNumber ++;
         } while (!(players.get((currentPlayerInd+1)% players.size()).isActive()));
+
+        nextPhase();
 
         if (getBonusUnits(getCurrentPlayer())==0) {
             nextPhase();
@@ -275,7 +276,6 @@ public class GameSingleton {
      * @param current The current Player
      */
     public int getBonusUnits(Player current) {
-        //TODO: incorporate round number into this decision
         if (roundNumber==1) {
             int territoryBonus = current.getOwnedTerritories().size() / 3;
             return (territoryBonus<3) ? 3:territoryBonus;
@@ -342,6 +342,14 @@ public class GameSingleton {
             }
         }
         visited.remove(initial);
+        List<Territory> invalid = new LinkedList<>();
+        for (Territory t : visited.keySet()) {
+            if (t.getUnits()==1) invalid.add(t);
+        }
+        for (Territory t : invalid) {
+            visited.remove(t);
+        }
+
         if (visited.size() == 0) {
             notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_ATTACKABLE, false));
             return null;
