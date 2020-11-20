@@ -35,12 +35,44 @@ public class AIPlayer extends Player {
         //moveTroops
     }
     public void placeUnits(int numUnits){
-
+        while(numUnits >0)
+        {
+            Territory terrToAddUnit = null;
+            double highestUtility = -1;
+            for(Territory territory: getOwnedTerritories())
+            {
+                double utility = placeUnitsUtilityFunction(territory);
+                if (utility>highestUtility)
+                {
+                    highestUtility = utility;
+                    terrToAddUnit = territory;
+                }
+            }
+            terrToAddUnit.addUnits(1);
+            System.out.println(terrToAddUnit.getName() + " " + highestUtility);
+            numUnits--;
+        }
     }
     public double placeUnitsUtilityFunction(Territory territory){
+        //arbitrary percentages, just want to put more emphasis on troops
         //40 percent how many neighbouring are owned terr, if all neighbour owned make that part 0 percent
-        //60 percent how little troops there are
-        return 0;
+        int friendlyNeighbouringTerrs = numOwnedNeighbouringTerritories(territory);
+        if(friendlyNeighbouringTerrs == territory.getNeighbours().size())
+        {
+            return 0;
+        }
+        double neighbouringPercentage = .30*(numOwnedNeighbouringTerritories(territory))/(territory.getNeighbours().size()-1);
+        //60 percent difference of surrounding troops there are to its troops
+        int numEnemyTroops = numNeighbouringEnemyTroops(territory);
+        int numTroops = territory.getUnits();
+        double lessTroopsPercentage;
+        if(numTroops-numEnemyTroops > 5)
+            lessTroopsPercentage = 0;
+        else if(numTroops-numEnemyTroops < -5)
+            lessTroopsPercentage = .70;
+        else
+             lessTroopsPercentage = .70*(0.5 -(numTroops-numEnemyTroops)/10.0);
+        return neighbouringPercentage + lessTroopsPercentage ;
     }
     public Territory territoryToAttack()
     {

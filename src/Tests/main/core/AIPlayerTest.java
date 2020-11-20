@@ -29,7 +29,6 @@ public class AIPlayerTest {
         t1.addNeighbour(t3);
         t2.addNeighbour(t6);
         t3.addNeighbour(t4);
-        t3.addNeighbour(t4);
         t3.addNeighbour(t5);
         t4.addNeighbour(t5);
         t5.addNeighbour(t2);
@@ -45,6 +44,17 @@ public class AIPlayerTest {
         t4.setUnits(2);
         t5.setUnits(1);
         t6.setUnits(3);
+    }
+    @Test
+    public void testPlaceUnits()
+    {
+        this.setup();
+        assertEquals(8,t1.getUnits()+t2.getUnits()+t3.getUnits()+t4.getUnits());
+        robo.placeUnits(4);
+        assertEquals(3,t6.getUnits());
+        assertEquals(1,t5.getUnits());
+        assertEquals(12,t1.getUnits()+t2.getUnits()+t3.getUnits()+t4.getUnits());
+
     }
     @Test
     public void testNumNeighbouringEnemyTroops()
