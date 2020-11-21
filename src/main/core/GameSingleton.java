@@ -202,7 +202,7 @@ public class GameSingleton {
         }
         if (getCurrentPlayer() instanceof AIPlayer)
         {
-
+            ((AIPlayer)getCurrentPlayer()).doAiTurn(this);
         }
         else
             {
@@ -484,7 +484,7 @@ public class GameSingleton {
      *
      * @param e RiskEvent
      */
-    private void notifyHandlers(RiskEvent e) {
+    public void notifyHandlers(RiskEvent e) {
         for (RiskGameHandler rgv : riskHandlers) {
             rgv.handleRiskUpdate(e);
         }

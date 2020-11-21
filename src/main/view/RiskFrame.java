@@ -26,6 +26,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
      * The model for this view.
      */
     private GameSingleton riskModel;
+
+    private RiskController rc;
     /**
      * Stores whose turn it is on the panel.
      */
@@ -83,7 +85,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
      */
     private void composeFrame() {
 
-        RiskController rc = new RiskController(riskModel, this);
+        rc = new RiskController(riskModel, this);
         riskModel.addHandler(this);
 
         JMenuBar menuBar = new JMenuBar();

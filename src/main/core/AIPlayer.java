@@ -1,5 +1,8 @@
 package main.core;
 
+import main.view.RiskEvent;
+import main.view.RiskEventType;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -25,12 +28,17 @@ public class AIPlayer extends Player {
     public AIPlayer(String name, RiskColour colour) {
         super(name, colour);
     }
-    public void doAiTurn()
+    public void doAiTurn(GameSingleton model)
     {
-        //place units, no human input needed.
-        //attacking human input might be needed
-        //placeUnits
-        //while(percent)
+
+        //placeUnits()
+        Territory[] territories = territoryToAttack();
+        while(territories[0] != null)
+        {
+            //notify
+            territories = territoryToAttack();
+            model.notifyHandlers(new RiskEvent(this, RiskEventType.AI_ATTACK, territories));
+        }
             //territoryToAttack
         //moveTroops
     }
