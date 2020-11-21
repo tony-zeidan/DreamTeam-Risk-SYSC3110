@@ -37,6 +37,7 @@ public enum RiskEventType {
      * Each time a territory has been taken over in the game.
      */
     TERRITORY_DOMINATED,
+    AI_ATTACK,
     /**
      * Each time the defender drives of the attacker to the point where he/she
      * can no longer attack (1 unit) in the game.

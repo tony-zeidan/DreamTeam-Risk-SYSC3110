@@ -37,9 +37,17 @@ public class WorldMap {
     private Map<Territory, Point> allCoordinates;
 
     /**
+     * A set of continents on the map.
+     */
+    private Map<String,Continent> continents;
+
+    /**
      * Random variable for assigning territories in setup.
      */
     private static Random rand;
+
+    //use a regex pattern to recognize each portion our map syntax in each line of the file
+    private static final Pattern MAP_PATTERN = Pattern.compile("((\\w+\\s?)+)\\(((\\d+):(\\d+))\\)\\(((\\w+\\s?)+)\\)((,?((\\w+)\\s?)+)+)");
 
     /**
      * Constructor for instances of WorldMap.
@@ -73,37 +81,14 @@ public class WorldMap {
         //corresponding to each territory (this is a result of reading the text file)
         HashMap<Territory, String> neighbourStrings = new HashMap<>();
 
-        //use a regex pattern to recognize each portion our map syntax in each line of the file
-        Pattern valid = Pattern.compile("((\\w+\\s?)+)\\(((\\d+):(\\d+))\\)((,?((\\w+)\\s?)+)+)");
+
 
         //attempt to read the file
         try {
             File myObj = new File("src/resources/map_packages/main_package/map.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                Matcher matcher = valid.matcher(data);
-
-                String readName = "";
-
-                //check if the line in the file matches our map syntax (pattern)
-                if (matcher.matches()) {
-
-                    //parse the information from the different groups of the line
-                    readName = matcher.group(1);
-                    int xCord = Integer.parseInt(matcher.group(4));
-                    int yCord = Integer.parseInt(matcher.group(5));
-                    Point readCoordinates = new Point(xCord, yCord);
-                    String readNeighbours = matcher.group(6).substring(1);  //substring gets rid of first comma
-                    Territory readTerritory = new Territory(readName);
-
-                    //System.out.println(matcher.group(1));
-
-                    //put the information in the correct spots
-                    allTerritories.put(readName, readTerritory);
-                    allCoordinates.put(readTerritory, readCoordinates);
-                    neighbourStrings.put(readTerritory, readNeighbours);
-                }
+                readMapLine(myReader.nextLine());
             }
             myReader.close();
         } catch (FileNotFoundException e) {
@@ -125,6 +110,41 @@ public class WorldMap {
         }
 
         writeXML();
+    }
+
+    private void readMapLine(String line) {
+        Matcher matcher = MAP_PATTERN.matcher(line);
+        if (matcher.matches()) {
+            //parse the information from the different groups of the line
+            String readName = matcher.group(1);
+            if (!allTerritories.containsKey(readName)) {
+                allTerritories.put(readName,new Territory(readName));
+            }
+            Territory readTerritory = allTerritories.get(readName);
+            int xCord = Integer.parseInt(matcher.group(4));
+            int yCord = Integer.parseInt(matcher.group(5));
+            Point readCoordinates = new Point(xCord, yCord);
+            allCoordinates.put(readTerritory,readCoordinates);
+            String contString = matcher.group(6);
+            String neighString = matcher.group(8).substring(1);
+
+            //if the continent does not exist yet, make a new one
+            if (!continents.containsKey(contString)) {
+                continents.put(contString,new Continent(contString));
+            }
+            Continent continent = continents.get(contString);
+            continent.addContinentTerritory(readTerritory);
+
+            //looping through all neighbours in the string
+            for (String s : neighString.split(",")) {
+
+                //if the territory does not exist yet, create a new one
+                if (!allTerritories.containsKey(s)) {
+                    allTerritories.put(s, new Territory(s));
+                }
+                readTerritory.addNeighbour(allTerritories.get(s));
+            }
+        }
     }
 
     /**

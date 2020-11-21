@@ -31,7 +31,7 @@ public class Territory {
      * The Neighbouring Territories of the Territory
      */
     private Set<Territory> neighbours;
-
+    private boolean visited;
     /**
      * Constructor for the territory object that contains a name and current player.
      *
@@ -41,6 +41,7 @@ public class Territory {
         this.name = name;
         units = 0;
         neighbours = new HashSet<>();
+        visited = false;
     }
 
 
@@ -137,5 +138,13 @@ public class Territory {
     @Override
     public String toString() {
         return String.format("Territory of %s: \n\tunits: %s", name, units);
+    }
+    public boolean getVisited()
+    {
+        return visited;
+    }
+    public void setVisited(boolean visited)
+    {
+        this.visited = visited;
     }
 }

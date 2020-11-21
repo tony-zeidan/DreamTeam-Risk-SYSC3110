@@ -25,7 +25,4 @@ public class Continent {
     public void removeContinentTerritory(Territory territory){
         territories.remove(territory);
     }
-
-
-
 }

@@ -29,17 +29,17 @@ public class GameSingleton {
      *
      * @see Player
      */
-    private static List<Player> players;
+    private List<Player> players;
     /**
      * The world that the players will be playing on.
      *
      * @see WorldMap
      */
-    private static WorldMap world;
+    private WorldMap world;
     /**
      * Contains the current number of active players.
      */
-    private static int numActivePlayer;
+    private int numActivePlayer;
     /**
      * Stores the location of the current player in the list of players.
      */
@@ -127,6 +127,7 @@ public class GameSingleton {
             }
         }
 
+        System.out.println(riskHandlers.size());
         //shuffle the order of the players
         shufflePlayers();
         world.setUp(players);
@@ -232,21 +233,23 @@ public class GameSingleton {
     public void nextPlayer() {
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_ENDED, getCurrentPlayer()));
-        do {
+
+        currentPlayerInd = (currentPlayerInd + 1) % players.size();
+        while (!(players.get(currentPlayerInd).isActive())) {
             currentPlayerInd = (currentPlayerInd + 1) % players.size();
-            if(currentPlayerInd == 0) roundNumber ++;
-        } while (!(players.get((currentPlayerInd+1)% players.size()).isActive()));
-
-        nextPhase();
-
-        //TODO: not necessary anymore
-        if (getBonusUnits(getCurrentPlayer()) == 0) {
-            System.out.println("Bonus Zero");
-            nextPhase();
         }
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
 
+        if (getCurrentPlayer() instanceof AIPlayer)
+        {
+            ((AIPlayer)getCurrentPlayer()).doAiTurn(this);
+        }
+        else
+            {
+            notifyHandlers(new RiskEvent(this,
+                    RiskEventType.TURN_BEGAN, getCurrentPlayer()));
+        }
     }
 
     /**
@@ -380,6 +383,7 @@ public class GameSingleton {
 
         notifyHandlers(new RiskEvent(this, RiskEventType.ATTACK_COMMENCED,
                 attacker, defender));
+        //TODO: we could use this in order to get input of die, and check if AIs were present
 
         int[] lost = attack(attackDie, defendDie);
         attacking.removeUnits(lost[0]);
