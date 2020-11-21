@@ -345,11 +345,11 @@ public class GameSingleton {
             }
         }
         visited.remove(initial);
-        List<Territory> invalid = new LinkedList<>();
+        List<Territory> invalidTerritories = new LinkedList<>();
         for (Territory t : visited.keySet()) {
-            if (t.getUnits()==1) invalid.add(t);
+            if (t.getUnits()==1) invalidTerritories.add(t);
         }
-        for (Territory t : invalid) {
+        for (Territory t : invalidTerritories) {
             visited.remove(t);
         }
 
@@ -360,6 +360,16 @@ public class GameSingleton {
             notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_ATTACKABLE, true));
             return visited;
         }
+    }
+
+    public void moveUnits(Territory initialT, Territory finalT, int numUnits){
+        //Move the units from the initial territory to the final territory
+        initialT.removeUnits(numUnits);
+        finalT.addUnits(numUnits);
+
+        //Print a message to confirm the fortify
+        notifyHandlers(new RiskEvent(this, RiskEventType.UNITS_MOVED,
+                initialT, finalT, numUnits));
     }
 
     /**

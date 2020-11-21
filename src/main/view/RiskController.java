@@ -247,7 +247,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
                             if (fortifyUnits!=-1) {
 
-                                //TODO: actually move units in the model!
+                                riskModel.moveUnits(selectedTerritory,clickedTerritory,fortifyUnits);
 
                                 //reset GUI after moving
                                 selectedTerritory = null;

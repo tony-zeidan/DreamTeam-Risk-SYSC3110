@@ -15,7 +15,7 @@ Kyler Verge | Events, Controller Input, Map Editing, Documentation
 - Implement an algorithm for maximum utility (AI Player)
 - Algorithms for bonus troupe placement
 - Algorithms for continent conquering bonus
-- Fortification process needs to be changed (moving units across territories) 
+- Fortification process needs to be changed (moving units across territories)
 
 ### Project Description:
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
