@@ -99,7 +99,7 @@ public class GameSingletonTest {
         t2.setOwner(anthony);
         assertEquals(anthony, t2.getOwner());
 
-        gsm.fortifyPosition(t1,t2,2);
+        gsm.moveUnits(t1,t2,2);
 
         assertEquals("Earth",t1.getName());
         assertEquals("Pluto",t2.getName());

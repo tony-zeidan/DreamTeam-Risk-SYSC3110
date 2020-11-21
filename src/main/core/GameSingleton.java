@@ -330,13 +330,13 @@ public class GameSingleton {
 
     public Map<Territory,Point> getValidTroupeMovementTerritories(Territory initial) {
         List<Territory> queue = new LinkedList<>();
-        Map<Territory,Point> visited = new HashMap<>();
+        Map<Territory, Point> visited = new HashMap<>();
         queue.add(initial);
-        while(!queue.isEmpty()) {
+        while (!queue.isEmpty()) {
             Territory current = queue.remove(0);
-            Map<Territory, Point> validNeighbours = world.getNeighbourNodesOwned(initial.getOwner(),current);
+            Map<Territory, Point> validNeighbours = world.getNeighbourNodesOwned(initial.getOwner(), current);
 
-            visited.put(current,world.getAllCoordinates().get(current));
+            visited.put(current, world.getAllCoordinates().get(current));
             // Or you can store a set of visited vertices somewhere
             for (Territory t : validNeighbours.keySet()) {
                 if (!visited.containsKey(t)) {
@@ -347,7 +347,7 @@ public class GameSingleton {
         visited.remove(initial);
         List<Territory> invalidTerritories = new LinkedList<>();
         for (Territory t : visited.keySet()) {
-            if (t.getUnits()==1) invalidTerritories.add(t);
+            if (t.getUnits() == 1) invalidTerritories.add(t);
         }
         for (Territory t : invalidTerritories) {
             visited.remove(t);
@@ -360,16 +360,6 @@ public class GameSingleton {
             notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_ATTACKABLE, true));
             return visited;
         }
-    }
-
-    public void moveUnits(Territory initialT, Territory finalT, int numUnits){
-        //Move the units from the initial territory to the final territory
-        initialT.removeUnits(numUnits);
-        finalT.addUnits(numUnits);
-
-        //Print a message to confirm the fortify
-        notifyHandlers(new RiskEvent(this, RiskEventType.UNITS_MOVED,
-                initialT, finalT, numUnits));
     }
 
     /**
@@ -536,27 +526,33 @@ public class GameSingleton {
      * @param finalT   The territory that will add units
      * @param numUnits The number of units that the attacker wants to move
      */
-    public void fortifyPosition(Territory initialT, Territory finalT, int numUnits) {
+    public void moveUnits(Territory initialT, Territory finalT, int numUnits) {
 
         //Move the units from the fortifying territory to the fortified territory
         initialT.removeUnits(numUnits);
         finalT.addUnits(numUnits);
 
-        Player attacker = initialT.getOwner();
-        Player defender = finalT.getOwner();
+        if(initialT.getOwner() != finalT.getOwner()){
+            Player attacker = initialT.getOwner();
+            Player defender = finalT.getOwner();
 
-        //Gives the victor the claimed territory
-        finalT.setOwner(attacker);
-        //attacker.addTerritory(finalT);
-        defender.removeTerritory(finalT);
-        //Print a message to confirm the fortify
-        notifyHandlers(new RiskEvent(this, RiskEventType.UNITS_MOVED,
-                initialT, finalT, numUnits));
+            //Gives the victor the claimed territory
+            finalT.setOwner(attacker);
+            //attacker.addTerritory(finalT);
+            defender.removeTerritory(finalT);
+            //Print a message to confirm the fortify after an attack
+            notifyHandlers(new RiskEvent(this, RiskEventType.UNITS_MOVED,
+                    initialT, finalT, numUnits));
 
-        //Check to see if their is only one player remaining
-        updateNumActivePlayers();
-        if (this.getNumActivePlayer() == 1) {
-            endGame();
+            //Check to see if their is only one player remaining
+            updateNumActivePlayers();
+            if (this.getNumActivePlayer() == 1) {
+                endGame();
+            }
+        }else{
+            //Print a message to confirm the movement of units before end of turn
+            notifyHandlers(new RiskEvent(this, RiskEventType.UNITS_MOVED,
+                    initialT, finalT, numUnits));
         }
 
     }
