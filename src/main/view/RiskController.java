@@ -216,7 +216,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                                 int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView, currentPlayer, clickedTerritory,
                                         selectedTerritory, amountOfAttackDie, false);
                                 //Move chosen number of units from the attacking territory to the claimed territory and gives rightful ownership
-                                riskModel.fortifyPosition(clickedTerritory, selectedTerritory, fortifyUnits);
+                                riskModel.moveUnits(clickedTerritory, selectedTerritory, fortifyUnits);
                             }
                             selectedTerritory = null;
                             selectedAction = null;
@@ -252,7 +252,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
                             if (fortifyUnits!=-1) {
 
-                                //TODO: actually move units in the model!
+                                riskModel.moveUnits(selectedTerritory,clickedTerritory,fortifyUnits);
 
                                 //reset GUI after moving
                                 selectedTerritory = null;
