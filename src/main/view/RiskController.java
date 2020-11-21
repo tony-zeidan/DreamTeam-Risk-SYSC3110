@@ -180,11 +180,10 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 int bonusUnits = riskView.getBonusUnits();
 
                 if (clickedTerritory!=null) {
-                    if (bonusUnits>0) {
-                        //TODO: actually move units in the model (only my territories displayed)
-                        bonusUnits -= 1;
-                        riskView.setBonusUnits(bonusUnits);
-                    } else {
+                    //TODO: actually move units in the model (only my territories displayed)
+                    bonusUnits -= 1;
+                    riskView.setBonusUnits(bonusUnits);
+                    if (bonusUnits==0) {
                         riskModel.nextPhase();
                     }
                 } else {
