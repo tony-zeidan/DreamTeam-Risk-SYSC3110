@@ -215,6 +215,16 @@ public class WorldMap {
         }
     }
 
+    public int hasConquered(Player player){
+        int numRuled = 0;
+        for(Continent c : continents){
+            if(c.getRuler() == player){
+                numRuled += c.getBonusRulerAmount();
+            }
+        }
+        return numRuled;
+    }
+
     /**
      * Please ignore this method for now.
      * Testing map xml generation.

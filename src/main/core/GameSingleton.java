@@ -280,6 +280,7 @@ public class GameSingleton {
      */
     public int getBonusUnits(Player current) {
         int territoryBonus = current.getOwnedTerritories().size() / 3;
+
         return (territoryBonus<3) ? 3:territoryBonus;
     }
 
