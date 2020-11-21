@@ -26,11 +26,14 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      * Stores whose turn it is on the panel.
      */
     private JLabel playerTurnLbl;
-
+    /**
+     * Contains the string representation of the players bonus units.
+     */
     private JLabel playerBonusUnitsLbl;
-
+    /**
+     * Contains the string representation of the current game phase.
+     */
     private JLabel gamePhaseLbl;
-
     /**
      * JPanel containing the game board (the map).
      */
@@ -341,6 +344,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 if (gamePhase==GamePhase.BONUS_TROUPE) {
 
                 }
+                gamePhaseLbl.setText(gamePhase.toString());
+                gamePhaseLbl.setBackground(gamePhase.getColour());
+                gamePhaseLbl.setForeground(getContrastColor(gamePhase.getColour()));
                 restoreGUI();
                 System.out.println("Current Phase: " + gamePhase);
                 break;
@@ -359,8 +365,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         endTurnBtn.setText("End Turn");
         setBonusUnits(-1);
         playerBonusUnitsLbl.setVisible(false);
-        gamePhaseLbl.setBackground(Color.RED);
-        gamePhaseLbl.setForeground(getContrastColor(Color.RED));
     }
 
     private void restoreMoveUnits() {
@@ -374,8 +378,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         endTurnBtn.setText("Skip");
         setBonusUnits(-1);
         playerBonusUnitsLbl.setVisible(false);
-        gamePhaseLbl.setBackground(Color.BLUE);
-        gamePhaseLbl.setForeground(getContrastColor(Color.BLUE));
     }
 
     private void restoreBonusTroupe() {
@@ -388,8 +390,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         endTurnBtn.setActionCommand("NULL");
         endTurnBtn.setText("End Turn");
         playerBonusUnitsLbl.setVisible(true);
-        gamePhaseLbl.setBackground(Color.GREEN);
-        gamePhaseLbl.setForeground(getContrastColor(Color.GREEN));
     }
 
 

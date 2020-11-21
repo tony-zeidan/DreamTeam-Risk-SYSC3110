@@ -29,26 +29,29 @@ public class GameSingleton {
      *
      * @see Player
      */
-    private List<Player> players;
+    private static List<Player> players;
     /**
      * The world that the players will be playing on.
      *
      * @see WorldMap
      */
-    private WorldMap world;
+    private static WorldMap world;
     /**
      * Contains the current number of active players.
      */
-    private int numActivePlayer;
+    private static int numActivePlayer;
     /**
      * Stores the location of the current player in the list of players.
      */
-    private int currentPlayerInd;
-
-    private int roundNumber;
-
-    private GamePhase gamePhase;
-
+    private static int currentPlayerInd;
+    /**
+     * Stores the current round the game is on.
+     */
+    private static int roundNumber;
+    /**
+     * Stores the current phase of the game.
+     */
+    private static GamePhase gamePhase;
     /**
      * A list of all handlers that listen to this model.
      */
@@ -66,7 +69,6 @@ public class GameSingleton {
         this.players = players;
         world = new WorldMap("Earth");
         currentPlayerInd = 0;
-        roundNumber=0;
         gamePhase = null;
         riskHandlers = new ArrayList<>();
     }
@@ -134,7 +136,7 @@ public class GameSingleton {
 
         gamePhase = GamePhase.START_GAME;
         nextPhase();    //beginning should be bonus troupe
-        nextPhase();    //no bonus for first players turn so push phase further
+        //nextPhase();    //no bonus for first players turn so push phase further
 
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
@@ -237,15 +239,13 @@ public class GameSingleton {
 
         nextPhase();
 
-        if (getBonusUnits(getCurrentPlayer()) != 0) {
-            notifyHandlers(new RiskEvent(this,
-                    RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
-        } else {
+        //TODO: not necessary anymore
+        if (getBonusUnits(getCurrentPlayer()) == 0) {
             System.out.println("Bonus Zero");
             nextPhase();
-            notifyHandlers(new RiskEvent(this,
-                    RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
         }
+        notifyHandlers(new RiskEvent(this,
+                RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
 
     }
 
@@ -279,14 +279,8 @@ public class GameSingleton {
      * @param current The current Player
      */
     public int getBonusUnits(Player current) {
-        if (roundNumber==1) {
-            int territoryBonus = current.getOwnedTerritories().size() / 3;
-            return (territoryBonus<3) ? 3:territoryBonus;
-        }
-        //Loop through each continents territories?
-
-
-        return 0; //+ continent bonus;
+        int territoryBonus = current.getOwnedTerritories().size() / 3;
+        return (territoryBonus<3) ? 3:territoryBonus;
     }
 
     public Map<Territory,Point> getAllOwnedNodes(Player player) {
