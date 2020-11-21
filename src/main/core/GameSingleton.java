@@ -517,14 +517,16 @@ public class GameSingleton {
     }
 
     /**
-     * Fortify more units into one territory from an adjacent territory, such
-     * that the current player owns both territories. At least one unit must
-     * be left behind in the initial territory. Used after an attack once the
-     * territory has been claimed.
+     * Move units into one territory from an adjacent territory, such
+     * that the current player owns both territories after the movement sequence. At least one unit must
+     * be left behind in the initial territory. If the owners of the two territories are different for
+     * the movement sequence, then it is occurring after a victory for the attacker in a battle sequence.
+     * If the owners of the two territories are the same, then the movement sequence is occurring just before
+     * the end of the current player's turn.
      *
      * @param initialT The territory that will move units out
      * @param finalT   The territory that will add units
-     * @param numUnits The number of units that the attacker wants to move
+     * @param numUnits The number of units that the attacker/current player wants to move
      */
     public void moveUnits(Territory initialT, Territory finalT, int numUnits) {
 
@@ -532,6 +534,7 @@ public class GameSingleton {
         initialT.removeUnits(numUnits);
         finalT.addUnits(numUnits);
 
+        //Check if the movement of units occurs after a battle sequence as a result of a victory for the attacker
         if(initialT.getOwner() != finalT.getOwner()){
             Player attacker = initialT.getOwner();
             Player defender = finalT.getOwner();
@@ -550,7 +553,7 @@ public class GameSingleton {
                 endGame();
             }
         }else{
-            //Print a message to confirm the movement of units before end of turn
+            //Print a message to confirm the movement of units before end of current player's turn
             notifyHandlers(new RiskEvent(this, RiskEventType.UNITS_MOVED,
                     initialT, finalT, numUnits));
         }
