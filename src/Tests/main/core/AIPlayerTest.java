@@ -50,10 +50,10 @@ public class AIPlayerTest {
     {
         this.setup();
         assertEquals(8,t1.getUnits()+t2.getUnits()+t3.getUnits()+t4.getUnits());
-        robo.placeUnits(4);
+        robo.placeUnits(5);
         assertEquals(3,t6.getUnits());
         assertEquals(1,t5.getUnits());
-        assertEquals(12,t1.getUnits()+t2.getUnits()+t3.getUnits()+t4.getUnits());
+        assertEquals(13,t1.getUnits()+t2.getUnits()+t3.getUnits()+t4.getUnits());
 
     }
     @Test

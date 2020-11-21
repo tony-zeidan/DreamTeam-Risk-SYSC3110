@@ -49,38 +49,81 @@ public class AIPlayer extends Player {
                 }
             }
             terrToAddUnit.addUnits(1);
-            System.out.println(terrToAddUnit.getName() + " " + highestUtility);
             numUnits--;
         }
     }
     public double placeUnitsUtilityFunction(Territory territory){
-        //arbitrary percentages, just want to put more emphasis on troops
-        //40 percent how many neighbouring are owned terr, if all neighbour owned make that part 0 percent
+        //arbitrary percentages, just want to put more emphasis on troop difference
+        //25 percent how many neighbouring are owned terr, if all neighbour owned make that part 0 percent
         int friendlyNeighbouringTerrs = numOwnedNeighbouringTerritories(territory);
         if(friendlyNeighbouringTerrs == territory.getNeighbours().size())
         {
             return 0;
         }
-        double neighbouringPercentage = .30*(numOwnedNeighbouringTerritories(territory))/(territory.getNeighbours().size()-1);
-        //60 percent difference of surrounding troops there are to its troops
+        double neighbouringPercentage = .25*(numOwnedNeighbouringTerritories(territory))/(territory.getNeighbours().size()-1);
+        //75 percent difference of surrounding troops there are to its troops
         int numEnemyTroops = numNeighbouringEnemyTroops(territory);
         int numTroops = territory.getUnits();
         double lessTroopsPercentage;
         if(numTroops-numEnemyTroops > 5)
             lessTroopsPercentage = 0;
         else if(numTroops-numEnemyTroops < -5)
-            lessTroopsPercentage = .70;
+            lessTroopsPercentage = .75;
         else
-             lessTroopsPercentage = .70*(0.5 -(numTroops-numEnemyTroops)/10.0);
+             lessTroopsPercentage = .75*(0.5 -(numTroops-numEnemyTroops)/10.0);
         return neighbouringPercentage + lessTroopsPercentage ;
     }
-    public Territory territoryToAttack()
+    public Territory[] territoryToAttack()
     {
-        return null;
+        Territory attacking = null;
+        Territory defending = null;
+        double mostUtility = 0;
+        for (Territory attackingTerr: getOwnedTerritories())
+        {
+            for (Territory defendingTerr: attackingTerr.getNeighbours())
+            {
+                if (defendingTerr.getOwner() != this)
+                {
+                    double utility = attackUtilityFunction(attackingTerr.getUnits(),defendingTerr.getUnits());
+                    if (utility > mostUtility)
+                    {
+                        mostUtility = utility;
+                        attacking = attackingTerr;
+                        defending = defendingTerr;
+                    }
+                }
+            }
+        }
+        return new Territory[]{attacking, defending};
     }
-    public void attackUtilityFunction()
+    public double attackUtilityFunction(int attackers, int defenders)
     {
-
+        int numAttackersDice = (attackers>4)?3:attackers-1;
+        double utility=0;
+        if (numAttackersDice==0)
+            return 0;
+        if (defenders == 1)
+        {
+            double probabilityOf1Loss= Math.pow(1,numAttackersDice)+Math.pow(2,numAttackersDice)+Math.pow(3,numAttackersDice)+Math.pow(4,numAttackersDice)+Math.pow(5,numAttackersDice)+Math.pow(6,numAttackersDice);
+            double probabilityOf1Win = 1- probabilityOf1Loss;
+            utility = 1*probabilityOf1Win - 1*probabilityOf1Loss;
+        }
+        else
+        {
+            if (numAttackersDice == 1)
+            {
+                utility = 1*.2546 - 1*74.54;
+            }
+            else if(numAttackersDice == 2)
+            {
+                utility = 2*0.2276 + 1*0.3241 - 1*0.3241- 2*0.4483;
+            }
+            else
+            {
+                utility = 2*0.3717 + 1*0.3358 - 1*0.3358- 2*0.2926;
+            }
+        }
+        return utility;
     }
     public void moveTroops()
     {
@@ -174,9 +217,5 @@ public class AIPlayer extends Player {
             }
         }
         return numUnits;
-    }
-    public static void main(String[] args)
-    {
-
     }
 }
