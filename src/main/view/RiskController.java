@@ -27,15 +27,20 @@ import java.util.Map;
 public class RiskController extends MouseAdapter implements ActionListener {
 
     /**
-     * GameSingleton is the model of the MVC pattern
+     * GameSingleton is the model of the MVC pattern.
      */
     private GameSingleton riskModel;
     /**
-     * RiskFrame is the view of the MVC pattern
+     * RiskFrame is the view of the MVC pattern.
      */
     private RiskFrame riskView;
-
+    /**
+     * Provides the previously selected action of the user.
+     */
     private String selectedAction;
+    /**
+     * Provides the previously selected territory of the user.
+     */
     private Territory selectedTerritory;
 
     /**
