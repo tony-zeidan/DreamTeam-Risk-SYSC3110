@@ -1,18 +1,18 @@
-Alaska(63:124),Kamchatka,Northwest Territory,Western Canada
-Northwest Territory(160:129),Greenland,Central Canada,Alaska,Western Canada
-Greenland(376:77),Central Canada,Eastern Canada,Northwest Territory,Iceland
-Western Canada(155:180),Central Canada,Northwest Territory,Alaska,Western United States
-Central Canada(228:190),Western Canada,Eastern Canada,Northwest Territory,Greenland,Western United States,Eastern United States
-Eastern Canada(300:185),Greenland,Central Canada,Eastern United States
-Western United States(154:244),Western Canada,Central Canada,Eastern United States,Central America
-Eastern United States(234:262),Central Canada,Western United States,Eastern Canada,Central America
-Central America(170:308),Western United States,Eastern United States,Venezuela
-Venezuela(208:395),Central America,Brazil,Peru
-Peru(215:480),Venezuela,Brazil,Argentina
-Brazil(300:460),Venezuela,Peru,Argentina
-Argentina(235:560),Peru,Brazil
-North Africa(413:395),Brazil,Western Europe,Southern Europe,Egypt,Congo,East Africa
-Egypt(489:366),Southern Europe,North Africa,East Africa,Middle East
+Alaska(63:124),(North America),Kamchatka,Northwest Territory,Western Canada
+Northwest Territory(160:129),(North America),Greenland,Central Canada,Alaska,Western Canada
+Greenland(376:77),(North America),Central Canada,Eastern Canada,Northwest Territory,Iceland
+Western Canada(155:180),(North America),Central Canada,Northwest Territory,Alaska,Western United States
+Central Canada(228:190),(North America),Western Canada,Eastern Canada,Northwest Territory,Greenland,Western United States,Eastern United States
+Eastern Canada(300:185),(North America),Greenland,Central Canada,Eastern United States
+Western United States(154:244),(North America),Western Canada,Central Canada,Eastern United States,Central America
+Eastern United States(234:262),(North America),Central Canada,Western United States,Eastern Canada,Central America
+Central America(170:308),(North America),Western United States,Eastern United States,Venezuela
+Venezuela(208:395),(South America),Central America,Brazil,Peru
+Peru(215:480),(South America),Venezuela,Brazil,Argentina
+Brazil(300:460),(South America),Venezuela,Peru,Argentina
+Argentina(235:560),(South America),Peru,Brazil
+North Africa(413:395),(Africa),Brazil,Western Europe,Southern Europe,Egypt,Congo,East Africa
+Egypt(489:366),(Africa),Southern Europe,North Africa,East Africa,Middle East
 East Africa(532:452),Egypt,Middle East,North Africa,Congo,South Africa,Madagascar
 Congo(485:495),North Africa,East Africa,South Africa
 South Africa(478:583),Madagascar,Congo,East Africa

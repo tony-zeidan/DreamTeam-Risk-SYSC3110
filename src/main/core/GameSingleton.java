@@ -285,6 +285,7 @@ public class GameSingleton {
         }
         //Loop through each continents territories?
 
+
         return 0; //+ continent bonus;
     }
 
