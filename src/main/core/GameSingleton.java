@@ -138,9 +138,9 @@ public class GameSingleton {
         gamePhase = GamePhase.START_GAME;
         nextPhase();    //beginning should be bonus troupe
         //nextPhase();    //no bonus for first players turn so push phase further
-
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
+
     }
 
     /**
@@ -208,19 +208,36 @@ public class GameSingleton {
     }
 
     public void nextPhase() {
+        Player currentPlayer = getCurrentPlayer();
         switch (gamePhase) {
             case START_GAME:
             case MOVE_UNITS:
                 this.gamePhase=GamePhase.BONUS_TROUPE;
                 notifyMapUpdateOwnedCoordinates();
+                if (currentPlayer instanceof AIPlayer)
+                {
+                    int numTroopsToPlace = getBonusUnits(currentPlayer);
+                    ((AIPlayer) currentPlayer).placeUnits(numTroopsToPlace);
+                    nextPhase();
+                }
                 break;
             case BONUS_TROUPE:
                 this.gamePhase=GamePhase.ATTACK;
                 notifyMapUpdateAllCoordinates();
+                if (currentPlayer instanceof AIPlayer)
+                {
+                    ((AIPlayer) currentPlayer).doAttack(this);
+                    nextPhase();
+                }
                 break;
             case ATTACK:
                 this.gamePhase=GamePhase.MOVE_UNITS;
                 notifyMapUpdateOwnedCoordinates();
+                if (currentPlayer instanceof AIPlayer)
+                {
+                    ((AIPlayer) currentPlayer).moveTroops();
+                    nextPlayer();
+                }
                 break;
         }
         notifyHandlers(new RiskEvent(this,RiskEventType.PHASE_CHANGE,gamePhase));
@@ -240,16 +257,6 @@ public class GameSingleton {
         }
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
-
-        if (getCurrentPlayer() instanceof AIPlayer)
-        {
-            ((AIPlayer)getCurrentPlayer()).doAiTurn(this);
-        }
-        else
-            {
-            notifyHandlers(new RiskEvent(this,
-                    RiskEventType.TURN_BEGAN, getCurrentPlayer()));
-        }
     }
 
     /**
@@ -389,10 +396,10 @@ public class GameSingleton {
             notifyHandlers(new RiskEvent(this,RiskEventType.SELECT_DEFEND_DIE,attacking,defending,maxDefend));
             defDice = defender.getDiceRoll();
         }
-
-        return battle(attacking,defending,attDice,defDice);
+        boolean battleWon =battle(attacking,defending,attDice,defDice);
+        notifyMapUpdateAllCoordinates();
+        return battleWon;
     }
-
 
     /**
      * Represents a battle sequence between a territory owned by the current player and
@@ -591,7 +598,7 @@ public class GameSingleton {
             notifyHandlers(new RiskEvent(this, RiskEventType.UNITS_MOVED,
                     initialT, finalT, numUnits));
         }
-
+        notifyMapUpdateAllCoordinates();
     }
 
     /**

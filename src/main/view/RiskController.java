@@ -181,6 +181,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     clickedTerritory.addUnits(1);
                     bonusUnits -= 1;
                     riskView.setBonusUnits(bonusUnits);
+                    riskModel.notifyMapUpdateOwnedCoordinates();
                     if (bonusUnits==0) {
                         riskModel.nextPhase();
                     }
@@ -212,7 +213,6 @@ public class RiskController extends MouseAdapter implements ActionListener {
                             selectedTerritory = null;
                             selectedAction = null;
                             riskView.restoreGUI();
-                            riskModel.notifyMapUpdateAllCoordinates();
                         }
                         return;
                     }

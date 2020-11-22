@@ -71,7 +71,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         setLayout(new BorderLayout());
         composeFrame();
         riskModel.setUpGame();
-        showFrame();
     }
 
     /**
@@ -355,6 +354,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 alert.showMessageDialog(this, "GAME OVER " + info[0] + " has won!!!");
                 setAttackable(false);
                 setEndable(false);
+                break;
+            case GAME_BEGAN:
+                showFrame();
                 break;
             case TURN_BEGAN:
                 restoreGUI();

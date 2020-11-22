@@ -28,19 +28,19 @@ public class AIPlayer extends Player {
     public AIPlayer(String name, RiskColour colour) {
         super(name, colour);
     }
-    public void doAiTurn(GameSingleton model)
+    public void doAttack(GameSingleton model)
     {
-
-        //placeUnits()
         Territory[] territories = territoryToAttack();
         while(territories[0] != null)
         {
-            //notify
             territories = territoryToAttack();
-            //model.notifyHandlers(new RiskEvent(this, RiskEventType.AI_ATTACK, territories));
-            model.performBattle(territories[0],territories[1]);
+            boolean won = model.performBattle(territories[0],territories[1]);
+            if (won) {
+                int numTroopsToMove = territories[0].getUnits()-1;
+                model.moveUnits(territories[0],territories[1],numTroopsToMove);
+            }
+
         }
-        //moveTroops
     }
     public void placeUnits(int numUnits){
         while(numUnits >0)
