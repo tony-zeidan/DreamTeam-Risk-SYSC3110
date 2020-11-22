@@ -282,6 +282,16 @@ public class WorldMap {
         return numRuled;
     }
 
+    public Set<Continent> getRuled(Player player){
+        Set<Continent> ruled = new HashSet<>();
+        for(Continent c : continents.values()){
+            if(player == c.getRuler()){
+                ruled.add(c);
+            }
+        }
+        return ruled;
+    }
+
     /**
      * Please ignore this method for now.
      * Testing map xml generation.

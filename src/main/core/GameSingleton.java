@@ -280,8 +280,13 @@ public class GameSingleton {
      */
     public int getBonusUnits(Player current) {
         int territoryBonus = current.getOwnedTerritories().size() / 3;
+        int continentBonus = 0;
+        Set<Continent> ruled = world.getRuled(current);
+        for(Continent c : ruled){
+            continentBonus += c.getBonusRulerAmount();
+        }
 
-        return (territoryBonus<3) ? 3:territoryBonus;
+        return (Math.max(territoryBonus, 3)) + continentBonus;
     }
 
     public Map<Territory,Point> getAllOwnedNodes(Player player) {
