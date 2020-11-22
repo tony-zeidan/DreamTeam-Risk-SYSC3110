@@ -366,6 +366,34 @@ public class GameSingleton {
         }
     }
 
+    public boolean performBattle(Territory attacking, Territory defending) {
+
+        Player attacker = attacking.getOwner();
+        Player defender = defending.getOwner();
+
+        int attDice = 0;
+        int defDice = 0;
+
+        if (attacker instanceof AIPlayer) {
+            attDice = getMaxBattleDie(attacking.getUnits(),true);
+        } else {
+            int maxAttack = getMaxBattleDie(attacking.getUnits(),true);
+            notifyHandlers(new RiskEvent(this,RiskEventType.SELECT_ATTACK_DIE,attacking,defending,maxAttack));
+            attDice = attacker.getDiceRoll();
+        }
+
+        if (defender instanceof AIPlayer) {
+            defDice = getMaxBattleDie(defending.getUnits(),false);
+        } else {
+            int maxDefend = getMaxBattleDie(defending.getUnits(),false);
+            notifyHandlers(new RiskEvent(this,RiskEventType.SELECT_DEFEND_DIE,attacking,defending,maxDefend));
+            defDice = defender.getDiceRoll();
+        }
+
+        return battle(attacking,defending,attDice,defDice);
+    }
+
+
     /**
      * Represents a battle sequence between a territory owned by the current player and
      * an adjacent territory owned by another player.
