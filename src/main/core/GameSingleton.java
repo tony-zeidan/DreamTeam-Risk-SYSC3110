@@ -283,7 +283,13 @@ public class GameSingleton {
      */
     public int getBonusUnits(Player current) {
         int territoryBonus = current.getOwnedTerritories().size() / 3;
-        return (territoryBonus<3) ? 3:territoryBonus;
+        int continentBonus = 0;
+        Set<Continent> ruled = world.getRuled(current);
+        for(Continent c : ruled){
+            continentBonus += c.getBonusRulerAmount();
+        }
+
+        return (Math.max(territoryBonus, 3)) + continentBonus;
     }
 
     public Map<Territory,Point> getAllOwnedNodes(Player player) {
@@ -400,6 +406,7 @@ public class GameSingleton {
             notifyHandlers(new RiskEvent(this, RiskEventType.TERRITORY_DOMINATED,
                     attacker, defender));
             notifyMapUpdateAllCoordinates();
+            world.updateContinentRulers();
             return true;
         }
         return false;
@@ -413,7 +420,7 @@ public class GameSingleton {
      * @param defendRolls The number of dice the defender is using for this defence
      * @return A pair of integers (position 0: how many units attacker lost, position 1: how many units defender lost)
      */
-    private int[] attack(int attackRolls, int defendRolls) {
+    public int[] attack(int attackRolls, int defendRolls) {
 
         //Random Acts as a Die
         Random rand = new Random();

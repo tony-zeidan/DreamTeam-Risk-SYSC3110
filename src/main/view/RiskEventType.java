@@ -24,6 +24,15 @@ public enum RiskEventType {
      * Each time the attack button needs to be updated.
      */
     UPDATE_ATTACKABLE,
+    /**
+     * An event that is thrown when the user should be selecting die, this ignores
+     * the AI player.
+     */
+    SELECT_DIE,
+    /**
+     * An event that is thrown every time the phase of the game is changed,
+     * used to update the map and GUI.
+     */
     PHASE_CHANGE,
     /**
      * Each time an attack has just been commenced in the game.

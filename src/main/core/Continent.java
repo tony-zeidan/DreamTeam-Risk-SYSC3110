@@ -7,15 +7,24 @@ public class Continent {
 
     private String name;
 
+    private Player ruler;
+
+    private int bonusAmount;
+
     private Set<Territory> territories;
 
-    public Continent(String name){
+    public Continent(String name, int bonusAmount){
         this.name = name;
+        this.bonusAmount = bonusAmount;
         territories = new HashSet<>();
     }
 
     public String getContinentName(){
         return name;
+    }
+
+    public int getBonusRulerAmount(){
+        return bonusAmount;
     }
 
     public void addContinentTerritory(Territory territory){
@@ -25,4 +34,22 @@ public class Continent {
     public void removeContinentTerritory(Territory territory){
         territories.remove(territory);
     }
+
+    public Player getRuler(){
+        return ruler;
+    }
+
+    public void updateRuler(){
+        Iterator<Territory> it = territories.iterator();
+        Player firstOwner = it.next().getOwner();
+        while(it.hasNext()){
+            Player nextOwner = it.next().getOwner();
+            if(firstOwner != nextOwner){
+                ruler = null;
+                return;
+            }
+        }
+        ruler = firstOwner;
+    }
+
 }

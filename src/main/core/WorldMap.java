@@ -46,8 +46,8 @@ public class WorldMap {
      */
     private static Random rand;
 
-    //use a regex pattern to recognize each portion our map syntax in each line of the file
-    private static final Pattern MAP_PATTERN = Pattern.compile("((\\w+\\s?)+)\\(((\\d+):(\\d+))\\)\\(((\\w+\\s?)+)\\)((,?((\\w+)\\s?)+)+)");
+    private static final Pattern CONTINENT_PATTERN = Pattern.compile("((\\w+\\s?)+)\\((\\d+)\\)\\|((((\\w+\\s?)+),?)+)");
+    private static final Pattern TERRITORY_PATTERN = Pattern.compile("((\\w+\\s?)+)\\((\\d+):(\\d+)\\)\\|((((\\w+\\s?)+),?)+)");
 
     /**
      * Constructor for instances of WorldMap.
@@ -60,6 +60,7 @@ public class WorldMap {
         rand = new Random();
         allTerritories = new HashMap<>();
         allCoordinates = new HashMap<>();
+        continents = new HashMap<>();
         readMap();
     }
 
@@ -85,10 +86,16 @@ public class WorldMap {
 
         //attempt to read the file
         try {
-            File myObj = new File("src/resources/map_packages/main_package/map.txt");
-            Scanner myReader = new Scanner(myObj);
+            File territoryData = new File("src/resources/map_packages/main_package/countries.txt");
+            File continentData = new File("src/resources/map_packages/main_package/continents.txt");
+            Scanner myReader = new Scanner(continentData);
             while (myReader.hasNextLine()) {
-                readMapLine(myReader.nextLine());
+                readContinentLine(myReader.nextLine());
+            }
+            myReader.close();
+            myReader = new Scanner(territoryData);
+            while (myReader.hasNextLine()) {
+                readTerritoryLine(myReader.nextLine());
             }
             myReader.close();
         } catch (FileNotFoundException e) {
@@ -112,39 +119,71 @@ public class WorldMap {
         writeXML();
     }
 
-    private void readMapLine(String line) {
-        Matcher matcher = MAP_PATTERN.matcher(line);
+    private void readContinentLine(String line) {
+        Matcher matcher = CONTINENT_PATTERN.matcher(line);
         if (matcher.matches()) {
-            //parse the information from the different groups of the line
+            String readName = matcher.group(1);
+            int bonusUnits=0;
+            try {
+                bonusUnits = Integer.parseInt(matcher.group(3));
+            } catch (NumberFormatException e) {
+                System.out.println("line incorrectly formatted");
+                return;
+            }
+            Continent continent = new Continent(readName,bonusUnits);
+            String territoriesString = matcher.group(4);
+            List<String> territoriesWithin = Arrays.asList(territoriesString.split(","));
+            for (String s : territoriesWithin) {
+                if (!allTerritories.containsKey(s)) {
+                    allTerritories.put(s,new Territory(s));
+                }
+                continent.addContinentTerritory(allTerritories.get(s));
+            }
+        }
+    }
+
+    private void readTerritoryLine(String line) {
+        Matcher matcher = TERRITORY_PATTERN.matcher(line);
+        if (matcher.matches()) {
             String readName = matcher.group(1);
             if (!allTerritories.containsKey(readName)) {
                 allTerritories.put(readName,new Territory(readName));
             }
-            Territory readTerritory = allTerritories.get(readName);
-            int xCord = Integer.parseInt(matcher.group(4));
-            int yCord = Integer.parseInt(matcher.group(5));
-            Point readCoordinates = new Point(xCord, yCord);
-            allCoordinates.put(readTerritory,readCoordinates);
-            String contString = matcher.group(6);
-            String neighString = matcher.group(8).substring(1);
+            Territory territory = allTerritories.get(readName);
+            int xCord = 0;
+            int yCord = 0;
+            try {
+                xCord = Integer.parseInt(matcher.group(3));
+                yCord = Integer.parseInt(matcher.group(4));
 
-            //if the continent does not exist yet, make a new one
-            if (!continents.containsKey(contString)) {
-                continents.put(contString,new Continent(contString));
+
+            } catch (NumberFormatException e) {
+                System.out.println("line was formatted incorrectly.");
+                return;
             }
-            Continent continent = continents.get(contString);
-            continent.addContinentTerritory(readTerritory);
+            Point readCoordinates = new Point(xCord, yCord);
+            allCoordinates.put(territory,readCoordinates);
 
-            //looping through all neighbours in the string
-            for (String s : neighString.split(",")) {
-
-                //if the territory does not exist yet, create a new one
+            String neighString = matcher.group(5);
+            List<String> neighbourList = Arrays.asList(neighString.split(","));
+            for (String s : neighbourList) {
                 if (!allTerritories.containsKey(s)) {
-                    allTerritories.put(s, new Territory(s));
+                    allTerritories.put(s,new Territory(s));
                 }
-                readTerritory.addNeighbour(allTerritories.get(s));
+                territory.addNeighbour(allTerritories.get(s));
             }
         }
+    }
+
+    public void printMap() {
+        for (Continent c : continents.values()) {
+            System.out.println(c.getContinentName()+ ":" + c.getBonusRulerAmount());
+        }
+        /*
+        for (Territory t : allCoordinates.keySet()) {
+            Point p = allCoordinates.get(t);
+            System.out.println(t.getName() + "-" + t.getUnits() + "-" + t.getOwner().getName());
+        }*/
     }
 
     /**
@@ -186,6 +225,7 @@ public class WorldMap {
         if (players.size() != 2)
             max = -5 * players.size() + 50;
         placeTroops(players, max);
+        updateContinentRulers();
     }
 
     /**
@@ -233,6 +273,20 @@ public class WorldMap {
                 numOfTroops++;
             }
         }
+    }
+
+    public Set<Continent> getRuled(Player player){
+        Set<Continent> ruled = new HashSet<>();
+        for(Continent c : continents.values()){
+            if(player == c.getRuler()){
+                ruled.add(c);
+            }
+        }
+        return ruled;
+    }
+
+    public void updateContinentRulers(){
+        for(Continent c : continents.values()) c.updateRuler();
     }
 
     /**

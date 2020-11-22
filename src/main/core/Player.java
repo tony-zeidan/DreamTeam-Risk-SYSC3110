@@ -34,6 +34,7 @@ public class Player {
      */
     private boolean active;
 
+
     /**
      * Constructor for instances of Player class with name.
      *
@@ -151,5 +152,6 @@ public class Player {
     public boolean ownsTerritory(Territory territory) {
         return owned.contains(territory);
     }
+
 
 }
