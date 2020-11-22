@@ -388,6 +388,24 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 restoreGUI();
                 System.out.println("Current Phase: " + gamePhase);
                 break;
+            case SELECT_ATTACK_DIE:
+                Territory attacking = (Territory)info[0];
+                Player currentPlayer = attacking.getOwner();
+                Territory defending = (Territory)info[1];
+                int maxAttack = (Integer)info[2];
+                int diceAmount= JRiskOptionPane.showDieCountDialog(this, currentPlayer,
+                        1, maxAttack, "You are attacking "+ defending.getName()+" from "+attacking.getName()+".");
+                currentPlayer.setDiceRoll(diceAmount);
+                break;
+            case SELECT_DEFEND_DIE:
+                attacking = (Territory)info[0];
+                defending = (Territory)info[1];
+                currentPlayer = defending.getOwner();
+                int maxDice = (Integer)info[2];
+                diceAmount= JRiskOptionPane.showDieCountDialog(this, currentPlayer,1 ,
+                        maxDice,"You are Defending "+ defending.getName()+" from "+attacking.getName()+".");
+                currentPlayer.setDiceRoll(diceAmount);
+                break;
         }
     }
 
