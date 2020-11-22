@@ -162,7 +162,7 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
      */
     @Override
     public void handleRiskUpdate(RiskEvent e) {
-        GameSingleton model = (GameSingleton) e.getSource();
+        //GameSingleton model = (GameSingleton) e.getSource();
         RiskEventType type = e.getType();
         Object[] info = e.getEventInfo();
 

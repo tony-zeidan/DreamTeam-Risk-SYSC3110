@@ -2,8 +2,6 @@ package main.core;
 
 import main.view.RiskEvent;
 import main.view.RiskEventType;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
@@ -35,12 +33,11 @@ public class AIPlayer extends Player {
         Territory[] territories = territoryToAttack();
         while(territories[0] != null)
         {
-            //notify
-            territories = territoryToAttack();
             model.notifyHandlers(new RiskEvent(this, RiskEventType.AI_ATTACK, territories));
+            territories = territoryToAttack();
         }
-            //territoryToAttack
-        //moveTroops
+        moveTroops();
+        model.nextPlayer();
     }
     public void placeUnits(int numUnits){
         while(numUnits >0)

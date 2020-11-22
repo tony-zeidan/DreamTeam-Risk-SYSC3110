@@ -37,14 +37,14 @@ public class JRiskOptionPane {
      * @param upperBound The higher bound of the dice rolls
      * @return The option the user chose (corresponds to constants above)
      */
-    public static int showDieCountDialog(JFrame frame,Player player, int lowerBound, int upperBound) {
+    public static int showDieCountDialog(JFrame frame,Player player, int lowerBound, int upperBound,String Description) {
 
         //get the exact number of options the user has
         List<Object> op = Arrays.asList(dieRollOptions);
         Object[] options = op.subList(lowerBound-1,upperBound).toArray();
 
         int input = JOptionPane.showOptionDialog(frame,
-                "How many die will you roll?",
+                Description+"How many die will you roll?",
                 player.getName()+"'s die count",
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE,

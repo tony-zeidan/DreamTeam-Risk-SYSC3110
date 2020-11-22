@@ -131,6 +131,10 @@ public class GameSingleton {
 
         notifyHandlers(new RiskEvent(this, RiskEventType.TURN_BEGAN,
                 getCurrentPlayer()));
+        if (getCurrentPlayer() instanceof AIPlayer)
+        {
+            ((AIPlayer)getCurrentPlayer()).doAiTurn(this);
+        }
     }
 
     /**
@@ -200,14 +204,11 @@ public class GameSingleton {
         while (!(players.get(currentPlayerInd).isActive())) {
             currentPlayerInd = (currentPlayerInd + 1) % players.size();
         }
+
+        notifyHandlers(new RiskEvent(this, RiskEventType.TURN_BEGAN, getCurrentPlayer()));
         if (getCurrentPlayer() instanceof AIPlayer)
         {
             ((AIPlayer)getCurrentPlayer()).doAiTurn(this);
-        }
-        else
-            {
-            notifyHandlers(new RiskEvent(this,
-                    RiskEventType.TURN_BEGAN, getCurrentPlayer()));
         }
     }
 

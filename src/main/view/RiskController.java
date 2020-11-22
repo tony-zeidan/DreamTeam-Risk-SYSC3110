@@ -178,14 +178,33 @@ public class RiskController extends MouseAdapter implements ActionListener {
         //Attacker Set Up
         //Get Max Attack Die
         Player currentPlayer=attacking.getOwner();
-        int maxAttack = riskModel.getMaxBattleDie(attacking.getUnits(), true);
-        int amountOfAttackDie = JRiskOptionPane.showDieCountDialog(riskView, currentPlayer, 1, maxAttack);
+        int amountOfAttackDie;
+        int attackingNumUnits =attacking.getUnits();
+        if(currentPlayer instanceof AIPlayer)
+        {
+            amountOfAttackDie = (attackingNumUnits>4)?3:attackingNumUnits-1;
+        }
+        else
+        {
+            int maxAttack = riskModel.getMaxBattleDie(attacking.getUnits(), true);
+            amountOfAttackDie = JRiskOptionPane.showDieCountDialog(riskView, currentPlayer, 1, maxAttack,
+                    "You are attacking "+ defending.getName()+" from "+attacking.getName()+". ");
+        }
 
         //Defender Set Up
         Player defendingPlayer = defending.getOwner();
-        //Get Max Defend Die
-        int maxDefend = riskModel.getMaxBattleDie(defending.getUnits(), false);
-        int amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1, maxDefend);
+        int amountOfDefendDie;
+        if (defendingPlayer instanceof AIPlayer)
+        {
+            amountOfDefendDie = (defending.getUnits()==1)?1:2;
+        }
+        else
+        {
+            //Get Max Defend Die
+            int maxDefend = riskModel.getMaxBattleDie(defending.getUnits(), false);
+            amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1, maxDefend,
+                    "You are Defending "+ defending.getName()+" from "+attacking.getName()+". ");
+        }
 
         boolean won = inputBattle(attacking, defending, amountOfAttackDie, amountOfDefendDie);
         riskView.setSelectedTerritory(null);
@@ -196,9 +215,19 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
         //If Defending Territory Has Been Wiped Out, Start Fortifying Process
         if (won) {
-            //Get the Number of Units the Victor wishes to move to their newly claimed territory
-            int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView, currentPlayer, attacking,
-                    defending, amountOfAttackDie, false);
+            int fortifyUnits;
+            if (currentPlayer instanceof AIPlayer)
+            {
+                //Get the Number of Units the Victor wishes to move to their newly claimed territory
+                fortifyUnits =attackingNumUnits -1;
+            }
+            else
+            {
+                //Get the Number of Units the Victor wishes to move to their newly claimed territory
+                fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView, currentPlayer, attacking,
+                        defending, amountOfAttackDie, false);
+                //Move chosen number of units from the attacking territory to the claimed territory and gives rightful ownership
+            }
             //Move chosen number of units from the attacking territory to the claimed territory and gives rightful ownership
             riskModel.fortifyPosition(attacking, defending, fortifyUnits);
         }

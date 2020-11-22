@@ -386,6 +386,10 @@ public class RiskFrame extends JFrame implements RiskGameHandler, ActionListener
                 break;
             case UPDATE_ATTACKABLE:
                 setAttackable((boolean) info[0]);
+                break;
+            case  AI_ATTACK:
+                rc.attacking((Territory)info[0],(Territory)info[1]);
+                break;
             default:
                 return;
         }
