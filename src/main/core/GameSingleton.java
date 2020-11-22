@@ -603,7 +603,7 @@ public class GameSingleton {
     }
 
     public void moveBonus(Territory bonusTerritory){
-        Territory tempTerritory = bonusTerritory;
+        Territory tempTerritory = new Territory("bonus");
         tempTerritory.setUnits(1);
         moveUnits(tempTerritory,bonusTerritory,1);
     }
