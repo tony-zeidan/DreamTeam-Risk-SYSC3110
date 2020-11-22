@@ -38,8 +38,8 @@ public class AIPlayer extends Player {
             //notify
             territories = territoryToAttack();
             //model.notifyHandlers(new RiskEvent(this, RiskEventType.AI_ATTACK, territories));
+            model.performBattle(territories[0],territories[1]);
         }
-            //territoryToAttack
         //moveTroops
     }
     public void placeUnits(int numUnits){
