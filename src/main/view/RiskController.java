@@ -235,7 +235,6 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     if (selectedTerritory != null) {
                         if (clickedTerritory != null) {
 
-
                             riskView.setInfoDisplay(clickedTerritory);
                                 //Get the Number of Units the Victor wishes to move to their newly claimed territory
                             int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView, currentPlayer, clickedTerritory,

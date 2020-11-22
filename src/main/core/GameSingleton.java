@@ -45,10 +45,6 @@ public class GameSingleton {
      */
     private static int currentPlayerInd;
     /**
-     * Stores the current round the game is on.
-     */
-    private static int roundNumber;
-    /**
      * Stores the current phase of the game.
      */
     private static GamePhase gamePhase;
@@ -137,10 +133,13 @@ public class GameSingleton {
 
         gamePhase = GamePhase.START_GAME;
         nextPhase();    //beginning should be bonus troupe
-        //nextPhase();    //no bonus for first players turn so push phase further
+
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
 
+        if (getCurrentPlayer() instanceof AIPlayer) {
+            getCurrentPlayer().doTurn(this);
+        }
     }
 
     /**
@@ -255,6 +254,9 @@ public class GameSingleton {
         while (!(players.get(currentPlayerInd).isActive())) {
             currentPlayerInd = (currentPlayerInd + 1) % players.size();
         }
+
+        nextPhase();
+
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
     }

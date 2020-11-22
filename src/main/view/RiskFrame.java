@@ -68,6 +68,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         List<Player> players = getPlayers(numPlayers);
         addAIsToList(numOfAIs(numPlayers),players);
         riskModel = GameSingleton.getGameInstance(players);
+        this.gamePhase = GamePhase.START_GAME;
         setLayout(new BorderLayout());
         composeFrame();
         riskModel.setUpGame();
@@ -116,7 +117,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         moveUnitsBtn.addActionListener(rc);
         endTurnBtn.addActionListener(rc);
         attackBtn.setActionCommand("A");
-        moveUnitsBtn.setActionCommand("MU");
+        moveUnitsBtn.setActionCommand("M");
         endTurnBtn.setActionCommand("E");
         buttonPane.add(attackBtn);
         buttonPane.add(moveUnitsBtn);
@@ -380,10 +381,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 break;
             case PHASE_CHANGE:
                 this.gamePhase = (GamePhase) info[0];
-                //TODO: reset bonus units here
-                if (gamePhase==GamePhase.BONUS_TROUPE) {
-
-                }
                 gamePhaseLbl.setText(gamePhase.toString());
                 gamePhaseLbl.setBackground(gamePhase.getColour());
                 gamePhaseLbl.setForeground(getContrastColor(gamePhase.getColour()));
@@ -431,6 +428,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         attackBtn.setText("Attack");
         moveUnitsBtn.setEnabled(false);
         moveUnitsBtn.setActionCommand("M");
+        moveUnitsBtn.setText("Move Units");
         endTurnBtn.setEnabled(true);
         endTurnBtn.setActionCommand("S");
         endTurnBtn.setText("Skip");
