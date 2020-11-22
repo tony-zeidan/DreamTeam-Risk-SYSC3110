@@ -128,7 +128,8 @@ public class GameSingleton {
         }
 
         //shuffle the order of the players
-        shufflePlayers();
+        //TODO: Commented out for testing right now
+        //shufflePlayers();
         world.setUp(players);
 
         notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,
@@ -261,7 +262,7 @@ public class GameSingleton {
     /**
      * Game has finished and determine the player who won.
      */
-    private void endGame() {
+    public Player endGame() {
         Player winner = null;
 
         for (Player p : players) {
@@ -271,6 +272,7 @@ public class GameSingleton {
         //notify all views that the game is over
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.GAME_OVER, winner, world.getName()));
+        return winner;
     }
 
     /**
@@ -552,7 +554,8 @@ public class GameSingleton {
             //Check to see if their is only one player remaining
             updateNumActivePlayers();
             if (this.getNumActivePlayer() == 1) {
-                endGame();
+                //TODO: Winner player is never used except for testing
+                Player winner = endGame();
             }
         }else{
             //Print a message to confirm the movement of units before end of current player's turn

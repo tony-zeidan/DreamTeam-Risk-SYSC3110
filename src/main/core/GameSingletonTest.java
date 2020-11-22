@@ -69,7 +69,7 @@ public class GameSingletonTest {
         //Attacking 2 Units -> 1 Dice
         assertEquals(1,gsm.getMaxBattleDie(2,true));
         //Defending 2 Units -> 1 Dice
-        assertEquals(1,gsm.getMaxBattleDie(2,false));
+        assertEquals(2,gsm.getMaxBattleDie(2,false));
         //Defending 3 Units -> 2 Dice
         assertEquals(2,gsm.getMaxBattleDie(3,false));
     }
@@ -266,8 +266,10 @@ public class GameSingletonTest {
     public void testUpdateNumActivePlayer(){
         Player ethan = players.get(0);
         Player anthony = players.get(1);
+        players.remove(2);
+        players.remove(2);
 
-        gsm.setNumActivePlayer(players.size());
+        //gsm.setNumActivePlayer(players.size());
 
         Territory t1 = new Territory("Earth");
         t1.setUnits(4);
@@ -294,7 +296,7 @@ public class GameSingletonTest {
     }
 
     /**
-     * Test nextPlayer() method in GameSingleton class
+     * Test nextPlayer() and getCurrentPlayer() method in GameSingleton class
      *
      * Starts a new four player game, when the game is starting
      * the order of players is shuffled, tests to see
@@ -329,5 +331,17 @@ public class GameSingletonTest {
 
         //Test 5, First Player IS the First Player (Looped through all players)
         assertEquals(first,gsm.getCurrentPlayer());
+    }
+
+    @Test
+    public void testEndGame(){
+        players.remove(0);
+        players.remove(0);
+        players.remove(0);
+        Player projectedWinner = players.get(0);
+        assertEquals(projectedWinner.getName(),gsm.endGame().getName());
+
+        /*players.remove(0);
+        assertEquals(null,gsm.endGame());*/
     }
 }
