@@ -132,14 +132,11 @@ public class GameSingleton {
                 world.getName()));
 
         gamePhase = GamePhase.START_GAME;
-        nextPhase();    //beginning should be bonus troupe
 
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
 
-        if (getCurrentPlayer() instanceof AIPlayer) {
-            getCurrentPlayer().doTurn(this);
-        }
+        nextPhase();    //beginning should be bonus troupe
     }
 
     /**

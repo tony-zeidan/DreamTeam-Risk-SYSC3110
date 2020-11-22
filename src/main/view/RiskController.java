@@ -172,7 +172,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
         //debug printing
         System.out.println(String.format("\nCLICK REGISTERED:\nCoordinates: (%s,%s)\nSelected Action: %s\nCurrent Territory Selected: %s\nPrevious Territory Selected: %s\n",
                 clicked.x, clicked.y, selectedAction, clickedTerritory, selectedTerritory));
-        System.out.println(phase);
+
         switch (phase) {
             case BONUS_TROUPE:
                 int bonusUnits = riskView.getBonusUnits();
@@ -193,12 +193,15 @@ public class RiskController extends MouseAdapter implements ActionListener {
             case ATTACK:
                 Player currentPlayer = riskModel.getCurrentPlayer();
 
+                if (clickedTerritory!=null) {
+                    riskView.setInfoDisplay(clickedTerritory);
+                }
+
                 if (selectedAction!=null && selectedAction.equals("A")) {
                     if (selectedTerritory != null) {
                         if (clickedTerritory != null) {
 
                             boolean won = inputBattle(clickedTerritory, selectedTerritory);
-                            riskView.setInfoDisplay(clickedTerritory);
 
                             int amountOfAttackDie = currentPlayer.getDiceRoll();
 
@@ -210,6 +213,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
                                 //Move chosen number of units from the attacking territory to the claimed territory and gives rightful ownership
                                 riskModel.moveUnits(clickedTerritory, selectedTerritory, fortifyUnits);
                             }
+
+                            //At the end of a successfully executed attack, restore the GUI defaults.
                             selectedTerritory = null;
                             selectedAction = null;
                             riskView.restoreGUI();
@@ -224,18 +229,20 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     riskView.restoreGUI();
                 } else {
                     selectedTerritory=clickedTerritory;
-                    System.out.println("Worked Here");
                     riskModel.getValidAttackNeighboursOwned(currentPlayer,clickedTerritory);
                 }
                 break;
             case MOVE_UNITS:
                 currentPlayer = riskModel.getCurrentPlayer();
 
+                if (clickedTerritory!=null) {
+                    riskView.setInfoDisplay(clickedTerritory);
+                }
+
                 if (selectedAction!=null && selectedAction.equals("M")) {
                     if (selectedTerritory != null) {
                         if (clickedTerritory != null) {
 
-                            riskView.setInfoDisplay(clickedTerritory);
                                 //Get the Number of Units the Victor wishes to move to their newly claimed territory
                             int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView, currentPlayer, clickedTerritory,
                                     selectedTerritory, 1, true);
