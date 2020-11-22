@@ -180,7 +180,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 int bonusUnits = riskView.getBonusUnits();
 
                 if (clickedTerritory!=null) {
-                    //TODO: actually move units in the model (only my territories displayed)
+                    //TODO: not sure if I can add to the territory directly and bypass GameSingleton
+                    clickedTerritory.addUnits(1);
                     bonusUnits -= 1;
                     riskView.setBonusUnits(bonusUnits);
                     if (bonusUnits==0) {
