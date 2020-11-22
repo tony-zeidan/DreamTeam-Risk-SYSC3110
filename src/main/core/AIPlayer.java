@@ -41,7 +41,7 @@ public class AIPlayer extends Player {
             territories = territoryToAttack();
         }
     }
-    public void placeUnits(int numUnits){
+    public void placeUnits(int numUnits, GameSingleton model){
         while(numUnits >0)
         {
             Territory terrToAddUnit = null;
@@ -55,7 +55,7 @@ public class AIPlayer extends Player {
                     terrToAddUnit = territory;
                 }
             }
-            terrToAddUnit.addUnits(1);
+            model.moveBonus(terrToAddUnit);
             numUnits--;
         }
     }

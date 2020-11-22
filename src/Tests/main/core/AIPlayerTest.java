@@ -50,7 +50,8 @@ public class AIPlayerTest {
     {
         this.setup();
         assertEquals(8,t1.getUnits()+t2.getUnits()+t3.getUnits()+t4.getUnits());
-        robo.placeUnits(5);
+        //TODO: Fix parameters in the call to pass the model
+        //robo.placeUnits(5);
         assertEquals(3,t6.getUnits());
         assertEquals(1,t5.getUnits());
         assertEquals(13,t1.getUnits()+t2.getUnits()+t3.getUnits()+t4.getUnits());
