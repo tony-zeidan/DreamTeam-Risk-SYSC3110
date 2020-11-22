@@ -223,6 +223,7 @@ public class WorldMap {
         if (players.size() != 2)
             max = -5 * players.size() + 50;
         placeTroops(players, max);
+        updateContinentRulers();
     }
 
     /**
@@ -272,16 +273,6 @@ public class WorldMap {
         }
     }
 
-    public int hasConquered(Player player){
-        int numRuled = 0;
-        for(Continent c : continents.values()){
-            if(c.getRuler() == player){
-                numRuled += c.getBonusRulerAmount();
-            }
-        }
-        return numRuled;
-    }
-
     public Set<Continent> getRuled(Player player){
         Set<Continent> ruled = new HashSet<>();
         for(Continent c : continents.values()){
@@ -290,6 +281,10 @@ public class WorldMap {
             }
         }
         return ruled;
+    }
+
+    public void updateContinentRulers(){
+        for(Continent c : continents.values()) c.updateRuler();
     }
 
     /**

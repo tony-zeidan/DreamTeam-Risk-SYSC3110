@@ -402,6 +402,7 @@ public class GameSingleton {
             notifyHandlers(new RiskEvent(this, RiskEventType.TERRITORY_DOMINATED,
                     attacker, defender));
             notifyMapUpdateAllCoordinates();
+            world.updateContinentRulers();
             return true;
         }
         return false;
