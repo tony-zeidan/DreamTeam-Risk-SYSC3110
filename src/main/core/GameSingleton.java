@@ -363,7 +363,6 @@ public class GameSingleton {
         }
     }
 
-
     /**
      * Represents a battle sequence between a territory owned by the current player and
      * an adjacent territory owned by another player.
