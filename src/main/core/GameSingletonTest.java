@@ -201,42 +201,42 @@ public class GameSingletonTest {
         int highDefendingLost = 2;
         int lowDefendingLost = 0;
 
-        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
-        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
-        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
-        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+        assertTrue("Error, too many attacking units lost",highAttackerLost>=lost[0]);
+        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<=lost[0]);
+        assertTrue("Error, too many defending units lost",highDefendingLost>=lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost<=lost[1]);
 
         lost = gsm.attack(2,2);
 
-        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
-        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
-        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
-        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+        assertTrue("Error, too many attacking units lost",highAttackerLost>=lost[0]);
+        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<=lost[0]);
+        assertTrue("Error, too many defending units lost",highDefendingLost>=lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost<=lost[1]);
 
         lost = gsm.attack(2,1);
         highAttackerLost = 2;
         highDefendingLost = 1;
 
-        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
-        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
-        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
-        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+        assertTrue("Error, too many attacking units lost",highAttackerLost>=lost[0]);
+        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<=lost[0]);
+        assertTrue("Error, too many defending units lost",highDefendingLost>=lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost<=lost[1]);
 
         lost = gsm.attack(1,1);
         highAttackerLost = 1;
 
-        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
-        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
-        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
-        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+        assertTrue("Error, too many attacking units lost",highAttackerLost>=lost[0]);
+        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<=lost[0]);
+        assertTrue("Error, too many defending units lost",highDefendingLost>=lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost<=lost[1]);
 
         lost = gsm.attack(1,2);
         highDefendingLost = 2;
 
-        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
-        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
-        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
-        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+        assertTrue("Error, too many attacking units lost",highAttackerLost>=lost[0]);
+        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<=lost[0]);
+        assertTrue("Error, too many defending units lost",highDefendingLost>=lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost<=lost[1]);
     }
 
     /**
