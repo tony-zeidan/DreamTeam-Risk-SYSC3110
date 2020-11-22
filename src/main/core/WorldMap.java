@@ -90,6 +90,7 @@ public class WorldMap {
             while (myReader.hasNextLine()) {
                 readContinentLine(myReader.nextLine());
             }
+            myReader.close();
             myReader = new Scanner(territoryData);
             while (myReader.hasNextLine()) {
                 readTerritoryLine(myReader.nextLine());
@@ -170,6 +171,17 @@ public class WorldMap {
                 territory.addNeighbour(allTerritories.get(s));
             }
         }
+    }
+
+    public void printMap() {
+        for (Continent c : continents.values()) {
+            System.out.println(c.getContinentName()+ ":" + c.getBonusRulerAmount());
+        }
+        /*
+        for (Territory t : allCoordinates.keySet()) {
+            Point p = allCoordinates.get(t);
+            System.out.println(t.getName() + "-" + t.getUnits() + "-" + t.getOwner().getName());
+        }*/
     }
 
     /**
