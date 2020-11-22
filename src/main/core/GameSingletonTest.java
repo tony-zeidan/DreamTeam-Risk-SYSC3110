@@ -75,15 +75,19 @@ public class GameSingletonTest {
     }
 
     /**
-     * Test fortifyPosition() in GameSingleton class
+     * Test moveUnits() in GameSingleton class
      *
      * Creates two territories with different names, owners and number of units.
-     * These territories are passed as parameters to fortifyPosition() in
+     * These territories are passed as parameters to moveUnits() in
      * GameSingleton.java with the number of units to move. Checks
      * if the units are moved properly.
+     *
+     * Also tests the movement of units between two territories that are
+     * owned by the current player. This would be part of the movement phase of the
+     * game that occurs just before the end of the current player's turn.
      */
     @Test
-    public void testFortifyPosition(){
+    public void testMoveUnits(){
         Player ethan = players.get(0);
         Player anthony = players.get(1);
 
@@ -107,6 +111,72 @@ public class GameSingletonTest {
         assertEquals(ethan,t2.getOwner());
         assertEquals(2,t1.getUnits());
         assertEquals(7,t2.getUnits());
+
+        gsm.moveUnits(t2,t1,2);
+
+        assertEquals(t1.getOwner(),t2.getOwner());
+        assertEquals(4,t1.getUnits());
+        assertEquals(5, t2.getUnits());
+    }
+
+    /**
+     * Test attack() in GameSingleton class
+     *
+     * Makes sure that the units destroyed in the attack() are limited
+     * based on the number of rolls by the attacker and defender.
+     *
+     * While rolling the maximum number of dice (3 and 2), the attacker cannot possibly
+     * lose more than 2 units. Same goes with the defender in this scenario.
+     * Otherwise, the attacker and defender cannot lose more than the number
+     * of dice they rolled.
+     *
+     * The attacker and defender cannot have a negative value produced for the
+     * number of units lost in the attack().
+     */
+    @Test
+    public void testAttack(){
+        int[] lost = gsm.attack(3,2);
+        int highAttackerLost = 2;
+        int lowAttackerLost = 0;
+        int highDefendingLost = 2;
+        int lowDefendingLost = 0;
+
+        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
+        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
+        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+
+        lost = gsm.attack(2,2);
+
+        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
+        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
+        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+
+        lost = gsm.attack(2,1);
+        highAttackerLost = 2;
+        highDefendingLost = 1;
+
+        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
+        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
+        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+
+        lost = gsm.attack(1,1);
+        highAttackerLost = 1;
+
+        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
+        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
+        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+
+        lost = gsm.attack(1,2);
+        highDefendingLost = 2;
+
+        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
+        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
+        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
     }
 
     /**
