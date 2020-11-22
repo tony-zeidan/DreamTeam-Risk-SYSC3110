@@ -34,6 +34,7 @@ public class Player {
      */
     private boolean active;
 
+    private int diceRoll;
 
     /**
      * Constructor for instances of Player class with name.
@@ -152,6 +153,13 @@ public class Player {
     public boolean ownsTerritory(Territory territory) {
         return owned.contains(territory);
     }
-
+    public void setDiceRoll(int numOfDice)
+    {
+        diceRoll = numOfDice;
+    }
+    public int getDiceRoll()
+    {
+        return diceRoll;
+    }
 
 }
