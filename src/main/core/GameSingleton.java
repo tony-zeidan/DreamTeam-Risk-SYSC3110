@@ -304,7 +304,7 @@ public class GameSingleton {
         Map<Territory,Point> owned = new HashMap<>();
         for (Territory t : player.getOwnedTerritories()) {
             Point p = world.getAllCoordinates().get(t);
-            owned.put(t,p);
+            owned.put(t, p);
         }
         return owned;
     }
@@ -603,10 +603,13 @@ public class GameSingleton {
     }
 
     public void moveBonus(Territory bonusTerritory){
+        Player mover = bonusTerritory.getOwner();
         Territory tempTerritory = new Territory("bonus");
-        tempTerritory.setOwner(bonusTerritory.getOwner());
+        tempTerritory.setOwner(mover);
         tempTerritory.setUnits(1);
         moveUnits(tempTerritory,bonusTerritory,1);
+        mover.removeTerritory(tempTerritory);
+        notifyMapUpdateOwnedCoordinates();
     }
 
     /**
