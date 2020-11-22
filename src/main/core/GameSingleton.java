@@ -416,7 +416,7 @@ public class GameSingleton {
      * @param defendRolls The number of dice the defender is using for this defence
      * @return A pair of integers (position 0: how many units attacker lost, position 1: how many units defender lost)
      */
-    private int[] attack(int attackRolls, int defendRolls) {
+    public int[] attack(int attackRolls, int defendRolls) {
 
         //Random Acts as a Die
         Random rand = new Random();
