@@ -346,9 +346,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         RiskEventType eventType = e.getType();
         Object[] info = e.getEventInfo();
 
-        System.out.println(eventType);
-
-
         switch (eventType) {
             case GAME_OVER:
                 JOptionPane alert = new JOptionPane();
@@ -385,7 +382,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 gamePhaseLbl.setBackground(gamePhase.getColour());
                 gamePhaseLbl.setForeground(getContrastColor(gamePhase.getColour()));
                 restoreGUI();
-                System.out.println("Current Phase: " + gamePhase);
                 break;
             case SELECT_ATTACK_DIE:
                 Territory attacking = (Territory)info[0];

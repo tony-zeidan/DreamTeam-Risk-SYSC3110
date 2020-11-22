@@ -136,6 +136,8 @@ public class GameSingleton {
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
 
+        System.out.println("Beginning Player: " + getCurrentPlayer().getName());
+
         nextPhase();    //beginning should be bonus troupe
     }
 
@@ -237,7 +239,6 @@ public class GameSingleton {
                 break;
         }
         notifyHandlers(new RiskEvent(this,RiskEventType.PHASE_CHANGE,gamePhase));
-        System.out.println("NEXT PHASE: " + gamePhase.toString());
     }
 
     /**
@@ -252,10 +253,11 @@ public class GameSingleton {
             currentPlayerInd = (currentPlayerInd + 1) % players.size();
         }
 
-        nextPhase();
-
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
+        System.out.println("New Player: " + getCurrentPlayer().getName());
+
+        nextPhase();
     }
 
     /**
