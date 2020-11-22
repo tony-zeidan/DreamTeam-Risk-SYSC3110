@@ -215,7 +215,7 @@ public class GameSingleton {
                 if (currentPlayer instanceof AIPlayer)
                 {
                     int numTroopsToPlace = getBonusUnits(currentPlayer);
-                    ((AIPlayer) currentPlayer).placeUnits(numTroopsToPlace);
+                    ((AIPlayer) currentPlayer).placeUnits(numTroopsToPlace, this);
                     nextPhase();
                 }
                 break;
@@ -600,6 +600,12 @@ public class GameSingleton {
                     initialT, finalT, numUnits));
         }
         notifyMapUpdateAllCoordinates();
+    }
+
+    public void moveBonus(Territory bonusTerritory){
+        Territory tempTerritory = bonusTerritory;
+        tempTerritory.setUnits(1);
+        moveUnits(tempTerritory,bonusTerritory,1);
     }
 
     /**
