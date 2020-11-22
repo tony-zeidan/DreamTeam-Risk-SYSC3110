@@ -107,6 +107,8 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
      * @param g Graphics draws the points of the territories with their colour
      */
     private void paintPoints(Graphics g) {
+        if (pointsToPaint==null) return;
+
         for (Territory t : pointsToPaint.keySet()) {
             Point p = pointsToPaint.get(t);
             g.setColor(Color.BLACK);
