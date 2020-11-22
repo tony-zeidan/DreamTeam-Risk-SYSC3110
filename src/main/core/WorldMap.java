@@ -36,10 +36,15 @@ public class WorldMap {
      */
     private Map<Territory, Point> allCoordinates;
 
+    private Map<String,Continent> continents;
+
     /**
      * Random variable for assigning territories in setup.
      */
     private static Random rand;
+
+    private static final Pattern CONTINENT_PATTERN = Pattern.compile("((\\w+\\s?)+)\\((\\d+)\\)\\|((((\\w+\\s?)+),?)+)");
+    private static final Pattern TERRITORY_PATTERN = Pattern.compile("((\\w+\\s?)+)\\((\\d+):(\\d+)\\)\\|((((\\w+\\s?)+),?)+)");
 
     /**
      * Constructor for instances of WorldMap.
@@ -52,6 +57,7 @@ public class WorldMap {
         rand = new Random();
         allTerritories = new HashMap<>();
         allCoordinates = new HashMap<>();
+        continents = new HashMap<>();
         readMap();
     }
 
@@ -78,32 +84,15 @@ public class WorldMap {
 
         //attempt to read the file
         try {
-            File myObj = new File("src/resources/map_packages/main_package/map.txt");
-            Scanner myReader = new Scanner(myObj);
+            File territoryData = new File("src/resources/map_packages/main_package/countries.txt");
+            File continentData = new File("src/resources/map_packages/main_package/continents.txt");
+            Scanner myReader = new Scanner(continentData);
             while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                Matcher matcher = valid.matcher(data);
-
-                String readName = "";
-
-                //check if the line in the file matches our map syntax (pattern)
-                if (matcher.matches()) {
-
-                    //parse the information from the different groups of the line
-                    readName = matcher.group(1);
-                    int xCord = Integer.parseInt(matcher.group(4));
-                    int yCord = Integer.parseInt(matcher.group(5));
-                    Point readCoordinates = new Point(xCord, yCord);
-                    String readNeighbours = matcher.group(6).substring(1);  //substring gets rid of first comma
-                    Territory readTerritory = new Territory(readName);
-
-                    //System.out.println(matcher.group(1));
-
-                    //put the information in the correct spots
-                    allTerritories.put(readName, readTerritory);
-                    allCoordinates.put(readTerritory, readCoordinates);
-                    neighbourStrings.put(readTerritory, readNeighbours);
-                }
+                readContinentLine(myReader.nextLine());
+            }
+            myReader = new Scanner(territoryData);
+            while (myReader.hasNextLine()) {
+                readTerritoryLine(myReader.nextLine());
             }
             myReader.close();
         } catch (FileNotFoundException e) {
@@ -125,6 +114,62 @@ public class WorldMap {
         }
 
         writeXML();
+    }
+
+    private void readContinentLine(String line) {
+        Matcher matcher = CONTINENT_PATTERN.matcher(line);
+        if (matcher.matches()) {
+            String readName = matcher.group(1);
+            int bonusUnits=0;
+            try {
+                bonusUnits = Integer.parseInt(matcher.group(3));
+            } catch (NumberFormatException e) {
+                System.out.println("line incorrectly formatted");
+                return;
+            }
+            Continent continent = new Continent(readName,bonusUnits);
+            String territoriesString = matcher.group(4);
+            List<String> territoriesWithin = Arrays.asList(territoriesString.split(","));
+            for (String s : territoriesWithin) {
+                if (!allTerritories.containsKey(s)) {
+                    allTerritories.put(s,new Territory(s));
+                }
+                continent.addContinentTerritory(allTerritories.get(s));
+            }
+        }
+    }
+
+    private void readTerritoryLine(String line) {
+        Matcher matcher = TERRITORY_PATTERN.matcher(line);
+        if (matcher.matches()) {
+            String readName = matcher.group(1);
+            if (!allTerritories.containsKey(readName)) {
+                allTerritories.put(readName,new Territory(readName));
+            }
+            Territory territory = allTerritories.get(readName);
+            int xCord = 0;
+            int yCord = 0;
+            try {
+                xCord = Integer.parseInt(matcher.group(3));
+                yCord = Integer.parseInt(matcher.group(4));
+
+
+            } catch (NumberFormatException e) {
+                System.out.println("line was formatted incorrectly.");
+                return;
+            }
+            Point readCoordinates = new Point(xCord, yCord);
+            allCoordinates.put(territory,readCoordinates);
+
+            String neighString = matcher.group(5);
+            List<String> neighbourList = Arrays.asList(neighString.split(","));
+            for (String s : neighbourList) {
+                if (!allTerritories.containsKey(s)) {
+                    allTerritories.put(s,new Territory(s));
+                }
+                territory.addNeighbour(allTerritories.get(s));
+            }
+        }
     }
 
     /**
@@ -217,7 +262,7 @@ public class WorldMap {
 
     public int hasConquered(Player player){
         int numRuled = 0;
-        for(Continent c : continents){
+        for(Continent c : continents.values()){
             if(c.getRuler() == player){
                 numRuled += c.getBonusRulerAmount();
             }
