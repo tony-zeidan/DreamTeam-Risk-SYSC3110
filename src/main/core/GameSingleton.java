@@ -604,6 +604,7 @@ public class GameSingleton {
 
     public void moveBonus(Territory bonusTerritory){
         Territory tempTerritory = new Territory("bonus");
+        tempTerritory.setOwner(bonusTerritory.getOwner());
         tempTerritory.setUnits(1);
         moveUnits(tempTerritory,bonusTerritory,1);
     }
