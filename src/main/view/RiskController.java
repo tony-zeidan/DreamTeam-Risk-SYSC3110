@@ -70,12 +70,10 @@ public class RiskController extends MouseAdapter implements ActionListener {
      *
      * @param attacking The territory that is attacking the defending
      * @param defending The territory that is defending from the attacking
-     * @param attackDie The amount of die the attacking territory can use
-     * @param defendDie The amount of die the defending territory can use
      * @return If the attacker won the battle
      */
-    public boolean inputBattle(Territory attacking, Territory defending, int attackDie, int defendDie) {
-        return riskModel.battle(attacking, defending, attackDie, defendDie);
+    public boolean inputBattle(Territory attacking, Territory defending) {
+        return riskModel.performBattle(attacking, defending);
     }
 
     /**
@@ -197,17 +195,11 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 if (selectedAction!=null && selectedAction.equals("A")) {
                     if (selectedTerritory != null) {
                         if (clickedTerritory != null) {
-                            int maxAttack = riskModel.getMaxBattleDie(clickedTerritory.getUnits(), true);
-                            int amountOfAttackDie = JRiskOptionPane.showDieCountDialog(riskView, currentPlayer, 1, maxAttack);
 
-                            //Defender Set Up
-                            Player defendingPlayer = selectedTerritory.getOwner();
-                            //Get Max Defend Die
-                            int maxDefend = riskModel.getMaxBattleDie(selectedTerritory.getUnits(), false);
-                            int amountOfDefendDie = JRiskOptionPane.showDieCountDialog(riskView, defendingPlayer, 1, maxDefend);
-
-                            boolean won = inputBattle(clickedTerritory, selectedTerritory, amountOfAttackDie, amountOfDefendDie);
+                            boolean won = inputBattle(clickedTerritory, selectedTerritory);
                             riskView.setInfoDisplay(clickedTerritory);
+
+                            int amountOfAttackDie = currentPlayer.getDiceRoll();
 
                             //If Defending Territory Has Been Wiped Out, Start Fortifying Process
                             if (won) {
