@@ -120,6 +120,66 @@ public class GameSingletonTest {
     }
 
     /**
+     * Test battle() in GameSingleton class
+     *
+     * Creates two territories and tests a single battle sequence
+     * between them.
+     *
+     * Scenario 1:
+     * The first territory is set to have more than three units while the second territory
+     * is set to have only one unit. The attacker choses to roll the maximum number of dice
+     * while the defender can only roll one die. The asserts are based on the higher probability
+     * of the attacker winning the battle.
+     *
+     * Scenario 2:
+     * The first territory is set to have two units, so that the attacker can only roll one die
+     * in the attack. The second territory is set to have more than two units, so that the
+     * defender rolls two dice. The asserts are based on the higher probability of the defender
+     * winning the battle.
+     */
+    @Test
+    public void testBattle(){
+        Player kyler = players.get(0);
+        Player tony = players.get(1);
+
+        //Scenario 1 -------------------------------------------------
+        Territory t1 = new Territory("Earth");
+        t1.setUnits(8);
+        assertEquals(8, t1.getUnits());
+        t1.setOwner(kyler);
+        assertEquals(kyler, t1.getOwner());
+
+        Territory t2 = new Territory("Pluto");
+        t2.setUnits(1);
+        assertEquals(1, t2.getUnits());
+        t2.setOwner(tony);
+        assertEquals(tony, t2.getOwner());
+
+        boolean attackerWon = gsm.battle(t1,t2,3,1);
+
+        assertEquals(true, attackerWon);
+        assertEquals(0,t2.getUnits());
+
+        //Scenario 2 -------------------------------------------------
+        Territory t3 = new Territory("Mars");
+        t3.setUnits(2);
+        assertEquals(2, t3.getUnits());
+        t3.setOwner(kyler);
+        assertEquals(kyler, t3.getOwner());
+
+        Territory t4 = new Territory("Saturn");
+        t4.setUnits(4);
+        assertEquals(4, t4.getUnits());
+        t4.setOwner(tony);
+        assertEquals(tony, t4.getOwner());
+
+        boolean defenderWon = gsm.battle(t3,t4,1,2);
+
+        assertEquals(false,defenderWon);
+        assertEquals(1,t3.getUnits());
+    }
+
+    /**
      * Test attack() in GameSingleton class
      *
      * Makes sure that the units destroyed in the attack() are limited
