@@ -119,6 +119,10 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
      */
     public void addEvent(String event) {
         eventModel.addElement(event);
+        //Keeps scrollPane always scrolled to the bottom
+        this.validate();
+        JScrollBar vertical = gameEventScroller.getVerticalScrollBar();
+        vertical.setValue(vertical.getMaximum()+1);
     }
 
     /**
