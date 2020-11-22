@@ -33,13 +33,12 @@ public class AIPlayer extends Player {
         Territory[] territories = territoryToAttack();
         while(territories[0] != null)
         {
-            territories = territoryToAttack();
             boolean won = model.performBattle(territories[0],territories[1]);
             if (won) {
                 int numTroopsToMove = territories[0].getUnits()-1;
                 model.moveUnits(territories[0],territories[1],numTroopsToMove);
             }
-
+            territories = territoryToAttack();
         }
     }
     public void placeUnits(int numUnits){
