@@ -58,35 +58,6 @@ public class AIPlayerTest {
 
     }
     @Test
-    public void testNumNeighbouringEnemyTroops()
-    {
-        this.setup();
-        assertEquals(0,robo.numNeighbouringEnemyTroops(t1));
-        assertEquals(1,robo.numNeighbouringEnemyTroops(t3));
-        assertEquals(4,robo.numNeighbouringEnemyTroops(t2));
-        assertEquals(1,robo.numNeighbouringEnemyTroops(t4));
-    }
-    @Test
-    public void testOwnsAllNeighbouringTerritories()
-    {
-        this.setup();
-        assertTrue(robo.ownsAllNeighbouringTerritories(t1));
-        assertFalse(robo.ownsAllNeighbouringTerritories(t2));
-        assertFalse(robo.ownsAllNeighbouringTerritories(t3));
-        assertFalse(robo.ownsAllNeighbouringTerritories(t4));
-
-    }
-    @Test
-    public void testNumOwnedNeighbouringTerritories()
-    {
-        this.setup();
-        assertEquals(2,robo.numOwnedNeighbouringTerritories(t1));
-        assertEquals(1,robo.numOwnedNeighbouringTerritories(t2));
-        assertEquals(2,robo.numOwnedNeighbouringTerritories(t3));
-        assertEquals(1,robo.numOwnedNeighbouringTerritories(t4));
-
-    }
-    @Test
     public void testTerritoryMovingUnitsAway()
     {
         this.setup();

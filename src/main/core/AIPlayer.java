@@ -8,6 +8,15 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
+/**
+ * A subclass of Player that has the AIs parameters as well as functions to calculate the
+ * placing of units, attacking and movement of troops.
+ *
+ * @author Anthony
+ * @author Eathan Chase
+ * @author Kyler Verge
+ * @author Tony Zeidan
+ */
 public class AIPlayer extends Player {
 
     /**
@@ -28,19 +37,13 @@ public class AIPlayer extends Player {
     public AIPlayer(String name, RiskColour colour) {
         super(name, colour);
     }
-    public void doAttack(GameSingleton model)
-    {
-        Territory[] territories = territoryToAttack();
-        while(territories[0] != null)
-        {
-            boolean won = model.performBattle(territories[0],territories[1]);
-            if (won) {
-                int numTroopsToMove = territories[0].getUnits()-1;
-                model.moveUnits(territories[0],territories[1],numTroopsToMove);
-            }
-            territories = territoryToAttack();
-        }
-    }
+
+    /**
+     * places the number of units specified by the model, on the territories of the AI.
+     *
+     * @param numUnits The number of units to be added to the territories of the AI
+     * @param model The GameSingleton that contains more general game logic
+     */
     public void placeUnits(int numUnits, GameSingleton model){
         while(numUnits >0)
         {
@@ -59,6 +62,13 @@ public class AIPlayer extends Player {
             numUnits--;
         }
     }
+
+    /**
+     * A utilty function to determine at that specific call what the most optimal territory to add a troops to.
+     *
+     * @param territory the Territory that's utility is being determined.
+     * @return double the utility of placing a unit on that territory.
+     */
     public double placeUnitsUtilityFunction(Territory territory){
         //arbitrary percentages, just want to put more emphasis on troop difference
         //25 percent how many neighbouring are owned terr, if all neighbour owned make that part 0 percent
@@ -80,6 +90,31 @@ public class AIPlayer extends Player {
              lessTroopsPercentage = .75*(0.5 -(numTroops-numEnemyTroops)/10.0);
         return neighbouringPercentage + lessTroopsPercentage ;
     }
+
+    /**
+     * performs all the attacks that the AI computes as optimal, with randomness caused by dice.
+     *
+     * @param model The GameSingleton that contains general game logic.
+     */
+    public void doAttack(GameSingleton model)
+    {
+        Territory[] territories = territoryToAttack();
+        while(territories[0] != null)
+        {
+            boolean won = model.performBattle(territories[0],territories[1]);
+            if (won) {
+                int numTroopsToMove = territories[0].getUnits()-1;
+                model.moveUnits(territories[0],territories[1],numTroopsToMove);
+            }
+            territories = territoryToAttack();
+        }
+    }
+
+    /**
+     * determines the most optimal territory to attack with and where to attack to.
+     * @return Territory[] where at index 0 is the attacker territory and index 1 is the defending territory. Null is returned
+     * when no attack is good enough for the AI.
+     */
     public Territory[] territoryToAttack()
     {
         Territory attacking = null;
@@ -103,6 +138,13 @@ public class AIPlayer extends Player {
         }
         return new Territory[]{attacking, defending};
     }
+
+    /**
+     * returns the utility of an amount of units attacking another amount of units.
+     * @param attackers int the amount of units on the attacking territory.
+     * @param defenders in the amount of units on the defneding territory.
+     * @return
+     */
     public double attackUtilityFunction(int attackers, int defenders)
     {
         int numAttackersDice = (attackers>4)?3:attackers-1;
@@ -132,6 +174,10 @@ public class AIPlayer extends Player {
         }
         return utility;
     }
+
+    /**
+     * performs the end of turn move for the AI.
+     */
     public void moveTroops()
     {
         //territoryMovingUnitsAway null if no owned territory with no neighbouring enemy territories, and units more than 1
@@ -144,6 +190,11 @@ public class AIPlayer extends Player {
             terrUnitsMoveTo.addUnits(unitsToMove);
         }
     }
+
+    /**
+     * determines the best territory to move its units away from
+     * @return Territory where the end of turn move will start at
+     */
     public Territory territoryMovingUnitsAway()
     {
         //no neighbouring enemy territories
@@ -165,6 +216,12 @@ public class AIPlayer extends Player {
         }
         return terrUnitsMoveAwayFrom;
     }
+
+    /**
+     * Determines the best territory to move the units of another territory to.
+     * @param territory The territory that the end of turn starts at.
+     * @return Territory that the units will be moved to.
+     */
     public Territory territoryMovingUnitsTo(Territory territory)
     {
         //pick the territory with the most enemy units
@@ -197,7 +254,13 @@ public class AIPlayer extends Player {
         }
         return terrUnitsMoveTo;
     }
-    public int numOwnedNeighbouringTerritories(Territory territory)
+
+    /**
+     * Determines the number of owned territories that neighbour that territory
+     * @param territory the Territory that is finding out the number of owned neighbours
+     * @return int of the number of neighbouring territories it owns.
+     */
+    private int numOwnedNeighbouringTerritories(Territory territory)
     {
         int counter = 0;
         for (Territory neighbourTerr:territory.getNeighbours())
@@ -209,11 +272,23 @@ public class AIPlayer extends Player {
         }
         return counter;
     }
-    public boolean ownsAllNeighbouringTerritories(Territory territory)
+
+    /**
+     * Determines if the territory owns all the territories it neighbours
+     * @param territory the Territory finding out if it owns all its neighbouring territories
+     * @return boolean if it owns all the neighbouring territories returns true, else false.
+     */
+    private boolean ownsAllNeighbouringTerritories(Territory territory)
     {
         return(numOwnedNeighbouringTerritories(territory) == territory.getNeighbours().size());
     }
-    public int numNeighbouringEnemyTroops(Territory territory)
+
+    /**
+     * determines the number of enemy troops that border the territory.
+     * @param territory The territory that finds the number of enemy units bordering it.
+     * @return int the number of enemy troops bordering it.
+     */
+    private int numNeighbouringEnemyTroops(Territory territory)
     {
         int numUnits =0;
         for(Territory terr: territory.getNeighbours())

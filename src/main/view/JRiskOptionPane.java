@@ -35,6 +35,8 @@ public class JRiskOptionPane {
      * @param player The player whose input made this dialog appear
      * @param lowerBound The lower bound of the dice rolls
      * @param upperBound The higher bound of the dice rolls
+     * @param description String the description of what territory is attacking who, and whether it is a defense or
+     * attack roll
      * @return The option the user chose (corresponds to constants above)
      */
     public static int showDieCountDialog(JFrame frame,Player player, int lowerBound, int upperBound,String description) {

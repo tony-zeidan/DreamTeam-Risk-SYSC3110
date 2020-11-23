@@ -34,6 +34,9 @@ public class Player {
      */
     private boolean active;
 
+    /**
+     * Contains the user input for the amount of dice to use
+     */
     private int diceRoll;
 
     /**
@@ -153,10 +156,20 @@ public class Player {
     public boolean ownsTerritory(Territory territory) {
         return owned.contains(territory);
     }
+
+    /**
+     * setter for amount of dice the user wants to use
+     * @param numOfDice int number of dice to use
+     */
     public void setDiceRoll(int numOfDice)
     {
         diceRoll = numOfDice;
     }
+
+    /**
+     * Getter fof the amount of dice the user wants to use.
+     * @return int the amount of dice to use.
+     */
     public int getDiceRoll()
     {
         return diceRoll;

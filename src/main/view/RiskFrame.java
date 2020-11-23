@@ -22,8 +22,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      * The model for this view.
      */
     private GameSingleton riskModel;
-
-    private RiskController rc;
     /**
      * Stores whose turn it is on the panel.
      */
@@ -54,9 +52,13 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      * altered in other methods.
      */
     private JButton endTurnBtn;
-
+    /**
+     * Jbutton for end of turn movement.
+     */
     private JButton moveUnitsBtn;
-
+    /**
+     * the current phase that the game is in.
+     */
     private GamePhase gamePhase;
 
     /**
@@ -80,7 +82,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      */
     private void composeFrame() {
 
-        rc = new RiskController(riskModel, this);
+        RiskController rc = new RiskController(riskModel, this);
         riskModel.addHandler(this);
 
         JMenuBar menuBar = new JMenuBar();
@@ -298,6 +300,10 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         return mapPane.getScalingY();
     }
 
+    /**
+     * gets the number of units to be added
+     * @return int the number of units that need to be added
+     */
     public int getBonusUnits() {
         try {
             return Integer.parseInt(playerBonusUnitsLbl.getName());
@@ -306,6 +312,10 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         }
     }
 
+    /**
+     * sets the lbl to the number of bonus troops that need to be added
+     * @param units
+     */
     public void setBonusUnits(int units) {
         playerBonusUnitsLbl.setText("Bonus Units: " + units);
         playerBonusUnitsLbl.setName(units+"");
@@ -404,6 +414,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         }
     }
 
+    /**
+     * restores button to default of attacking
+     */
     private void restoreAttack() {
         attackBtn.setEnabled(false);
         attackBtn.setActionCommand("A");
@@ -418,6 +431,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         playerBonusUnitsLbl.setVisible(false);
     }
 
+    /**
+     * restores default buttons in end of turn movement
+     */
     private void restoreMoveUnits() {
         attackBtn.setEnabled(false);
         attackBtn.setActionCommand("NULL");
@@ -432,6 +448,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         playerBonusUnitsLbl.setVisible(false);
     }
 
+    /**
+     * restores button default in troop placement
+     */
     private void restoreBonusTroupe() {
         attackBtn.setEnabled(false);
         attackBtn.setActionCommand("NULL");

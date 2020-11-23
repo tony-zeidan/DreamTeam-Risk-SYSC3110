@@ -164,10 +164,19 @@ public class GameSingleton {
         notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_MAP, getValidAttackNeighboursOwned(getCurrentPlayer(), territory)));
     }
 
+    /**
+     * notify all views to set the displayable coordinates/territories to be only those
+     * owned by the current player
+     */
     public void notifyMapUpdateOwnedCoordinates() {
         notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_MAP,getAllOwnedNodes(getCurrentPlayer())));
     }
 
+    /**
+     * notify all view to set the displayable coordinates/territories to be only those
+     * that are in the same path as the given territory
+     * @param territory the territory that the other owned territories must be connected to
+     */
     public void notifyMapUpdateTroupeMoveCoordinate(Territory territory) {
         notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_MAP, getValidTroupeMovementTerritories(territory)));
     }
@@ -205,6 +214,9 @@ public class GameSingleton {
         }
     }
 
+    /**
+     * Makes the current Phase pass to the next phase
+     */
     public void nextPhase() {
         Player currentPlayer = getCurrentPlayer();
         switch (gamePhase) {
@@ -294,12 +306,18 @@ public class GameSingleton {
         int continentBonus = 0;
         Set<Continent> ruled = world.getRuled(current);
         for(Continent c : ruled){
+            System.out.println(c.getContinentName());
             continentBonus += c.getBonusRulerAmount();
         }
 
         return (Math.max(territoryBonus, 3)) + continentBonus;
     }
 
+    /**
+     * gets all territories/coordinates the that player owns
+     * @param player that nodes should be gotten
+     * @return mapping of the territory to its coordinate
+     */
     public Map<Territory,Point> getAllOwnedNodes(Player player) {
         Map<Territory,Point> owned = new HashMap<>();
         for (Territory t : player.getOwnedTerritories()) {
@@ -340,6 +358,11 @@ public class GameSingleton {
         }
     }
 
+    /**
+     * Determines the territories/coordinates that are connected to the provided territory and same owner.
+     * @param initial The inital territory that the end of turn move starts at
+     * @return mapping of territories and coordinates.
+     */
     public Map<Territory,Point> getValidTroupeMovementTerritories(Territory initial) {
         List<Territory> queue = new LinkedList<>();
         Map<Territory, Point> visited = new HashMap<>();
@@ -374,6 +397,13 @@ public class GameSingleton {
         }
     }
 
+    /**
+     * performs the battle, notifying views for user input if needed
+     * for the attacking and defending of the two territories.
+     * @param attacking the attacking territory
+     * @param defending the defending territory
+     * @return true if the attacking territory has eliminated all troops in defending territory, otherwise false.
+     */
     public boolean performBattle(Territory attacking, Territory defending) {
 
         Player attacker = attacking.getOwner();

@@ -45,8 +45,13 @@ public class WorldMap {
      * Random variable for assigning territories in setup.
      */
     private static Random rand;
-
+    /**
+     * regex pattern for continent
+     */
     private static final Pattern CONTINENT_PATTERN = Pattern.compile("((\\w+\\s?)+)\\((\\d+)\\)\\|((((\\w+\\s?)+),?)+)");
+    /**
+     * regex pattern for territories
+     */
     private static final Pattern TERRITORY_PATTERN = Pattern.compile("((\\w+\\s?)+)\\((\\d+):(\\d+)\\)\\|((((\\w+\\s?)+),?)+)");
 
     /**
@@ -119,6 +124,10 @@ public class WorldMap {
         writeXML();
     }
 
+    /**
+     * reads the String line that holds the continent, the territories they hold, and bonus troops
+     * @param line
+     */
     private void readContinentLine(String line) {
         Matcher matcher = CONTINENT_PATTERN.matcher(line);
         if (matcher.matches()) {
@@ -142,6 +151,10 @@ public class WorldMap {
         }
     }
 
+    /**
+     * reads a String of the territory text file to determine, territory and neighbours
+     * @param line String of the text file
+     */
     private void readTerritoryLine(String line) {
         Matcher matcher = TERRITORY_PATTERN.matcher(line);
         if (matcher.matches()) {
@@ -275,6 +288,11 @@ public class WorldMap {
         }
     }
 
+    /**
+     * returns continents owned by that player
+     * @param player to determine continents it owns
+     * @return Set of continents the player owns
+     */
     public Set<Continent> getRuled(Player player){
         Set<Continent> ruled = new HashSet<>();
         for(Continent c : continents.values()){
@@ -285,6 +303,9 @@ public class WorldMap {
         return ruled;
     }
 
+    /**
+     * updates the owner of the continent
+     */
     public void updateContinentRulers(){
         for(Continent c : continents.values()) c.updateRuler();
     }
