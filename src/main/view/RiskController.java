@@ -1,7 +1,6 @@
 package main.view;
 
 import main.core.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -13,7 +12,7 @@ import java.util.Map;
  * and then uses that input to update the Model.
  *
  * @see GameSingleton
- * <p>
+ *
  * The thought process behind its implementation is that two types GUI events
  * (i.e. buttons being pressed and specific points on the map board being clicked)
  * We override the method in MouseAdapter (in order to only listen to mouse "clicks".
@@ -290,7 +289,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
     private Territory checkClickedTerritory(Point clicked) {
         double x = riskView.getScalingX();
         double y = riskView.getScalingY();
-        Point newpoint = new Point((int) (clicked.getX() / x), (int) (clicked.getY() / y));
+        Point newpoint = new Point((int) (clicked.getX() / x)+6, (int) (clicked.getY() / y)+6);
         Map<Territory, Point> cords = riskView.getPointsToPaint();
         for (Territory t : cords.keySet()) {
             Point p = cords.get(t);

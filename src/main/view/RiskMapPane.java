@@ -144,6 +144,7 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
             lbl2.setBounds(30 + insets.left, 5 + insets.top, lblSize2.width, lblSize2.height);
 
             Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+            setBorder(raisedEtched);
 
             lbl.setLocation(x-(lbl.getWidth()/2)+2,y-15);
             lbl2.setLocation(x+15,y);
