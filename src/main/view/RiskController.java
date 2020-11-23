@@ -43,12 +43,6 @@ public class RiskController extends MouseAdapter implements ActionListener {
     private Territory selectedTerritory;
 
     /**
-     * CLICK_DISTANCE is the minimum distance away from point
-     * to register a click
-     */
-    private static final int CLICK_DISTANCE = 20;
-
-    /**
      * Constructor for instances of the RiskController.
      * Creates a new controller that listen for certain inputs in the view, and
      * update the model with more prompted user inputs.
@@ -299,7 +293,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
             Point translatedCheck = new Point(p.x+RiskMapPane.INNER_POINT_RADIUS,
                     p.y+RiskMapPane.INNER_POINT_RADIUS);
-            if (translatedCheck.distance(newpoint) <= CLICK_DISTANCE) {
+            if (translatedCheck.distance(newpoint) <= RiskMapPane.HIT_POINT_RADIUS) {
                 return t;
             }
         }

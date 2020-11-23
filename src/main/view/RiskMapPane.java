@@ -49,11 +49,30 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
      * Checks to see if it has been loaded before to set up variables
      */
     boolean firstTimeLoaded;
-
+    /**
+     * Represents the diameter of the innermost circle when painting.
+     */
     public static final int INNER_POINT_DIAMETER = 12;
+    /**
+     * Represents the radius of the innermost circle when painting.
+     */
     public static final int INNER_POINT_RADIUS = INNER_POINT_DIAMETER/2;
+    /**
+     * Represents the diameter of the second outermost circle when painting.
+     */
     public static final int OUTER_POINT_DIAMETER = 16;
+    /**
+     * Represents the radius of the second outermost circle when painting.
+     */
     public static final int OUTER_POINT_RADIUS = OUTER_POINT_DIAMETER/2;
+    /**
+     * Represents the diameter of the outermost circle when painting.
+     */
+    public static final int HIT_POINT_DIAMETER = 40;
+    /**
+     * Represents the radius of the outermost circle when painting.
+     */
+    public static final int HIT_POINT_RADIUS = HIT_POINT_DIAMETER/2;
 
     /**
      * Constructor for instances of RiskMapPane.
@@ -132,9 +151,9 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
             g.fillOval(x,  y, INNER_POINT_DIAMETER, INNER_POINT_DIAMETER);
             g.setColor(Color.BLACK);
 
-            diff = 20-INNER_POINT_RADIUS;
+            diff = HIT_POINT_RADIUS-INNER_POINT_RADIUS;
 
-            g.drawOval(x-diff,y-diff,40,40);
+            g.drawOval(x-diff,y-diff,HIT_POINT_DIAMETER,HIT_POINT_DIAMETER);
         }
     }
 
