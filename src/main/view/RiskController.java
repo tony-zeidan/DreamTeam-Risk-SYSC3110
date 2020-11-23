@@ -177,16 +177,13 @@ public class RiskController extends MouseAdapter implements ActionListener {
             case BONUS_TROUPE:
                 int bonusUnits = riskView.getBonusUnits();
 
-                if (clickedTerritory!=null) {
+                if (clickedTerritory!=null && clickedTerritory.getOwner() == riskModel.getCurrentPlayer()) {
                     bonusUnits -= 1;
                     riskView.setBonusUnits(bonusUnits);
                     riskModel.moveBonus(clickedTerritory);
                     if (bonusUnits==0) {
                         riskModel.nextPhase();
                     }
-                } else {
-                    //TODO: this line below may be useless
-                    riskModel.notifyMapUpdateOwnedCoordinates();
                 }
                 break;
             case ATTACK:
@@ -241,7 +238,6 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 if (selectedAction!=null && selectedAction.equals("M")) {
                     if (selectedTerritory != null) {
                         if (clickedTerritory != null) {
-
                                 //Get the Number of Units the Victor wishes to move to their newly claimed territory
                             int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView, currentPlayer, clickedTerritory,
                                     selectedTerritory, 1, true);
