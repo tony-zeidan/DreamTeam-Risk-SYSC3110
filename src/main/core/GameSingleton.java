@@ -225,7 +225,8 @@ public class GameSingleton {
             case START_GAME:
             case MOVE_UNITS:
                 this.gamePhase=GamePhase.BONUS_TROUPE;
-                notifyMapUpdateOwnedCoordinates();
+                //notifyMapUpdateOwnedCoordinates();
+                notifyMapUpdateAllCoordinates();
                 if (currentPlayer instanceof AIPlayer)
                 {
                     int numTroopsToPlace = getBonusUnits(currentPlayer);
@@ -639,7 +640,7 @@ public class GameSingleton {
         tempTerritory.setUnits(1);
         moveUnits(tempTerritory,bonusTerritory,1);
         mover.removeTerritory(tempTerritory);
-        notifyMapUpdateOwnedCoordinates();
+        notifyMapUpdateAllCoordinates();
     }
 
     /**
