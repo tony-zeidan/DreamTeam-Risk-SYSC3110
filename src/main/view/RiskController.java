@@ -177,6 +177,10 @@ public class RiskController extends MouseAdapter implements ActionListener {
             case BONUS_TROUPE:
                 int bonusUnits = riskView.getBonusUnits();
 
+                /*
+                Note that we could have triggered an event in the model, but didn't think
+                it was worth the struggle doing too much error checking.
+                 */
                 if (clickedTerritory!=null && clickedTerritory.getOwner() == riskModel.getCurrentPlayer()) {
                     bonusUnits -= 1;
                     riskView.setBonusUnits(bonusUnits);
