@@ -287,13 +287,19 @@ public class RiskController extends MouseAdapter implements ActionListener {
      * @return Territory that was clicked
      */
     private Territory checkClickedTerritory(Point clicked) {
+
+        //we need to downscale the point that was clicked on to the original set of points
         double x = riskView.getScalingX();
         double y = riskView.getScalingY();
-        Point newpoint = new Point((int) (clicked.getX() / x)+6, (int) (clicked.getY() / y)+6);
+        Point newpoint = new Point((int) ((clicked.getX()) / x), (int) ((clicked.getY()) / y));
+
         Map<Territory, Point> cords = riskView.getPointsToPaint();
         for (Territory t : cords.keySet()) {
             Point p = cords.get(t);
-            if (p.distance(newpoint) < CLICK_DISTANCE) {
+
+            Point translatedCheck = new Point(p.x+RiskMapPane.INNER_POINT_RADIUS,
+                    p.y+RiskMapPane.INNER_POINT_RADIUS);
+            if (translatedCheck.distance(newpoint) <= CLICK_DISTANCE) {
                 return t;
             }
         }

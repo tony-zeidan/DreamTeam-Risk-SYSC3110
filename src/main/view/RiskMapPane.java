@@ -50,6 +50,11 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
      */
     boolean firstTimeLoaded;
 
+    public static final int INNER_POINT_DIAMETER = 12;
+    public static final int INNER_POINT_RADIUS = INNER_POINT_DIAMETER/2;
+    public static final int OUTER_POINT_DIAMETER = 16;
+    public static final int OUTER_POINT_RADIUS = OUTER_POINT_DIAMETER/2;
+
     /**
      * Constructor for instances of RiskMapPane.
      * Creates a new map pane (meant to be embedded within RiskFrame)
@@ -102,6 +107,8 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
         placePointLabels();     //paint the labels to go with the points
     }
 
+
+
     /**
      *
      * @param g Graphics draws the points of the territories with their colour
@@ -114,10 +121,20 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
             g.setColor(Color.BLACK);
             int x = (int) (p.getX() * scalingX);
             int y = (int) (p.getY() * scalingY);
-            g.fillOval(x-2,y-2,16,16);
+
+            int diff = OUTER_POINT_RADIUS-INNER_POINT_RADIUS;
+
+            g.fillOval(x-diff, y-diff, OUTER_POINT_DIAMETER,OUTER_POINT_DIAMETER);
+
             Player player = t.getOwner();
             g.setColor(player.getColour().getValue());
-            g.fillOval(x,  y, 12, 12);
+
+            g.fillOval(x,  y, INNER_POINT_DIAMETER, INNER_POINT_DIAMETER);
+            g.setColor(Color.BLACK);
+
+            diff = 20-INNER_POINT_RADIUS;
+
+            g.drawOval(x-diff,y-diff,40,40);
         }
     }
 
