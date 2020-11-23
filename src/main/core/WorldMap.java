@@ -140,6 +140,7 @@ public class WorldMap {
                 return;
             }
             Continent continent = new Continent(readName,bonusUnits);
+            continents.put(readName,continent);
             String territoriesString = matcher.group(4);
             List<String> territoriesWithin = Arrays.asList(territoriesString.split(","));
             for (String s : territoriesWithin) {
@@ -296,7 +297,7 @@ public class WorldMap {
     public Set<Continent> getRuled(Player player){
         Set<Continent> ruled = new HashSet<>();
         for(Continent c : continents.values()){
-            if(player == c.getRuler()){
+            if(player==c.getRuler()){
                 ruled.add(c);
             }
         }
@@ -307,7 +308,7 @@ public class WorldMap {
      * updates the owner of the continent
      */
     public void updateContinentRulers(){
-        for(Continent c : continents.values()) c.updateRuler();
+        for (Continent c : continents.values()) c.updateRuler();
     }
 
     /**

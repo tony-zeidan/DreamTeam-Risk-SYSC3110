@@ -13,6 +13,10 @@ import java.util.LinkedList;
  * the view of changes made to the game, is responsible
  * for the core functionality of the game.
  *
+ * The model now works with phases and as it progresses through the phases,
+ * it notifies any views. The phases are:
+ *      Bonus Troupe Phase, Attack Phase, Move Units Phase
+ *
  * @author Kyler Verge
  * @author Ethan Chase
  * @author Anthony Dooley
@@ -123,7 +127,6 @@ public class GameSingleton {
             }
         }
 
-        System.out.println(riskHandlers.size());
         //shuffle the order of the players
         shufflePlayers();
         world.setUp(players);
@@ -135,8 +138,6 @@ public class GameSingleton {
 
         notifyHandlers(new RiskEvent(this,
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
-
-        System.out.println("Beginning Player: " + getCurrentPlayer().getName());
 
         nextPhase();    //beginning should be bonus troupe
     }
@@ -215,7 +216,8 @@ public class GameSingleton {
     }
 
     /**
-     * Makes the current Phase pass to the next phase
+     * Switches the current phase of the game.
+     * Goes through phases in a cyclical fashion.
      */
     public void nextPhase() {
         Player currentPlayer = getCurrentPlayer();
@@ -306,7 +308,6 @@ public class GameSingleton {
         int continentBonus = 0;
         Set<Continent> ruled = world.getRuled(current);
         for(Continent c : ruled){
-            System.out.println(c.getContinentName());
             continentBonus += c.getBonusRulerAmount();
         }
 

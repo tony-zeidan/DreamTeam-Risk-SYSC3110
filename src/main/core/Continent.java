@@ -76,14 +76,16 @@ public class Continent {
     public void updateRuler(){
         Iterator<Territory> it = territories.iterator();
         Player firstOwner = it.next().getOwner();
-        while(it.hasNext()){
+        while(it.hasNext()) {
             Player nextOwner = it.next().getOwner();
             if(firstOwner != nextOwner){
                 ruler = null;
                 return;
             }
         }
+        System.out.println("Conquerer determined.");
         ruler = firstOwner;
+
     }
 
 }
