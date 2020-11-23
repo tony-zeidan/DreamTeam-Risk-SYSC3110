@@ -303,6 +303,7 @@ public class GameSingleton {
      * Gets the number of bonus units a player receives at the start of their turn
      *
      * @param current The current Player
+     * @return The amount of bonus units that the player receives
      */
     public int getBonusUnits(Player current) {
         int territoryBonus = current.getOwnedTerritories().size() / 3;
@@ -633,6 +634,10 @@ public class GameSingleton {
         notifyMapUpdateAllCoordinates();
     }
 
+    /**
+     * Moves exactly one unit from the players bonus supply.
+     * @param bonusTerritory The territory the units will be moved to
+     */
     public void moveBonus(Territory bonusTerritory){
         Player mover = bonusTerritory.getOwner();
         Territory tempTerritory = new Territory("bonus");

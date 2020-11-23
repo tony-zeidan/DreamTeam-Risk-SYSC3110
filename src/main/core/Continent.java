@@ -47,7 +47,7 @@ public class Continent {
 
     /**
      * Getter for the amount bonus troops of the continent
-     * @return
+     * @return The amount of units the player will get for conquering this territory
      */
     public int getBonusRulerAmount(){
         return bonusAmount;

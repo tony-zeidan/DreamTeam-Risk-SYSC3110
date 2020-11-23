@@ -1,18 +1,60 @@
-package main.core;
+package Tests.main.core;
+
+import main.core.AIPlayer;
+import main.core.Player;
+import main.core.RiskColour;
+import main.core.Territory;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Testing class that was made to help ensure all the AI functionality
+ * was working as intended.
+ *
+ * @author Ethan Chase
+ * @author Anthony Dooley
+ * @author Kyler Verge
+ * @author Tony Zeidan
+ */
 public class AIPlayerTest {
+    /**
+     * The normal player to test against.
+     */
     Player guy;
+    /**
+     * The AI player to test with.
+     */
     AIPlayer robo;
+    /**
+     * Territory to test with.
+     */
     Territory t1;
+    /**
+     * Territory to test with.
+     */
     Territory t2;
+    /**
+     * Territory to test with.
+     */
     Territory t3;
+    /**
+     * Territory to test with.
+     */
     Territory t4;
+    /**
+     * Territory to test with.
+     */
     Territory t5;
+    /**
+     * Territory to test with.
+     */
     Territory t6;
+
+    /**
+     * Sets up the object for testing.
+     */
     @Before
     public void setup()
     {
@@ -45,6 +87,10 @@ public class AIPlayerTest {
         t5.setUnits(1);
         t6.setUnits(3);
     }
+
+    /**
+     * Test the AI's algorithm for placing units.
+     */
     @Test
     public void testPlaceUnits()
     {
@@ -57,12 +103,20 @@ public class AIPlayerTest {
         assertEquals(13,t1.getUnits()+t2.getUnits()+t3.getUnits()+t4.getUnits());
 
     }
+
+    /**
+     * Test the AI's algorithm for moving units away from a specific territory.
+     */
     @Test
     public void testTerritoryMovingUnitsAway()
     {
         this.setup();
         assertEquals(t1,robo.territoryMovingUnitsAway());
     }
+
+    /**
+     * Test the AI's algorithm for moving units toward from a specific territory.
+     */
     @Test
     public void testTerritoryMovingUnitsTo()
     {
@@ -78,6 +132,10 @@ public class AIPlayerTest {
         t8.setUnits(1);
         assertEquals(t4,robo.territoryMovingUnitsTo(t1));
     }
+
+    /**
+     * Test the Ai's ability to move units effectively (according to utility).
+     */
     @Test
     public void testMoveTroops()
     {

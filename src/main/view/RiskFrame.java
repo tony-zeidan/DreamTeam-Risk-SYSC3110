@@ -325,8 +325,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
     }
 
     /**
-     * sets the lbl to the number of bonus troops that need to be added
-     * @param units
+     * Sets the label to the number of bonus troops that need to be added
+     * @param units The units to show in the label
      */
     public void setBonusUnits(int units) {
         playerBonusUnitsLbl.setText("Bonus Units: " + units);
@@ -352,6 +352,10 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         eventPane.setCurrentInstruction(RiskEventPane.DEFAULT_INSTRUCTION);
     }
 
+    /**
+     * Retrieves the current phase the gui is in right now.
+     * @return The current gui phase
+     */
     public GamePhase getPhase() {
         return gamePhase;
     }

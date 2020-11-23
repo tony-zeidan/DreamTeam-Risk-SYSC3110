@@ -117,6 +117,7 @@ public class JRiskOptionPane {
      *
      * @param frame The parent frame
      * @param playerNum This players number
+     * @param playerType The players type format
      * @return The user's input
      */
     public static String showPlayerNameDialog(JFrame frame, int playerNum, String playerType){

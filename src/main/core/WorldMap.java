@@ -126,7 +126,7 @@ public class WorldMap {
 
     /**
      * reads the String line that holds the continent, the territories they hold, and bonus troops
-     * @param line
+     * @param line The line to read
      */
     private void readContinentLine(String line) {
         Matcher matcher = CONTINENT_PATTERN.matcher(line);
@@ -154,7 +154,7 @@ public class WorldMap {
 
     /**
      * reads a String of the territory text file to determine, territory and neighbours
-     * @param line String of the text file
+     * @param line The line to read
      */
     private void readTerritoryLine(String line) {
         Matcher matcher = TERRITORY_PATTERN.matcher(line);

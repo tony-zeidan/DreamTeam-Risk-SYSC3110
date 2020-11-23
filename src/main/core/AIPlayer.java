@@ -140,10 +140,10 @@ public class AIPlayer extends Player {
     }
 
     /**
-     * returns the utility of an amount of units attacking another amount of units.
+     * Retrieves the utility of an amount of units attacking another amount of units.
      * @param attackers int the amount of units on the attacking territory.
-     * @param defenders in the amount of units on the defneding territory.
-     * @return
+     * @param defenders in the amount of units on the defending territory.
+     * @return The expected utility for a specific attack
      */
     public double attackUtilityFunction(int attackers, int defenders)
     {
