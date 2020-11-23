@@ -4,8 +4,7 @@ import jdk.jfr.ValueDescriptor;
 import org.w3c.dom.Attr;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -87,41 +86,45 @@ public class WorldMap {
         //corresponding to each territory (this is a result of reading the text file)
         HashMap<Territory, String> neighbourStrings = new HashMap<>();
 
+        //this only works for Maven I believe
+        ClassLoader loader = getClass().getClassLoader();
+        InputStream in = loader.getResourceAsStream("src/resources/map_packages/main_package/continents.txt");
 
-
-        //attempt to read the file
-        try {
-            File territoryData = new File("src/resources/map_packages/main_package/countries.txt");
-            File continentData = new File("src/resources/map_packages/main_package/continents.txt");
-            Scanner myReader = new Scanner(continentData);
-            while (myReader.hasNextLine()) {
-                readContinentLine(myReader.nextLine());
-            }
-            myReader.close();
-            myReader = new Scanner(territoryData);
-            while (myReader.hasNextLine()) {
-                readTerritoryLine(myReader.nextLine());
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-        /*
-        We now have a map of all territories, but no neighbours have been added to them.
-        We must loop through the string representation of all neighbours and add them to the
-        corresponding territories.
-         */
-        for (Territory t : neighbourStrings.keySet()) {
-            for (String rt : neighbourStrings.get(t).split(",")) {
-                if (allTerritories.containsKey(rt)) {
-                    t.addNeighbour(allTerritories.get(rt));
+        if (in != null) {
+            BufferedReader buf = new BufferedReader(new InputStreamReader(in));
+            String line = "";
+            try {
+                while ((line = buf.readLine()) != null) {
+                    readContinentLine(line);
                 }
+                buf.close();
+                in.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+                System.out.println("There was a problem reading the file stream.");
             }
+        } else {
+            throw new IllegalArgumentException("The file was not found!");
         }
 
-        writeXML();
+        in = loader.getResourceAsStream("src/resources/map_packages/main_package/countries.txt");
+
+        if (in != null) {
+            BufferedReader buf = new BufferedReader(new InputStreamReader(in));
+            String line = "";
+            try {
+                while ((line = buf.readLine()) != null) {
+                    readTerritoryLine(line);
+                }
+                buf.close();
+                in.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+                System.out.println("There was a problem reading the file stream.");
+            }
+        } else {
+            throw new IllegalArgumentException("The file was not found!");
+        }
     }
 
     /**
