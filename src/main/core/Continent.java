@@ -83,9 +83,7 @@ public class Continent {
                 return;
             }
         }
-        System.out.println("Conquerer determined.");
         ruler = firstOwner;
-
     }
 
 }

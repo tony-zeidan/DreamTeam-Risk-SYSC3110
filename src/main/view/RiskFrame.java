@@ -254,6 +254,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         }
         return Integer.parseInt(input);
     }
+
     private void addAIsToList(int numAIs,List<Player> players)
     {
         for (int i = 0; i < numAIs; i++) {

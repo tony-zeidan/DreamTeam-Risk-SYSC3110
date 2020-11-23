@@ -473,7 +473,6 @@ public class GameSingleton {
             notifyHandlers(new RiskEvent(this, RiskEventType.TERRITORY_DOMINATED,
                     attacker, defender));
             notifyMapUpdateAllCoordinates();
-            world.updateContinentRulers();
             return true;
         }
         return false;
@@ -619,7 +618,7 @@ public class GameSingleton {
             //Print a message to confirm the fortify after an attack
             notifyHandlers(new RiskEvent(this, RiskEventType.UNITS_MOVED,
                     initialT, finalT, numUnits));
-
+            world.updateContinentRulers();
             //Check to see if their is only one player remaining
             updateNumActivePlayers();
             if (this.getNumActivePlayer() == 1) {
