@@ -4,6 +4,16 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * JUnit Testing class, tests some of the AIs functions
+ * and ensures AI is working
+ *
+ * @author Ethan Chase
+ * @author Kyler Verge
+ * @author Anthony Dooley
+ * @author Tony Zeidan
+ */
+
 public class AIPlayerTest {
     Player guy;
     AIPlayer robo;

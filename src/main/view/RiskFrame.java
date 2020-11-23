@@ -326,7 +326,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
     /**
      * sets the lbl to the number of bonus troops that need to be added
-     * @param units
+     * @param units amount of troops
      */
     public void setBonusUnits(int units) {
         playerBonusUnitsLbl.setText("Bonus Units: " + units);
