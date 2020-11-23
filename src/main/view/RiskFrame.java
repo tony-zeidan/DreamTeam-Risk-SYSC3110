@@ -231,6 +231,12 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         return players;
     }
     //refactor
+
+    /**
+     * gets the number of AIs playing the game
+     * @param numSpotsTaken, int determining the max of AIs to be allowed
+     * @return the number of AIs chosen
+     */
     private int numOfAIs(int numSpotsTaken)
     {
         String[] options;
@@ -255,6 +261,11 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         return Integer.parseInt(input);
     }
 
+    /**
+     * Adds a number of AI to the players list
+     * @param numAIs number of AIs to add
+     * @param players the list of players AIs are added to
+     */
     private void addAIsToList(int numAIs,List<Player> players)
     {
         for (int i = 0; i < numAIs; i++) {

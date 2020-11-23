@@ -189,17 +189,6 @@ public class WorldMap {
         }
     }
 
-    public void printMap() {
-        for (Continent c : continents.values()) {
-            System.out.println(c.getContinentName()+ ":" + c.getBonusRulerAmount());
-        }
-        /*
-        for (Territory t : allCoordinates.keySet()) {
-            Point p = allCoordinates.get(t);
-            System.out.println(t.getName() + "-" + t.getUnits() + "-" + t.getOwner().getName());
-        }*/
-    }
-
     /**
      * Gets the neighbouring territories that the current player owns
      * when attacking a territory.
