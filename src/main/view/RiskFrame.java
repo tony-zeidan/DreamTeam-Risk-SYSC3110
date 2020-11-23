@@ -204,7 +204,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
     private int getNumOfPlayers() {
         String input;
         Object[] options = {"1","2", "3", "4", "5", "6"};
-        input = (String) JOptionPane.showInputDialog(this, "How many players?", "Number of Players",
+        input = (String) JOptionPane.showInputDialog(this, "How many human players?", "Number of Human Players",
                 JOptionPane.QUESTION_MESSAGE, null, options, "2");
         //User pressed close or cancel
         if (input == null) {
@@ -252,7 +252,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 options[i] = Integer.toString((i));
             }
         }
-        String input = (String) JOptionPane.showInputDialog(this, "How many AIs?", "Number of AIs",
+        String input = (String) JOptionPane.showInputDialog(this, "How many AI Players?", "Number of AI Players",
                 JOptionPane.QUESTION_MESSAGE, null, options, "2");
         //User pressed close or cancel
         if (input == null) {
