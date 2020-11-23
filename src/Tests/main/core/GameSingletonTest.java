@@ -1,5 +1,9 @@
-package main.core;
+package Tests.main.core;
 
+import main.core.GameSingleton;
+import main.core.Player;
+import main.core.RiskColour;
+import main.core.Territory;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.ArrayList;
