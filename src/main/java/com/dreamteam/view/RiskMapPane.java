@@ -1,8 +1,6 @@
-package main.view;
+package com.dreamteam.view;
 
-import main.core.Player;
-import main.core.RiskColour;
-import main.core.Territory;
+import com.dreamteam.core.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class is a part of RiskFrame and contains the Map with its points and labels. RiskMapPane is also a view
+ * This class is a part of RiskFrame and contains the Map with its points and labels. RiskMapPane is also a com.dreamteam.view
  * and handles the update of the Map GUI when certain events in the model happen.
  *
  * @author Kyler Verge

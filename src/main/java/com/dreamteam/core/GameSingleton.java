@@ -1,8 +1,8 @@
-package main.core;
+package com.dreamteam.core;
 
-import main.view.RiskEvent;
-import main.view.RiskEventType;
-import main.view.RiskGameHandler;
+import com.dreamteam.view.RiskEvent;
+import com.dreamteam.view.RiskEventType;
+import com.dreamteam.view.RiskGameHandler;
 
 import java.awt.*;
 import java.util.*;
@@ -11,8 +11,8 @@ import java.util.LinkedList;
 
 /**
  * This class represents the model for the program, notifies
- * the view of changes made to the game, is responsible
- * for the core functionality of the game.
+ * the com.dreamteam.view of changes made to the game, is responsible
+ * for the com.dreamteam.core functionality of the game.
  * <p>
  * The model now works with phases and as it progresses through the phases,
  * it notifies any views. The phases are:
@@ -59,7 +59,7 @@ public class GameSingleton {
     private List<RiskGameHandler> riskHandlers;
 
     /**
-     * Default constructor for instances of main.core.Game class.
+     * Default constructor for instances of main.com.dreamteam.core.Game class.
      * (For now) Creates a new game with the hardcoded map and the players that
      * the user inputs.
      *
@@ -177,7 +177,7 @@ public class GameSingleton {
     }
 
     /**
-     * notify all view to set the displayable coordinates/territories to be only those
+     * notify all com.dreamteam.view to set the displayable coordinates/territories to be only those
      * that are in the same path as the given territory
      *
      * @param territory the territory that the other owned territories must be connected to

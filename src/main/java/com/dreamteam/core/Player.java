@@ -1,7 +1,7 @@
-package main.core;
+package com.dreamteam.core;
+
 
 import java.util.*;
-import java.util.List;
 
 /**
  * Class Player represents the user within the {@link GameSingleton}.
@@ -49,7 +49,7 @@ public class Player {
 
 
     /**
-     * Constructor for instances of main.core.Player class with name and colour.
+     * Constructor for instances of main.com.dreamteam.core.Player class with name and colour.
      *
      * @param name   The name of the player
      * @param colour The colour of the units that the player owns
@@ -144,7 +144,7 @@ public class Player {
     }
 
     /**
-     * Determines whether the player owns the given main.core.Territory.
+     * Determines whether the player owns the given main.com.dreamteam.core.Territory.
      *
      * @param territory The territory to check
      * @return Whether the player owns the territory (t/f)

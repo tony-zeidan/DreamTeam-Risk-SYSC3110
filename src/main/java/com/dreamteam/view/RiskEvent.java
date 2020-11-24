@@ -1,10 +1,10 @@
-package main.view;
+package com.dreamteam.view;
 
 import java.util.EventObject;
 
 /**
  * This class is used when handling the update of the model, specifying the type
- * of event that occurred and necessary information to process the event in each view.
+ * of event that occurred and necessary information to process the event in each com.dreamteam.view.
  *
  * @author Kyler Verge
  * @author Ethan Chase

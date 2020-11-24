@@ -1,11 +1,8 @@
-package main.view;
+package com.dreamteam.view;
 
-import main.core.Player;
-import main.core.RiskColour;
-import main.core.Territory;
+import com.dreamteam.core.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 

@@ -1,7 +1,4 @@
-package main.core;
-
-import main.view.RiskEvent;
-import main.view.RiskEventType;
+package com.dreamteam.core;
 
 import java.util.*;
 
@@ -26,7 +23,7 @@ public class AIPlayer extends Player {
     }
 
     /**
-     * Constructor for instances of main.core.Player class with name and colour.
+     * Constructor for instances of main.com.dreamteam.core.Player class with name and colour.
      *
      * @param name   The name of the player
      * @param colour The colour of the units that the player owns

@@ -34,9 +34,9 @@ Design Decisions:
 For classes we created :
 Territory class to have a name, with a number of units occupying it, ownership being a Player object and its neighbours. We decided to use a HashMap to implement the neighbours, because the look up time is 0(1).  Instead of a list or Binary Search Tree where searching respectively is 0(n) and 0(logn).
 
-WorldMap to hold a set of Territory objects and a name for the map. As well as preforming the random set up for the risk game. The set of Territories are implemented using a HashMap because of its quick look up time. By having the main.core.WorldMap hold a set of territories and each territory holding their neighbours, a graph can be made.
+WorldMap to hold a set of Territory objects and a name for the map. As well as preforming the random set up for the risk game. The set of Territories are implemented using a HashMap because of its quick look up time. By having the main.com.dreamteam.core.WorldMap hold a set of territories and each territory holding their neighbours, a graph can be made.
 
-Player class is to show ownership, with name, and color. As well as a list of territories to be able to check if a main.core.Player is still in the game. This is because a player loses when they have 0 territories, this list is implemented with a LinkedList because there will be a fair bit of adds and removes, and LinkedList are more efficient when removing. But, because there will not be many removes in a row between user input the efficiency will not be noticeable. Also in the main.core.Player class holds a Boolean active.
+Player class is to show ownership, with name, and color. As well as a list of territories to be able to check if a main.com.dreamteam.core.Player is still in the game. This is because a player loses when they have 0 territories, this list is implemented with a LinkedList because there will be a fair bit of adds and removes, and LinkedList are more efficient when removing. But, because there will not be many removes in a row between user input the efficiency will not be noticeable. Also in the main.com.dreamteam.core.Player class holds a Boolean active.
 
 GameSingleton class holds a WorldMap object and a list of Player Objects. The list of Player objects is implemented using an array list as it is more efficient to traverse and there will be no deletions. But again, this efficiency will not be noticeable. The GameSingleton class also hold attack,fortify and end turn functionalities, with the game loop. 
     
@@ -49,7 +49,7 @@ GameSingleton class holds a WorldMap object and a list of Player Objects. The li
    
    From Milestone two:
        The GUI and risk game is implemented using a MVC approach.
-       we created a RiskFrame, which is the main view that holds two other JPanels, RiskMapPane that handles the map points and labels updates, and 
+       we created a RiskFrame, which is the main com.dreamteam.view that holds two other JPanels, RiskMapPane that handles the map points and labels updates, and 
        RiskEventPane which deals with the event descriptions updates, such as dice rolls and unit losses. Each JPanel is added to the 
        GameSingleton class (which is our model) as a RiskGameHandler, placed in an ArrayList as it is efficient at iterating over items
        and for our design we do not remove any items at any time. Our controller RiskController listens for territory selections, attack or end turn button clicks and 

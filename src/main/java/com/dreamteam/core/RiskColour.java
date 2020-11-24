@@ -1,4 +1,4 @@
-package main.core;
+package com.dreamteam.core;
 
 import java.awt.*;
 

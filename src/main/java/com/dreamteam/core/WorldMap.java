@@ -1,7 +1,4 @@
-package main.core;
-
-import jdk.jfr.ValueDescriptor;
-import org.w3c.dom.Attr;
+package com.dreamteam.core;
 
 import java.awt.*;
 import java.io.File;

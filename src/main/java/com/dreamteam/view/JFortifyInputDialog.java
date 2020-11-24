@@ -1,8 +1,7 @@
-package main.view;
+package com.dreamteam.view;
 
-import main.core.Player;
-import main.core.RiskColour;
-import main.core.Territory;
+import com.dreamteam.core.Player;
+import com.dreamteam.core.Territory;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -10,7 +9,8 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * This class represents a dialog that will be shown in the game of RISK when
@@ -87,7 +87,7 @@ public class JFortifyInputDialog extends JDialog implements ActionListener, Chan
     private boolean canCancel;
 
     /**
-     * Constructor for instances of main.view.JFortifyInputDialog.
+     * Constructor for instances of main.com.dreamteam.view.JFortifyInputDialog.
      * Creates a new dialog whose parent frame is the one specified.
      *
      * @param frame The parent frame

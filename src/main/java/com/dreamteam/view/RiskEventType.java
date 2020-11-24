@@ -1,4 +1,4 @@
-package main.view;
+package com.dreamteam.view;
 
 /**
  * This class specifies the type of event being done

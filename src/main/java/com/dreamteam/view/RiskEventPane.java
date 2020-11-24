@@ -1,8 +1,6 @@
-package main.view;
+package com.dreamteam.view;
 
-import main.core.GameSingleton;
-import main.core.Player;
-import main.core.Territory;
+import com.dreamteam.core.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -12,7 +10,7 @@ import java.awt.*;
 
 /**
  * This class is the JPanel that displays the event descriptions and is a part of the RiskFrame. RiskEventPane is
- * also a view that updates the event descriptions after certain events are done in the model.
+ * also a com.dreamteam.view that updates the event descriptions after certain events are done in the model.
  *
  * @author Kyler Verge
  * @author Ethan Chase
@@ -55,7 +53,7 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
     private JScrollPane gameEventScroller;
 
     /**
-     * Creates a Jpanel with the events descriptions and adds it as a view in the model
+     * Creates a Jpanel with the events descriptions and adds it as a com.dreamteam.view in the model
      * to update model events.
      */
     public RiskEventPane() {

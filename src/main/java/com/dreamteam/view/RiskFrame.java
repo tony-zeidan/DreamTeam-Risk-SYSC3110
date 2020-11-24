@@ -1,11 +1,11 @@
-package main.view;
+package com.dreamteam.view;
 
-import main.core.*;
+import com.dreamteam.core.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,7 +20,7 @@ import java.util.Map;
 public class RiskFrame extends JFrame implements RiskGameHandler {
 
     /**
-     * The model for this view.
+     * The model for this com.dreamteam.view.
      */
     private GameSingleton riskModel;
     /**
@@ -484,7 +484,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
 
     /**
-     * Main method for this view. (Testing)
+     * Main method for this com.dreamteam.view. (Testing)
      *
      * @param args n/a
      */

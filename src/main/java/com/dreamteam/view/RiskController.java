@@ -1,6 +1,6 @@
-package main.view;
+package com.dreamteam.view;
 
-import main.core.*;
+import com.dreamteam.core.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +30,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
      */
     private GameSingleton riskModel;
     /**
-     * RiskFrame is the view of the MVC pattern
+     * RiskFrame is the com.dreamteam.view of the MVC pattern
      */
     private RiskFrame riskView;
     /**
@@ -44,11 +44,11 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
     /**
      * Constructor for instances of the RiskController.
-     * Creates a new controller that listen for certain inputs in the view, and
+     * Creates a new controller that listen for certain inputs in the com.dreamteam.view, and
      * update the model with more prompted user inputs.
      *
      * @param riskModel The model to get data from and update
-     * @param riskView  The view to obtain
+     * @param riskView  The com.dreamteam.view to obtain
      */
     public RiskController(GameSingleton riskModel, RiskFrame riskView) {
         this.riskView = riskView;
@@ -71,9 +71,9 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
     /**
      * Action listener implementation.
-     * This will be added mainly to JButtons in the view.
+     * This will be added mainly to JButtons in the com.dreamteam.view.
      * Checks if the buttons are being clicked and then sets the selected option
-     * field and the components in the view accordingly.
+     * field and the components in the com.dreamteam.view accordingly.
      *
      * @param e The event that was triggered
      */
