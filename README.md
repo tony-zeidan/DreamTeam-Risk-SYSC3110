@@ -3,34 +3,26 @@
 ### Team Members:
 Name | Main Contributions
 ------------ | -------------
-Tony Abou-Zeidan | GUI, Controller, Events, Territory Refactoring
-Anthony Dooley | Controller, Events, Territory Refactoring
-Ethan Chase | Events, Singleton Model, Map Editing, Testing
-Kyler Verge | Events, Controller Input, Map Editing, Documentation
-
-
-
-### TODOS:
-- Address remarks from TA about Milestone 2 submission and refine code where necessary
-- Implement an algorithm for maximum utility (AI Player)
-- Algorithms for bonus troupe placement
-- Algorithms for continent conquering bonus
-- Fortification process needs to be changed (moving units across territories)
+Tony Abou-Zeidan | Controller Refactoring, GUI Refactoring, AI Development, AI Integration
+Anthony Dooley | Controller Refactoring, AI Development, AI Integration, Testing
+Ethan Chase | Controller Refactoring, Documentation, Moving Units, Testing,
+Kyler Verge | Map Updating, Bonus Troupe, Continent Bonus, Documentation
 
 ### Project Description:
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
 > Risk project!
 
-### Since-Milestone 1 Changes:
-- visual map implemented (an interactive map that uses java.awt.Graphics and a JPanel)
-- MVC pattern implemented (RiskFrame, RiskController, RiskEvent, RiskGameView, JRiskOptionPane)
-- made changes to Territory.java (has a neighbour container)
+### Since-Milestone 2 Changes:
+- Fixed documentation
+- Added hit boxes around territories
+- Added AI players that use expected utility method
+- Added new game phase integration to keep the game running cyclical
  
 **Project Progress**
 
 ![99%](https://progress-bar.dev/99)
 
-milestone 2 phase
+milestone 3 phase
 
 [UML](https://lucid.app/invitations/accept/fdd00eb0-1f04-4212-8db9-c9dd045a9c40)
 
@@ -48,19 +40,31 @@ Player class is to show ownership, with name, and color. As well as a list of te
 
 GameSingleton class holds a WorldMap object and a list of Player Objects. The list of Player objects is implemented using an array list as it is more efficient to traverse and there will be no deletions. But again, this efficiency will not be noticeable. The GameSingleton class also hold attack,fortify and end turn functionalities, with the game loop. 
     
-### Decision Making: MileStone 2:
+### Decision Making - MileStone 3:
    From Milestone one:
      Neighbours in Territory class was changed from a Map to a set, as there was never any look up being used and a set is a better data structure as the Territory can not have the same neighbour twice.
      As well as in the Player's class where the owned also was changed to a set, as it should not have duplicates of the same territory.Game class was changed to a singleton class, so that only one Game can be instantiated at one time.
      In WorldMap class the setting up of territories acts more like a parser now, reading in a text file. As well as the worldMap
      having a Mapping of Territories to their coordinates.
    
-   The GUI and risk game is implemented using a MVC approach.
-   we created a RiskFrame, which is the main view that holds two other JPanels, RiskMapPane that handles the map points and labels updates, and 
-   RiskEventPane which deals with the event descriptions updates, such as dice rolls and unit losses. Each JPanel is added to the 
-   GameSingleton class (which is our model) as a RiskGameHandler, placed in an ArrayList as it is efficient at iterating over items
-   and for our design we do not remove any items at any time. Our controller RiskController listens for territory selections, attack or end turn button clicks and 
-   passes this information to the model to perform the appropriate action.
+   From Milestone two:
+       The GUI and risk game is implemented using a MVC approach.
+       we created a RiskFrame, which is the main view that holds two other JPanels, RiskMapPane that handles the map points and labels updates, and 
+       RiskEventPane which deals with the event descriptions updates, such as dice rolls and unit losses. Each JPanel is added to the 
+       GameSingleton class (which is our model) as a RiskGameHandler, placed in an ArrayList as it is efficient at iterating over items
+       and for our design we do not remove any items at any time. Our controller RiskController listens for territory selections, attack or end turn button clicks and 
+       passes this information to the model to perform the appropriate action.
+   
+   We now implemented an AI player as an extension of the main Player class. The AI player contains all computation methods necessary to choose the best method of approach when taking its turn.
+   The AI player not only deals with attacking, but moving bonus units and fortifying.
+   The AI player chooses the option that maximizes maximum expected utility for that phase of the game.
+   
+   The game now also runs with game phases, which go in a cyclical fashion. The first phase is the "Start Game" phase which will not be returned to again after moving on.
+   The next phase is the "Bonus Troupe" phase in which the controller only expects mouse clicks with the intention of placing a single unit on a territory that the player owns.
+   The next phase is the "Attack" phase in which the controller only expects mouse and button clicks with the intention of attacking a territory from another.
+   The next phase is the "Move Units" phase in which the controller only expects mouse and button clicks with the intention of moving only one set of units from one owned territory to another
+   along a path of other owned territories.
+   After the "Move Units" phase, the next players turn is initiated and the phase loops back to the "Bonus Troupe" phase.
     
     
 ### Milestones:
@@ -89,7 +93,7 @@ GameSingleton class holds a WorldMap object and a list of Player Objects. The li
       and data structures from Milestone 1 and explain why. 
     - Deadline: Monday November 9th. Weight: 20% of the overall project grade.
 
-- [ ] Milestone 3: Addition of army placement, troupe movement phase, etc...
+- [x] Milestone 3: Addition of army placement, troupe movement phase, etc...
     >  Additional features: bonus army placement + troupe movement phase +
       “AI” player. As per the rules of Risk, at the beginning of a player’s turn, the player
       receives reinforcement armies proportional to the number of countries held (total
@@ -110,6 +114,7 @@ GameSingleton class holds a WorldMap object and a list of Player Objects. The li
       documentation. The program must work robustly, and the code must be “smellfree” (we will be hunting for smells!). Make sure that you document the changes
       since the last iteration, and the reason for those changes.
     - Deadline: Monday November 23rd. Weight: 30% of the overall project grade
+    
 - [ ] Milestone 4: Addition of saving / loading features
     > Two more things: 1- Save/load features. You may use Java Serialization to
      achieve this. 2- Custom maps. The custom map may be defined in XML or JSON format.
