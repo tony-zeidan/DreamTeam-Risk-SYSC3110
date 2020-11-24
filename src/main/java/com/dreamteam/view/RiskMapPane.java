@@ -1,6 +1,8 @@
 package com.dreamteam.view;
 
-import com.dreamteam.core.*;
+import com.dreamteam.core.Player;
+import com.dreamteam.core.RiskColour;
+import com.dreamteam.core.Territory;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -8,8 +10,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -88,11 +90,17 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
         scalingY = 1;
         //attempt to read the map file
         BufferedImage mapImage = null;
-        try {
-            mapImage = ImageIO.read(new File("src/resources/map_packages/main_package/map.png"));
-        } catch (IOException ioException) {
-            System.out.println("RISK Board Load Failed");
-            ioException.printStackTrace();
+        ClassLoader cl = getClass().getClassLoader();
+        InputStream in = cl.getResourceAsStream("map_packages/main_package/map.png");
+        if (in!=null) {
+            try {
+                mapImage = ImageIO.read(in);
+            } catch (IOException ioException) {
+                System.out.println("RISK Board Load Failed");
+                ioException.printStackTrace();
+            }
+        } else {
+            throw new IllegalArgumentException("The map file specified does not exist!");
         }
         finalMapImage = mapImage;
         firstTimeLoaded = true;
