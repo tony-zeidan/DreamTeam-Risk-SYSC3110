@@ -179,7 +179,6 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
                 Player beganPlayer = (Player) info[0];
                 addEvent(String.format("%s's turn has began", beganPlayer.getName()));
                 setCurrentInstruction(beganPlayer.getName() + ", please select a territory or end your turn.");
-                System.out.println("Displayed");
                 break;
             case TURN_ENDED:
                 clearSelectedTerritoryDisplay();

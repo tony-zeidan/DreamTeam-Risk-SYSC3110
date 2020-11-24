@@ -1,6 +1,7 @@
 package com.dreamteam.view;
 
 import com.dreamteam.core.*;
+import com.github.cliftonlabs.json_simple.Jsoner;
 
 import javax.swing.*;
 import java.awt.*;
@@ -75,6 +76,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         setLayout(new BorderLayout());
         composeFrame();
         riskModel.setUpGame();
+
+        String json = Jsoner.serialize(riskModel);
+        System.out.println(Jsoner.prettyPrint(json));
     }
 
     /**

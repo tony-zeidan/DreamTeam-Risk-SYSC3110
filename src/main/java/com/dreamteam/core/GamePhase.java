@@ -1,13 +1,18 @@
 package com.dreamteam.core;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsonable;
+
 import java.awt.*;
+import java.io.IOException;
+import java.io.Writer;
 
 /**
  * This enumeration represents the different phases of the RISK game.
  * The game generally flows in a cyclical motion, providing a great opportunity
  * to implement this flow with methods.
  */
-public enum GamePhase {
+public enum GamePhase implements Jsonable {
     /**
      * This phase represents the very beginning of the game, only used once.
      */
@@ -78,5 +83,31 @@ public enum GamePhase {
     @Override
     public String toString() {
         return name + ": " + description;
+    }
+
+    /**
+     * Serialize to a JSON formatted string.
+     *
+     * @return a string, formatted in JSON, that represents the Jsonable.
+     */
+    @Override
+    public String toJson() {
+        JsonObject json = new JsonObject();
+        json.put("name", name);
+        return json.toJson();
+    }
+
+    /**
+     * Serialize to a JSON formatted stream.
+     *
+     * @param writable where the resulting JSON text should be sent.
+     * @throws IOException when the writable encounters an I/O error.
+     */
+    @Override
+    public void toJson(Writer writable) throws IOException {
+        try {
+            writable.write(this.toJson());
+        } catch (Exception ignored) {
+        }
     }
 }
