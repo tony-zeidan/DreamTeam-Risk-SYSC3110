@@ -3,10 +3,7 @@ package main.core;
 import main.view.RiskEvent;
 import main.view.RiskEventType;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A subclass of Player that has the AIs parameters as well as functions to calculate the
@@ -140,10 +137,10 @@ public class AIPlayer extends Player {
     }
 
     /**
-     * Retrieves the utility of an amount of units attacking another amount of units.
+     * returns the utility of an amount of units attacking another amount of units.
      * @param attackers int the amount of units on the attacking territory.
-     * @param defenders in the amount of units on the defending territory.
-     * @return The expected utility for a specific attack
+     * @param defenders in the amount of units on the defneding territory.
+     * @return
      */
     public double attackUtilityFunction(int attackers, int defenders)
     {
@@ -229,18 +226,19 @@ public class AIPlayer extends Player {
         int mostEnemyTroops = 0;
         Territory terrUnitsMoveTo = territory;
         Queue<Territory> territories = new LinkedList<>();
+        Set<Territory> visited = new HashSet<>();
         territories.add(territory);
         while (!territories.isEmpty())
         {
             Territory terr = territories.remove();
-            for(Territory adjTerr: terr.getNeighbours())
+            for(Territory adjTerr : terr.getNeighbours())
             {
-                if (adjTerr.getOwner() == this && adjTerr.getVisited() != true)
+                if (adjTerr.getOwner() == this && !visited.contains(adjTerr))
                 {
                     territories.add(adjTerr);
                 }
             }
-            terr.setVisited(true);
+            visited.add(terr);
             int numEnemyTroops = numNeighbouringEnemyTroops(terr);
             if (numEnemyTroops > mostEnemyTroops)
             {
@@ -248,9 +246,9 @@ public class AIPlayer extends Player {
                  terrUnitsMoveTo = terr;
             }
         }
-        for(Territory terr:this.getOwnedTerritories())
+        for(Territory terr : getOwnedTerritories())
         {
-            terr.setVisited(false);
+            visited.remove(terr);
         }
         return terrUnitsMoveTo;
     }
