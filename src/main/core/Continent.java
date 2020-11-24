@@ -1,5 +1,7 @@
 package main.core;
+
 import java.util.*;
+
 /**
  * A class to hold the amount of the continent bonus and if a player holds that, to allow bonus troops placement
  *
@@ -28,10 +30,11 @@ public class Continent {
 
     /**
      * constructor for the continent class
-     * @param name String name of the continent
+     *
+     * @param name        String name of the continent
      * @param bonusAmount int amount of the bonus troops for holding continent
      */
-    public Continent(String name, int bonusAmount){
+    public Continent(String name, int bonusAmount) {
         this.name = name;
         this.bonusAmount = bonusAmount;
         territories = new HashSet<>();
@@ -39,33 +42,37 @@ public class Continent {
 
     /**
      * Getter for continent Name
+     *
      * @return String name of the continent
      */
-    public String getContinentName(){
+    public String getContinentName() {
         return name;
     }
 
     /**
      * Getter for the amount bonus troops of the continent
+     *
      * @return Bonus amount of the continent
      */
-    public int getBonusRulerAmount(){
+    public int getBonusRulerAmount() {
         return bonusAmount;
     }
 
     /**
      * adds the territory that the continent should contain.
+     *
      * @param territory the territory that the continent should contain
      */
-    public void addContinentTerritory(Territory territory){
+    public void addContinentTerritory(Territory territory) {
         territories.add(territory);
     }
 
     /**
      * getter for the current owner of the territory
+     *
      * @return The Player that owns the continent
      */
-    public Player getRuler(){
+    public Player getRuler() {
         return ruler;
     }
 
@@ -73,12 +80,12 @@ public class Continent {
      * checks to see if a Player now owns the continent, by owning all its
      * territories, and makes the Player equal to its ruler if it does own the continent.
      */
-    public void updateRuler(){
+    public void updateRuler() {
         Iterator<Territory> it = territories.iterator();
         Player firstOwner = it.next().getOwner();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Player nextOwner = it.next().getOwner();
-            if(firstOwner != nextOwner){
+            if (firstOwner != nextOwner) {
                 ruler = null;
                 return;
             }

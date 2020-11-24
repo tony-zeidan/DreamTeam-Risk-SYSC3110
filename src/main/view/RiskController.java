@@ -1,6 +1,7 @@
 package main.view;
 
 import main.core.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -11,17 +12,16 @@ import java.util.Map;
  * The controller registers events in the GUI and then takes input from the user,
  * and then uses that input to update the Model.
  *
- * @see GameSingleton
- *
- * The thought process behind its implementation is that two types GUI events
- * (i.e. buttons being pressed and specific points on the map board being clicked)
- * We override the method in MouseAdapter (in order to only listen to mouse "clicks".
- * @see RiskFrame
- *
  * @author Ethan Chase
  * @author Anthony Dooley
  * @author Kyler Verge
  * @author Tony Zeidan
+ * @see GameSingleton
+ * <p>
+ * The thought process behind its implementation is that two types GUI events
+ * (i.e. buttons being pressed and specific points on the map board being clicked)
+ * We override the method in MouseAdapter (in order to only listen to mouse "clicks".
+ * @see RiskFrame
  */
 public class RiskController extends MouseAdapter implements ActionListener {
 
@@ -53,8 +53,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
     public RiskController(GameSingleton riskModel, RiskFrame riskView) {
         this.riskView = riskView;
         this.riskModel = riskModel;
-        selectedAction=null;
-        selectedTerritory=null;
+        selectedAction = null;
+        selectedTerritory = null;
     }
 
     /**
@@ -84,7 +84,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
             JButton jb = (JButton) o;
             selectedAction = jb.getActionCommand();
             GamePhase phase = riskView.getPhase();
-            switch(phase) {
+            switch (phase) {
                 case ATTACK:
                     switch (selectedAction) {
                         case "A":
@@ -174,11 +174,11 @@ public class RiskController extends MouseAdapter implements ActionListener {
                 Note that we could have triggered an event in the model, but didn't think
                 it was worth the struggle doing too much error checking.
                  */
-                if (clickedTerritory!=null && clickedTerritory.getOwner() == riskModel.getCurrentPlayer()) {
+                if (clickedTerritory != null && clickedTerritory.getOwner() == riskModel.getCurrentPlayer()) {
                     bonusUnits -= 1;
                     riskView.setBonusUnits(bonusUnits);
                     riskModel.moveBonus(clickedTerritory);
-                    if (bonusUnits==0) {
+                    if (bonusUnits == 0) {
                         riskModel.nextPhase();
                     }
                 }
@@ -186,11 +186,11 @@ public class RiskController extends MouseAdapter implements ActionListener {
             case ATTACK:
                 Player currentPlayer = riskModel.getCurrentPlayer();
 
-                if (clickedTerritory!=null) {
+                if (clickedTerritory != null) {
                     riskView.setInfoDisplay(clickedTerritory);
                 }
 
-                if (selectedAction!=null && selectedAction.equals("A")) {
+                if (selectedAction != null && selectedAction.equals("A")) {
                     if (selectedTerritory != null) {
                         if (clickedTerritory != null) {
 
@@ -216,32 +216,32 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     }
                 }
 
-                if (clickedTerritory==null) {
-                    selectedAction=null;
-                    selectedTerritory=null;
+                if (clickedTerritory == null) {
+                    selectedAction = null;
+                    selectedTerritory = null;
                     riskView.restoreGUI();
                 } else {
-                    selectedTerritory=clickedTerritory;
-                    riskModel.getValidAttackNeighboursOwned(currentPlayer,clickedTerritory);
+                    selectedTerritory = clickedTerritory;
+                    riskModel.getValidAttackNeighboursOwned(currentPlayer, clickedTerritory);
                 }
                 break;
             case MOVE_UNITS:
                 currentPlayer = riskModel.getCurrentPlayer();
 
-                if (clickedTerritory!=null) {
+                if (clickedTerritory != null) {
                     riskView.setInfoDisplay(clickedTerritory);
                 }
 
-                if (selectedAction!=null && selectedAction.equals("M")) {
+                if (selectedAction != null && selectedAction.equals("M")) {
                     if (selectedTerritory != null) {
                         if (clickedTerritory != null) {
-                                //Get the Number of Units the Victor wishes to move to their newly claimed territory
+                            //Get the Number of Units the Victor wishes to move to their newly claimed territory
                             int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView, currentPlayer, clickedTerritory,
                                     selectedTerritory, 1, true);
 
-                            if (fortifyUnits!=-1) {
+                            if (fortifyUnits != -1) {
 
-                                riskModel.moveUnits(clickedTerritory,selectedTerritory,fortifyUnits);
+                                riskModel.moveUnits(clickedTerritory, selectedTerritory, fortifyUnits);
 
                                 //reset GUI after moving
                                 selectedTerritory = null;
@@ -261,12 +261,12 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     }
                 }
 
-                if (clickedTerritory==null) {
-                    selectedAction=null;
-                    selectedTerritory=null;
+                if (clickedTerritory == null) {
+                    selectedAction = null;
+                    selectedTerritory = null;
                     riskView.restoreGUI();
                 } else {
-                    selectedTerritory=clickedTerritory;
+                    selectedTerritory = clickedTerritory;
                     riskModel.getValidTroupeMovementTerritories(clickedTerritory);
                 }
                 break;
@@ -291,8 +291,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
         for (Territory t : cords.keySet()) {
             Point p = cords.get(t);
 
-            Point translatedCheck = new Point(p.x+RiskMapPane.INNER_POINT_RADIUS,
-                    p.y+RiskMapPane.INNER_POINT_RADIUS);
+            Point translatedCheck = new Point(p.x + RiskMapPane.INNER_POINT_RADIUS,
+                    p.y + RiskMapPane.INNER_POINT_RADIUS);
             if (translatedCheck.distance(newpoint) <= RiskMapPane.HIT_POINT_RADIUS) {
                 return t;
             }

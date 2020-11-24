@@ -15,27 +15,27 @@ public enum RiskColour {
     /**
      * The risk colour red.
      */
-    RED(new Color(125, 1, 22),"RED"),
+    RED(new Color(125, 1, 22), "RED"),
     /**
      * The risk colour gray.
      */
-    GRAY(Color.GRAY,"GRAY"),
+    GRAY(Color.GRAY, "GRAY"),
     /**
      * The risk colour blue.
      */
-    BLUE(Color.BLUE,"BLUE"),
+    BLUE(Color.BLUE, "BLUE"),
     /**
      * The risk colour yellow.
      */
-    YELLOW(new Color(191, 176, 12),"YELLOW"),
+    YELLOW(new Color(191, 176, 12), "YELLOW"),
     /**
      * The risk colour black.
      */
-    BLACK(new Color(15,0,0),"BLACK"),
+    BLACK(new Color(15, 0, 0), "BLACK"),
     /**
      * The risk colour green.
      */
-    GREEN(new Color(10, 142, 1),"GREEN");
+    GREEN(new Color(10, 142, 1), "GREEN");
 
     /**
      * the colour value
@@ -48,23 +48,30 @@ public enum RiskColour {
 
     /**
      * Assigns to a color and its colour name
+     *
      * @param colour The awt colour
-     * @param name The colour's name
+     * @param name   The colour's name
      */
     RiskColour(Color colour, String name) {
-        this.colour=colour;
-        this.name=name;
+        this.colour = colour;
+        this.name = name;
     }
 
     /**
-     *getter for colour
+     * getter for colour
+     *
      * @return Colour
      */
-    public Color getValue() { return colour; }
+    public Color getValue() {
+        return colour;
+    }
 
     /**
      * getter for colour name
+     *
      * @return String
      */
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 }

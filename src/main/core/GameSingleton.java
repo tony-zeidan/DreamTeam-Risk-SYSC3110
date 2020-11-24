@@ -3,6 +3,7 @@ package main.core;
 import main.view.RiskEvent;
 import main.view.RiskEventType;
 import main.view.RiskGameHandler;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -12,10 +13,10 @@ import java.util.LinkedList;
  * This class represents the model for the program, notifies
  * the view of changes made to the game, is responsible
  * for the core functionality of the game.
- *
+ * <p>
  * The model now works with phases and as it progresses through the phases,
  * it notifies any views. The phases are:
- *      Bonus Troupe Phase, Attack Phase, Move Units Phase
+ * Bonus Troupe Phase, Attack Phase, Move Units Phase
  *
  * @author Kyler Verge
  * @author Ethan Chase
@@ -144,9 +145,10 @@ public class GameSingleton {
 
     /**
      * Set the number of currently active players
+     *
      * @param numActivePlayer Number of active players
      */
-    public void setNumActivePlayer(int numActivePlayer){
+    public void setNumActivePlayer(int numActivePlayer) {
         this.numActivePlayer = numActivePlayer;
     }
 
@@ -159,6 +161,7 @@ public class GameSingleton {
 
     /**
      * Notify all views to set displayable coordinates/territories.
+     *
      * @param territory The territory that determines the other displayable territories
      */
     public void notifyMapUpdateAttackingNeighbourCoordinates(Territory territory) {
@@ -170,16 +173,17 @@ public class GameSingleton {
      * owned by the current player
      */
     public void notifyMapUpdateOwnedCoordinates() {
-        notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_MAP,getAllOwnedNodes(getCurrentPlayer())));
+        notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_MAP, getAllOwnedNodes(getCurrentPlayer())));
     }
 
     /**
      * notify all view to set the displayable coordinates/territories to be only those
      * that are in the same path as the given territory
+     *
      * @param territory the territory that the other owned territories must be connected to
      */
     public void notifyMapUpdateTroupeMoveCoordinate(Territory territory) {
-        notifyHandlers(new RiskEvent(this,RiskEventType.UPDATE_MAP, getValidTroupeMovementTerritories(territory)));
+        notifyHandlers(new RiskEvent(this, RiskEventType.UPDATE_MAP, getValidTroupeMovementTerritories(territory)));
     }
 
     /**
@@ -224,36 +228,33 @@ public class GameSingleton {
         switch (gamePhase) {
             case START_GAME:
             case MOVE_UNITS:
-                this.gamePhase=GamePhase.BONUS_TROUPE;
+                this.gamePhase = GamePhase.BONUS_TROUPE;
                 //notifyMapUpdateOwnedCoordinates();
                 notifyMapUpdateAllCoordinates();
-                if (currentPlayer instanceof AIPlayer)
-                {
+                if (currentPlayer instanceof AIPlayer) {
                     int numTroopsToPlace = getBonusUnits(currentPlayer);
                     ((AIPlayer) currentPlayer).placeUnits(numTroopsToPlace, this);
                     nextPhase();
                 }
                 break;
             case BONUS_TROUPE:
-                this.gamePhase=GamePhase.ATTACK;
+                this.gamePhase = GamePhase.ATTACK;
                 notifyMapUpdateAllCoordinates();
-                if (currentPlayer instanceof AIPlayer)
-                {
+                if (currentPlayer instanceof AIPlayer) {
                     ((AIPlayer) currentPlayer).doAttack(this);
                     nextPhase();
                 }
                 break;
             case ATTACK:
-                this.gamePhase=GamePhase.MOVE_UNITS;
+                this.gamePhase = GamePhase.MOVE_UNITS;
                 notifyMapUpdateOwnedCoordinates();
-                if (currentPlayer instanceof AIPlayer)
-                {
+                if (currentPlayer instanceof AIPlayer) {
                     ((AIPlayer) currentPlayer).moveTroops();
                     nextPlayer();
                 }
                 break;
         }
-        notifyHandlers(new RiskEvent(this,RiskEventType.PHASE_CHANGE,gamePhase));
+        notifyHandlers(new RiskEvent(this, RiskEventType.PHASE_CHANGE, gamePhase));
     }
 
     /**
@@ -309,7 +310,7 @@ public class GameSingleton {
         int territoryBonus = current.getOwnedTerritories().size() / 3;
         int continentBonus = 0;
         Set<Continent> ruled = world.getRuled(current);
-        for(Continent c : ruled){
+        for (Continent c : ruled) {
             continentBonus += c.getBonusRulerAmount();
         }
 
@@ -318,11 +319,12 @@ public class GameSingleton {
 
     /**
      * gets all territories/coordinates the that player owns
+     *
      * @param player that nodes should be gotten
      * @return mapping of the territory to its coordinate
      */
-    public Map<Territory,Point> getAllOwnedNodes(Player player) {
-        Map<Territory,Point> owned = new HashMap<>();
+    public Map<Territory, Point> getAllOwnedNodes(Player player) {
+        Map<Territory, Point> owned = new HashMap<>();
         for (Territory t : player.getOwnedTerritories()) {
             Point p = world.getAllCoordinates().get(t);
             owned.put(t, p);
@@ -363,10 +365,11 @@ public class GameSingleton {
 
     /**
      * Determines the territories/coordinates that are connected to the provided territory and same owner.
+     *
      * @param initial The inital territory that the end of turn move starts at
      * @return mapping of territories and coordinates.
      */
-    public Map<Territory,Point> getValidTroupeMovementTerritories(Territory initial) {
+    public Map<Territory, Point> getValidTroupeMovementTerritories(Territory initial) {
         List<Territory> queue = new LinkedList<>();
         Map<Territory, Point> visited = new HashMap<>();
         queue.add(initial);
@@ -403,6 +406,7 @@ public class GameSingleton {
     /**
      * performs the battle, notifying views for user input if needed
      * for the attacking and defending of the two territories.
+     *
      * @param attacking the attacking territory
      * @param defending the defending territory
      * @return true if the attacking territory has eliminated all troops in defending territory, otherwise false.
@@ -416,21 +420,21 @@ public class GameSingleton {
         int defDice = 0;
 
         if (attacker instanceof AIPlayer) {
-            attDice = getMaxBattleDie(attacking.getUnits(),true);
+            attDice = getMaxBattleDie(attacking.getUnits(), true);
         } else {
-            int maxAttack = getMaxBattleDie(attacking.getUnits(),true);
-            notifyHandlers(new RiskEvent(this,RiskEventType.SELECT_ATTACK_DIE,attacking,defending,maxAttack));
+            int maxAttack = getMaxBattleDie(attacking.getUnits(), true);
+            notifyHandlers(new RiskEvent(this, RiskEventType.SELECT_ATTACK_DIE, attacking, defending, maxAttack));
             attDice = attacker.getDiceRoll();
         }
 
         if (defender instanceof AIPlayer) {
-            defDice = getMaxBattleDie(defending.getUnits(),false);
+            defDice = getMaxBattleDie(defending.getUnits(), false);
         } else {
-            int maxDefend = getMaxBattleDie(defending.getUnits(),false);
-            notifyHandlers(new RiskEvent(this,RiskEventType.SELECT_DEFEND_DIE,attacking,defending,maxDefend));
+            int maxDefend = getMaxBattleDie(defending.getUnits(), false);
+            notifyHandlers(new RiskEvent(this, RiskEventType.SELECT_DEFEND_DIE, attacking, defending, maxDefend));
             defDice = defender.getDiceRoll();
         }
-        boolean battleWon =battle(attacking,defending,attDice,defDice);
+        boolean battleWon = battle(attacking, defending, attDice, defDice);
         notifyMapUpdateAllCoordinates();
         return battleWon;
     }
@@ -542,13 +546,13 @@ public class GameSingleton {
      * @param rolls The amount of die to roll
      * @return The results of each roll
      */
-    public static int[] rollDice(int rolls){
+    public static int[] rollDice(int rolls) {
 
         Random rand = new Random();
 
         int[] rollers = new int[rolls];
 
-        for(int i=0; i<rolls; i++){
+        for (int i = 0; i < rolls; i++) {
             rollers[i] = rand.nextInt(6) + 1;
         }
 
@@ -609,7 +613,7 @@ public class GameSingleton {
         finalT.addUnits(numUnits);
 
         //Check if the movement of units occurs after a battle sequence as a result of a victory for the attacker
-        if(initialT.getOwner() != finalT.getOwner()){
+        if (initialT.getOwner() != finalT.getOwner()) {
             Player attacker = initialT.getOwner();
             Player defender = finalT.getOwner();
 
@@ -626,7 +630,7 @@ public class GameSingleton {
             if (this.getNumActivePlayer() == 1) {
                 endGame();
             }
-        }else{
+        } else {
             //Print a message to confirm the movement of units before end of current player's turn
             notifyHandlers(new RiskEvent(this, RiskEventType.UNITS_MOVED,
                     initialT, finalT, numUnits));
@@ -636,14 +640,15 @@ public class GameSingleton {
 
     /**
      * Moves exactly one unit from the players bonus supply.
+     *
      * @param bonusTerritory The territory the units will be moved to
      */
-    public void moveBonus(Territory bonusTerritory){
+    public void moveBonus(Territory bonusTerritory) {
         Player mover = bonusTerritory.getOwner();
         Territory tempTerritory = new Territory("bonus");
         tempTerritory.setOwner(mover);
         tempTerritory.setUnits(1);
-        moveUnits(tempTerritory,bonusTerritory,1);
+        moveUnits(tempTerritory, bonusTerritory, 1);
         mover.removeTerritory(tempTerritory);
         notifyMapUpdateAllCoordinates();
     }

@@ -1,4 +1,5 @@
 package main.view;
+
 /**
  * This class specifies the type of event being done
  *

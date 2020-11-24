@@ -31,6 +31,7 @@ public class Territory {
      * The Neighbouring Territories of the Territory
      */
     private Set<Territory> neighbours;
+
     /**
      * Constructor for the territory object that contains a name and current player.
      *
@@ -41,6 +42,7 @@ public class Territory {
         units = 0;
         neighbours = new HashSet<>();
     }
+
     /**
      * Get the name of the territory.
      *
@@ -82,14 +84,18 @@ public class Territory {
      *
      * @param units The amount of units to remove
      */
-    public void removeUnits(int units) { this.units -= units; }
+    public void removeUnits(int units) {
+        this.units -= units;
+    }
 
     /**
      * Retrieves the owner for this territory.
      *
      * @return The owner
      */
-    public Player getOwner() { return owner; }
+    public Player getOwner() {
+        return owner;
+    }
 
     /**
      * Sets the owner of this territory.

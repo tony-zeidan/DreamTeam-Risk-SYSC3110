@@ -39,7 +39,7 @@ public class WorldMap {
     /**
      * A set of continents on the map.
      */
-    private Map<String,Continent> continents;
+    private Map<String, Continent> continents;
 
     /**
      * Random variable for assigning territories in setup.
@@ -88,7 +88,6 @@ public class WorldMap {
         HashMap<Territory, String> neighbourStrings = new HashMap<>();
 
 
-
         //attempt to read the file
         try {
             File territoryData = new File("src/resources/map_packages/main_package/countries.txt");
@@ -126,26 +125,27 @@ public class WorldMap {
 
     /**
      * reads the String line that holds the continent, the territories they hold, and bonus troops
+     *
      * @param line The line to read
      */
     private void readContinentLine(String line) {
         Matcher matcher = CONTINENT_PATTERN.matcher(line);
         if (matcher.matches()) {
             String readName = matcher.group(1);
-            int bonusUnits=0;
+            int bonusUnits = 0;
             try {
                 bonusUnits = Integer.parseInt(matcher.group(3));
             } catch (NumberFormatException e) {
                 System.out.println("line incorrectly formatted");
                 return;
             }
-            Continent continent = new Continent(readName,bonusUnits);
-            continents.put(readName,continent);
+            Continent continent = new Continent(readName, bonusUnits);
+            continents.put(readName, continent);
             String territoriesString = matcher.group(4);
             List<String> territoriesWithin = Arrays.asList(territoriesString.split(","));
             for (String s : territoriesWithin) {
                 if (!allTerritories.containsKey(s)) {
-                    allTerritories.put(s,new Territory(s));
+                    allTerritories.put(s, new Territory(s));
                 }
                 continent.addContinentTerritory(allTerritories.get(s));
             }
@@ -154,6 +154,7 @@ public class WorldMap {
 
     /**
      * reads a String of the territory text file to determine, territory and neighbours
+     *
      * @param line The line to read
      */
     private void readTerritoryLine(String line) {
@@ -161,7 +162,7 @@ public class WorldMap {
         if (matcher.matches()) {
             String readName = matcher.group(1);
             if (!allTerritories.containsKey(readName)) {
-                allTerritories.put(readName,new Territory(readName));
+                allTerritories.put(readName, new Territory(readName));
             }
             Territory territory = allTerritories.get(readName);
             int xCord = 0;
@@ -176,13 +177,13 @@ public class WorldMap {
                 return;
             }
             Point readCoordinates = new Point(xCord, yCord);
-            allCoordinates.put(territory,readCoordinates);
+            allCoordinates.put(territory, readCoordinates);
 
             String neighString = matcher.group(5);
             List<String> neighbourList = Arrays.asList(neighString.split(","));
             for (String s : neighbourList) {
                 if (!allTerritories.containsKey(s)) {
-                    allTerritories.put(s,new Territory(s));
+                    allTerritories.put(s, new Territory(s));
                 }
                 territory.addNeighbour(allTerritories.get(s));
             }
@@ -280,13 +281,14 @@ public class WorldMap {
 
     /**
      * returns set of continents owned by given player
+     *
      * @param player to determine continents it owns
      * @return Set of continents the player owns
      */
-    public Set<Continent> getRuled(Player player){
+    public Set<Continent> getRuled(Player player) {
         Set<Continent> ruled = new HashSet<>();
-        for(Continent c : continents.values()){
-            if(player==c.getRuler()){
+        for (Continent c : continents.values()) {
+            if (player == c.getRuler()) {
                 ruled.add(c);
             }
         }
@@ -296,7 +298,7 @@ public class WorldMap {
     /**
      * updates the owner of the continent
      */
-    public void updateContinentRulers(){
+    public void updateContinentRulers() {
         for (Continent c : continents.values()) c.updateRuler();
     }
 

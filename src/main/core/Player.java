@@ -18,22 +18,18 @@ public class Player {
      * The name of the player that this object represents.
      */
     private String name;
-
     /**
      * The colour of the units that the player owns.
      */
     private RiskColour colour;
-
     /**
      * List of territories that the player owns.
      */
     private Set<Territory> owned;
-
     /**
      * Contains whether the player is still active in the game.
      */
     private boolean active;
-
     /**
      * Contains the user input for the amount of dice to use
      */
@@ -159,19 +155,19 @@ public class Player {
 
     /**
      * setter for amount of dice the user wants to use
+     *
      * @param numOfDice int number of dice to use
      */
-    public void setDiceRoll(int numOfDice)
-    {
+    public void setDiceRoll(int numOfDice) {
         diceRoll = numOfDice;
     }
 
     /**
      * Getter fof the amount of dice the user wants to use.
+     *
      * @return int the amount of dice to use.
      */
-    public int getDiceRoll()
-    {
+    public int getDiceRoll() {
         return diceRoll;
     }
 

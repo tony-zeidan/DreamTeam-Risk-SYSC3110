@@ -1,4 +1,5 @@
 package main.view;
+
 import main.core.*;
 
 import javax.swing.*;
@@ -68,7 +69,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         super("RISK");
         int numPlayers = getNumOfPlayers();
         List<Player> players = getPlayers(numPlayers);
-        addAIsToList(numOfAIs(numPlayers),players);
+        addAIsToList(numOfAIs(numPlayers), players);
         riskModel = GameSingleton.getGameInstance(players);
         this.gamePhase = GamePhase.START_GAME;
         setLayout(new BorderLayout());
@@ -203,7 +204,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      */
     private int getNumOfPlayers() {
         String input;
-        Object[] options = {"1","2", "3", "4", "5", "6"};
+        Object[] options = {"1", "2", "3", "4", "5", "6"};
         input = (String) JOptionPane.showInputDialog(this, "How many human players?", "Number of Human Players",
                 JOptionPane.QUESTION_MESSAGE, null, options, "2");
         //User pressed close or cancel
@@ -224,7 +225,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         for (int i = 0; i < numPlayers; i++) {
             String input = null;
             while (input == null || input.length() == 0) {
-                input = JRiskOptionPane.showPlayerNameDialog(this, i + 1,"Player");
+                input = JRiskOptionPane.showPlayerNameDialog(this, i + 1, "Player");
             }
             players.add(new Player(input));
         }
@@ -234,21 +235,17 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
     /**
      * gets the number of AIs playing the game
+     *
      * @param numSpotsTaken, int determining the max of AIs to be allowed
      * @return the number of AIs chosen
      */
-    private int numOfAIs(int numSpotsTaken)
-    {
+    private int numOfAIs(int numSpotsTaken) {
         String[] options;
-        if (numSpotsTaken==1)
-        {
+        if (numSpotsTaken == 1) {
             options = new String[]{"1", "2", "3", "4", "5"};
-        }
-        else
-        {
-            options = new String[7-numSpotsTaken];
-            for(int i = 0; i<7-numSpotsTaken;i++)
-            {
+        } else {
+            options = new String[7 - numSpotsTaken];
+            for (int i = 0; i < 7 - numSpotsTaken; i++) {
                 options[i] = Integer.toString((i));
             }
         }
@@ -263,19 +260,20 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
     /**
      * Adds a number of AI to the players list
-     * @param numAIs number of AIs to add
+     *
+     * @param numAIs  number of AIs to add
      * @param players the list of players AIs are added to
      */
-    private void addAIsToList(int numAIs,List<Player> players)
-    {
+    private void addAIsToList(int numAIs, List<Player> players) {
         for (int i = 0; i < numAIs; i++) {
             String input = null;
             while (input == null || input.length() == 0) {
-                input = JRiskOptionPane.showPlayerNameDialog(this, i + 1,"AI");
+                input = JRiskOptionPane.showPlayerNameDialog(this, i + 1, "AI");
             }
             players.add(new AIPlayer(input));
         }
     }
+
     /**
      * Updates the event pane to instruct the player of their choices
      *
@@ -298,6 +296,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
     /**
      * getter for the scaling in the x-direction of the RiskMapPane JPanel
+     *
      * @return double
      */
     public double getScalingX() {
@@ -306,6 +305,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
     /**
      * getter for the scaling in the y-direction of the RiskMapPane JPanel
+     *
      * @return double
      */
     public double getScalingY() {
@@ -314,6 +314,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
     /**
      * gets the number of units to be added
+     *
      * @return int the number of units that need to be added
      */
     public int getBonusUnits() {
@@ -326,11 +327,12 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
     /**
      * sets the lbl to the number of bonus troops that need to be added
+     *
      * @param units amount of troops
      */
     public void setBonusUnits(int units) {
         playerBonusUnitsLbl.setText("Bonus Units: " + units);
-        playerBonusUnitsLbl.setName(units+"");
+        playerBonusUnitsLbl.setName(units + "");
     }
 
     /**
@@ -354,6 +356,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
     /**
      * Retrieves the current phase the gui is in right now.
+     *
      * @return The current gui phase
      */
     public GamePhase getPhase() {
@@ -396,9 +399,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 playerTurnLbl.setForeground(getContrastColor(playerColour));
                 break;
             case UPDATE_ATTACKABLE:
-                if (gamePhase==GamePhase.ATTACK) {
+                if (gamePhase == GamePhase.ATTACK) {
                     setAttackable((boolean) info[0]);
-                } else if (gamePhase==GamePhase.MOVE_UNITS) {
+                } else if (gamePhase == GamePhase.MOVE_UNITS) {
                     moveUnitsBtn.setEnabled((boolean) info[0]);
                 }
                 break;
@@ -410,21 +413,21 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 restoreGUI();
                 break;
             case SELECT_ATTACK_DIE:
-                Territory attacking = (Territory)info[0];
+                Territory attacking = (Territory) info[0];
                 Player currentPlayer = attacking.getOwner();
-                Territory defending = (Territory)info[1];
-                int maxAttack = (Integer)info[2];
-                int diceAmount= JRiskOptionPane.showDieCountDialog(this, currentPlayer,
-                        1, maxAttack, "You are attacking "+ defending.getName()+" from "+attacking.getName()+".");
+                Territory defending = (Territory) info[1];
+                int maxAttack = (Integer) info[2];
+                int diceAmount = JRiskOptionPane.showDieCountDialog(this, currentPlayer,
+                        1, maxAttack, "You are attacking " + defending.getName() + " from " + attacking.getName() + ".");
                 currentPlayer.setDiceRoll(diceAmount);
                 break;
             case SELECT_DEFEND_DIE:
-                attacking = (Territory)info[0];
-                defending = (Territory)info[1];
+                attacking = (Territory) info[0];
+                defending = (Territory) info[1];
                 currentPlayer = defending.getOwner();
-                int maxDice = (Integer)info[2];
-                diceAmount= JRiskOptionPane.showDieCountDialog(this, currentPlayer,1 ,
-                        maxDice,"You are Defending "+ defending.getName()+" from "+attacking.getName()+".");
+                int maxDice = (Integer) info[2];
+                diceAmount = JRiskOptionPane.showDieCountDialog(this, currentPlayer, 1,
+                        maxDice, "You are Defending " + defending.getName() + " from " + attacking.getName() + ".");
                 currentPlayer.setDiceRoll(diceAmount);
                 break;
         }
@@ -480,9 +483,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
     }
 
 
-
     /**
      * Main method for this view. (Testing)
+     *
      * @param args n/a
      */
     public static void main(String[] args) {

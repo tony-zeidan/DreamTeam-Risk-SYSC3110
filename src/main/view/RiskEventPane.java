@@ -9,6 +9,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+
 /**
  * This class is the JPanel that displays the event descriptions and is a part of the RiskFrame. RiskEventPane is
  * also a view that updates the event descriptions after certain events are done in the model.
@@ -101,7 +102,8 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
 
     /**
      * Shows the current territory selected.
-     * @param player The player this territory belongs to
+     *
+     * @param player    The player this territory belongs to
      * @param territory The territory that is being displayed
      */
     public void setInfoDisplay(Player player, Territory territory) {
@@ -122,7 +124,7 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
         //Keeps scrollPane always scrolled to the bottom
         this.validate();
         JScrollBar vertical = gameEventScroller.getVerticalScrollBar();
-        vertical.setValue(vertical.getMaximum()+1);
+        vertical.setValue(vertical.getMaximum() + 1);
     }
 
     /**

@@ -1,4 +1,5 @@
 package main.view;
+
 /**
  * This class is an interface for the different views to update their GUI from the model.
  *

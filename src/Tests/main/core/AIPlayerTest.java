@@ -18,7 +18,6 @@ import static org.junit.Assert.*;
  * @author Anthony Dooley
  * @author Tony Zeidan
  */
-
 public class AIPlayerTest {
     /**
      * The normal player to test against.
@@ -57,10 +56,9 @@ public class AIPlayerTest {
      * Sets up the object for testing.
      */
     @Before
-    public void setup()
-    {
+    public void setup() {
         guy = new Player("guy", RiskColour.RED);
-        robo = new AIPlayer("Robo",RiskColour.GRAY);
+        robo = new AIPlayer("Robo", RiskColour.GRAY);
 
         t1 = new Territory("t1");
         t2 = new Territory("t2");
@@ -88,16 +86,19 @@ public class AIPlayerTest {
         t5.setUnits(1);
         t6.setUnits(3);
     }
+
+    /**
+     * Tests the AI's capability to place units strategically.
+     */
     @Test
-    public void testPlaceUnits()
-    {
+    public void testPlaceUnits() {
         this.setup();
-        assertEquals(8,t1.getUnits()+t2.getUnits()+t3.getUnits()+t4.getUnits());
+        assertEquals(8, t1.getUnits() + t2.getUnits() + t3.getUnits() + t4.getUnits());
         //TODO: Fix parameters in the call to pass the model
         //robo.placeUnits(5);
-        assertEquals(3,t6.getUnits());
-        assertEquals(1,t5.getUnits());
-        assertEquals(13,t1.getUnits()+t2.getUnits()+t3.getUnits()+t4.getUnits());
+        assertEquals(3, t6.getUnits());
+        assertEquals(1, t5.getUnits());
+        assertEquals(13, t1.getUnits() + t2.getUnits() + t3.getUnits() + t4.getUnits());
 
     }
 
@@ -105,20 +106,18 @@ public class AIPlayerTest {
      * Test the AI's algorithm for moving units away from a specific territory.
      */
     @Test
-    public void testTerritoryMovingUnitsAway()
-    {
+    public void testTerritoryMovingUnitsAway() {
         this.setup();
-        assertEquals(t1,robo.territoryMovingUnitsAway());
+        assertEquals(t1, robo.territoryMovingUnitsAway());
     }
 
     /**
      * Test the AI's algorithm for moving units toward from a specific territory.
      */
     @Test
-    public void testTerritoryMovingUnitsTo()
-    {
+    public void testTerritoryMovingUnitsTo() {
         this.setup();
-        assertEquals(t2,robo.territoryMovingUnitsTo(t1));
+        assertEquals(t2, robo.territoryMovingUnitsTo(t1));
         Territory t7 = new Territory("t7");
         Territory t8 = new Territory("t8");
         t7.addNeighbour(t4);
@@ -127,19 +126,18 @@ public class AIPlayerTest {
         t8.setOwner(robo);
         t7.setUnits(5);
         t8.setUnits(1);
-        assertEquals(t4,robo.territoryMovingUnitsTo(t1));
+        assertEquals(t4, robo.territoryMovingUnitsTo(t1));
     }
 
     /**
      * Test the Ai's ability to move units effectively (according to utility).
      */
     @Test
-    public void testMoveTroops()
-    {
+    public void testMoveTroops() {
         this.setup();
         robo.moveTroops();
-        assertEquals(1,t1.getUnits());
-        assertEquals(2,t2.getUnits());
+        assertEquals(1, t1.getUnits());
+        assertEquals(2, t2.getUnits());
         Territory t7 = new Territory("t7");
         Territory t8 = new Territory("t8");
 
@@ -151,7 +149,7 @@ public class AIPlayerTest {
         t7.setUnits(5);
         t8.setUnits(1);
         robo.moveTroops();
-        assertEquals(1,t1.getUnits());
-        assertEquals(3,t4.getUnits());
+        assertEquals(1, t1.getUnits());
+        assertEquals(3, t4.getUnits());
     }
 }

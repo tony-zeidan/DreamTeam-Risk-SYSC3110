@@ -25,11 +25,11 @@ public class RiskEvent extends EventObject {
     /**
      * Constructs a prototypical Event.
      *
-     * @param source the object on which the Event initially occurred
-     * @param type The type of event
+     * @param source    the object on which the Event initially occurred
+     * @param type      The type of event
      * @param eventInfo The data that will be sent along with this event
      */
-    public RiskEvent(Object source,RiskEventType type,Object... eventInfo) {
+    public RiskEvent(Object source, RiskEventType type, Object... eventInfo) {
         super(source);
         this.eventInfo = eventInfo;
         this.type = type;
@@ -37,6 +37,7 @@ public class RiskEvent extends EventObject {
 
     /**
      * getter for the type of event passed
+     *
      * @return RiskEventType
      */
     public RiskEventType getType() {
@@ -45,6 +46,7 @@ public class RiskEvent extends EventObject {
 
     /**
      * getter for additional information of
+     *
      * @return Object[]
      */
     public Object[] getEventInfo() {

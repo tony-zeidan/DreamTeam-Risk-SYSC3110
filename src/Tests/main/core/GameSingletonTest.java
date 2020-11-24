@@ -6,8 +6,10 @@ import main.core.RiskColour;
 import main.core.Territory;
 import org.junit.Before;
 import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -36,18 +38,18 @@ public class GameSingletonTest {
      * to test methods in the Game model class.
      */
     @Before
-    public void setUp(){
+    public void setUp() {
         players = new ArrayList<>();
         players.add(new Player("Ethan", RiskColour.RED));
         players.add(new Player("Anthony", RiskColour.BLUE));
         players.add(new Player("Tony", RiskColour.YELLOW));
-        players.add(new Player("Kyler",RiskColour.BLACK));
+        players.add(new Player("Kyler", RiskColour.BLACK));
         gsm = GameSingleton.getGameInstance(players);
     }
 
     /**
      * Test getNumActivePlayer():
-     *
+     * <p>
      * Check how many players are not yet eliminated from the game
      * through getNumActivePlayer() in GameSingleton.java
      */
@@ -59,39 +61,39 @@ public class GameSingletonTest {
 
     /**
      * Test getMaxBattleDie()
-     *
+     * <p>
      * Calls getMaxBattleDie() in GameSingleton.java to check if it
      * returns the maximum amount of dice the attacker/defender can roll
      * based on the number of units used in the attack sequence.
      */
     @Test
-    public void testGetMaxBattleDie(){
+    public void testGetMaxBattleDie() {
         //Attacking, 3 Units -> 2 Dice
-        assertEquals(2, gsm.getMaxBattleDie(3,true));
+        assertEquals(2, gsm.getMaxBattleDie(3, true));
         //Attacking 4 Units -> 3 Dice
-        assertEquals(3,gsm.getMaxBattleDie(4,true));
+        assertEquals(3, gsm.getMaxBattleDie(4, true));
         //Attacking 2 Units -> 1 Dice
-        assertEquals(1,gsm.getMaxBattleDie(2,true));
+        assertEquals(1, gsm.getMaxBattleDie(2, true));
         //Defending 2 Units -> 1 Dice
-        assertEquals(1,gsm.getMaxBattleDie(2,false));
+        assertEquals(1, gsm.getMaxBattleDie(2, false));
         //Defending 3 Units -> 2 Dice
-        assertEquals(2,gsm.getMaxBattleDie(3,false));
+        assertEquals(2, gsm.getMaxBattleDie(3, false));
     }
 
     /**
      * Test moveUnits() in GameSingleton class
-     *
+     * <p>
      * Creates two territories with different names, owners and number of units.
      * These territories are passed as parameters to moveUnits() in
      * GameSingleton.java with the number of units to move. Checks
      * if the units are moved properly.
-     *
+     * <p>
      * Also tests the movement of units between two territories that are
      * owned by the current player. This would be part of the movement phase of the
      * game that occurs just before the end of the current player's turn.
      */
     @Test
-    public void testMoveUnits(){
+    public void testMoveUnits() {
         Player ethan = players.get(0);
         Player anthony = players.get(1);
 
@@ -107,93 +109,93 @@ public class GameSingletonTest {
         t2.setOwner(anthony);
         assertEquals(anthony, t2.getOwner());
 
-        gsm.moveUnits(t1,t2,2);
+        gsm.moveUnits(t1, t2, 2);
 
-        assertEquals("Earth",t1.getName());
-        assertEquals("Pluto",t2.getName());
-        assertEquals(ethan,t1.getOwner());
-        assertEquals(ethan,t2.getOwner());
-        assertEquals(2,t1.getUnits());
-        assertEquals(7,t2.getUnits());
+        assertEquals("Earth", t1.getName());
+        assertEquals("Pluto", t2.getName());
+        assertEquals(ethan, t1.getOwner());
+        assertEquals(ethan, t2.getOwner());
+        assertEquals(2, t1.getUnits());
+        assertEquals(7, t2.getUnits());
 
-        gsm.moveUnits(t2,t1,2);
+        gsm.moveUnits(t2, t1, 2);
 
-        assertEquals(t1.getOwner(),t2.getOwner());
-        assertEquals(4,t1.getUnits());
+        assertEquals(t1.getOwner(), t2.getOwner());
+        assertEquals(4, t1.getUnits());
         assertEquals(5, t2.getUnits());
     }
 
     /**
      * Test attack() in GameSingleton class
-     *
+     * <p>
      * Makes sure that the units destroyed in the attack() are limited
      * based on the number of rolls by the attacker and defender.
-     *
+     * <p>
      * While rolling the maximum number of dice (3 and 2), the attacker cannot possibly
      * lose more than 2 units. Same goes with the defender in this scenario.
      * Otherwise, the attacker and defender cannot lose more than the number
      * of dice they rolled.
-     *
+     * <p>
      * The attacker and defender cannot have a negative value produced for the
      * number of units lost in the attack().
      */
     @Test
-    public void testAttack(){
-        int[] lost = gsm.attack(3,2);
+    public void testAttack() {
+        int[] lost = gsm.attack(3, 2);
         int highAttackerLost = 2;
         int lowAttackerLost = 0;
         int highDefendingLost = 2;
         int lowDefendingLost = 0;
 
-        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
-        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
-        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
-        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+        assertTrue("Error, too many attacking units lost", highAttackerLost > lost[0]);
+        assertTrue("Error, can't lose negative attacking units", lowAttackerLost < lost[0]);
+        assertTrue("Error, too many defending units lost", highDefendingLost > lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost < lost[1]);
 
-        lost = gsm.attack(2,2);
+        lost = gsm.attack(2, 2);
 
-        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
-        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
-        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
-        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+        assertTrue("Error, too many attacking units lost", highAttackerLost > lost[0]);
+        assertTrue("Error, can't lose negative attacking units", lowAttackerLost < lost[0]);
+        assertTrue("Error, too many defending units lost", highDefendingLost > lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost < lost[1]);
 
-        lost = gsm.attack(2,1);
+        lost = gsm.attack(2, 1);
         highAttackerLost = 2;
         highDefendingLost = 1;
 
-        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
-        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
-        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
-        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+        assertTrue("Error, too many attacking units lost", highAttackerLost > lost[0]);
+        assertTrue("Error, can't lose negative attacking units", lowAttackerLost < lost[0]);
+        assertTrue("Error, too many defending units lost", highDefendingLost > lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost < lost[1]);
 
-        lost = gsm.attack(1,1);
+        lost = gsm.attack(1, 1);
         highAttackerLost = 1;
 
-        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
-        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
-        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
-        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+        assertTrue("Error, too many attacking units lost", highAttackerLost > lost[0]);
+        assertTrue("Error, can't lose negative attacking units", lowAttackerLost < lost[0]);
+        assertTrue("Error, too many defending units lost", highDefendingLost > lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost < lost[1]);
 
-        lost = gsm.attack(1,2);
+        lost = gsm.attack(1, 2);
         highDefendingLost = 2;
 
-        assertTrue("Error, too many attacking units lost",highAttackerLost>lost[0]);
-        assertTrue("Error, can't lose negative attacking units",lowAttackerLost<lost[0]);
-        assertTrue("Error, too many defending units lost",highDefendingLost>lost[1]);
-        assertTrue("Error, can't lose negative defending units", lowDefendingLost<lost[1]);
+        assertTrue("Error, too many attacking units lost", highAttackerLost > lost[0]);
+        assertTrue("Error, can't lose negative attacking units", lowAttackerLost < lost[0]);
+        assertTrue("Error, too many defending units lost", highDefendingLost > lost[1]);
+        assertTrue("Error, can't lose negative defending units", lowDefendingLost < lost[1]);
     }
 
     /**
      * Test rollDice() in GameSingleton class
-     *
+     * <p>
      * Checks that when a set of dice are rolled, that the results
      * are within and including 1 and 6.
      */
     @Test
-    public void testRollDie(){
+    public void testRollDie() {
         int[] theRolls = gsm.rollDice(3);
         assertEquals(3, theRolls.length);
-        for(int i=0;i<3;i++){
+        for (int i = 0; i < 3; i++) {
             assertTrue(theRolls[i] > 0);
             assertTrue(theRolls[i] < 7);
         }
@@ -201,13 +203,13 @@ public class GameSingletonTest {
 
     /**
      * Test updateNumActivePlayer() in GameSingleton class
-     *
+     * <p>
      * Creates two territories with different names, owners and units. Only
      * two of the four total players own territories, so the getNumActivePlayer()
      * should return the proper amount.
      */
     @Test
-    public void testUpdateNumActivePlayer(){
+    public void testUpdateNumActivePlayer() {
         Player ethan = players.get(0);
         Player anthony = players.get(1);
 
@@ -233,20 +235,20 @@ public class GameSingletonTest {
          */
         anthony.removeTerritory(t2);
         gsm.updateNumActivePlayers();
-        assertEquals(false,anthony.isActive());
+        assertEquals(false, anthony.isActive());
         assertEquals(1, gsm.getNumActivePlayer());
     }
 
     /**
      * Test nextPlayer() method in GameSingleton class
-     *
+     * <p>
      * Starts a new four player game, when the game is starting
      * the order of players is shuffled, tests to see
      * if the nextPlayer method will cycle through
      * all the players when every player presses end turn
      */
     @Test
-    public void testNextPlayer(){
+    public void testNextPlayer() {
 
         //Shuffles Player Order
         gsm.setUpGame();
@@ -254,24 +256,24 @@ public class GameSingletonTest {
         //Test 1, First Player -> Second Player
         Player first = gsm.getCurrentPlayer();
         gsm.nextPlayer();
-        assertNotEquals(first,gsm.getCurrentPlayer());
+        assertNotEquals(first, gsm.getCurrentPlayer());
 
         //Test 2 Second Player -> Third Player
         Player second = gsm.getCurrentPlayer();
         gsm.nextPlayer();
-        assertNotEquals(second,gsm.getCurrentPlayer());
+        assertNotEquals(second, gsm.getCurrentPlayer());
 
         //Test 3 Third Player -> Fourth Player
         Player third = gsm.getCurrentPlayer();
         gsm.nextPlayer();
-        assertNotEquals(third,gsm.getCurrentPlayer());
+        assertNotEquals(third, gsm.getCurrentPlayer());
 
         //Test 4 Fourth Player -> First Player
         Player fourth = gsm.getCurrentPlayer();
         gsm.nextPlayer();
-        assertNotEquals(fourth,gsm.getCurrentPlayer());
+        assertNotEquals(fourth, gsm.getCurrentPlayer());
 
         //Test 5, First Player IS the First Player (Looped through all players)
-        assertEquals(first,gsm.getCurrentPlayer());
+        assertEquals(first, gsm.getCurrentPlayer());
     }
 }
