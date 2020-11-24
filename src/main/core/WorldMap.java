@@ -279,7 +279,7 @@ public class WorldMap {
     }
 
     /**
-     * returns continents owned by that player
+     * returns set of continents owned by given player
      * @param player to determine continents it owns
      * @return Set of continents the player owns
      */

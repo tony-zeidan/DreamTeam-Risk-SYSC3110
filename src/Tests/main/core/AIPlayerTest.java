@@ -10,14 +10,15 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Testing class that was made to help ensure all the AI functionality
- * was working as intended.
+ * JUnit Testing class, tests some of the AIs functions
+ * and ensures AI is working
  *
  * @author Ethan Chase
- * @author Anthony Dooley
  * @author Kyler Verge
+ * @author Anthony Dooley
  * @author Tony Zeidan
  */
+
 public class AIPlayerTest {
     /**
      * The normal player to test against.
@@ -87,10 +88,6 @@ public class AIPlayerTest {
         t5.setUnits(1);
         t6.setUnits(3);
     }
-
-    /**
-     * Test the AI's algorithm for placing units.
-     */
     @Test
     public void testPlaceUnits()
     {

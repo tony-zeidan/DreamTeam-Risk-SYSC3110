@@ -3,7 +3,7 @@ import java.util.*;
 /**
  * A class to hold the amount of the continent bonus and if a player holds that, to allow bonus troops placement
  *
- * @author Anthony
+ * @author Anthony Dooley
  * @author Eathan Chase
  * @author Kyler Verge
  * @author Tony Zeidan
@@ -47,7 +47,7 @@ public class Continent {
 
     /**
      * Getter for the amount bonus troops of the continent
-     * @return The amount of units the player will get for conquering this territory
+     * @return Bonus amount of the continent
      */
     public int getBonusRulerAmount(){
         return bonusAmount;
@@ -63,7 +63,7 @@ public class Continent {
 
     /**
      * getter for the current owner of the territory
-     * @return Player that owns the continent
+     * @return The Player that owns the continent
      */
     public Player getRuler(){
         return ruler;
