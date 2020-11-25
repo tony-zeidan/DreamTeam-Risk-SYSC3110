@@ -1,9 +1,6 @@
 package com.dreamteam;
 
-import main.core.GameSingleton;
-import main.core.Player;
-import main.core.RiskColour;
-import main.core.Territory;
+import com.dreamteam.core.*;
 import org.junit.Before;
 import org.junit.Test;
 
