@@ -12,6 +12,10 @@ public class HomeScreenFrame extends JFrame implements ActionListener {
     private JButton loadGame;
 
     public HomeScreenFrame() {
+        super("Dream Team RISK!");
+
+        composeFrame();
+
         final SplashScreen splash = SplashScreen.getSplashScreen();
         if (splash == null) {
             System.out.println("SplashScreen.getSplashScreen() returned null");
@@ -25,7 +29,27 @@ public class HomeScreenFrame extends JFrame implements ActionListener {
     }
 
     private void composeFrame() {
+        setLayout(new BorderLayout());
 
+        JPanel buttonPane = new JPanel(new GridLayout(2,1));
+
+        newGame = new JButton("New Game");
+        newGame.setActionCommand("N");
+        loadGame = new JButton("Load Game");
+        loadGame.setActionCommand("L");
+
+        buttonPane.add(newGame);
+        buttonPane.add(loadGame);
+
+        add(BorderLayout.SOUTH,buttonPane);
+
+        setPreferredSize(new Dimension(600,600));
+    }
+
+    private void showFrame() {
+        pack();
+        setResizable(false);
+        setVisible(true);
     }
 
     /**
@@ -40,5 +64,6 @@ public class HomeScreenFrame extends JFrame implements ActionListener {
 
     public static void main(String[] args) {
         HomeScreenFrame hs = new HomeScreenFrame();
+        hs.showFrame();
     }
 }
