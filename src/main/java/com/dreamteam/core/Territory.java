@@ -1,6 +1,14 @@
 package com.dreamteam.core;
 
+import com.github.cliftonlabs.json_simple.JsonArray;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsonable;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,7 +21,7 @@ import java.util.Set;
  * @version 1.01
  * @since 1.00
  */
-public class Territory {
+public class Territory implements Jsonable {
 
     /**
      * The name of the territory.
@@ -140,5 +148,40 @@ public class Territory {
     @Override
     public String toString() {
         return String.format("Territory of %s: \n\tunits: %s", name, units);
+    }
+
+    /**
+     * Serialize to a JSON formatted string.
+     *
+     * @return a string, formatted in JSON, that represents the Jsonable.
+     */
+    @Override
+    public String toJson() {
+        JsonObject json = new JsonObject();
+        json.put("name", name);
+        json.put("owner", owner.getName());
+        json.put("units", units);
+        JsonArray neighJson = new JsonArray();
+        List<String> neighbourNames = new ArrayList<>();
+        for (Territory t : neighbours) {
+            neighbourNames.add(t.getName());
+        }
+        neighJson.addAll(neighbourNames);
+        json.put("neighbours", neighJson);
+        return json.toJson();
+    }
+
+    /**
+     * Serialize to a JSON formatted stream.
+     *
+     * @param writable where the resulting JSON text should be sent.
+     * @throws IOException when the writable encounters an I/O error.
+     */
+    @Override
+    public void toJson(Writer writable) throws IOException {
+        try {
+            writable.write(this.toJson());
+        } catch (Exception ignored) {
+        }
     }
 }

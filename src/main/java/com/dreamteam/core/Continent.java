@@ -1,5 +1,11 @@
 package com.dreamteam.core;
 
+import com.github.cliftonlabs.json_simple.JsonArray;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsonable;
+
+import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
 
 /**
@@ -10,7 +16,7 @@ import java.util.*;
  * @author Kyler Verge
  * @author Tony Zeidan
  */
-public class Continent {
+public class Continent implements Jsonable {
     /**
      * name of the continent
      */
@@ -93,4 +99,32 @@ public class Continent {
         ruler = firstOwner;
     }
 
+    /**
+     * Serialize to a JSON formatted string.
+     *
+     * @return a string, formatted in JSON, that represents the Jsonable.
+     */
+    @Override
+    public String toJson() {
+        JsonObject json = new JsonObject();
+        json.put("name", name);
+        JsonArray territoriesJson = new JsonArray();
+        territoriesJson.addAll(territories);
+        json.put("within",territoriesJson);
+        return json.toJson();
+    }
+
+    /**
+     * Serialize to a JSON formatted stream.
+     *
+     * @param writable where the resulting JSON text should be sent.
+     * @throws IOException when the writable encounters an I/O error.
+     */
+    @Override
+    public void toJson(Writer writable) throws IOException {
+        try {
+            writable.write(this.toJson());
+        } catch (Exception ignored) {
+        }
+    }
 }

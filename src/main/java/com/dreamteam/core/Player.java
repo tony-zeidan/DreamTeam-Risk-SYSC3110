@@ -1,7 +1,16 @@
 package com.dreamteam.core;
 
 
-import java.util.*;
+import com.github.cliftonlabs.json_simple.JsonArray;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsonable;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Class Player represents the user within the {@link GameSingleton}.
@@ -12,7 +21,7 @@ import java.util.*;
  * @version 1.00
  * @since 1.00
  */
-public class Player {
+public class Player implements Jsonable {
 
     /**
      * The name of the player that this object represents.
@@ -171,4 +180,39 @@ public class Player {
         return diceRoll;
     }
 
+    /**
+     * Serialize to a JSON formatted string.
+     *
+     * @return a string, formatted in JSON, that represents the Jsonable.
+     */
+    @Override
+    public String toJson() {
+        JsonObject json = new JsonObject();
+        json.put("name", name);
+        json.put("colour",colour);
+        JsonArray ownedJson = new JsonArray();
+        ownedJson.addAll(owned);
+        List<String> ownedNames = new ArrayList<>();
+        for (Territory t : owned) {
+            ownedNames.add(t.getName());
+        }
+        json.put("owned", ownedNames);
+        json.put("active",active);
+        json.put("selectedDie",diceRoll);
+        return json.toJson();
+    }
+
+    /**
+     * Serialize to a JSON formatted stream.
+     *
+     * @param writable where the resulting JSON text should be sent.
+     * @throws IOException when the writable encounters an I/O error.
+     */
+    @Override
+    public void toJson(Writer writable) throws IOException {
+        try {
+            writable.write(this.toJson());
+        } catch (Exception ignored) {
+        }
+    }
 }

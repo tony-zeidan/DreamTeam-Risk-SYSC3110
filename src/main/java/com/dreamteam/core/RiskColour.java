@@ -1,6 +1,11 @@
 package com.dreamteam.core;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsonable;
+
 import java.awt.*;
+import java.io.IOException;
+import java.io.Writer;
 
 /**
  * This class represents the custom colours made for our version of RISK
@@ -11,7 +16,7 @@ import java.awt.*;
  * @author Anthony Dooley
  * @author Ethan Chase
  */
-public enum RiskColour {
+public enum RiskColour implements Jsonable {
     /**
      * The risk colour red.
      */
@@ -73,5 +78,32 @@ public enum RiskColour {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Serialize to a JSON formatted string.
+     *
+     * @return a string, formatted in JSON, that represents the Jsonable.
+     */
+    @Override
+    public String toJson() {
+        JsonObject json = new JsonObject();
+        json.put("name", name);
+        //json.put("colour",colour.toString());
+        return json.toJson();
+    }
+
+    /**
+     * Serialize to a JSON formatted stream.
+     *
+     * @param writable where the resulting JSON text should be sent.
+     * @throws IOException when the writable encounters an I/O error.
+     */
+    @Override
+    public void toJson(Writer writable) throws IOException {
+        try {
+            writable.write(this.toJson());
+        } catch (Exception ignored) {
+        }
     }
 }

@@ -3,8 +3,13 @@ package com.dreamteam.core;
 import com.dreamteam.view.RiskEvent;
 import com.dreamteam.view.RiskEventType;
 import com.dreamteam.view.RiskGameHandler;
+import com.github.cliftonlabs.json_simple.JsonArray;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsonable;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
 import java.util.List;
 import java.util.LinkedList;
@@ -23,7 +28,7 @@ import java.util.LinkedList;
  * @author Anthony Dooley
  * @author Tony Zeidan
  */
-public class GameSingleton {
+public class GameSingleton implements Jsonable {
 
     /**
      * Single instance of the game itself
@@ -689,6 +694,38 @@ public class GameSingleton {
     private void notifyHandlers(RiskEvent e) {
         for (RiskGameHandler rgv : riskHandlers) {
             rgv.handleRiskUpdate(e);
+        }
+    }
+
+    /**
+     * Serialize to a JSON formatted string.
+     *
+     * @return a string, formatted in JSON, that represents the Jsonable.
+     */
+    @Override
+    public String toJson() {
+        JsonObject json = new JsonObject();
+        json.put("currentTurn", getCurrentPlayer().getName());
+        JsonArray playersJson = new JsonArray();
+        playersJson.addAll(players);
+        json.put("players",playersJson);
+        json.put("activeNum",numActivePlayer);
+        json.put("phase",gamePhase);
+        json.put("map",world);
+        return json.toJson();
+    }
+
+    /**
+     * Serialize to a JSON formatted stream.
+     *
+     * @param writable where the resulting JSON text should be sent.
+     * @throws IOException when the writable encounters an I/O error.
+     */
+    @Override
+    public void toJson(Writer writable) throws IOException {
+        try {
+            writable.write(this.toJson());
+        } catch (Exception ignored) {
         }
     }
 }

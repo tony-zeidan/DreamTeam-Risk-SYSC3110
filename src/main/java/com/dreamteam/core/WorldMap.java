@@ -1,10 +1,11 @@
 package com.dreamteam.core;
 
+import com.github.cliftonlabs.json_simple.JsonArray;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsonable;
+
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -18,7 +19,7 @@ import java.util.regex.Pattern;
  * @author Ethan Chase
  * @author Kyler Verge
  */
-public class WorldMap {
+public class WorldMap implements Jsonable {
 
     /**
      * The name of the world.
@@ -341,4 +342,32 @@ public class WorldMap {
         System.out.println(doc.toString());*/
     }
 
+    /**
+     * Serialize to a JSON formatted string.
+     *
+     * @return a string, formatted in JSON, that represents the Jsonable.
+     */
+    @Override
+    public String toJson() {
+        JsonObject json = new JsonObject();
+        json.put("name", name);
+        JsonArray continentsJson = new JsonArray();
+        continentsJson.addAll(continents.values());
+        json.put("continents", continentsJson);
+        JsonArray territoriesJson = new JsonArray();
+        territoriesJson.addAll(allTerritories.values());
+        json.put("territories",territoriesJson);
+        return json.toJson();
+    }
+
+    /**
+     * Serialize to a JSON formatted stream.
+     *
+     * @param writable where the resulting JSON text should be sent.
+     * @throws IOException when the writable encounters an I/O error.
+     */
+    @Override
+    public void toJson(Writer writable) throws IOException {
+
+    }
 }

@@ -1,6 +1,9 @@
 package com.dreamteam.core;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * A subclass of Player that has the AIs parameters as well as functions to calculate the
