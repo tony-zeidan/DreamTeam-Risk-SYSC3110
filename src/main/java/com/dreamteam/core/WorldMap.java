@@ -66,7 +66,6 @@ public class WorldMap implements Jsonable {
         allTerritories = new HashMap<>();
         allCoordinates = new HashMap<>();
         continents = new HashMap<>();
-        readMap();
     }
 
     /**
@@ -81,15 +80,37 @@ public class WorldMap implements Jsonable {
     /**
      * Reads in the map from the map.txt file (for now)
      */
-    public void readMap() {
+    public void readMap(File path) {
 
         //contains a temporary list of neighbours (in the form of strings)
         //corresponding to each territory (this is a result of reading the text file)
 
         //this only works for Maven I believe
-        ClassLoader loader = getClass().getClassLoader();
-        InputStream in = loader.getResourceAsStream("map_packages/main_package/continents.txt");
+        //ClassLoader loader = getClass().getClassLoader();
+        //InputStream in = loader.getResourceAsStream("map_packages/main_package/continents.txt");
 
+
+        try {
+            InputStream is = new FileInputStream(path);
+            BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+            String line = "";
+            try {
+                while ((line = buf.readLine()) != null) {
+                    readTerritoryLine(line);
+                    System.out.println(line);
+                }
+                buf.close();
+                is.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+                System.out.println("There was a problem reading the file stream.");
+            }
+            //TODO: add parsing here (JSON)
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        /*
         if (in != null) {
             BufferedReader buf = new BufferedReader(new InputStreamReader(in));
             String line = "";
@@ -105,8 +126,9 @@ public class WorldMap implements Jsonable {
             }
         } else {
             throw new IllegalArgumentException("The file was not found!");
-        }
+        }*/
 
+        /*
         in = loader.getResourceAsStream("map_packages/main_package/countries.txt");
 
         if (in != null) {
@@ -124,7 +146,7 @@ public class WorldMap implements Jsonable {
             }
         } else {
             throw new IllegalArgumentException("The file was not found!");
-        }
+        }*/
 
     }
 
@@ -227,7 +249,10 @@ public class WorldMap implements Jsonable {
      *
      * @param players the players playing the game
      */
-    public void setUp(List<Player> players) {
+    public void setUp(List<Player> players, File mapData) {
+
+        readMap(mapData);
+
         assignTerritories(players);
         //place remaining troops on each of the territories
         int max = 50;

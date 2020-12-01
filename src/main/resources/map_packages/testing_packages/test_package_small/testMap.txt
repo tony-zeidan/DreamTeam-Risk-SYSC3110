@@ -1,3 +1,0 @@
-Newfoundland(87:188)|Alabama,Lebanon
-Lebanon(474:439)|Alabama,Newfoundland
-Alabama(533:142)|Lebanon

@@ -10,8 +10,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,7 +81,7 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
      *
      * @param rc The risk controller that this pane listens to
      */
-    public RiskMapPane(RiskController rc) {
+    public RiskMapPane(File mapFile, RiskController rc) {
         this.addMouseListener(rc);
         this.setLayout(null);
         pointsToPaint = null;
@@ -90,17 +89,16 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
         scalingY = 1;
         //attempt to read the map file
         BufferedImage mapImage = null;
-        ClassLoader cl = getClass().getClassLoader();
-        InputStream in = cl.getResourceAsStream("map_packages/main_package/map.png");
-        if (in!=null) {
-            try {
-                mapImage = ImageIO.read(in);
-            } catch (IOException ioException) {
-                System.out.println("RISK Board Load Failed");
-                ioException.printStackTrace();
-            }
-        } else {
-            throw new IllegalArgumentException("The map file specified does not exist!");
+        InputStream is = null;
+        try {
+            is = new FileInputStream(mapFile);
+            mapImage = ImageIO.read(is);
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not find map file");
+            return;
+        } catch (IOException e) {
+            System.out.println("There was an error while reading the map image");
+            return;
         }
         finalMapImage = mapImage;
         firstTimeLoaded = true;

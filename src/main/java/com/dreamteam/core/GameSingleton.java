@@ -8,11 +8,11 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsonable;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.*;
 import java.util.List;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * This class represents the model for the program, notifies
@@ -98,7 +98,7 @@ public class GameSingleton implements Jsonable {
      * assigning random colours, setting up the world map
      * and notifying all event handlers.
      */
-    public void setUpGame() {
+    public void setUpGame(File mapData) {
         //set the initial amount of active players accordingly
         setNumActivePlayer(players.size());
 
@@ -135,7 +135,7 @@ public class GameSingleton implements Jsonable {
 
         //shuffle the order of the players
         shufflePlayers();
-        world.setUp(players);
+        world.setUp(players,mapData);
 
         notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,
                 world.getName()));

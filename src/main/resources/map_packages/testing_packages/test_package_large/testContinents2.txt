@@ -1,5 +1,0 @@
-Grineer(3)|Mercury,Saturn,Ceres,Mars,Uranus,Sedna
-Orokin(5)|Void,Dojo
-Corpus(3)|Venus,Phobos,Europa,Jupiter,Neptune,Pluto
-Infested(2)|Eris
-

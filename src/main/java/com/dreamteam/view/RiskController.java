@@ -140,6 +140,17 @@ public class RiskController extends MouseAdapter implements ActionListener {
             }
             riskView.setUndecorated(fs.isSelected());
             riskView.setVisible(true);
+        } else if (o instanceof JMenuItem) {
+            JMenuItem mi = (JMenuItem) o;
+            switch (mi.getActionCommand()) {
+                case "S":
+                    //riskModel.saveGame
+                    break;
+                case "E":
+                    HomeScreenFrame hs = new HomeScreenFrame();
+                    hs.showFrame();
+                    riskView.dispose();
+            }
         }
     }
 

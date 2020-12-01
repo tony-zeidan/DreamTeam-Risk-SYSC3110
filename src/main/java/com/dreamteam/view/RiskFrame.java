@@ -5,6 +5,7 @@ import com.github.cliftonlabs.json_simple.Jsoner;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
     /**
      * Constructor for instances of RiskFrame, constructs a new GUI.
      */
-    public RiskFrame() {
+    public RiskFrame(File[] data) {
         super("RISK");
         int numPlayers = getNumOfPlayers();
         List<Player> players = getPlayers(numPlayers);
@@ -74,8 +75,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         riskModel = GameSingleton.getGameInstance(players);
         this.gamePhase = GamePhase.START_GAME;
         setLayout(new BorderLayout());
-        composeFrame();
-        riskModel.setUpGame();
+        composeFrame(data[0]);
+        riskModel.setUpGame(data[1]);
 
         String json = Jsoner.serialize(riskModel);
         System.out.println(Jsoner.prettyPrint(json));
@@ -85,7 +86,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      * Generates and places all components on the frame, this should
      * generally only be called once per frame.
      */
-    private void composeFrame() {
+    private void composeFrame(File mapImage) {
 
         RiskController rc = new RiskController(riskModel, this);
         riskModel.addHandler(this);
@@ -96,7 +97,15 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
         JRadioButtonMenuItem fs = new JRadioButtonMenuItem("Fullscreen");
         fs.addActionListener(rc);
+        JMenuItem saveGameItem = new JMenuItem("Save Game");
+        saveGameItem.setActionCommand("S");
+        saveGameItem.addActionListener(rc);
+        JMenuItem exitGameItem = new JMenuItem("Main Menu");
+        exitGameItem.setActionCommand("E");
+        exitGameItem.addActionListener(rc);
         menu.add(fs);
+        menu.add(saveGameItem);
+        menu.add(exitGameItem);
 
         //create a massive separator in the menu bar
         gamePhaseLbl = new JLabel();
@@ -130,7 +139,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         buttonPane.add(moveUnitsBtn);
         buttonPane.add(endTurnBtn);
 
-        mapPane = new RiskMapPane(rc);
+        mapPane = new RiskMapPane(mapImage,rc);
         eventPane = new RiskEventPane();
         riskModel.addHandler(mapPane);
         riskModel.addHandler(eventPane);
@@ -493,7 +502,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      * @param args n/a
      */
     public static void main(String[] args) {
-        RiskFrame rf = new RiskFrame();
+        //RiskFrame rf = new RiskFrame();
     }
 
 }
