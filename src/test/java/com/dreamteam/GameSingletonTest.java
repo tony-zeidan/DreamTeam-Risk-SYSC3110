@@ -52,7 +52,7 @@ public class GameSingletonTest {
      */
     @Test
     public void testGetNumActivePlayer() {
-        gsm.setUpGame();
+        //gsm.setUpGame();
         assertEquals(4, gsm.getNumActivePlayer());
     }
 
@@ -248,7 +248,7 @@ public class GameSingletonTest {
     public void testNextPlayer() {
 
         //Shuffles Player Order
-        gsm.setUpGame();
+        //gsm.setUpGame();
 
         //Test 1, First Player -> Second Player
         Player first = gsm.getCurrentPlayer();

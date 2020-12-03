@@ -15,15 +15,35 @@ repositories {
     jcenter()
 }
 
+configurations {
+    jaxDoclet
+}
+
 dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
     implementation 'com.github.cliftonlabs:json-simple:3.1.0'
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'DreamTeamRISK',
+                'Implementation-Version': version,
+                'Main-Class': 'com.dreamteam.view.HomeScreenFrame'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
 test {
     useJUnit()
 
     maxHeapSize = '1G'
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
 }
 
 sourceSets {
