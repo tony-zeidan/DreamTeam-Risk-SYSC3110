@@ -4,6 +4,7 @@ import com.dreamteam.view.HomeScreenFrame;
 import com.dreamteam.view.RiskFrame;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -27,11 +28,11 @@ public class HomeScreenController implements ActionListener {
                 case "N":
                     //TODO: somehow create a new game here
                     //TODO: migrate the adding of players to this screen
-                    File selected = chooseFile("./worlds/world_maps");
+                    File selected = chooseDir(homeView,"./worlds/world_maps");
                     runGame(selected);
                     break;
                 case "L":
-                    selected = chooseFile("./worlds/saved_games");
+                    selected = chooseDir(homeView,"./worlds/saved_games");
                     runGame(selected);
                     break;
                 case "E":
@@ -41,14 +42,15 @@ public class HomeScreenController implements ActionListener {
         }
     }
 
-    private File chooseFile(String path) {
+    public static File chooseDir(JFrame parent, String path) {
         //TODO: use methods to read in the game that the user wants
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new java.io.File(path));
         chooser.setDialogTitle("Choose a Saved Game");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
-        if (chooser.showOpenDialog(homeView) == JFileChooser.APPROVE_OPTION) {
+        if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
+
             System.out.println("getCurrentDirectory(): "
                     +  chooser.getCurrentDirectory());
             System.out.println("getSelectedFile() : "
@@ -58,17 +60,41 @@ public class HomeScreenController implements ActionListener {
         return null;
     }
 
+
+    public static File chooseFile(JFrame parent, String path) {
+        //TODO: use methods to read in the game that the user wants
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File(path));
+        chooser.setDialogTitle("Choose a Saved Game");
+        chooser.setMultiSelectionEnabled(false);
+        chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
+        chooser.setFileFilter(new FileNameExtensionFilter("Files ending in .save", "foo"));
+        chooser.setAcceptAllFileFilterUsed(false);
+
+        if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
+
+            File file = chooser.getSelectedFile();
+
+            System.out.println("getCurrentDirectory(): "
+                    +  chooser.getCurrentDirectory());
+            System.out.println("getSelectedFile() : "
+                    +  chooser.getSelectedFile());
+
+            if (file.getName().endsWith(".save")||file.getName().endsWith(".world")) {
+                return chooser.getSelectedFile();
+            }
+        }
+        return null;
+    }
+
+
     private void runGame(File file) {
         if (file.isDirectory()) {
             Map<String,File> contained = new HashMap<>();
             for (File f : file.listFiles()) {
                 contained.put(f.getName(),f);
             }
-            File[] mapFiles = new File[] {
-                    contained.get("map.png"),
-                    contained.get("countries.txt")
-            };
-            RiskFrame rf = new RiskFrame(mapFiles);
+            RiskFrame rf = new RiskFrame(contained.get("countries.txt"),contained.get("map.png"));
         } else {
             System.out.println("File did not denote a properly formatted directory or IO error handled.");
         }

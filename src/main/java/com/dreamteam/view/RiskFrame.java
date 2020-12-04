@@ -67,7 +67,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
     /**
      * Constructor for instances of RiskFrame, constructs a new GUI.
      */
-    public RiskFrame(File[] data) {
+    public RiskFrame(File mapData, File mapImage) {
         super("RISK");
         int numPlayers = getNumOfPlayers();
         List<Player> players = getPlayers(numPlayers);
@@ -75,8 +75,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         riskModel = GameSingleton.getGameInstance(players);
         this.gamePhase = GamePhase.START_GAME;
         setLayout(new BorderLayout());
-        composeFrame(data[0]);
-        riskModel.setUpGame(data[1]);
+        composeFrame(mapImage);
+        riskModel.setUpGame(mapData);
 
         String json = Jsoner.serialize(riskModel);
         System.out.println(Jsoner.prettyPrint(json));
@@ -323,6 +323,10 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      */
     public double getScalingY() {
         return mapPane.getScalingY();
+    }
+
+    public Image getMapImage() {
+        return mapPane.getImage();
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.dreamteam.view;
 
+import com.dreamteam.controller.HomeScreenController;
 import com.dreamteam.core.*;
 
 import javax.swing.*;
@@ -144,7 +145,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
             JMenuItem mi = (JMenuItem) o;
             switch (mi.getActionCommand()) {
                 case "S":
-                    //riskModel.saveGame
+                    riskModel.export(HomeScreenController.chooseFile(riskView,""),riskView.getMapImage());
                     break;
                 case "E":
                     HomeScreenFrame hs = new HomeScreenFrame();
@@ -284,6 +285,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
         }
         selectedTerritory = clickedTerritory;
     }
+
+
 
     /**
      * Checks to see if the player clicked a territory on the map

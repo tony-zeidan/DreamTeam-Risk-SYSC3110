@@ -7,12 +7,17 @@ import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsonable;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * This class represents the model for the program, notifies
@@ -146,6 +151,26 @@ public class GameSingleton implements Jsonable {
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
 
         nextPhase();    //beginning should be bonus troupe
+    }
+
+    public void export(File file,Image mapImage) {
+        if (file!=null) {
+            try {
+                ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(file));
+
+                zos.putNextEntry(new ZipEntry("game.json"));
+                zos.write(toJson().getBytes());
+                zos.closeEntry();
+                zos.putNextEntry(new ZipEntry("map.png"));
+                ImageIO.write((RenderedImage) mapImage,"jpg",zos);
+                //DataBufferByte data = (DataBufferByte) ((BufferedImage) mapImage).getRaster().getDataBuffer();
+                //zos.write(data.getData());
+                zos.closeEntry();
+                zos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

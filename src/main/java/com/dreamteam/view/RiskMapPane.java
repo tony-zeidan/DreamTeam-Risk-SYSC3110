@@ -256,4 +256,8 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
                 break;
         }
     }
+
+    public Image getImage() {
+        return finalMapImage;
+    }
 }
