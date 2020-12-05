@@ -10,13 +10,11 @@ import com.github.cliftonlabs.json_simple.Jsonable;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.RenderedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.util.List;
 import java.util.*;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -153,6 +151,37 @@ public class GameSingleton implements Jsonable {
         nextPhase();    //beginning should be bonus troupe
     }
 
+    public void importGame(File file) {
+        if (file!=null) {
+            try {
+                ZipInputStream zis = new ZipInputStream(new FileInputStream(file));
+                Image mapImage = null;
+                File gameData = null;
+
+                ZipEntry ze;
+
+                while ((ze=zis.getNextEntry())!=null) {
+                    if (ze.getName().equals("map.png")) {
+                        //TODO: fix this (this method may suggest major refactoring to the project)
+                    }
+                }
+
+            } catch (FileNotFoundException e) {
+                System.out.println("The file specified was not found");
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Exports the file to our custom save game format (.save).
+     * This format is actually a ZIP folder containing a JSON and map image.
+     *
+     * @param file The file to export to (new or not)
+     * @param mapImage The image representing the map
+     */
     public void export(File file,Image mapImage) {
         if (file!=null) {
             try {
@@ -162,9 +191,7 @@ public class GameSingleton implements Jsonable {
                 zos.write(toJson().getBytes());
                 zos.closeEntry();
                 zos.putNextEntry(new ZipEntry("map.png"));
-                ImageIO.write((RenderedImage) mapImage,"jpg",zos);
-                //DataBufferByte data = (DataBufferByte) ((BufferedImage) mapImage).getRaster().getDataBuffer();
-                //zos.write(data.getData());
+                ImageIO.write((RenderedImage) mapImage,"png",zos);
                 zos.closeEntry();
                 zos.close();
             } catch (IOException e) {
