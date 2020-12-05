@@ -109,45 +109,6 @@ public class WorldMap implements Jsonable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-        /*
-        if (in != null) {
-            BufferedReader buf = new BufferedReader(new InputStreamReader(in));
-            String line = "";
-            try {
-                while ((line = buf.readLine()) != null) {
-                    readContinentLine(line);
-                }
-                buf.close();
-                in.close();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-                System.out.println("There was a problem reading the file stream.");
-            }
-        } else {
-            throw new IllegalArgumentException("The file was not found!");
-        }*/
-
-        /*
-        in = loader.getResourceAsStream("map_packages/main_package/countries.txt");
-
-        if (in != null) {
-            BufferedReader buf = new BufferedReader(new InputStreamReader(in));
-            String line = "";
-            try {
-                while ((line = buf.readLine()) != null) {
-                    readTerritoryLine(line);
-                }
-                buf.close();
-                in.close();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-                System.out.println("There was a problem reading the file stream.");
-            }
-        } else {
-            throw new IllegalArgumentException("The file was not found!");
-        }*/
-
     }
 
     /**

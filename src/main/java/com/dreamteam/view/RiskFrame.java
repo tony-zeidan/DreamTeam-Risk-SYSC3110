@@ -70,6 +70,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
     public RiskFrame(File mapData, File mapImage) {
         super("RISK");
         int numPlayers = getNumOfPlayers();
+
+        //TODO: player selection should be in the home screen (maybe)
         List<Player> players = getPlayers(numPlayers);
         addAIsToList(numOfAIs(numPlayers), players);
         riskModel = GameSingleton.getGameInstance(players);
