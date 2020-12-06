@@ -102,7 +102,7 @@ public class HomeScreenController implements ActionListener {
             for (File f : file.listFiles()) {
                 contained.put(f.getName(),f);
             }
-            RiskFrame rf = new RiskFrame(contained.get("countries.txt"),contained.get("map.png"));
+            RiskFrame rf = new RiskFrame(contained.get("country.json"),contained.get("map.png"));
         } else {
             System.out.println("File did not denote a properly formatted directory or IO error handled.");
         }

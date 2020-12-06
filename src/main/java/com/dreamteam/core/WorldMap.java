@@ -80,50 +80,18 @@ public class WorldMap implements Jsonable {
      */
     public void readMap(File path) throws Exception {
         System.out.println(path);
-        //contains a temporary list of neighbours (in the form of strings)
-        //corresponding to each territory (this is a result of reading the text file)
-
-        //this only works for Maven I believe
-        //ClassLoader loader = getClass().getClassLoader();
-        //InputStream in = loader.getResourceAsStream("map_packages/main_package/continents.txt");
-
 
         try {
             InputStream is = new FileInputStream(path);
             BufferedReader buf = new BufferedReader(new InputStreamReader(is));
             JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
             JsonObject map = (JsonObject)parser.get("map");
-            //maybe done in gamesingleton
             name = (String)map.get("name");
             JsonArray territories =(JsonArray)((JsonObject)map).get("territories");
-            for(Object terr: territories)
-            {
-                String readName = (String) ((JsonObject)terr).get("name");
-                if (!allTerritories.containsKey(readName)) {
-                    allTerritories.put(readName, new Territory(readName));
-                }
-                Territory territory = allTerritories.get(readName);
-                try {
-                    String[] coord = ((String)((JsonObject)terr).get("coordinates")).split(",");
-                    System.out.println(coord[0]);
-                    System.out.println(coord[1]);
-                    int xCord = (int)Double.parseDouble(coord[0]);
-                    int yCord =(int)Double.parseDouble(coord[1]);
-                    Point readCoordinates = new Point(xCord, yCord);
-                    allCoordinates.put(territory, readCoordinates);
-                    List<String> neighbourList = (List<String>) ((JsonObject)terr).get("neighbours");;
-                    for (String s : neighbourList) {
-                        if (!allTerritories.containsKey(s)) {
-                            allTerritories.put(s, new Territory(s));
-                        }
-                        territory.addNeighbour(allTerritories.get(s));
-                    }
-
-                } catch (NumberFormatException e) {
-                    System.out.println("line was formatted incorrectly.");
-                    return;
-                }
-            }
+            readCountries(territories);
+            JsonArray continents = (JsonArray)map.get("continents");
+            System.out.println(continents);
+            readContinents(continents);
         } catch (FileNotFoundException | JsonException e) {
             e.printStackTrace();
         }
@@ -153,31 +121,59 @@ public class WorldMap implements Jsonable {
         }
         return (numVisited == allTerritories.values().size());
     }
+    private void readCountries(JsonArray territories)
+    {
+        for(Object terr: territories)
+        {
+            String readName = (String) ((JsonObject)terr).get("name");
+            if (!allTerritories.containsKey(readName)) {
+                allTerritories.put(readName, new Territory(readName));
+            }
+            Territory territory = allTerritories.get(readName);
+            try {
+                String[] coord = ((String)((JsonObject)terr).get("coordinates")).split(",");
+                System.out.println(coord[0]);
+                System.out.println(coord[1]);
+                int xCord = (int)Double.parseDouble(coord[0]);
+                int yCord =(int)Double.parseDouble(coord[1]);
+                Point readCoordinates = new Point(xCord, yCord);
+                allCoordinates.put(territory, readCoordinates);
+                List<String> neighbourList = (List<String>) ((JsonObject)terr).get("neighbours");;
+                for (String s : neighbourList) {
+                    if (!allTerritories.containsKey(s)) {
+                        allTerritories.put(s, new Territory(s));
+                    }
+                    territory.addNeighbour(allTerritories.get(s));
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("line was formatted incorrectly.");
+                return;
+            }
+        }
+    }
     /**
      * reads the String line that holds the continent, the territories they hold, and bonus troops
      *
-     * @param line The line to read
      */
-    private void readContinentLine(String line) {
-        Matcher matcher = CONTINENT_PATTERN.matcher(line);
-        if (matcher.matches()) {
-            String readName = matcher.group(1);
-            int bonusUnits = 0;
+    private void readContinents(JsonArray listContinents) {
+        for(Object cont: listContinents) {
+            String readName = (String) ((JsonObject)cont).get("name");
+
             try {
-                bonusUnits = Integer.parseInt(matcher.group(3));
+                int bonusUnits = Integer.parseInt((String)((JsonObject)cont).get("value"));
+                Continent continent = new Continent(readName, bonusUnits);
+                continents.put(readName, continent);
+                List<String> territoriesWithin = (List<String>) ((JsonObject)cont).get("territories");;
+                for (String s : territoriesWithin) {
+                    if (!allTerritories.containsKey(s)) {
+                        allTerritories.put(s, new Territory(s));
+                    }
+                    continent.addContinentTerritory(allTerritories.get(s));
+                }
             } catch (NumberFormatException e) {
                 System.out.println("line incorrectly formatted");
                 return;
-            }
-            Continent continent = new Continent(readName, bonusUnits);
-            continents.put(readName, continent);
-            String territoriesString = matcher.group(4);
-            List<String> territoriesWithin = Arrays.asList(territoriesString.split(","));
-            for (String s : territoriesWithin) {
-                if (!allTerritories.containsKey(s)) {
-                    allTerritories.put(s, new Territory(s));
-                }
-                continent.addContinentTerritory(allTerritories.get(s));
             }
         }
     }
@@ -342,8 +338,8 @@ public class WorldMap implements Jsonable {
         JsonObject json = new JsonObject();
         json.put("name", name);
         JsonArray continentsJson = new JsonArray();
-        //continentsJson.addAll(continents.values());
-        //json.put("continents", continentsJson);
+        continentsJson.addAll(continents.values());
+        json.put("continents", continentsJson);
         JsonArray territoriesJson = new JsonArray();
         ArrayList<JsonObject> territoriesJsonList = new ArrayList<>();
         for (Territory terr: allTerritories.values())
@@ -376,6 +372,6 @@ public class WorldMap implements Jsonable {
     }
     public static void main(String[] args) throws Exception {
         WorldMap w = new WorldMap("world");
-        w.readMap(new File("C:/Users/Anthony/Desktop/main_package/game.json"));
+        w.readMap(new File("C:/Users/Anthony/Desktop/game.json"));
     }
 }
