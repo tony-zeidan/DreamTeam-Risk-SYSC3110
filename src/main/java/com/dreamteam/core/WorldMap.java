@@ -43,14 +43,6 @@ public class WorldMap implements Jsonable {
      * Random variable for assigning territories in setup.
      */
     private static Random rand;
-    /**
-     * regex pattern for continent
-     */
-    private static final Pattern CONTINENT_PATTERN = Pattern.compile("((\\w+\\s?)+)\\((\\d+)\\)\\|((((\\w+\\s?)+),?)+)");
-    /**
-     * regex pattern for territories
-     */
-    private static final Pattern TERRITORY_PATTERN = Pattern.compile("((\\w+\\s?)+)\\((\\d+):(\\d+)\\)\\|((((\\w+\\s?)+),?)+)");
 
     /**
      * Constructor for instances of WorldMap.
@@ -208,9 +200,13 @@ public class WorldMap implements Jsonable {
      *
      * @param players the players playing the game
      */
-    public void setUp(List<Player> players, InputStream mapData) throws Exception {
-
-        readMap(mapData);
+    public void setUp(List<Player> players, InputStream mapData) {
+        try{
+            readMap(mapData);
+        } catch(Exception e)
+        {
+            System.out.println(e);
+        }
 
         assignTerritories(players);
         //place remaining troops on each of the territories

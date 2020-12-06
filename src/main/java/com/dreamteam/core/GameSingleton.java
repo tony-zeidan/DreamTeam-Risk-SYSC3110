@@ -101,7 +101,7 @@ public class GameSingleton implements Jsonable {
      * assigning random colours, setting up the world map
      * and notifying all event handlers.
      */
-    public void setUpGame(InputStream mapData) {
+    public void setUpGame(InputStream mapData){
         //set the initial amount of active players accordingly
         setNumActivePlayer(players.size());
 

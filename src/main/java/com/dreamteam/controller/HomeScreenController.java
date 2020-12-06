@@ -35,11 +35,11 @@ public class HomeScreenController implements ActionListener {
                 case "N":
                     //TODO: somehow create a new game here
                     //TODO: migrate the adding of players to this screen
-                    File selected = chooseDir(homeView,"./worlds/world_maps");
+                    File selected = chooseFile(homeView,"./worlds/world_maps");
                     runGame(selected);
                     break;
                 case "L":
-                    selected = chooseDir(homeView,"./worlds/saved_games");
+                    selected = chooseFile(homeView,"./worlds/saved_games");
                     runGame(selected);
                     break;
                 case "E":
@@ -110,13 +110,12 @@ public class HomeScreenController implements ActionListener {
 
                 ZipEntry jsonEntry = zf.getEntry("map.json");
                 InputStream is = zf.getInputStream(jsonEntry);
-
-                RiskFrame rf = new RiskFrame();
+                System.out.println(is);
+                RiskFrame rf = new RiskFrame(is,image);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
 
 
