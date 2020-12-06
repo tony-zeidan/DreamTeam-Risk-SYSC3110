@@ -4,13 +4,10 @@ import com.dreamteam.core.Player;
 import com.dreamteam.core.RiskColour;
 import com.dreamteam.core.Territory;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,15 +78,16 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
      *
      * @param rc The risk controller that this pane listens to
      */
-    public RiskMapPane(File mapFile, RiskController rc) {
+    public RiskMapPane(Image mapImage, RiskController rc) {
         this.addMouseListener(rc);
         this.setLayout(null);
         pointsToPaint = null;
         scalingX = 1;
         scalingY = 1;
         //attempt to read the map file
-        BufferedImage mapImage = null;
-        InputStream is = null;
+        //BufferedImage mapImage = null;
+        //InputStream is = null;
+        /*
         try {
             is = new FileInputStream(mapFile);
             mapImage = ImageIO.read(is);
@@ -99,7 +97,7 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
         } catch (IOException e) {
             System.out.println("There was an error while reading the map image");
             return;
-        }
+        }*/
         finalMapImage = mapImage;
         firstTimeLoaded = true;
     }

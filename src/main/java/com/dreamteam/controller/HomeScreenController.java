@@ -3,13 +3,20 @@ package com.dreamteam.controller;
 import com.dreamteam.view.HomeScreenFrame;
 import com.dreamteam.view.RiskFrame;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class HomeScreenController implements ActionListener {
 
@@ -29,19 +36,11 @@ public class HomeScreenController implements ActionListener {
                     //TODO: somehow create a new game here
                     //TODO: migrate the adding of players to this screen
                     File selected = chooseDir(homeView,"./worlds/world_maps");
-                    try {
-                        runGame(selected);
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
-                    }
+                    runGame(selected);
                     break;
                 case "L":
-                    selected = chooseFile(homeView,"./worlds/saved_games");
-                    try {
-                        runGame(selected);
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
-                    }
+                    selected = chooseDir(homeView,"./worlds/saved_games");
+                    runGame(selected);
                     break;
                 case "E":
                     System.exit(0);
@@ -96,16 +95,31 @@ public class HomeScreenController implements ActionListener {
     }
 
 
-    private void runGame(File file) throws Exception {
-        if (file.isDirectory()) {
-            Map<String,File> contained = new HashMap<>();
-            for (File f : file.listFiles()) {
-                contained.put(f.getName(),f);
+    private void runGame(File file) {
+        if (file!=null && file.getName().endsWith(".save")) {
+
+            try {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                ZipFile zf = new ZipFile(file);
+                ZipEntry imageEntry = zf.getEntry("map.png");
+                InputStream in = zf.getInputStream(imageEntry);
+                BufferedImage image = ImageIO.read(in);
+                in.close();
+                zf.close();
+                out.close();
+
+                ZipEntry jsonEntry = zf.getEntry("map.json");
+                InputStream is = zf.getInputStream(jsonEntry);
+
+                RiskFrame rf = new RiskFrame();
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            RiskFrame rf = new RiskFrame(contained.get("country.json"),contained.get("map.png"));
-        } else {
-            System.out.println("File did not denote a properly formatted directory or IO error handled.");
+
         }
+
+
         //the path given should not refer to a file, but instead a map folder
         homeView.dispose();
 

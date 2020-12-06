@@ -101,7 +101,7 @@ public class GameSingleton implements Jsonable {
      * assigning random colours, setting up the world map
      * and notifying all event handlers.
      */
-    public void setUpGame(File mapData) throws Exception {
+    public void setUpGame(InputStream mapData) {
         //set the initial amount of active players accordingly
         setNumActivePlayer(players.size());
 
@@ -138,7 +138,7 @@ public class GameSingleton implements Jsonable {
 
         //shuffle the order of the players
         shufflePlayers();
-        world.setUp(players,new FileInputStream(mapData));
+        world.setUp(players,mapData);
 
         notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,
                 world.getName()));
