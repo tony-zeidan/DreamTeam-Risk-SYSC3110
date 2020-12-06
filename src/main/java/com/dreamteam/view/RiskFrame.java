@@ -6,6 +6,7 @@ import com.github.cliftonlabs.json_simple.Jsoner;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +68,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
     /**
      * Constructor for instances of RiskFrame, constructs a new GUI.
      */
-    public RiskFrame(File mapData, File mapImage) {
+    public RiskFrame(InputStream mapData, Image mapImage) {
         super("RISK");
         int numPlayers = getNumOfPlayers();
 
@@ -88,7 +89,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      * Generates and places all components on the frame, this should
      * generally only be called once per frame.
      */
-    private void composeFrame(File mapImage) {
+    private void composeFrame(Image mapImage) {
 
         RiskController rc = new RiskController(riskModel, this);
         riskModel.addHandler(this);

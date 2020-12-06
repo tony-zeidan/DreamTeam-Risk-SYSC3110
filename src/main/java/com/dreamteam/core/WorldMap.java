@@ -341,7 +341,13 @@ public class WorldMap implements Jsonable {
         continentsJson.addAll(continents.values());
         json.put("continents", continentsJson);
         JsonArray territoriesJson = new JsonArray();
-        territoriesJson.addAll(allTerritories.values());
+        for (Territory t : allCoordinates.keySet()) {
+            JsonObject terrMap = new JsonObject();
+            terrMap.put("name",t.getName());
+            Point p = allCoordinates.get(t);
+            terrMap.put("coordinate",p.toString());
+        }
+        territoriesJson.addAll(allTerritories.keySet());
         json.put("territories",territoriesJson);
         return json.toJson();
     }

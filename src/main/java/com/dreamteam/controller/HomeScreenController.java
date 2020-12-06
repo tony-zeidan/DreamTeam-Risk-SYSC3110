@@ -3,13 +3,20 @@ package com.dreamteam.controller;
 import com.dreamteam.view.HomeScreenFrame;
 import com.dreamteam.view.RiskFrame;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class HomeScreenController implements ActionListener {
 
@@ -52,9 +59,9 @@ public class HomeScreenController implements ActionListener {
         if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
 
             System.out.println("getCurrentDirectory(): "
-                    +  chooser.getCurrentDirectory());
+                    + chooser.getCurrentDirectory());
             System.out.println("getSelectedFile() : "
-                    +  chooser.getSelectedFile());
+                    + chooser.getSelectedFile());
             return chooser.getSelectedFile();
         }
         return null;
@@ -89,6 +96,30 @@ public class HomeScreenController implements ActionListener {
 
 
     private void runGame(File file) {
+        if (file!=null && file.getName().endsWith(".save")) {
+
+            try {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                ZipFile zf = new ZipFile(file);
+                ZipEntry imageEntry = zf.getEntry("map.png");
+                InputStream in = zf.getInputStream(imageEntry);
+                BufferedImage image = ImageIO.read(in);
+                in.close();
+                zf.close();
+                out.close();
+
+                ZipEntry jsonEntry = zf.getEntry("map.json");
+                InputStream is = zf.getInputStream(jsonEntry);
+
+                RiskFrame rf = new RiskFrame()
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
         if (file.isDirectory()) {
             Map<String,File> contained = new HashMap<>();
             for (File f : file.listFiles()) {
