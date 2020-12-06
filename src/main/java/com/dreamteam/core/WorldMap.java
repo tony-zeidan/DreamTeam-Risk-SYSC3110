@@ -1,8 +1,6 @@
 package com.dreamteam.core;
 
-import com.github.cliftonlabs.json_simple.JsonArray;
-import com.github.cliftonlabs.json_simple.JsonObject;
-import com.github.cliftonlabs.json_simple.Jsonable;
+import com.github.cliftonlabs.json_simple.*;
 
 import java.awt.*;
 import java.io.*;
@@ -81,7 +79,7 @@ public class WorldMap implements Jsonable {
      * Reads in the map from the map.txt file (for now)
      */
     public void readMap(File path) {
-
+        System.out.println(path);
         //contains a temporary list of neighbours (in the form of strings)
         //corresponding to each territory (this is a result of reading the text file)
 
@@ -93,20 +91,55 @@ public class WorldMap implements Jsonable {
         try {
             InputStream is = new FileInputStream(path);
             BufferedReader buf = new BufferedReader(new InputStreamReader(is));
-            String line = "";
-            try {
-                while ((line = buf.readLine()) != null) {
-                    readTerritoryLine(line);
-                    System.out.println(line);
+            JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
+            JsonObject map = (JsonObject)parser.get("map");
+            //maybe done in gamesingleton
+            name = (String)map.get("name");
+            JsonArray territories =(JsonArray)((JsonObject)map).get("territories");
+            for(Object terr: territories)
+            {
+                String readName = (String) ((JsonObject)terr).get("name");
+                if (!allTerritories.containsKey(readName)) {
+                    allTerritories.put(readName, new Territory(readName));
                 }
-                buf.close();
-                is.close();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-                System.out.println("There was a problem reading the file stream.");
+                Territory territory = allTerritories.get(readName);
+                try {
+                    String[] coord = ((String)((JsonObject)terr).get("coordinates")).split(",");
+                    System.out.println(coord[0]);
+                    System.out.println(coord[1]);
+                    int xCord = (int)Double.parseDouble(coord[0]);
+                    int yCord =(int)Double.parseDouble(coord[1]);
+                    Point readCoordinates = new Point(xCord, yCord);
+                    allCoordinates.put(territory, readCoordinates);
+                    List<String> neighbourList = (List<String>) ((JsonObject)terr).get("neighbours");;
+                    for (String s : neighbourList) {
+                        if (!allTerritories.containsKey(s)) {
+                            allTerritories.put(s, new Territory(s));
+                        }
+                        territory.addNeighbour(allTerritories.get(s));
+                    }
+
+                } catch (NumberFormatException e) {
+                    System.out.println("line was formatted incorrectly.");
+                    return;
+                }
             }
-            //TODO: add parsing here (JSON)
-        } catch (FileNotFoundException e) {
+
+
+//            String line = "";
+//            try {
+//                while ((line = buf.readLine()) != null) {
+//                    readTerritoryLine(line);
+//                    System.out.println(line);
+//                }
+//                buf.close();
+//                is.close();
+//            } catch (IOException ioException) {
+//                ioException.printStackTrace();
+//                System.out.println("There was a problem reading the file stream.");
+//            }
+//            //TODO: add parsing here (JSON)
+        } catch (FileNotFoundException | JsonException e) {
             e.printStackTrace();
         }
     }
@@ -338,10 +371,19 @@ public class WorldMap implements Jsonable {
         JsonObject json = new JsonObject();
         json.put("name", name);
         JsonArray continentsJson = new JsonArray();
-        continentsJson.addAll(continents.values());
-        json.put("continents", continentsJson);
+        //continentsJson.addAll(continents.values());
+        //json.put("continents", continentsJson);
         JsonArray territoriesJson = new JsonArray();
-        territoriesJson.addAll(allTerritories.values());
+        ArrayList<JsonObject> territoriesJsonList = new ArrayList<>();
+        for (Territory terr: allTerritories.values())
+        {
+            JsonObject jsonTerr = new JsonObject();
+            jsonTerr.put("name", terr.getName());
+            jsonTerr.put("coordinates", getCoordinatesString(terr));
+            jsonTerr.put("neighbours", terr.toJsonBuildMap());
+            territoriesJsonList.add(jsonTerr);
+        }
+        territoriesJson.addAll(territoriesJsonList);
         json.put("territories",territoriesJson);
         return json.toJson();
     }
@@ -355,5 +397,15 @@ public class WorldMap implements Jsonable {
     @Override
     public void toJson(Writer writable) throws IOException {
 
+    }
+    public String getCoordinatesString(Territory terr)
+    {
+        Point terrPoint = allCoordinates.get(terr);
+        return terrPoint.getX() +","+terrPoint.getY();
+    }
+    public static void main(String[] args)
+    {
+        WorldMap w = new WorldMap("world");
+        w.readMap(new File("C:/Users/Anthony/Desktop/main_package/game.json"));
     }
 }

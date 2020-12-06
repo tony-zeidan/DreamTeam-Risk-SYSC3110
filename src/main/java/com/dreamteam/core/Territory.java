@@ -159,18 +159,18 @@ public class Territory implements Jsonable {
     public String toJson() {
         JsonObject json = new JsonObject();
         json.put("name", name);
-        json.put("owner", owner.getName());
         json.put("units", units);
+        return json.toJson();
+    }
+    public JsonArray toJsonBuildMap() {
         JsonArray neighJson = new JsonArray();
         List<String> neighbourNames = new ArrayList<>();
         for (Territory t : neighbours) {
             neighbourNames.add(t.getName());
         }
         neighJson.addAll(neighbourNames);
-        json.put("neighbours", neighJson);
-        return json.toJson();
+        return neighJson;
     }
-
     /**
      * Serialize to a JSON formatted stream.
      *

@@ -148,9 +148,11 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     riskModel.export(HomeScreenController.chooseFile(riskView,""),riskView.getMapImage());
                     break;
                 case "E":
+                    //bug double frame.
+                    riskView.dispose();
+                    riskView = null;
                     HomeScreenFrame hs = new HomeScreenFrame();
                     hs.showFrame();
-                    riskView.dispose();
             }
         }
     }

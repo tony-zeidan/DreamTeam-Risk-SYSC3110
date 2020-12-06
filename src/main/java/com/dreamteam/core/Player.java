@@ -190,13 +190,7 @@ public class Player implements Jsonable {
         JsonObject json = new JsonObject();
         json.put("name", name);
         json.put("colour",colour);
-        JsonArray ownedJson = new JsonArray();
-        ownedJson.addAll(owned);
-        List<String> ownedNames = new ArrayList<>();
-        for (Territory t : owned) {
-            ownedNames.add(t.getName());
-        }
-        json.put("owned", ownedNames);
+        json.put("owned", owned);
         json.put("active",active);
         json.put("selectedDie",diceRoll);
         return json.toJson();
