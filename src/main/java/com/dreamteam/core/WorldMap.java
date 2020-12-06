@@ -78,11 +78,8 @@ public class WorldMap implements Jsonable {
     /**
      * Reads in the map from the map.txt file (for now)
      */
-    public void readMap(File path) throws Exception {
-        System.out.println(path);
-
+    public void readMap(InputStream is) throws Exception {
         try {
-            InputStream is = new FileInputStream(path);
             BufferedReader buf = new BufferedReader(new InputStreamReader(is));
             JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
             JsonObject map = (JsonObject)parser.get("map");
@@ -92,7 +89,7 @@ public class WorldMap implements Jsonable {
             JsonArray continents = (JsonArray)map.get("continents");
             System.out.println(continents);
             readContinents(continents);
-        } catch (FileNotFoundException | JsonException e) {
+        } catch (JsonException e) {
             e.printStackTrace();
         }
         if (!validMap())
@@ -100,6 +97,7 @@ public class WorldMap implements Jsonable {
             System.out.println("invalid");
             throw new Exception("Please input valid map");
         }
+        is.close();
     }
     private boolean validMap()
     {
@@ -210,7 +208,7 @@ public class WorldMap implements Jsonable {
      *
      * @param players the players playing the game
      */
-    public void setUp(List<Player> players, File mapData) throws Exception {
+    public void setUp(List<Player> players, InputStream mapData) throws Exception {
 
         readMap(mapData);
 
@@ -372,6 +370,6 @@ public class WorldMap implements Jsonable {
     }
     public static void main(String[] args) throws Exception {
         WorldMap w = new WorldMap("world");
-        w.readMap(new File("C:/Users/Anthony/Desktop/game.json"));
+        w.readMap(new FileInputStream(new File("C:/Users/Anthony/Desktop/game.json")));
     }
 }

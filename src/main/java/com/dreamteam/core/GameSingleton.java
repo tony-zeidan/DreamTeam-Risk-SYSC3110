@@ -138,7 +138,7 @@ public class GameSingleton implements Jsonable {
 
         //shuffle the order of the players
         shufflePlayers();
-        world.setUp(players,mapData);
+        world.setUp(players,new FileInputStream(mapData));
 
         notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,
                 world.getName()));

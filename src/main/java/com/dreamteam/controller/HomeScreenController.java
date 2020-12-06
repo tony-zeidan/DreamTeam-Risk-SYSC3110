@@ -36,7 +36,7 @@ public class HomeScreenController implements ActionListener {
                     }
                     break;
                 case "L":
-                    selected = chooseDir(homeView,"./worlds/saved_games");
+                    selected = chooseFile(homeView,"./worlds/saved_games");
                     try {
                         runGame(selected);
                     } catch (Exception exception) {
