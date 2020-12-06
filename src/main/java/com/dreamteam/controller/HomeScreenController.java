@@ -5,7 +5,6 @@ import com.dreamteam.view.RiskFrame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -53,9 +52,6 @@ public class HomeScreenController implements ActionListener {
         chooser.setCurrentDirectory(new java.io.File(path));
         chooser.setDialogTitle("Choose a Saved Game");
         chooser.setMultiSelectionEnabled(false);
-        chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
-        chooser.setFileFilter(new FileNameExtensionFilter("Files ending in .save", "foo"));
-        chooser.setAcceptAllFileFilterUsed(false);
 
         if (chooser.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION) {
 
@@ -80,9 +76,6 @@ public class HomeScreenController implements ActionListener {
         chooser.setCurrentDirectory(new java.io.File(path));
         chooser.setDialogTitle("Choose a Saved Game");
         chooser.setMultiSelectionEnabled(false);
-        chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
-        chooser.setFileFilter(new FileNameExtensionFilter("Files ending in .save", "foo"));
-        chooser.setAcceptAllFileFilterUsed(false);
 
         if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
 
