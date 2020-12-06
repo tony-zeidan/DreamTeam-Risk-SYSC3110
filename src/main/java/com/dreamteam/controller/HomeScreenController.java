@@ -13,8 +13,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -35,11 +33,11 @@ public class HomeScreenController implements ActionListener {
                 case "N":
                     //TODO: somehow create a new game here
                     //TODO: migrate the adding of players to this screen
-                    File selected = chooseFile(homeView,"./worlds/world_maps");
+                    File selected = openFile(homeView,"./worlds/world_maps");
                     runGame(selected);
                     break;
                 case "L":
-                    selected = chooseFile(homeView,"./worlds/saved_games");
+                    selected = openFile(homeView,"./worlds/saved_games");
                     runGame(selected);
                     break;
                 case "E":
@@ -49,26 +47,34 @@ public class HomeScreenController implements ActionListener {
         }
     }
 
-    public static File chooseDir(JFrame parent, String path) {
+    public static File saveFile(JFrame parent, String path) {
         //TODO: use methods to read in the game that the user wants
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new java.io.File(path));
         chooser.setDialogTitle("Choose a Saved Game");
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setMultiSelectionEnabled(false);
+        chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
+        chooser.setFileFilter(new FileNameExtensionFilter("Files ending in .save", "foo"));
         chooser.setAcceptAllFileFilterUsed(false);
-        if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
+
+        if (chooser.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION) {
+
+            File file = chooser.getSelectedFile();
 
             System.out.println("getCurrentDirectory(): "
                     +  chooser.getCurrentDirectory());
             System.out.println("getSelectedFile() : "
                     +  chooser.getSelectedFile());
-            return chooser.getSelectedFile();
+
+            if (file.getName().endsWith(".save")||file.getName().endsWith(".world")) {
+                return chooser.getSelectedFile();
+            }
         }
         return null;
     }
 
 
-    public static File chooseFile(JFrame parent, String path) {
+    public static File openFile(JFrame parent, String path) {
         //TODO: use methods to read in the game that the user wants
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new java.io.File(path));
