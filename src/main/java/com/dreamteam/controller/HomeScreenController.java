@@ -29,11 +29,19 @@ public class HomeScreenController implements ActionListener {
                     //TODO: somehow create a new game here
                     //TODO: migrate the adding of players to this screen
                     File selected = chooseDir(homeView,"./worlds/world_maps");
-                    runGame(selected);
+                    try {
+                        runGame(selected);
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
                     break;
                 case "L":
                     selected = chooseDir(homeView,"./worlds/saved_games");
-                    runGame(selected);
+                    try {
+                        runGame(selected);
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
                     break;
                 case "E":
                     System.exit(0);
@@ -88,7 +96,7 @@ public class HomeScreenController implements ActionListener {
     }
 
 
-    private void runGame(File file) {
+    private void runGame(File file) throws Exception {
         if (file.isDirectory()) {
             Map<String,File> contained = new HashMap<>();
             for (File f : file.listFiles()) {

@@ -67,7 +67,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
     /**
      * Constructor for instances of RiskFrame, constructs a new GUI.
      */
-    public RiskFrame(File mapData, File mapImage) {
+    public RiskFrame(File mapData, File mapImage) throws Exception {
         super("RISK");
         int numPlayers = getNumOfPlayers();
 

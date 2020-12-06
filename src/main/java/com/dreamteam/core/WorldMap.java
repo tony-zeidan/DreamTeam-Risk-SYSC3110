@@ -78,7 +78,7 @@ public class WorldMap implements Jsonable {
     /**
      * Reads in the map from the map.txt file (for now)
      */
-    public void readMap(File path) {
+    public void readMap(File path) throws Exception {
         System.out.println(path);
         //contains a temporary list of neighbours (in the form of strings)
         //corresponding to each territory (this is a result of reading the text file)
@@ -124,26 +124,35 @@ public class WorldMap implements Jsonable {
                     return;
                 }
             }
-
-
-//            String line = "";
-//            try {
-//                while ((line = buf.readLine()) != null) {
-//                    readTerritoryLine(line);
-//                    System.out.println(line);
-//                }
-//                buf.close();
-//                is.close();
-//            } catch (IOException ioException) {
-//                ioException.printStackTrace();
-//                System.out.println("There was a problem reading the file stream.");
-//            }
-//            //TODO: add parsing here (JSON)
         } catch (FileNotFoundException | JsonException e) {
             e.printStackTrace();
         }
+        if (!validMap())
+        {
+            System.out.println("invalid");
+            throw new Exception("Please input valid map");
+        }
     }
-
+    private boolean validMap()
+    {
+        int numVisited = 0;
+        Queue<Territory> territories = new LinkedList<>();
+        Set<Territory> visited = new HashSet<>();
+        Territory start = (new ArrayList<> (allTerritories.values())).get(0);
+        territories.add(start);
+        visited.add(start);
+        while (!territories.isEmpty()) {
+            Territory terr = territories.remove();
+            for (Territory adjTerr : terr.getNeighbours()) {
+                if (!visited.contains(adjTerr)) {
+                    territories.add(adjTerr);
+                    visited.add(adjTerr);
+                }
+            }
+            numVisited += 1;
+        }
+        return (numVisited == allTerritories.values().size());
+    }
     /**
      * reads the String line that holds the continent, the territories they hold, and bonus troops
      *
@@ -169,44 +178,6 @@ public class WorldMap implements Jsonable {
                     allTerritories.put(s, new Territory(s));
                 }
                 continent.addContinentTerritory(allTerritories.get(s));
-            }
-        }
-    }
-
-    /**
-     * reads a String of the territory text file to determine, territory and neighbours
-     *
-     * @param line The line to read
-     */
-    private void readTerritoryLine(String line) {
-        Matcher matcher = TERRITORY_PATTERN.matcher(line);
-        if (matcher.matches()) {
-            String readName = matcher.group(1);
-            if (!allTerritories.containsKey(readName)) {
-                allTerritories.put(readName, new Territory(readName));
-            }
-            Territory territory = allTerritories.get(readName);
-            int xCord = 0;
-            int yCord = 0;
-            try {
-                xCord = Integer.parseInt(matcher.group(3));
-                yCord = Integer.parseInt(matcher.group(4));
-
-
-            } catch (NumberFormatException e) {
-                System.out.println("line was formatted incorrectly.");
-                return;
-            }
-            Point readCoordinates = new Point(xCord, yCord);
-            allCoordinates.put(territory, readCoordinates);
-
-            String neighString = matcher.group(5);
-            List<String> neighbourList = Arrays.asList(neighString.split(","));
-            for (String s : neighbourList) {
-                if (!allTerritories.containsKey(s)) {
-                    allTerritories.put(s, new Territory(s));
-                }
-                territory.addNeighbour(allTerritories.get(s));
             }
         }
     }
@@ -243,7 +214,7 @@ public class WorldMap implements Jsonable {
      *
      * @param players the players playing the game
      */
-    public void setUp(List<Player> players, File mapData) {
+    public void setUp(List<Player> players, File mapData) throws Exception {
 
         readMap(mapData);
 
@@ -403,8 +374,7 @@ public class WorldMap implements Jsonable {
         Point terrPoint = allCoordinates.get(terr);
         return terrPoint.getX() +","+terrPoint.getY();
     }
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws Exception {
         WorldMap w = new WorldMap("world");
         w.readMap(new File("C:/Users/Anthony/Desktop/main_package/game.json"));
     }
