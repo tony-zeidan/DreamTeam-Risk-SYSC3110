@@ -37,7 +37,7 @@ public class HomeScreenController implements ActionListener {
                     if (selected.getName().endsWith(".world")) {
                         try {
                             constructNewGame(new ZipFile(selected));
-                        } catch (IOException ioException) {
+                        } catch (Exception ioException) {
                             ioException.printStackTrace();
                         }
                     } else {
@@ -49,7 +49,7 @@ public class HomeScreenController implements ActionListener {
                     if (selected.getName().endsWith(".save")) {
                         try {
                             loadGame(new ZipFile(selected));
-                        } catch (IOException ioException) {
+                        } catch (Exception ioException) {
                             ioException.printStackTrace();
                         }
                     } else {
@@ -110,7 +110,7 @@ public class HomeScreenController implements ActionListener {
         return null;
     }
 
-    private void constructNewGame(ZipFile file) {
+    private void constructNewGame(ZipFile file) throws Exception {
         int numPlayers = getNumOfPlayers();
         List<Player> players = getPlayers(numPlayers);
         addAIsToList(numOfAIs(numPlayers), players);
@@ -120,7 +120,7 @@ public class HomeScreenController implements ActionListener {
         gs.newGame(file);
     }
 
-    private void loadGame(ZipFile file) {
+    private void loadGame(ZipFile file) throws Exception {
         GameSingleton gs = GameSingleton.getGameInstance(null);
         RiskFrame rf = new RiskFrame(file);
         gs.addHandler(rf);

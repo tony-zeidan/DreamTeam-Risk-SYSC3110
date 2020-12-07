@@ -1,9 +1,10 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
-mainClassName = "GameSingleton"
+mainClassName = "com.dreamteam.view.HomeScreenFrame"
 
 group 'com.dreamteam'
 version '3.0-SNAPSHOT'
@@ -20,30 +21,39 @@ configurations {
 }
 
 dependencies {
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     implementation 'com.github.cliftonlabs:json-simple:3.1.0'
 }
 
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Implementation-Title': 'DreamTeamRISK',
-                'Implementation-Version': version,
-                'Main-Class': 'com.dreamteam.view.HomeScreenFrame'
-    }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
-
 test {
-    useJUnit()
+    useJUnitPlatform()
 
     maxHeapSize = '1G'
 }
 
-javadoc {
-    source = sourceSets.main.allJava
-    classpath = configurations.compile
+shadowJar {
+    include "*.jar"
+    include "./worlds"
+}
+
+task javadocs(type: Javadoc) {
+    source = sourceSets.main.java.srcDirs
+    classpath = sourceSets.main.runtimeClasspath
+    exclude '**/R.html', '**/R.*.html', '**/index.html'
+}
+
+task deployDocs(type: Copy) {
+    dependsOn javadocs
+    from "build/docs/javadoc"
+    into "build/deployFull/documentation"
+}
+
+task deployFull(type: Copy) {
+    dependsOn deployDocs
+    dependsOn shadowJar
+    from "build/libs"
+    into "build/deployFull"
 }
 
 sourceSets {

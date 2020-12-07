@@ -186,7 +186,7 @@ public class GameSingleton implements Jsonable {
         ZipEntry gameData = zf.getEntry("game.json");
         InputStream gameStream = zf.getInputStream(gameData);
         world.readMap(mapStream);
-        readGame(gameStream);
+        //readGame(gameStream);
         mapStream.close();
         gameStream.close();
     }
