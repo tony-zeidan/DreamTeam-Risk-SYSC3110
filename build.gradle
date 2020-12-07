@@ -33,8 +33,8 @@ test {
 }
 
 shadowJar {
-    include "*.jar"
-    include "./worlds"
+    from sourceSets.main.allSource //add java files
+    from './extra_files' //./extra_files/worlds -> ./worlds
 }
 
 task javadocs(type: Javadoc) {
@@ -54,6 +54,14 @@ task deployFull(type: Copy) {
     dependsOn shadowJar
     from "build/libs"
     into "build/deployFull"
+}
+
+task zipDeployment(type: Zip) {
+    dependsOn deployFull
+    from 'build/deployFull'
+    include '*'
+    include '*/*'
+    archiveName 'Deployment.zip'
 }
 
 sourceSets {
