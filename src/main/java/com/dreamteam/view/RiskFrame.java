@@ -2,7 +2,6 @@ package com.dreamteam.view;
 
 import com.dreamteam.controller.RiskController;
 import com.dreamteam.core.*;
-import com.github.cliftonlabs.json_simple.Jsoner;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
@@ -87,13 +86,16 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
         //TODO: player selection should be in the home screen (maybe)
         setLayout(new BorderLayout());
-        importFrame(gs,gameData);
-
         rc = new RiskController(gs,this);
 
-        String json = Jsoner.serialize(gs);
+        importFrame(gs,gameData);
 
-        System.out.println(Jsoner.prettyPrint(json));
+
+        gs.addHandler(this);
+
+        //String json = Jsoner.serialize(gs);
+
+        //System.out.println(Jsoner.prettyPrint(json));
     }
 
     private void playSound(String name) {
@@ -444,6 +446,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 setEndable(false);
                 break;
             case GAME_BEGAN:
+                this.gamePhase = GamePhase.START_GAME;
                 showFrame();
                 break;
             case TURN_BEGAN:
