@@ -477,6 +477,20 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                         maxDice, "You are Defending " + defending.getName() + " from " + attacking.getName() + ".");
                 currentPlayer.setDiceRoll(diceAmount);
                 break;
+            case INVALID_MAP_LOAD:
+                //popup dialog and send back to home screen
+                int result = JOptionPane.showConfirmDialog(this, "You loaded an invalid map!",
+                        "Title", JOptionPane.INFORMATION_MESSAGE);
+                if (result==JOptionPane.OK_OPTION) {
+                    //safety measures
+                    mapPane=null;
+                    eventPane=null;
+
+                    //exit
+                    HomeScreenFrame hs = new HomeScreenFrame();
+                    hs.showFrame();
+                    this.dispose();
+                }
         }
     }
 

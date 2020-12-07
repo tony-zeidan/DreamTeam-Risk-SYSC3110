@@ -69,7 +69,7 @@ public class WorldMap implements Jsonable {
     /**
      * Reads in the map from the map.txt file (for now)
      */
-    public void readMap(InputStream is) throws Exception {
+    public void readMap(InputStream is) {
         try {
             BufferedReader buf = new BufferedReader(new InputStreamReader(is));
             JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
@@ -79,18 +79,28 @@ public class WorldMap implements Jsonable {
             readCountries(territories);
             JsonArray continents = (JsonArray)map.get("continents");
             readContinents(continents);
+            is.close();
         } catch (JsonException e) {
-            e.printStackTrace();
+            //TODO: perhaps add GUI handling of some sort
+            System.out.println("There was a fatal error while parsing the JSON"); return;
+        } catch (IOException e) {
+            System.out.println("There was a fatal IO exception when closing stream"); return;
         }
-        if (!validMap())
-        {
-            System.out.println("invalid");
-            throw new Exception("Please input valid map");
+        if (!validMap()) {
+            //TODO where this method is called, catch this exception (then throw an event to the frame)
+            System.out.println("Invalid map detected");
+            throw new RiskGameException("The user uploaded an invalid map.");
         }
-        is.close();
+
     }
-    private boolean validMap()
-    {
+
+    /**
+     * Determines whether the map currently loaded is a valid map.
+     * Algorithm:
+     *
+     * @return Whether the current map is valid
+     */
+    private boolean validMap() {
         int numVisited = 0;
         Queue<Territory> territories = new LinkedList<>();
         Set<Territory> visited = new HashSet<>();
@@ -109,6 +119,7 @@ public class WorldMap implements Jsonable {
         }
         return (numVisited == allTerritories.values().size());
     }
+
     private void readCountries(JsonArray territories)
     {
         for(Object terr: territories)
@@ -198,7 +209,7 @@ public class WorldMap implements Jsonable {
      *
      * @param players the players playing the game
      */
-    public void setUp(List<Player> players, InputStream mapData) {
+    public void assignNewMap(List<Player> players, InputStream mapData) throws RiskGameException {
         try{
             readMap(mapData);
         } catch(Exception e)
@@ -286,41 +297,6 @@ public class WorldMap implements Jsonable {
     }
 
     /**
-     * Please ignore this method for now.
-     * Testing map xml generation.
-     *
-     * @deprecated
-     */
-    private void writeXML() {
-        /*Document doc = new Document("world");
-        Attribute docName = new Attribute("id",getName());
-        int i = 1;
-        for (Territory t : allCoordinates.keySet()) {
-            Point p = allCoordinates.get(t);
-            Element terrElem = new Element("territory");
-            Attribute terrElemId = new Attribute("id",i+"");
-            terrElem.addAttribute(terrElemId);
-            ValuedElement terrElemName = new ValuedElement("name",t.getName());
-            terrElem.addChild(terrElemName);
-            ValuedElement terrElemPoint = new ValuedElement("point",p.x + "," + p.y);
-            terrElem.addChild(terrElemPoint);
-            ValuedElement terrElemUnits = new ValuedElement("units","1");
-            terrElem.addChild(terrElemUnits);
-            ValuedElement terrElemOwner = new ValuedElement("owner","null");
-            terrElem.addChild(terrElemOwner);
-            Element terrElemNeighbours = new Element("neighbours");
-            for (Territory n : t.getNeighbours()) {
-                ValuedElement neighboursElemName = new ValuedElement("name",n.getName());
-                terrElemNeighbours.addChild(neighboursElemName);
-            }
-            terrElem.addChild(terrElemNeighbours);
-            doc.addChild(terrElem);
-            i ++;
-        }
-        System.out.println(doc.toString());*/
-    }
-
-    /**
      * Serialize to a JSON formatted string.
      *
      * @return a string, formatted in JSON, that represents the Jsonable.
@@ -355,13 +331,19 @@ public class WorldMap implements Jsonable {
      */
     @Override
     public void toJson(Writer writable) throws IOException {
-
+        try {
+            writable.write(this.toJson());
+        } catch (Exception ignored) {
+        }
     }
-    public String getCoordinatesString(Territory terr)
+
+    private String getCoordinatesString(Territory terr)
     {
         Point terrPoint = allCoordinates.get(terr);
         return terrPoint.getX() +","+terrPoint.getY();
     }
+
+
     public static void main(String[] args) throws Exception {
         WorldMap w = new WorldMap("world");
         w.readMap(new FileInputStream(new File("C:/Users/Anthony/Desktop/game.json")));

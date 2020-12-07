@@ -158,7 +158,12 @@ public class GameSingleton implements Jsonable {
 
         ZipEntry mapData = zf.getEntry("map.json");
         InputStream mapStream = zf.getInputStream(mapData);
-        world.setUp(players,mapStream);
+        try {
+            world.assignNewMap(players, mapStream);
+        } catch (RiskGameException e) {
+            e.printStackTrace();
+            notifyHandlers(new RiskEvent(this,RiskEventType.INVALID_MAP_LOAD));
+        }
         mapStream.close();
         zf.close();
 
@@ -186,7 +191,12 @@ public class GameSingleton implements Jsonable {
         InputStream mapStream = zf.getInputStream(mapData);
         ZipEntry gameData = zf.getEntry("game.json");
         InputStream gameStream = zf.getInputStream(gameData);
-        world.readMap(mapStream);
+        try {
+            world.readMap(mapStream);
+        } catch (RiskGameException e) {
+            e.printStackTrace();
+            notifyHandlers(new RiskEvent(this,RiskEventType.INVALID_MAP_LOAD));
+        }
         readGame(gameStream);
         mapStream.close();
         gameStream.close();
