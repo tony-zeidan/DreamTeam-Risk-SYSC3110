@@ -75,7 +75,7 @@ public class WorldMap implements Jsonable {
             JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
             JsonObject map = (JsonObject)parser.get("map");
             name = (String)map.get("name");
-            JsonArray territories =(JsonArray)((JsonObject)map).get("territories");
+            JsonArray territories =(JsonArray)map.get("territories");
             readCountries(territories);
             JsonArray continents = (JsonArray)map.get("continents");
             readContinents(continents);
@@ -152,7 +152,7 @@ public class WorldMap implements Jsonable {
                 int bonusUnits = Integer.parseInt((String)((JsonObject)cont).get("value"));
                 Continent continent = new Continent(readName, bonusUnits);
                 continents.put(readName, continent);
-                List<String> territoriesWithin = (List<String>) ((JsonObject)cont).get("territories");;
+                List<String> territoriesWithin = (List<String>) ((JsonObject)cont).get("territories");
                 for (String s : territoriesWithin) {
                     if (!allTerritories.containsKey(s)) {
                         allTerritories.put(s, new Territory(s));

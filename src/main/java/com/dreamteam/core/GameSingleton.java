@@ -201,6 +201,7 @@ public class GameSingleton implements Jsonable {
 
         }catch(Exception e)
         {
+            e.printStackTrace();
         }
     }
     /**
