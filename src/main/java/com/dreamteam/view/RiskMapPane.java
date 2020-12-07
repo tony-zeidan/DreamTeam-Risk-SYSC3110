@@ -1,5 +1,6 @@
 package com.dreamteam.view;
 
+import com.dreamteam.controller.RiskController;
 import com.dreamteam.core.Player;
 import com.dreamteam.core.RiskColour;
 import com.dreamteam.core.Territory;

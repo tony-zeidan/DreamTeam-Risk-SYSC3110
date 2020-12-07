@@ -5,9 +5,8 @@ import com.github.cliftonlabs.json_simple.*;
 import java.awt.*;
 import java.io.*;
 import java.util.List;
+import java.util.Queue;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * WorldMap represents the entire map of that the Game contains.

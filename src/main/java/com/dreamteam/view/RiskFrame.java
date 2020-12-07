@@ -1,15 +1,21 @@
 package com.dreamteam.view;
 
+import com.dreamteam.controller.RiskController;
 import com.dreamteam.core.*;
 import com.github.cliftonlabs.json_simple.Jsoner;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * This class represents a GUI for the game risk, including the feature of
@@ -68,21 +74,42 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
     /**
      * Constructor for instances of RiskFrame, constructs a new GUI.
      */
-    public RiskFrame(InputStream mapData, Image mapImage) {
-        super("RISK");
-        int numPlayers = getNumOfPlayers();
+    public RiskFrame(ZipFile gameData) {
+        super("Dream Team RISK!");
 
         //TODO: player selection should be in the home screen (maybe)
-        List<Player> players = getPlayers(numPlayers);
-        addAIsToList(numOfAIs(numPlayers), players);
-        riskModel = GameSingleton.getGameInstance(players);
-        this.gamePhase = GamePhase.START_GAME;
         setLayout(new BorderLayout());
-        composeFrame(mapImage);
-        riskModel.setUpGame(mapData);
+        importFrame(gameData);
 
         String json = Jsoner.serialize(riskModel);
         System.out.println(Jsoner.prettyPrint(json));
+    }
+
+    private void importFrame(ZipFile zf) {
+        if (zf!=null) {
+            try {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                ZipEntry imageEntry = zf.getEntry("map.png");
+                InputStream in = zf.getInputStream(imageEntry);
+                BufferedImage image = ImageIO.read(in);
+
+                composeFrame(image);
+
+                in.close();
+                out.close();
+
+            } catch (IOException e) {
+                System.out.println("There was an error while parsing.");
+            }
+
+            if (zf.getName().endsWith(".world")) {
+
+                riskModel = GameSingleton.getGameInstance(null);
+                this.gamePhase = GamePhase.START_GAME;
+            } else if (zf.getName().endsWith(".save")) {
+
+            }
+        }
     }
 
     /**

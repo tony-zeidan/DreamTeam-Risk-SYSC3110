@@ -1,11 +1,20 @@
-package com.dreamteam.view;
+package com.dreamteam.controller;
 
-import com.dreamteam.controller.HomeScreenController;
-import com.dreamteam.core.*;
+import com.dreamteam.core.GamePhase;
+import com.dreamteam.core.GameSingleton;
+import com.dreamteam.core.Player;
+import com.dreamteam.core.Territory;
+import com.dreamteam.view.HomeScreenFrame;
+import com.dreamteam.view.JRiskOptionPane;
+import com.dreamteam.view.RiskFrame;
+import com.dreamteam.view.RiskMapPane;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Map;
 
 /**

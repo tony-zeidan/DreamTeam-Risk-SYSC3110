@@ -14,7 +14,7 @@ import java.io.*;
 import java.util.List;
 import java.util.*;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -75,7 +75,10 @@ public class GameSingleton implements Jsonable {
      */
     private GameSingleton(List<Player> players) {
         //initialize map, player list, and scanner
-        this.players = players;
+        if (players==null)
+            this.players = new ArrayList<>();
+        else
+            this.players=players;
         world = new WorldMap("Earth");
         currentPlayerInd = 0;
         gamePhase = null;
@@ -100,8 +103,46 @@ public class GameSingleton implements Jsonable {
      * Sets up the game through setting up initial amount of players
      * assigning random colours, setting up the world map
      * and notifying all event handlers.
+     * @param mapData
      */
-    public void setUpGame(InputStream mapData){
+    public void setUpGame(ZipFile mapData){
+
+        if (mapData!=null) {
+            if (mapData.getName().endsWith(".world")) {
+                if (players.get(0).getColour() == null) {
+                    //six random colors for players
+                    List<RiskColour> randomColors = new LinkedList<>();
+                    randomColors.add(RiskColour.RED);
+                    randomColors.add(RiskColour.GRAY);
+                    randomColors.add(RiskColour.BLUE);
+                    randomColors.add(RiskColour.YELLOW);
+                    randomColors.add(RiskColour.BLACK);
+                    randomColors.add(RiskColour.GREEN);
+
+                    Random rand = new Random();
+
+            /*We must get all player names and generate colours.
+            Loop through players and obtain names through user input.
+            Randomly assign colours.
+            */
+                    for (Player p : players) {
+                        //get this players name
+
+                        int randIndex = rand.nextInt(randomColors.size());
+                        //generate and assign random colours
+                        RiskColour colour = randomColors.get(randIndex);
+                        p.setColour(colour);
+                        randomColors.remove(randIndex);
+                    }
+                }
+
+                //shuffle the order of the players
+                shufflePlayers();
+            } else if (mapData.getName().endsWith(".save")) {
+                //TODO: read game data here
+            }
+        }
+
         //set the initial amount of active players accordingly
         setNumActivePlayer(players.size());
 
@@ -109,36 +150,8 @@ public class GameSingleton implements Jsonable {
         If not, then assign random colours to players.
          */
 
-        if (players.get(0).getColour() == null) {
-            //six random colors for players
-            List<RiskColour> randomColors = new LinkedList<>();
-            randomColors.add(RiskColour.RED);
-            randomColors.add(RiskColour.GRAY);
-            randomColors.add(RiskColour.BLUE);
-            randomColors.add(RiskColour.YELLOW);
-            randomColors.add(RiskColour.BLACK);
-            randomColors.add(RiskColour.GREEN);
 
-            Random rand = new Random();
-
-            /*We must get all player names and generate colours.
-            Loop through players and obtain names through user input.
-            Randomly assign colours.
-            */
-            for (Player p : players) {
-                //get this players name
-
-                int randIndex = rand.nextInt(randomColors.size());
-                //generate and assign random colours
-                RiskColour colour = randomColors.get(randIndex);
-                p.setColour(colour);
-                randomColors.remove(randIndex);
-            }
-        }
-
-        //shuffle the order of the players
-        shufflePlayers();
-        world.setUp(players,mapData);
+        //world.setUp(players,mapData);
 
         notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,
                 world.getName()));
@@ -151,29 +164,32 @@ public class GameSingleton implements Jsonable {
         nextPhase();    //beginning should be bonus troupe
     }
 
-    public void importGame(File file) {
-        if (file!=null) {
-            try {
-                ZipInputStream zis = new ZipInputStream(new FileInputStream(file));
-                Image mapImage = null;
-                File gameData = null;
+    public void readGame(InputStream is) {
 
-                ZipEntry ze;
+    }
 
-                while ((ze=zis.getNextEntry())!=null) {
-                    if (ze.getName().equals("map.png")) {
-                        //TODO: fix this (this method may suggest major refactoring to the project)
-                    }
-                }
-
-            } catch (FileNotFoundException e) {
-                System.out.println("The file specified was not found");
-                return;
-            } catch (IOException e) {
-                e.printStackTrace();
+    public void importGame(ZipFile zf) throws Exception {
+        if (zf!=null) {
+            if (zf.getName().endsWith(".world")) {
+                //This should be a new game
+                ZipEntry mapData = zf.getEntry("map.json");
+                InputStream mapStream = zf.getInputStream(mapData);
+                world.readMap(mapStream);
+                mapStream.close();
+                zf.close();
+            } else if (zf.getName().endsWith(".save")) {
+                ZipEntry mapData = zf.getEntry("map.json");
+                InputStream mapStream = zf.getInputStream(mapData);
+                ZipEntry gameData = zf.getEntry("game.json");
+                InputStream gameStream = zf.getInputStream(gameData);
+                world.readMap(mapStream);
+                readGame(gameStream);
+                mapStream.close();
+                gameStream.close();
             }
         }
     }
+
 
     /**
      * Exports the file to our custom save game format (.save).
@@ -189,6 +205,9 @@ public class GameSingleton implements Jsonable {
 
                 zos.putNextEntry(new ZipEntry("game.json"));
                 zos.write(toJson().getBytes());
+                zos.closeEntry();
+                zos.putNextEntry(new ZipEntry("map.json"));
+                zos.write(world.toJson().getBytes());
                 zos.closeEntry();
                 zos.putNextEntry(new ZipEntry("map.png"));
                 ImageIO.write((RenderedImage) mapImage,"png",zos);
@@ -763,7 +782,6 @@ public class GameSingleton implements Jsonable {
         json.put("players",playersJson);
         json.put("activeNum",numActivePlayer);
         json.put("phase",gamePhase);
-        json.put("map",world);
         return json.toJson();
     }
 
