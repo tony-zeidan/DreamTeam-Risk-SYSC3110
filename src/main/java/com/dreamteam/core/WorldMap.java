@@ -217,6 +217,54 @@ public class WorldMap implements Jsonable {
     }
 
     /**
+     * Determines if the given map is valid for play, all territories must be connected in some way
+     * @param mapsTerritories The territories in the given map
+     * @return True if the map is valid
+     */
+    public boolean isValidMap(Map<String,Territory> mapsTerritories){
+        //Loop through each territory and determine if they are connected in some way to all the other territories
+        for (Map.Entry territoryI : mapsTerritories.entrySet()){
+            Territory territory1 = (Territory) territoryI.getValue();
+            //If the territory has no neighbours than the map is invalid
+            if(territory1.getNeighbours() == null){
+                return false;
+            }
+            //Loop through each territory to see if the first territory is connected to the second in some way
+            for(Map.Entry territoryII : mapsTerritories.entrySet()){
+                Territory territory2 = (Territory) territoryII.getValue();
+                //The second territory is the same as the first, keep looping through the territories
+                if (territory1 == territory2){
+                    continue;
+                }
+                //look through neighbours of neighbours until getting to territory 1
+                List<Territory> queue = new LinkedList<>();
+                List<Territory> visited = new LinkedList<>();
+                queue.add(territory1);
+                while (!queue.isEmpty()) {
+                    Territory current = queue.remove(0);
+                    Set<Territory> validNeighbours = current.getNeighbours();
+                    visited.add(current);
+                    //It has reached territory 2
+                    if(current == territory2){
+                        break;
+                    }
+                    for (Territory t : validNeighbours) {
+                        if (!visited.contains(t)) {
+                            queue.add(t);
+                        }
+                    }
+                }
+                //Territory 2 is not connected to Territory 1, map invalid
+                if(!visited.contains(territory2)){
+                    return false;
+                }
+            }
+        }
+        //The map is valid
+        return true;
+    }
+
+    /**
      * Assigns the territories to each player and puts one unit on it.
      *
      * @param players the ordered players
