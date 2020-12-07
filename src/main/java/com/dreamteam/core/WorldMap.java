@@ -82,15 +82,14 @@ public class WorldMap implements Jsonable {
         } catch (JsonException e) {
             e.printStackTrace();
         }
-        if (!validMap())
-        {
-            System.out.println("invalid");
-            throw new Exception("Please input valid map");
+        if (!validMap()) {
+            //TODO where this method is called, catch this exception (then throw an event to the frame)
+            System.out.println("Invalid map detected");
+            throw new RiskGameException("The user uploaded an invalid map.");
         }
         is.close();
     }
-    private boolean validMap()
-    {
+    private boolean validMap() {
         int numVisited = 0;
         Queue<Territory> territories = new LinkedList<>();
         Set<Territory> visited = new HashSet<>();
@@ -109,6 +108,7 @@ public class WorldMap implements Jsonable {
         }
         return (numVisited == allTerritories.values().size());
     }
+
     private void readCountries(JsonArray territories)
     {
         for(Object terr: territories)
