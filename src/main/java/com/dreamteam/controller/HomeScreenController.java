@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipFile;
@@ -116,15 +115,13 @@ public class HomeScreenController implements ActionListener {
         List<Player> players = getPlayers(numPlayers);
         addAIsToList(numOfAIs(numPlayers), players);
         GameSingleton gs = GameSingleton.getGameInstance(players);
-        RiskFrame rf = new RiskFrame(file);
-        gs.addHandler(rf);
+        RiskFrame rf = new RiskFrame(gs,file);
         gs.newGame(file);
     }
 
     private void loadGame(ZipFile file) throws Exception {
         GameSingleton gs = GameSingleton.getGameInstance(null);
-        RiskFrame rf = new RiskFrame(file);
-        gs.addHandler(rf);
+        RiskFrame rf = new RiskFrame(gs,file);
         gs.importGame(file);
     }
 
@@ -203,23 +200,5 @@ public class HomeScreenController implements ActionListener {
             }
             players.add(new AIPlayer(input));
         }
-    }
-
-
-
-    private void runGame(File file) {
-        if (file!=null && file.getName().endsWith(".save")) {
-
-            try {
-                RiskFrame rf = new RiskFrame(new ZipFile(file));
-
-                //the path given should not refer to a file, but instead a map folder
-                homeView.dispose();
-
-            } catch (IOException e) {
-                System.out.println("There was an error while parsing.");
-            }
-        }
-        //TODO: make a new Game instance and ask it to read itself from a file.
     }
 }

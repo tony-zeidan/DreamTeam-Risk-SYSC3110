@@ -812,7 +812,7 @@ public class GameSingleton implements Jsonable {
         playersJson.addAll(playersJsonList);
         json.put("players",playersJson);
         json.put("activeNum",numActivePlayer);
-        json.put("phase",gamePhase);
+        json.put("phase",gamePhase.name());
         return json.toJson();
     }
 

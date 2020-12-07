@@ -5,6 +5,9 @@ import com.dreamteam.core.*;
 import com.github.cliftonlabs.json_simple.Jsoner;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -28,10 +32,6 @@ import java.util.zip.ZipFile;
  */
 public class RiskFrame extends JFrame implements RiskGameHandler {
 
-    /**
-     * The model for this com.dreamteam.view.
-     */
-    private GameSingleton riskModel;
     /**
      * Stores whose turn it is on the panel.
      */
@@ -71,21 +71,46 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      */
     private GamePhase gamePhase;
 
+    private RiskController rc;
+
+    private static Map<String,String> soundMap = new HashMap<>();
+
+    static {
+        soundMap.put("oof","sound_fx/oof.wav");
+    }
+
     /**
      * Constructor for instances of RiskFrame, constructs a new GUI.
      */
-    public RiskFrame(ZipFile gameData) {
+    public RiskFrame(GameSingleton gs,ZipFile gameData) {
         super("Dream Team RISK!");
 
         //TODO: player selection should be in the home screen (maybe)
         setLayout(new BorderLayout());
-        importFrame(gameData);
+        importFrame(gs,gameData);
 
-        String json = Jsoner.serialize(riskModel);
+        rc = new RiskController(gs,this);
+
+        String json = Jsoner.serialize(gs);
+
         System.out.println(Jsoner.prettyPrint(json));
     }
 
-    private void importFrame(ZipFile zf) {
+    private void playSound(String name) {
+        if (soundMap.containsKey(name)) {
+            try {
+                Clip clip = AudioSystem.getClip();
+                AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+                        getClass().getClassLoader().getResourceAsStream(soundMap.get(name)));
+                clip.open(inputStream);
+                clip.start();
+            } catch (Exception e) {
+                System.out.println("Error playing sound file.");
+            }
+        }
+    }
+
+    private void importFrame(GameSingleton gs, ZipFile zf) {
         if (zf!=null) {
             try {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -93,21 +118,13 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 InputStream in = zf.getInputStream(imageEntry);
                 BufferedImage image = ImageIO.read(in);
 
-                composeFrame(image);
+                composeFrame(gs,image);
 
                 in.close();
                 out.close();
 
             } catch (IOException e) {
                 System.out.println("There was an error while parsing.");
-            }
-
-            if (zf.getName().endsWith(".world")) {
-
-                riskModel = GameSingleton.getGameInstance(null);
-                this.gamePhase = GamePhase.START_GAME;
-            } else if (zf.getName().endsWith(".save")) {
-
             }
         }
     }
@@ -116,10 +133,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      * Generates and places all components on the frame, this should
      * generally only be called once per frame.
      */
-    private void composeFrame(Image mapImage) {
-
-        RiskController rc = new RiskController(riskModel, this);
-        riskModel.addHandler(this);
+    private void composeFrame(GameSingleton gs, Image mapImage) {
 
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Options");
@@ -171,8 +185,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
         mapPane = new RiskMapPane(mapImage,rc);
         eventPane = new RiskEventPane();
-        riskModel.addHandler(mapPane);
-        riskModel.addHandler(eventPane);
+        gs.addHandler(mapPane);
+        gs.addHandler(eventPane);
 
         //add everything to the main content pane
         getContentPane().add(BorderLayout.CENTER, mapPane);
