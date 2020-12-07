@@ -117,14 +117,14 @@ public class HomeScreenController implements ActionListener {
         GameSingleton gs = GameSingleton.getGameInstance(players);
         RiskFrame rf = new RiskFrame(file);
         gs.addHandler(rf);
-        gs.setUpGame(file);
+        gs.newGame(file);
     }
 
     private void loadGame(ZipFile file) {
         GameSingleton gs = GameSingleton.getGameInstance(null);
         RiskFrame rf = new RiskFrame(file);
         gs.addHandler(rf);
-        gs.setUpGame(file);
+        gs.importGame(file);
     }
 
     /**

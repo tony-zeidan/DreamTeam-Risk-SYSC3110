@@ -127,7 +127,7 @@ public class GameSingleton implements Jsonable {
 
     }
 
-    public void newGame(ZipFile zf) {
+    public void newGame(ZipFile zf) throws Exception {
         if (players.get(0).getColour() == null) {
             //six random colors for players
             List<RiskColour> randomColors = new LinkedList<>();
@@ -155,7 +155,13 @@ public class GameSingleton implements Jsonable {
             }
         }
 
-        world.setUp(players,zf);
+        ZipEntry mapData = zf.getEntry("map.json");
+        InputStream mapStream = zf.getInputStream(mapData);
+        world.setUp(players,mapStream);
+        mapStream.close();
+        zf.close();
+
+
 
         //set the initial amount of active players accordingly
         setNumActivePlayer(players.size());
@@ -174,30 +180,15 @@ public class GameSingleton implements Jsonable {
         nextPhase();    //beginning should be bonus troupe
     }
 
-    public void importGame() {
-
-    }
-
     public void importGame(ZipFile zf) throws Exception {
-        if (zf!=null) {
-            if (zf.getName().endsWith(".world")) {
-                //This should be a new game
-                ZipEntry mapData = zf.getEntry("map.json");
-                InputStream mapStream = zf.getInputStream(mapData);
-                world.readMap(mapStream);
-                mapStream.close();
-                zf.close();
-            } else if (zf.getName().endsWith(".save")) {
-                ZipEntry mapData = zf.getEntry("map.json");
-                InputStream mapStream = zf.getInputStream(mapData);
-                ZipEntry gameData = zf.getEntry("game.json");
-                InputStream gameStream = zf.getInputStream(gameData);
-                world.readMap(mapStream);
-                readGame(gameStream);
-                mapStream.close();
-                gameStream.close();
-            }
-        }
+        ZipEntry mapData = zf.getEntry("map.json");
+        InputStream mapStream = zf.getInputStream(mapData);
+        ZipEntry gameData = zf.getEntry("game.json");
+        InputStream gameStream = zf.getInputStream(gameData);
+        world.readMap(mapStream);
+        readGame(gameStream);
+        mapStream.close();
+        gameStream.close();
     }
 
 
