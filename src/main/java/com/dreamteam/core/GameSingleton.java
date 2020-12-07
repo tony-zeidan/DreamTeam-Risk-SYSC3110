@@ -6,6 +6,7 @@ import com.dreamteam.view.RiskGameHandler;
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsonable;
+import com.github.cliftonlabs.json_simple.Jsoner;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -186,12 +187,22 @@ public class GameSingleton implements Jsonable {
         ZipEntry gameData = zf.getEntry("game.json");
         InputStream gameStream = zf.getInputStream(gameData);
         world.readMap(mapStream);
-        //readGame(gameStream);
+        readGame(gameStream);
         mapStream.close();
         gameStream.close();
     }
 
+    public void readGame(InputStream gameStream)
+    {
+        try {
+            BufferedReader buf = new BufferedReader(new InputStreamReader(gameStream));
+            JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
+            numActivePlayer= Integer.parseInt((String)((JsonObject)parser).get("name"));
 
+        }catch(Exception e)
+        {
+        }
+    }
     /**
      * Exports the file to our custom save game format (.save).
      * This format is actually a ZIP folder containing a JSON and map image.
@@ -777,9 +788,17 @@ public class GameSingleton implements Jsonable {
     @Override
     public String toJson() {
         JsonObject json = new JsonObject();
-        json.put("currentTurn", getCurrentPlayer().getName());
+        json.put("currentIndex", currentPlayerInd);
         JsonArray playersJson = new JsonArray();
-        playersJson.addAll(players);
+        ArrayList<JsonObject> playersJsonList = new ArrayList<>();
+        for (int i =0; i<players.size();i++)
+        {
+            JsonObject playerObj = new JsonObject();
+            playerObj.put("index",i);
+            playerObj.put("player", players.get(i));
+            playersJsonList.add(playerObj);
+        }
+        playersJson.addAll(playersJsonList);
         json.put("players",playersJson);
         json.put("activeNum",numActivePlayer);
         json.put("phase",gamePhase);
@@ -798,5 +817,15 @@ public class GameSingleton implements Jsonable {
             writable.write(this.toJson());
         } catch (Exception ignored) {
         }
+    }
+    public static void main(String[] args) throws Exception {
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(new Player("Tone"));
+        players.add(new Player("mesa"));
+        players.add(new AIPlayer("robo"));
+        GameSingleton g =GameSingleton.getGameInstance(players);
+        g.newGame(new ZipFile("C:/Users/Anthony/Desktop/Desktop/University/Year 3/Sysc 3110/GitHub/worlds/saved_games/map.save"));
+
+        System.out.println("asd"+g.toJson());
     }
 }

@@ -16,7 +16,7 @@ import java.io.Writer;
  * @author Anthony Dooley
  * @author Ethan Chase
  */
-public enum RiskColour implements Jsonable {
+public enum RiskColour {
     /**
      * The risk colour red.
      */
@@ -78,32 +78,5 @@ public enum RiskColour implements Jsonable {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Serialize to a JSON formatted string.
-     *
-     * @return a string, formatted in JSON, that represents the Jsonable.
-     */
-    @Override
-    public String toJson() {
-        JsonObject json = new JsonObject();
-        json.put("name", name);
-        //json.put("colour",colour.toString());
-        return json.toJson();
-    }
-
-    /**
-     * Serialize to a JSON formatted stream.
-     *
-     * @param writable where the resulting JSON text should be sent.
-     * @throws IOException when the writable encounters an I/O error.
-     */
-    @Override
-    public void toJson(Writer writable) throws IOException {
-        try {
-            writable.write(this.toJson());
-        } catch (Exception ignored) {
-        }
     }
 }

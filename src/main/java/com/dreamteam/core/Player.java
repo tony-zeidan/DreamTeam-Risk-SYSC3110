@@ -188,8 +188,12 @@ public class Player implements Jsonable {
     @Override
     public String toJson() {
         JsonObject json = new JsonObject();
+        if (this instanceof AIPlayer)
+            json.put("isAI", "true");
+        else
+            json.put("isAI", "false");
         json.put("name", name);
-        json.put("colour",colour);
+        json.put("colour",colour.getName());
         json.put("owned", owned);
         json.put("active",active);
         json.put("selectedDie",diceRoll);

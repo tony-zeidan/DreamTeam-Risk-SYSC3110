@@ -111,6 +111,7 @@ public class HomeScreenController implements ActionListener {
     }
 
     private void constructNewGame(ZipFile file) throws Exception {
+        System.out.println(file);
         int numPlayers = getNumOfPlayers();
         List<Player> players = getPlayers(numPlayers);
         addAIsToList(numOfAIs(numPlayers), players);

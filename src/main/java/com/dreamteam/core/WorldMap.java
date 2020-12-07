@@ -78,7 +78,6 @@ public class WorldMap implements Jsonable {
             JsonArray territories =(JsonArray)((JsonObject)map).get("territories");
             readCountries(territories);
             JsonArray continents = (JsonArray)map.get("continents");
-            System.out.println(continents);
             readContinents(continents);
         } catch (JsonException e) {
             e.printStackTrace();
