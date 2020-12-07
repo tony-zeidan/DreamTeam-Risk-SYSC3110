@@ -31,6 +31,10 @@ public enum RiskEventType {
      */
     SELECT_ATTACK_DIE,
     /**
+     * An event that is triggered when the user loads a map with incorrect data within it.
+     */
+    INVALID_MAP_LOAD,
+    /**
      * An event that is thrown when the defending user should be selecting die, this ignores
      * the AI player.
      */

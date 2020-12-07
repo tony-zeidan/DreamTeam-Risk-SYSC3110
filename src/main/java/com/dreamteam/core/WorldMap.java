@@ -69,7 +69,7 @@ public class WorldMap implements Jsonable {
     /**
      * Reads in the map from the map.txt file (for now)
      */
-    public void readMap(InputStream is) throws Exception {
+    public void readMap(InputStream is) {
         try {
             BufferedReader buf = new BufferedReader(new InputStreamReader(is));
             JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
@@ -79,15 +79,19 @@ public class WorldMap implements Jsonable {
             readCountries(territories);
             JsonArray continents = (JsonArray)map.get("continents");
             readContinents(continents);
+            is.close();
         } catch (JsonException e) {
-            e.printStackTrace();
+            //TODO: perhaps add GUI handling of some sort
+            System.out.println("There was a fatal error while parsing the JSON"); return;
+        } catch (IOException e) {
+            System.out.println("There was a fatal IO exception when closing stream"); return;
         }
         if (!validMap()) {
             //TODO where this method is called, catch this exception (then throw an event to the frame)
             System.out.println("Invalid map detected");
             throw new RiskGameException("The user uploaded an invalid map.");
         }
-        is.close();
+
     }
     private boolean validMap() {
         int numVisited = 0;
