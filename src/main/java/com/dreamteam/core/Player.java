@@ -196,7 +196,7 @@ public class Player implements Jsonable {
         json.put("colour",colour.getName());
         json.put("owned", owned);
         json.put("active",active);
-        json.put("selectedDie",diceRoll);
+        json.put("selectedDie",diceRoll+"");
         return json.toJson();
     }
 

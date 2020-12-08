@@ -296,6 +296,10 @@ public class WorldMap implements Jsonable {
         for (Continent c : continents.values()) c.updateRuler();
     }
 
+    public Territory getTerritory(String name)
+    {
+        return allTerritories.get(name);
+    }
     /**
      * Serialize to a JSON formatted string.
      *
