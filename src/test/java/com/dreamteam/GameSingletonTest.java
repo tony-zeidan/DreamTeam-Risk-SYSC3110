@@ -139,7 +139,7 @@ public class GameSingletonTest {
             byte[] buffer = new byte[initialStream.available()];
             initialStream.read(buffer);
 
-            File targetFile = new File("src/test/resources/targetFile.tmp");
+            File targetFile = new File("src/test/resources/targetFile1.tmp");
             OutputStream outStream = new FileOutputStream(targetFile);
             outStream.write(buffer);
             gsm.importGame(new ZipFile(targetFile));
@@ -160,6 +160,7 @@ public class GameSingletonTest {
      */
     @Test
     public void testGetNumActivePlayer() {
+        //gsm.setUpGame();
         assertEquals(4, gsm.getNumActivePlayer());
     }
 
