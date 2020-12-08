@@ -72,15 +72,10 @@ public class GameSingleton implements Jsonable {
      * Default constructor for instances of main.com.dreamteam.core.Game class.
      * (For now) Creates a new game with the hardcoded map and the players that
      * the user inputs.
-     *
-     * @param players The list of participants for this game
      */
-    private GameSingleton(List<Player> players) {
+    private GameSingleton() {
         //initialize map, player list, and scanner
-        if (players==null)
-            this.players = new ArrayList<>();
-        else
-            this.players=players;
+        players = new ArrayList<>();
         world = new WorldMap();
         currentPlayerInd = 0;
         gamePhase = null;
@@ -91,17 +86,18 @@ public class GameSingleton implements Jsonable {
     /**
      * Gets an instance of the GameSingleton class (Game)
      *
-     * @param players List of the players
      * @return GameSingleton, the model of the program
      */
-    public static GameSingleton getGameInstance(List<Player> players) {
+    public static GameSingleton getGameInstance() {
         //if an instance doesn't exist, create only one instance
         if (gameInstance == null) {
-            gameInstance = new GameSingleton(players);
+            gameInstance = new GameSingleton();
         }
-        if (players != null)
-            gameInstance.players = players;     //NOTE: this could be better maybe
         return gameInstance;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 
     public void newGame(ZipFile zf) throws Exception {
@@ -853,12 +849,12 @@ public class GameSingleton implements Jsonable {
         currentPlayerInd = 0;
         gamePhase = null;
         riskHandlers.clear();
-        bonusTroops =0;
+        bonusTroops = 0;
     }
 
     public static void main(String[] args) throws Exception {
 
-        GameSingleton g =GameSingleton.getGameInstance(null);
+        GameSingleton g =GameSingleton.getGameInstance();
         g.readGame(new FileInputStream("C:/Users/Anthony/Desktop/game.json"));
         //.out.println(g.toJson());
     }
