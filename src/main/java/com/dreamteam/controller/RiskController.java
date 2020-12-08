@@ -154,7 +154,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
             JMenuItem mi = (JMenuItem) o;
             switch (mi.getActionCommand()) {
                 case "S":
-                    riskModel.export(HomeScreenController.saveFile(riskView,"./worlds/saved_games"),riskView.getMapImage());
+                    riskModel.export(HomeScreenController.saveFile(riskView,"./worlds/saved_games"),riskView.getMapImage(),riskView.getBonusUnits());
                     break;
                 case "E":
                     //bug double frame.

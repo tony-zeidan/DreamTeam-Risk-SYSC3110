@@ -108,7 +108,7 @@ public class Continent implements Jsonable {
     public String toJson() {
         JsonObject json = new JsonObject();
         json.put("name", name);
-        json.put("value", bonusAmount);
+        json.put("value", bonusAmount+"");
         ArrayList<String> terrNames = new ArrayList<>();
         for (Territory terr: territories)
         {

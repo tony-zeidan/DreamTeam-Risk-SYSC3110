@@ -66,7 +66,7 @@ public class GameSingleton implements Jsonable {
      * A list of all handlers that listen to this model.
      */
     private List<RiskGameHandler> riskHandlers;
-
+    private int bonusTroops;
     /**
      * Default constructor for instances of main.com.dreamteam.core.Game class.
      * (For now) Creates a new game with the hardcoded map and the players that
@@ -84,6 +84,7 @@ public class GameSingleton implements Jsonable {
         currentPlayerInd = 0;
         gamePhase = null;
         riskHandlers = new ArrayList<>();
+        bonusTroops =0;
     }
 
     /**
@@ -173,7 +174,7 @@ public class GameSingleton implements Jsonable {
         setNumActivePlayer(players.size());
 
         //shuffle the order of the players
-        //shufflePlayers();
+        shufflePlayers();
         //gamePhase = GamePhase.START_GAME;
 
         notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,
@@ -210,6 +211,7 @@ public class GameSingleton implements Jsonable {
             JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
             gamePhase = GamePhase.valueOf((String)(parser).get("phase"));
             numActivePlayer=Integer.parseInt((String)(parser).get("activeNum"));
+            bonusTroops = Integer.parseInt((String)(parser).get("bonusTroops"));
             JsonArray players = (JsonArray) (parser).get("players");
             System.out.println(players);
             for (Object player:players)
@@ -228,7 +230,7 @@ public class GameSingleton implements Jsonable {
                     String terrName = (String)((JsonObject)terr).get("name");
                     int numUnits = Integer.parseInt((String)((JsonObject)terr).get("units"));
                     Territory territory = world.getTerritory(terrName);
-                    playerObj.addTerritory(territory);
+                    territory.setOwner(playerObj);
                     territory.setUnits(numUnits);
                 }
             }
@@ -236,6 +238,17 @@ public class GameSingleton implements Jsonable {
         {
             e.printStackTrace();
         }
+        notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,world.getName()));
+        notifyHandlers(new RiskEvent(this, RiskEventType.PHASE_CHANGE, gamePhase));
+        if (gamePhase == GamePhase.BONUS_TROUPE)
+        {
+            notifyHandlers(new RiskEvent(this, RiskEventType.TURN_BEGAN, getCurrentPlayer(),bonusTroops));
+        }
+        else
+        {
+            notifyHandlers(new RiskEvent(this, RiskEventType.TURN_BEGAN, getCurrentPlayer(),0));
+        }
+        notifyMapUpdateAllCoordinates();
     }
     /**
      * Exports the file to our custom save game format (.save).
@@ -244,8 +257,9 @@ public class GameSingleton implements Jsonable {
      * @param file The file to export to (new or not)
      * @param mapImage The image representing the map
      */
-    public void export(File file,Image mapImage) {
+    public void export(File file,Image mapImage,int bonus) {
         if (file!=null) {
+            bonusTroops = bonus;
             try {
                 ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(file));
 
@@ -837,6 +851,7 @@ public class GameSingleton implements Jsonable {
         playersJson.addAll(playersJsonList);
         json.put("players",playersJson);
         json.put("activeNum",numActivePlayer+"");
+        json.put("bonusTroops",bonusTroops+"");
         json.put("phase",gamePhase.name());
         return json.toJson();
     }
