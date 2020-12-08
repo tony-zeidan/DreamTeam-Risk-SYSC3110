@@ -159,7 +159,7 @@ public class Territory implements Jsonable {
     public String toJson() {
         JsonObject json = new JsonObject();
         json.put("name", name);
-        json.put("units", units);
+        json.put("units", units+"");
         return json.toJson();
     }
     public JsonArray toJsonBuildMap() {

@@ -173,9 +173,9 @@ public class GameSingleton implements Jsonable {
         setNumActivePlayer(players.size());
 
         //shuffle the order of the players
-       // shufflePlayers();
-        gamePhase = GamePhase.START_GAME;
-        /*
+        //shufflePlayers();
+        //gamePhase = GamePhase.START_GAME;
+
         notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,
                 world.getName()));
 
@@ -185,8 +185,6 @@ public class GameSingleton implements Jsonable {
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
 
         nextPhase();    //beginning should be bonus troupe
-
-         */
     }
 
     public void importGame(ZipFile zf) throws Exception {
@@ -210,22 +208,29 @@ public class GameSingleton implements Jsonable {
         try {
             BufferedReader buf = new BufferedReader(new InputStreamReader(gameStream));
             JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
-            gamePhase = GamePhase.valueOf((String)((JsonObject)parser).get("phase"));
-            System.out.println((((JsonObject)parser).get("activeNum")));
-            numActivePlayer= (int)((JsonObject)parser).get("activeNum");
-            JsonArray players = (JsonArray) ((JsonObject)parser).get("players");
+            gamePhase = GamePhase.valueOf((String)(parser).get("phase"));
+            numActivePlayer=Integer.parseInt((String)(parser).get("activeNum"));
+            JsonArray players = (JsonArray) (parser).get("players");
+            System.out.println(players);
             for (Object player:players)
             {
                 JsonObject playerInfo= (JsonObject)((JsonObject)player).get("player");
-                RiskColour colour = RiskColour.valueOf((String)((JsonObject)playerInfo).get("colour"));
-                String name = (String) ((JsonObject)playerInfo).get("name");
-                boolean isAI = (boolean) ((JsonObject)playerInfo).get("isAI");
-                Player playerObj;
-                if (isAI)
-                    playerObj = new AIPlayer(name,colour);
-                else
-                    playerObj = new Player(name,colour);
-                players.add(playerObj);
+                RiskColour colour = RiskColour.valueOf((String)(playerInfo).get("colour"));
+                String name = (String) (playerInfo).get("name");
+                String isAI = (String) (playerInfo).get("isAI");
+                Player playerObj = (isAI.equals("true"))? new AIPlayer(name,colour):new Player(name,colour);
+                this.players.add(playerObj);
+                int dieRoll =Integer.parseInt((String)(playerInfo.get("selectedDie")));
+                playerObj.setDiceRoll(dieRoll);
+                JsonArray territories = (JsonArray)(playerInfo.get("owned"));
+                for(Object terr:territories)
+                {
+                    String terrName = (String)((JsonObject)terr).get("name");
+                    int numUnits = Integer.parseInt((String)((JsonObject)terr).get("units"));
+                    Territory territory = world.getTerritory(terrName);
+                    playerObj.addTerritory(territory);
+                    territory.setUnits(numUnits);
+                }
             }
         }catch(Exception e)
         {
@@ -831,7 +836,7 @@ public class GameSingleton implements Jsonable {
         }
         playersJson.addAll(playersJsonList);
         json.put("players",playersJson);
-        json.put("activeNum",numActivePlayer);
+        json.put("activeNum",numActivePlayer+"");
         json.put("phase",gamePhase.name());
         return json.toJson();
     }
@@ -850,11 +855,9 @@ public class GameSingleton implements Jsonable {
         }
     }
     public static void main(String[] args) throws Exception {
-        ArrayList<Player> players = new ArrayList<>();
-        players.add(new Player("Tone"));
-        players.add(new Player("mesa"));
-        players.add(new AIPlayer("robo"));
+
         GameSingleton g =GameSingleton.getGameInstance(null);
         g.readGame(new FileInputStream("C:/Users/Anthony/Desktop/game.json"));
+        //.out.println(g.toJson());
     }
 }
