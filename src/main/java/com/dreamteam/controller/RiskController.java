@@ -225,6 +225,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
 
                             //If Defending Territory Has Been Wiped Out, Start Fortifying Process
                             if (won) {
+                                AudioPlayer.playSound("terrTake");
                                 //Get the Number of Units the Victor wishes to move to their newly claimed territory
                                 int fortifyUnits = -1;
                                 while (fortifyUnits < 0) {

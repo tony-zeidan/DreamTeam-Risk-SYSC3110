@@ -16,6 +16,7 @@ public class AudioPlayer {
     static {
         soundMap.put("btnPress","sound_fx/button_press.wav");
         soundMap.put("terrPress","sound_fx/territory_select.wav");
+        soundMap.put("terrTake","sound_fx/territory_takeover.wav");
     }
 
     /**
