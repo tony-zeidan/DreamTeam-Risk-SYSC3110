@@ -33,7 +33,7 @@ test {
 
 shadowJar {
     from sourceSets.main.allSource //add java files
-    from './extra_files' //./extra_files/worlds -> ./worlds
+    from './worlds' //./extra_files/worlds -> ./worlds
 }
 
 task javadocs(type: Javadoc) {
