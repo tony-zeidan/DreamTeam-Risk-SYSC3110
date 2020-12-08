@@ -71,7 +71,10 @@ public class HomeScreenController implements ActionListener {
         chooser.setDialogTitle("Choose a Saved Game");
         chooser.setMultiSelectionEnabled(false);
 
-        if (chooser.showSaveDialog(parent) == JFileChooser.APPROVE_OPTION) {
+        int result = chooser.showSaveDialog(parent);
+        AudioPlayer.playSound("btnPress");
+
+        if (result == JFileChooser.APPROVE_OPTION) {
 
             File file = chooser.getSelectedFile();
 
@@ -95,8 +98,10 @@ public class HomeScreenController implements ActionListener {
         chooser.setDialogTitle("Choose a Saved Game");
         chooser.setMultiSelectionEnabled(false);
 
-        if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
+        int result = chooser.showSaveDialog(parent);
+        AudioPlayer.playSound("btnPress");
 
+        if (result == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
 
             System.out.println("getCurrentDirectory(): "
@@ -108,6 +113,7 @@ public class HomeScreenController implements ActionListener {
                 return chooser.getSelectedFile();
             }
         }
+        AudioPlayer.playSound("btnPress");
         return null;
     }
 
@@ -149,6 +155,7 @@ public class HomeScreenController implements ActionListener {
         if (input == null) {
             System.exit(0);
         }
+        AudioPlayer.playSound("btnPress");
         return Integer.parseInt(input);
     }
 
@@ -166,6 +173,7 @@ public class HomeScreenController implements ActionListener {
                 input = JRiskOptionPane.showPlayerNameDialog(homeView, i + 1, "Player");
             }
             players.add(new Player(input));
+            AudioPlayer.playSound("btnPress");
         }
         return players;
     }
@@ -192,6 +200,7 @@ public class HomeScreenController implements ActionListener {
         if (input == null) {
             System.exit(0);
         }
+        AudioPlayer.playSound("btnPress");
         return Integer.parseInt(input);
     }
 
