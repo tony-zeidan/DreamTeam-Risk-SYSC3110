@@ -1,6 +1,7 @@
 package com.dreamteam.controller;
 
 import com.dreamteam.core.AIPlayer;
+import com.dreamteam.core.AudioPlayer;
 import com.dreamteam.core.GameSingleton;
 import com.dreamteam.core.Player;
 import com.dreamteam.view.HomeScreenFrame;
@@ -26,6 +27,7 @@ public class HomeScreenController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
+        AudioPlayer.playSound("btnPress");
         if (o instanceof JButton) {
             JButton btn = (JButton) o;
             switch (btn.getActionCommand()) {

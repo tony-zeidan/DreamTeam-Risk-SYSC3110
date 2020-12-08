@@ -1,9 +1,6 @@
 package com.dreamteam.controller;
 
-import com.dreamteam.core.GamePhase;
-import com.dreamteam.core.GameSingleton;
-import com.dreamteam.core.Player;
-import com.dreamteam.core.Territory;
+import com.dreamteam.core.*;
 import com.dreamteam.view.HomeScreenFrame;
 import com.dreamteam.view.JRiskOptionPane;
 import com.dreamteam.view.RiskFrame;
@@ -89,6 +86,7 @@ public class RiskController extends MouseAdapter implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        AudioPlayer.playSound("btnPress");
         Object o = e.getSource();
         if (o instanceof JButton) {
             JButton jb = (JButton) o;
@@ -188,6 +186,10 @@ public class RiskController extends MouseAdapter implements ActionListener {
         //debug printing
         System.out.println(String.format("\nCLICK REGISTERED:\nCoordinates: (%s,%s)\nSelected Action: %s\nCurrent Territory Selected: %s\nPrevious Territory Selected: %s\n",
                 clicked.x, clicked.y, selectedAction, clickedTerritory, selectedTerritory));
+
+        if(clickedTerritory != null){
+            AudioPlayer.playSound("terrPress");
+        }
 
         switch (phase) {
             case BONUS_TROUPE:

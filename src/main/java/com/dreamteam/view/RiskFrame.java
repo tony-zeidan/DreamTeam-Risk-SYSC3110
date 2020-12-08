@@ -72,12 +72,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
     private RiskController rc;
 
-    private static Map<String,String> soundMap = new HashMap<>();
-
-    static {
-        soundMap.put("oof","sound_fx/oof.wav");
-    }
-
     /**
      * Constructor for instances of RiskFrame, constructs a new GUI.
      */
@@ -96,20 +90,6 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         //String json = Jsoner.serialize(gs);
 
         //System.out.println(Jsoner.prettyPrint(json));
-    }
-
-    private void playSound(String name) {
-        if (soundMap.containsKey(name)) {
-            try {
-                Clip clip = AudioSystem.getClip();
-                AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-                        getClass().getClassLoader().getResourceAsStream(soundMap.get(name)));
-                clip.open(inputStream);
-                clip.start();
-            } catch (Exception e) {
-                System.out.println("Error playing sound file.");
-            }
-        }
     }
 
     private void importFrame(GameSingleton gs, ZipFile zf) {
