@@ -1,5 +1,6 @@
 package com.dreamteam.view;
 
+import com.dreamteam.core.AudioPlayer;
 import com.dreamteam.core.Player;
 import com.dreamteam.core.Territory;
 
@@ -336,6 +337,7 @@ public class JFortifyInputDialog extends JDialog implements ActionListener, Chan
             if (source.getText().equals("Move Units")) {
                 selectedValue = sliderModel.getValue();
             }
+            AudioPlayer.playSound("btnPress");
             close();
         }
     }
