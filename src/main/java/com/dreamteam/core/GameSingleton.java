@@ -849,6 +849,7 @@ public class GameSingleton implements Jsonable {
         players.clear();
         world.clean();
         currentPlayerInd = 0;
+        numActivePlayer = 0;
         gamePhase = null;
         riskHandlers.clear();
         bonusTroops = 0;
