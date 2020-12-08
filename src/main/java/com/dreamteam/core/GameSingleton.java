@@ -12,7 +12,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.RenderedImage;
 import java.io.*;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -174,9 +173,9 @@ public class GameSingleton implements Jsonable {
         setNumActivePlayer(players.size());
 
         //shuffle the order of the players
-       // shufflePlayers();
-        gamePhase = GamePhase.START_GAME;
-        /*
+        //shufflePlayers();
+        //gamePhase = GamePhase.START_GAME;
+
         notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,
                 world.getName()));
 
@@ -186,8 +185,6 @@ public class GameSingleton implements Jsonable {
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
 
         nextPhase();    //beginning should be bonus troupe
-
-         */
     }
 
     public void importGame(ZipFile zf) throws Exception {

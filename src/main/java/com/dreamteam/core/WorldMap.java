@@ -73,11 +73,11 @@ public class WorldMap implements Jsonable {
         try {
             BufferedReader buf = new BufferedReader(new InputStreamReader(is));
             JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
-            JsonObject map = (JsonObject)parser.get("map");
-            name = (String)map.get("name");
-            JsonArray territories =(JsonArray)map.get("territories");
+            //JsonObject map = (JsonObject)parser.get("map");
+            name = (String)parser.get("name");
+            JsonArray territories =(JsonArray)parser.get("territories");
             readCountries(territories);
-            JsonArray continents = (JsonArray)map.get("continents");
+            JsonArray continents = (JsonArray)parser.get("continents");
             readContinents(continents);
             is.close();
         } catch (JsonException e) {
