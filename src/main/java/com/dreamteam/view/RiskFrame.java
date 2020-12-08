@@ -4,9 +4,6 @@ import com.dreamteam.controller.RiskController;
 import com.dreamteam.core.*;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -14,7 +11,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -69,7 +65,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      * the current phase that the game is in.
      */
     private GamePhase gamePhase;
-
+    /**
+     * A single risk controller only designed for this frame.
+     */
     private RiskController rc;
 
     /**
@@ -84,14 +82,14 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
         importFrame(gs,gameData);
 
-
         gs.addHandler(this);
-
-        //String json = Jsoner.serialize(gs);
-
-        //System.out.println(Jsoner.prettyPrint(json));
     }
 
+    /**
+     * Read the name map image and send it to the compose frame method.
+     * @param gs The model that the sub components of this frame are listening to
+     * @param zf The zipfile containing the map image (.save or .world)
+     */
     private void importFrame(GameSingleton gs, ZipFile zf) {
         if (zf!=null) {
             try {
@@ -441,6 +439,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 playerTurnLbl.setText("it is : " + beganPlayer.getName() + "'s turn.        ");
                 playerTurnLbl.setBackground(playerColour);
                 playerTurnLbl.setForeground(getContrastColor(playerColour));
+                playerTurnLbl.setIcon(beganPlayer.getAvatar());
                 break;
             case UPDATE_ATTACKABLE:
                 if (gamePhase == GamePhase.ATTACK) {

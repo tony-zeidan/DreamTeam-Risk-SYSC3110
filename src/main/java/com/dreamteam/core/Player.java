@@ -1,15 +1,16 @@
 package com.dreamteam.core;
 
 
-import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsonable;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -44,6 +45,8 @@ public class Player implements Jsonable {
      */
     private int diceRoll;
 
+    private ImageIcon avatar;
+
     /**
      * Constructor for instances of Player class with name.
      *
@@ -68,6 +71,7 @@ public class Player implements Jsonable {
         this.colour = colour;
         this.active = true;
         owned = new HashSet<>();
+        setAvatar();
     }
 
     /**
@@ -95,6 +99,7 @@ public class Player implements Jsonable {
      */
     public void setColour(RiskColour colour) {
         this.colour = colour;
+        setAvatar();
     }
 
     /**
@@ -178,6 +183,27 @@ public class Player implements Jsonable {
      */
     public int getDiceRoll() {
         return diceRoll;
+    }
+
+    private void setAvatar() {
+        try {
+            String path = "player_icons/" + colour.getName().toLowerCase()+".png";
+            System.out.println(path);
+            InputStream stream = getClass().getClassLoader().getResourceAsStream(path);
+            if (stream!=null) {
+                Image unscaled = ImageIO.read(stream);
+                avatar = new ImageIcon(unscaled.getScaledInstance(30,30,Image.SCALE_DEFAULT));
+                System.out.println("Avatar loaded.");
+            } else {
+                avatar = null;
+            }
+        } catch (IOException e) {
+            avatar = null;
+        }
+    }
+
+    public ImageIcon getAvatar() {
+        return avatar;
     }
 
     /**
