@@ -44,6 +44,18 @@ public class WorldMap implements Jsonable {
     private static Random rand;
 
     /**
+     * Default constructor for WorldMap.
+     * Constructs a map without a name.
+     */
+    public WorldMap() {
+        name="";
+        rand=new Random();
+        allTerritories = new HashMap<>();
+        allCoordinates = new HashMap<>();
+        continents = new HashMap<>();
+    }
+
+    /**
      * Constructor for instances of WorldMap.
      * Creates a new World with the name given (hardcoded map).
      *
