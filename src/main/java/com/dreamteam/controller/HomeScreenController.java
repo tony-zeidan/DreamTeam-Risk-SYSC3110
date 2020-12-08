@@ -115,15 +115,20 @@ public class HomeScreenController implements ActionListener {
         System.out.println(file);
         int numPlayers = getNumOfPlayers();
         List<Player> players = getPlayers(numPlayers);
-        addAIsToList(numOfAIs(numPlayers), players);
-        GameSingleton gs = GameSingleton.getGameInstance(players);
+        if (numPlayers <= 5) {
+            addAIsToList(numOfAIs(numPlayers), players);
+        }
+        GameSingleton gs = GameSingleton.getGameInstance();
+        gs.clean();
+        gs.setPlayers(players);
         RiskFrame rf = new RiskFrame(gs,file);
         gs.newGame(file);
         homeView.dispose();
     }
 
     private void loadGame(ZipFile file) throws Exception {
-        GameSingleton gs = GameSingleton.getGameInstance(null);
+        GameSingleton gs = GameSingleton.getGameInstance();
+        gs.clean();
         RiskFrame rf = new RiskFrame(gs,file);
         gs.importGame(file);
         homeView.dispose();
