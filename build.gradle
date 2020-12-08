@@ -32,7 +32,7 @@ test {
 }
 
 shadowJar {
-    from sourceSets.main.allSource //add java files
+    from sourceSets.main.java //add java files
     from './worlds' //./extra_files/worlds -> ./worlds
 }
 
