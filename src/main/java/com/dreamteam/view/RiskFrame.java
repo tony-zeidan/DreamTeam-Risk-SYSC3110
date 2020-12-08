@@ -460,18 +460,26 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 Player currentPlayer = attacking.getOwner();
                 Territory defending = (Territory) info[1];
                 int maxAttack = (Integer) info[2];
-                int diceAmount = JRiskOptionPane.showDieCountDialog(this, currentPlayer,
-                        1, maxAttack, "You are attacking " + defending.getName() + " from " + attacking.getName() + ".");
+                int diceAmount = -1;
+                while (diceAmount<=0) {
+                    diceAmount = JRiskOptionPane.showDieCountDialog(this, currentPlayer,
+                            1, maxAttack, "You are attacking " + defending.getName() + " from " + attacking.getName() + ".");
+                }
                 currentPlayer.setDiceRoll(diceAmount);
+                AudioPlayer.playSound("btnPress");
                 break;
             case SELECT_DEFEND_DIE:
                 attacking = (Territory) info[0];
                 defending = (Territory) info[1];
                 currentPlayer = defending.getOwner();
                 int maxDice = (Integer) info[2];
-                diceAmount = JRiskOptionPane.showDieCountDialog(this, currentPlayer, 1,
-                        maxDice, "You are Defending " + defending.getName() + " from " + attacking.getName() + ".");
+                diceAmount = -1;
+                while (diceAmount<=0) {
+                    diceAmount = JRiskOptionPane.showDieCountDialog(this, currentPlayer, 1,
+                            maxDice, "You are defending " + defending.getName() + " from " + attacking.getName() + ".");
+                }
                 currentPlayer.setDiceRoll(diceAmount);
+                AudioPlayer.playSound("btnPress");
                 break;
             case INVALID_MAP_LOAD:
                 //popup dialog and send back to home screen
