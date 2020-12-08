@@ -226,8 +226,11 @@ public class RiskController extends MouseAdapter implements ActionListener {
                             //If Defending Territory Has Been Wiped Out, Start Fortifying Process
                             if (won) {
                                 //Get the Number of Units the Victor wishes to move to their newly claimed territory
-                                int fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView, currentPlayer, clickedTerritory,
-                                        selectedTerritory, amountOfAttackDie, false);
+                                int fortifyUnits = -1;
+                                while (fortifyUnits < 0) {
+                                    fortifyUnits = JRiskOptionPane.showFortifyInputDialog(riskView, currentPlayer, clickedTerritory,
+                                            selectedTerritory, amountOfAttackDie, false);
+                                }
                                 //Move chosen number of units from the attacking territory to the claimed territory and gives rightful ownership
                                 riskModel.moveUnits(clickedTerritory, selectedTerritory, fortifyUnits);
                             }
