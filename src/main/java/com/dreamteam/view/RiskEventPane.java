@@ -51,6 +51,10 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
      * Actual component for scrolling in the selected territory display component.
      */
     private JScrollPane gameEventScroller;
+    /**
+     * Actual component for displaying selected territory.
+     */
+    private JLabel selectedTerritoryInformation;
 
     /**
      * Creates a Jpanel with the events descriptions and adds it as a com.dreamteam.view in the model
@@ -62,6 +66,7 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
         JPanel top = new JPanel(new BorderLayout());
         JPanel middle = new JPanel(new BorderLayout());
         JPanel bottom = new JPanel(new BorderLayout());
+        selectedTerritoryInformation = new JLabel("Selected Territory Info");
 
         infoModel = new DefaultTableModel();
         eventModel = new DefaultListModel<>();
@@ -69,7 +74,7 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
         infoTable = new JTable(infoModel);
         infoModel.addColumn("Info");
         infoModel.addColumn("Value");
-        top.add(BorderLayout.NORTH, new JLabel("Selected Territory Information"));
+        top.add(BorderLayout.NORTH, selectedTerritoryInformation);
         top.add(BorderLayout.CENTER, infoTable);
 
         eventList = new JList(eventModel);
@@ -110,6 +115,7 @@ public class RiskEventPane extends JPanel implements RiskGameHandler {
         infoModel.addRow(new Object[]{"Owner", player.getName()});
         infoModel.addRow(new String[]{"Colour", player.getColour().getName()});
         infoModel.addRow(new Object[]{"Units", territory.getUnits()});
+        selectedTerritoryInformation.setIcon(player.getAvatar());
     }
 
     /**
