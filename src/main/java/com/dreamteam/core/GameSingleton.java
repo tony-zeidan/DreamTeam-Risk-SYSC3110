@@ -848,11 +848,11 @@ public class GameSingleton implements Jsonable {
     }
 
     public void clean() {
-        players = new ArrayList<>();
+        players.clear();
         world.clean();
         currentPlayerInd = 0;
         gamePhase = null;
-        riskHandlers = new ArrayList<>();
+        riskHandlers.clear();
         bonusTroops =0;
     }
 

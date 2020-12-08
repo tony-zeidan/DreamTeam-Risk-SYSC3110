@@ -354,9 +354,9 @@ public class WorldMap implements Jsonable {
 
     public void clean() {
         name=null;
-        allTerritories = new HashMap<>();
-        allCoordinates = new HashMap<>();
-        continents = new HashMap<>();
+        allTerritories.clear();
+        allCoordinates.clear();
+        continents.clear();
     }
 
 
