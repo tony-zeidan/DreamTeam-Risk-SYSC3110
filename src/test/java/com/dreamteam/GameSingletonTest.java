@@ -1,9 +1,6 @@
 package com.dreamteam;
 
-import com.dreamteam.core.GameSingleton;
-import com.dreamteam.core.Player;
-import com.dreamteam.core.RiskColour;
-import com.dreamteam.core.Territory;
+import com.dreamteam.core.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,17 +33,22 @@ public class GameSingletonTest {
     private List<Player> players;
 
     /**
+     * Custom world of the game
+     */
+    private WorldMap wmp;
+
+    /**
      * Sets up list of players in a single Game of RISK in order
      * to test methods in the Game model class.
      */
     @Before
     public void setUp() {
         players = new ArrayList<>();
-        players.add(new Player("Ethan", RiskColour.RED));
-        players.add(new Player("Anthony", RiskColour.BLUE));
-        players.add(new Player("Tony", RiskColour.YELLOW));
-        players.add(new Player("Kyler", RiskColour.BLACK));
-        gsm = GameSingleton.getGameInstance(players);
+        players.add(new Player("Ethan", RiskColour.YELLOW));
+        players.add(new Player("Anthony", RiskColour.RED));
+        players.add(new Player("Kyler", RiskColour.BLUE));
+        players.add(new Player("Tony", RiskColour.GREEN));
+        gsm = GameSingleton.getGameInstance();
 
         InputStream initialStream = null;
         try {
@@ -65,6 +67,48 @@ public class GameSingletonTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        wmp = gsm.getWorld();
+    }
+
+    @Test
+    public void testLoadGame(){
+        gsm.clean();
+        players.add(new Player("Ethan", RiskColour.YELLOW));
+        players.add(new Player("Anthony", RiskColour.RED));
+        players.add(new Player("Kyler", RiskColour.BLUE));
+        players.add(new Player("Tony", RiskColour.GREEN));
+
+        InputStream initialStream = null;
+        try {
+            initialStream = getClass().getClassLoader().getResourceAsStream("test1.world");
+            byte[] buffer = new byte[initialStream.available()];
+            initialStream.read(buffer);
+
+            File targetFile = new File("src/test/resources/targetFile.tmp");
+            OutputStream outStream = new FileOutputStream(targetFile);
+            outStream.write(buffer);
+            gsm.newGame(new ZipFile(targetFile));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        wmp = gsm.getWorld();
+
+        Territory tempTerr = wmp.getTerritory("Test1");
+        assertEquals("Test1", tempTerr.getName());
+        tempTerr = wmp.getTerritory("Test2");
+        assertEquals("Test2", tempTerr.getName());
+        tempTerr = wmp.getTerritory("Test3");
+        assertEquals("Test3", tempTerr.getName());
+        tempTerr = wmp.getTerritory("Test4");
+        assertEquals("Test4", tempTerr.getName());
+        tempTerr = wmp.getTerritory("Test5");
+        assertEquals("Test5", tempTerr.getName());
+        tempTerr = wmp.getTerritory("Test6");
+        assertEquals(null, tempTerr);
     }
 
     /**
@@ -75,7 +119,6 @@ public class GameSingletonTest {
      */
     @Test
     public void testGetNumActivePlayer() {
-        //gsm.setUpGame();
         assertEquals(4, gsm.getNumActivePlayer());
     }
 
@@ -296,5 +339,9 @@ public class GameSingletonTest {
 
         //Test 5, First Player IS the First Player (Looped through all players)
         assertEquals(first, gsm.getCurrentPlayer());
+    }
+    @Test
+    public void testExportImport(){
+        gsm.clean();
     }
 }
