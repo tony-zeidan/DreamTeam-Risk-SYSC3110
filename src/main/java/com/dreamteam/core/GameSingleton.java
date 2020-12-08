@@ -98,39 +98,12 @@ public class GameSingleton implements Jsonable {
         if (gameInstance == null) {
             gameInstance = new GameSingleton(players);
         }
+        if (players != null)
+            gameInstance.players = players;     //NOTE: this could be better maybe
         return gameInstance;
     }
 
-    /**
-     * Sets up the game through setting up initial amount of players
-     * assigning random colours, setting up the world map
-     * and notifying all event handlers.
-     * @param mapData
-     */
-    public void setUpGame(ZipFile mapData){
-
-        if (mapData!=null) {
-            if (mapData.getName().endsWith(".world")) {
-
-            } else if (mapData.getName().endsWith(".save")) {
-                //TODO: read game data here
-            }
-        }
-
-
-
-        /*Check if colours have already been assigned to players.
-        If not, then assign random colours to players.
-         */
-
-
-        //
-
-
-    }
-
     public void newGame(ZipFile zf) throws Exception {
-        if (players.get(0).getColour() == null) {
             //six random colors for players
             List<RiskColour> randomColors = new LinkedList<>();
             randomColors.add(RiskColour.RED);
@@ -155,7 +128,6 @@ public class GameSingleton implements Jsonable {
                 p.setColour(colour);
                 randomColors.remove(randIndex);
             }
-        }
 
         ZipEntry mapData = zf.getEntry("map.json");
         InputStream mapStream = zf.getInputStream(mapData);
@@ -869,6 +841,16 @@ public class GameSingleton implements Jsonable {
         } catch (Exception ignored) {
         }
     }
+
+    public void clean() {
+        players = new ArrayList<>();
+        world.clean();
+        currentPlayerInd = 0;
+        gamePhase = null;
+        riskHandlers = new ArrayList<>();
+        bonusTroops =0;
+    }
+
     public static void main(String[] args) throws Exception {
 
         GameSingleton g =GameSingleton.getGameInstance(null);

@@ -69,23 +69,17 @@ public class WorldMap implements Jsonable {
     /**
      * Reads in the map from the map.txt file (for now)
      */
-    public void readMap(InputStream is) {
-        try {
-            BufferedReader buf = new BufferedReader(new InputStreamReader(is));
-            JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
-            //JsonObject map = (JsonObject)parser.get("map");
-            name = (String)parser.get("name");
-            JsonArray territories =(JsonArray)parser.get("territories");
-            readCountries(territories);
-            JsonArray continents = (JsonArray)parser.get("continents");
-            readContinents(continents);
-            is.close();
-        } catch (JsonException e) {
-            //TODO: perhaps add GUI handling of some sort
-            System.out.println("There was a fatal error while parsing the JSON"); return;
-        } catch (IOException e) {
-            System.out.println("There was a fatal IO exception when closing stream"); return;
-        }
+    public void readMap(InputStream is) throws JsonException, IOException, RiskGameException {
+        BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+        JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
+        //JsonObject map = (JsonObject)parser.get("map");
+        name = (String)parser.get("name");
+        JsonArray territories =(JsonArray)parser.get("territories");
+        readCountries(territories);
+        JsonArray continents = (JsonArray)parser.get("continents");
+        readContinents(continents);
+        is.close();
+
         if (!validMap()) {
             //TODO where this method is called, catch this exception (then throw an event to the frame)
             System.out.println("Invalid map detected");
@@ -131,8 +125,6 @@ public class WorldMap implements Jsonable {
             Territory territory = allTerritories.get(readName);
             try {
                 String[] coord = ((String)((JsonObject)terr).get("coordinates")).split(",");
-                System.out.println(coord[0]);
-                System.out.println(coord[1]);
                 int xCord = (int)Double.parseDouble(coord[0]);
                 int yCord =(int)Double.parseDouble(coord[1]);
                 Point readCoordinates = new Point(xCord, yCord);
@@ -165,9 +157,9 @@ public class WorldMap implements Jsonable {
                 continents.put(readName, continent);
                 List<String> territoriesWithin = (List<String>) ((JsonObject)cont).get("territories");
                 for (String s : territoriesWithin) {
-                    if (!allTerritories.containsKey(s)) {
-                        allTerritories.put(s, new Territory(s));
-                    }
+                    //if (!allTerritories.containsKey(s)) {
+                    //allTerritories.put(s, new Territory(s));
+                    //}
                     continent.addContinentTerritory(allTerritories.get(s));
                 }
             } catch (NumberFormatException e) {
@@ -210,11 +202,12 @@ public class WorldMap implements Jsonable {
      * @param players the players playing the game
      */
     public void assignNewMap(List<Player> players, InputStream mapData) throws RiskGameException {
-        try{
+        try {
             readMap(mapData);
-        } catch(Exception e)
-        {
-            System.out.println(e);
+        } catch (JsonException e) {
+            e.printStackTrace(); return;
+        } catch (IOException e) {
+            e.printStackTrace(); return;
         }
 
         assignTerritories(players);
@@ -345,6 +338,13 @@ public class WorldMap implements Jsonable {
     {
         Point terrPoint = allCoordinates.get(terr);
         return terrPoint.getX() +","+terrPoint.getY();
+    }
+
+    public void clean() {
+        name=null;
+        allTerritories = new HashMap<>();
+        allCoordinates = new HashMap<>();
+        continents = new HashMap<>();
     }
 
 

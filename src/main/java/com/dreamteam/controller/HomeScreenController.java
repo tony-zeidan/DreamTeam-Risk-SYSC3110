@@ -35,7 +35,7 @@ public class HomeScreenController implements ActionListener {
                     //TODO: somehow create a new game here
                     //TODO: migrate the adding of players to this screen
                     File selected = openFile(homeView,"./worlds/world_maps");
-                    if (selected.getName().endsWith(".world")) {
+                    if (selected!=null && selected.getName().endsWith(".world")) {
                         try {
                             constructNewGame(new ZipFile(selected));
                         } catch (Exception ioException) {
@@ -47,7 +47,7 @@ public class HomeScreenController implements ActionListener {
                     break;
                 case "L":
                     selected = openFile(homeView,"./worlds/saved_games");
-                    if (selected.getName().endsWith(".save")) {
+                    if (selected!=null && selected.getName().endsWith(".save")) {
                         try {
                             loadGame(new ZipFile(selected));
                         } catch (Exception ioException) {

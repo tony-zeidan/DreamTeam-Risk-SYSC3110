@@ -156,8 +156,8 @@ public class RiskController extends MouseAdapter implements ActionListener {
                     break;
                 case "E":
                     //bug double frame.
+                    riskModel.clean();
                     riskView.dispose();
-                    riskView = null;
                     HomeScreenFrame hs = new HomeScreenFrame();
                     hs.showFrame();
             }
