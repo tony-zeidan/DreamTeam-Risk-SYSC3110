@@ -66,6 +66,7 @@ public class GameSingleton implements Jsonable {
      * A list of all handlers that listen to this model.
      */
     private List<RiskGameHandler> riskHandlers;
+
     private int bonusTroops;
     /**
      * Default constructor for instances of main.com.dreamteam.core.Game class.
@@ -80,7 +81,7 @@ public class GameSingleton implements Jsonable {
             this.players = new ArrayList<>();
         else
             this.players=players;
-        world = new WorldMap("Earth");
+        world = new WorldMap();
         currentPlayerInd = 0;
         gamePhase = null;
         riskHandlers = new ArrayList<>();
@@ -176,7 +177,7 @@ public class GameSingleton implements Jsonable {
         gameStream.close();
     }
 
-    public void readGame(InputStream gameStream)
+    private void readGame(InputStream gameStream)
     {
         try {
             BufferedReader buf = new BufferedReader(new InputStreamReader(gameStream));
@@ -798,6 +799,10 @@ public class GameSingleton implements Jsonable {
         for (RiskGameHandler rgv : riskHandlers) {
             rgv.handleRiskUpdate(e);
         }
+    }
+
+    public WorldMap getWorld() {
+        return world;
     }
 
     /**

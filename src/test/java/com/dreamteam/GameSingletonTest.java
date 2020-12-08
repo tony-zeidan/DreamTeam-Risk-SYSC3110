@@ -1,11 +1,16 @@
 package com.dreamteam;
 
-import com.dreamteam.core.*;
+import com.dreamteam.core.GameSingleton;
+import com.dreamteam.core.Player;
+import com.dreamteam.core.RiskColour;
+import com.dreamteam.core.Territory;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipFile;
 
 import static org.junit.Assert.*;
 
@@ -28,7 +33,7 @@ public class GameSingletonTest {
     /**
      * List of players in the game
      */
-    List<Player> players;
+    private List<Player> players;
 
     /**
      * Sets up list of players in a single Game of RISK in order
@@ -42,6 +47,24 @@ public class GameSingletonTest {
         players.add(new Player("Tony", RiskColour.YELLOW));
         players.add(new Player("Kyler", RiskColour.BLACK));
         gsm = GameSingleton.getGameInstance(players);
+
+        InputStream initialStream = null;
+        try {
+            initialStream = getClass().getClassLoader().getResourceAsStream("test1.world");
+            byte[] buffer = new byte[initialStream.available()];
+            initialStream.read(buffer);
+
+            File targetFile = new File("src/test/resources/targetFile.tmp");
+            OutputStream outStream = new FileOutputStream(targetFile);
+            outStream.write(buffer);
+            gsm.newGame(new ZipFile(targetFile));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -93,6 +116,7 @@ public class GameSingletonTest {
     public void testMoveUnits() {
         Player ethan = players.get(0);
         Player anthony = players.get(1);
+
 
         Territory t1 = new Territory("Earth");
         t1.setUnits(4);
