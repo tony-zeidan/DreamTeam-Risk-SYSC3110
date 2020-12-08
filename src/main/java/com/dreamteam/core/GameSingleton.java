@@ -238,9 +238,11 @@ public class GameSingleton implements Jsonable {
                 zos.putNextEntry(new ZipEntry("map.json"));
                 zos.write(world.toJson().getBytes());
                 zos.closeEntry();
-                zos.putNextEntry(new ZipEntry("map.png"));
-                ImageIO.write((RenderedImage) mapImage,"png",zos);
-                zos.closeEntry();
+                if(mapImage!=null){
+                    zos.putNextEntry(new ZipEntry("map.png"));
+                    ImageIO.write((RenderedImage) mapImage,"png",zos);
+                    zos.closeEntry();
+                }
                 zos.close();
             } catch (IOException e) {
                 e.printStackTrace();

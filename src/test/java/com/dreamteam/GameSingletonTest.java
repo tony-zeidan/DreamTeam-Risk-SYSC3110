@@ -6,7 +6,9 @@ import org.junit.Test;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipFile;
 
 import static org.junit.Assert.*;
@@ -38,6 +40,11 @@ public class GameSingletonTest {
     private WorldMap wmp;
 
     /**
+     *
+     */
+    private Player p1, p2;
+
+    /**
      * Sets up list of players in a single Game of RISK in order
      * to test methods in the Game model class.
      */
@@ -49,6 +56,8 @@ public class GameSingletonTest {
         players.add(new Player("Kyler", RiskColour.BLUE));
         players.add(new Player("Tony", RiskColour.GREEN));
         gsm = GameSingleton.getGameInstance();
+        p1 = players.get(0);
+        p2 = players.get(1);
         gsm.setPlayers(players);
 
         InputStream initialStream = null;
@@ -118,8 +127,29 @@ public class GameSingletonTest {
     }
 
     @Test
-    public void testSaveGame(){
+    public void testExportImport(){
+        File pathToSave = new File("src/test/resources/test1.save");
+        gsm.export(pathToSave, null, 0);
 
+        gsm.clean();
+
+        InputStream initialStream = null;
+        try {
+            initialStream = getClass().getClassLoader().getResourceAsStream("test1.save");
+            byte[] buffer = new byte[initialStream.available()];
+            initialStream.read(buffer);
+
+            File targetFile = new File("src/test/resources/targetFile.tmp");
+            OutputStream outStream = new FileOutputStream(targetFile);
+            outStream.write(buffer);
+            gsm.importGame(new ZipFile(targetFile));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -149,7 +179,7 @@ public class GameSingletonTest {
         //Attacking 2 Units -> 1 Dice
         assertEquals(1, gsm.getMaxBattleDie(2, true));
         //Defending 2 Units -> 1 Dice
-        assertEquals(1, gsm.getMaxBattleDie(2, false));
+        assertEquals(2, gsm.getMaxBattleDie(2, false));
         //Defending 3 Units -> 2 Dice
         assertEquals(2, gsm.getMaxBattleDie(3, false));
     }
@@ -287,33 +317,19 @@ public class GameSingletonTest {
      */
     @Test
     public void testUpdateNumActivePlayer() {
-        Player ethan = players.get(0);
-        Player anthony = players.get(1);
+        Set<Territory> whatever = new HashSet<>();
 
-        gsm.setNumActivePlayer(players.size());
+        for (Territory temp : p1.getOwnedTerritories()){
+            whatever.add(temp);
+        }
 
-        Territory t1 = new Territory("Earth");
-        t1.setUnits(4);
-        assertEquals(4, t1.getUnits());
-        t1.setOwner(ethan);
-        assertEquals(ethan, t1.getOwner());
-
-        Territory t2 = new Territory("Pluto");
-        t2.setUnits(5);
-        assertEquals(5, t2.getUnits());
-        t2.setOwner(anthony);
-        assertEquals(anthony, t2.getOwner());
+        for (Territory temp : whatever){
+            temp.setOwner(p2);
+        }
 
         gsm.updateNumActivePlayers();
-        assertEquals(2, gsm.getNumActivePlayer());
-
-        /* Remove territory from one of the two active players
-        Now check if only one player is left.
-         */
-        anthony.removeTerritory(t2);
-        gsm.updateNumActivePlayers();
-        assertEquals(false, anthony.isActive());
-        assertEquals(1, gsm.getNumActivePlayer());
+        assertEquals(false, p1.isActive());
+        assertEquals(3, gsm.getNumActivePlayer());
     }
 
     /**
