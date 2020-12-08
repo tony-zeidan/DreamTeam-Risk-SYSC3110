@@ -173,8 +173,9 @@ public class GameSingleton implements Jsonable {
         setNumActivePlayer(players.size());
 
         //shuffle the order of the players
-        shufflePlayers();
-
+       // shufflePlayers();
+        gamePhase = GamePhase.START_GAME;
+        /*
         notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,
                 world.getName()));
 
@@ -184,6 +185,8 @@ public class GameSingleton implements Jsonable {
                 RiskEventType.TURN_BEGAN, getCurrentPlayer(), getBonusUnits(getCurrentPlayer())));
 
         nextPhase();    //beginning should be bonus troupe
+
+         */
     }
 
     public void importGame(ZipFile zf) throws Exception {
@@ -207,8 +210,23 @@ public class GameSingleton implements Jsonable {
         try {
             BufferedReader buf = new BufferedReader(new InputStreamReader(gameStream));
             JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
-            numActivePlayer= Integer.parseInt((String)((JsonObject)parser).get("name"));
-
+            gamePhase = GamePhase.valueOf((String)((JsonObject)parser).get("phase"));
+            System.out.println((((JsonObject)parser).get("activeNum")));
+            numActivePlayer= (int)((JsonObject)parser).get("activeNum");
+            JsonArray players = (JsonArray) ((JsonObject)parser).get("players");
+            for (Object player:players)
+            {
+                JsonObject playerInfo= (JsonObject)((JsonObject)player).get("player");
+                RiskColour colour = RiskColour.valueOf((String)((JsonObject)playerInfo).get("colour"));
+                String name = (String) ((JsonObject)playerInfo).get("name");
+                boolean isAI = (boolean) ((JsonObject)playerInfo).get("isAI");
+                Player playerObj;
+                if (isAI)
+                    playerObj = new AIPlayer(name,colour);
+                else
+                    playerObj = new Player(name,colour);
+                players.add(playerObj);
+            }
         }catch(Exception e)
         {
             e.printStackTrace();
@@ -799,20 +817,22 @@ public class GameSingleton implements Jsonable {
     @Override
     public String toJson() {
         JsonObject json = new JsonObject();
-        json.put("currentIndex", currentPlayerInd);
         JsonArray playersJson = new JsonArray();
         ArrayList<JsonObject> playersJsonList = new ArrayList<>();
-        for (int i =0; i<players.size();i++)
+        System.out.println(players.get(0));
+        int i = 0;
+        while (i<players.size())
         {
+            int currentIndex = (currentPlayerInd+i)%players.size();
             JsonObject playerObj = new JsonObject();
-            playerObj.put("index",i);
-            playerObj.put("player", players.get(i));
+            playerObj.put("player", players.get(currentIndex));
             playersJsonList.add(playerObj);
+            i++;
         }
         playersJson.addAll(playersJsonList);
         json.put("players",playersJson);
         json.put("activeNum",numActivePlayer);
-        json.put("phase",gamePhase);
+        json.put("phase",gamePhase.name());
         return json.toJson();
     }
 
@@ -834,9 +854,7 @@ public class GameSingleton implements Jsonable {
         players.add(new Player("Tone"));
         players.add(new Player("mesa"));
         players.add(new AIPlayer("robo"));
-        GameSingleton g =GameSingleton.getGameInstance(players);
-        g.newGame(new ZipFile("C:/Users/Anthony/Desktop/Desktop/University/Year 3/Sysc 3110/GitHub/worlds/saved_games/map.save"));
-
-        System.out.println("asd"+g.toJson());
+        GameSingleton g =GameSingleton.getGameInstance(null);
+        g.readGame(new FileInputStream("C:/Users/Anthony/Desktop/game.json"));
     }
 }
