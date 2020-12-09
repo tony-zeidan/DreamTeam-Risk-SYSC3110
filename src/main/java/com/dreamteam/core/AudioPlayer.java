@@ -8,6 +8,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class represents the implementation of audio in the game when a button is
+ * pressed, a territory is selected or a territory is won via a victory from an attack.
+ *
+ * @author Kyler Verge
+ */
 public class AudioPlayer {
 
     /**

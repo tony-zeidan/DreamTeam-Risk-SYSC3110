@@ -202,6 +202,11 @@ public class Player implements Jsonable {
         }
     }
 
+    /**
+     * Retrieve the image of the player's avatar.
+     *
+     * @return An image icon of the player's avatar.
+     */
     public ImageIcon getAvatar() {
         return avatar;
     }
