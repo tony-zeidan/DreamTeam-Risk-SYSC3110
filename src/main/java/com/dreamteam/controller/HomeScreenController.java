@@ -37,6 +37,12 @@ public class HomeScreenController implements ActionListener {
         this.homeView = homeView;
     }
 
+    /**
+     * ActionPerformed for HomeScreenController.
+     * Supports all buttons on the frame.
+     *
+     * @param e The event that was triggered
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
@@ -45,9 +51,7 @@ public class HomeScreenController implements ActionListener {
             JButton btn = (JButton) o;
             switch (btn.getActionCommand()) {
                 case "N":
-                    //TODO: somehow create a new game here
-                    //TODO: migrate the adding of players to this screen
-                    File selected = openFile(homeView,"./worlds/world_maps");
+                    File selected = openFile(homeView,"./worlds/world_maps",true);
                     if (selected!=null && selected.getName().endsWith(".world")) {
                         try {
                             constructNewGame(new ZipFile(selected));
@@ -59,7 +63,7 @@ public class HomeScreenController implements ActionListener {
                     }
                     break;
                 case "L":
-                    selected = openFile(homeView,"./worlds/saved_games");
+                    selected = openFile(homeView,"./worlds/saved_games",false);
                     if (selected!=null && selected.getName().endsWith(".save")) {
                         try {
                             loadGame(new ZipFile(selected));
@@ -78,17 +82,18 @@ public class HomeScreenController implements ActionListener {
     }
 
     /**
-     * TODO: Okay, so saveFile() and openFile() look like the same method except one has audio, one does not
+     * This dialog represents one that a user may see when saving a file.
+     * May not be necessary to have a dedicated method for saving and opening.
      *
-     * @param parent
-     * @param path The path
-     * @return
+     * @param parent The frame that this dialog is linked to
+     * @param path The path The path of where the dialog should begin in
+     * @return The file the user selected or null
      */
     public static File saveFile(JFrame parent, String path) {
         //TODO: use methods to read in the game that the user wants
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new java.io.File(path));
-        chooser.setDialogTitle("Choose a Saved Game");
+        chooser.setDialogTitle("Choose a name for this save game (.save at the end)");
         chooser.setMultiSelectionEnabled(false);
 
         int result = chooser.showSaveDialog(parent);
@@ -112,17 +117,19 @@ public class HomeScreenController implements ActionListener {
 
 
     /**
-     * TODO: See TODO in Javadoc for saveFile
+     * This method returns the input file of a dialog that asks the user
+     * where they wish to open a saved game or new game.
      *
      * @param parent The parent frame
      * @param path The path of the file to be opened
      * @return
      */
-    public static File openFile(JFrame parent, String path) {
+    public static File openFile(JFrame parent, String path, boolean newLoad) {
         //TODO: use methods to read in the game that the user wants
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new java.io.File(path));
-        chooser.setDialogTitle("Choose a Saved Game");
+        String str = (newLoad)?"Choose a world to play on (.world)":"Choose a saved game to resume (.save)";
+        chooser.setDialogTitle(str);
         chooser.setMultiSelectionEnabled(false);
 
         int result = chooser.showSaveDialog(parent);
@@ -144,7 +151,14 @@ public class HomeScreenController implements ActionListener {
         return null;
     }
 
-    private void constructNewGame(ZipFile file) throws Exception {
+    /**
+     * Constructs a new game by invoking methods in a new GameSingleton object.
+     * It then links this instance to a RiskFrame GUI.
+     *
+     * @param file The zipfile containing the information for this new game (.world)
+     * @throws Exception When the
+     */
+    private void constructNewGame(ZipFile file) {
         System.out.println(file);
         int numPlayers = getNumOfPlayers();
         List<Player> players = getPlayers(numPlayers);

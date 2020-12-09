@@ -3,10 +3,7 @@ package com.dreamteam.core;
 import com.dreamteam.view.RiskEvent;
 import com.dreamteam.view.RiskEventType;
 import com.dreamteam.view.RiskGameHandler;
-import com.github.cliftonlabs.json_simple.JsonArray;
-import com.github.cliftonlabs.json_simple.JsonObject;
-import com.github.cliftonlabs.json_simple.Jsonable;
-import com.github.cliftonlabs.json_simple.Jsoner;
+import com.github.cliftonlabs.json_simple.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -113,7 +110,7 @@ public class GameSingleton implements Jsonable {
      * @param zf Zipfile containing contents to start new game
      * @throws Exception TODO: Not sure what to put here
      */
-    public void newGame(ZipFile zf) throws Exception {
+    public void newGame(ZipFile zf) {
             //six random colors for players
             List<RiskColour> randomColors = new LinkedList<>();
             randomColors.add(RiskColour.RED);
@@ -139,18 +136,19 @@ public class GameSingleton implements Jsonable {
                 randomColors.remove(randIndex);
             }
 
-        ZipEntry mapData = zf.getEntry("map.json");
-        InputStream mapStream = zf.getInputStream(mapData);
         try {
+            ZipEntry mapData = zf.getEntry("map.json");
+            InputStream mapStream = zf.getInputStream(mapData);
             world.assignNewMap(players, mapStream);
+            mapStream.close();
+            zf.close();
         } catch (RiskGameException e) {
             e.printStackTrace();
             notifyHandlers(new RiskEvent(this,RiskEventType.INVALID_MAP_LOAD));
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("There was a fatal IO exception.");
         }
-        mapStream.close();
-        zf.close();
-
-
 
         //set the initial amount of active players accordingly
         setNumActivePlayer(players.size());
@@ -177,20 +175,29 @@ public class GameSingleton implements Jsonable {
      * @param zf The zipfile containing the contents of the game to be imported
      * @throws Exception TODO: Not sure what to put here
      */
-    public void importGame(ZipFile zf) throws Exception {
-        ZipEntry mapData = zf.getEntry("map.json");
-        InputStream mapStream = zf.getInputStream(mapData);
-        ZipEntry gameData = zf.getEntry("game.json");
-        InputStream gameStream = zf.getInputStream(gameData);
+    public void importGame(ZipFile zf) {
+
         try {
+            ZipEntry mapData = zf.getEntry("map.json");
+            InputStream mapStream = zf.getInputStream(mapData);
+            ZipEntry gameData = zf.getEntry("game.json");
+            InputStream gameStream = zf.getInputStream(gameData);
             world.readMap(mapStream);
+            readGame(gameStream);
+            mapStream.close();
+            gameStream.close();
         } catch (RiskGameException e) {
             e.printStackTrace();
             notifyHandlers(new RiskEvent(this,RiskEventType.INVALID_MAP_LOAD));
+            System.exit(0); //may not be necessary
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("There was a fatal IO exception during import of game.");
+        } catch (JsonException e) {
+            e.printStackTrace();
+            System.out.println("There was a fatal exception when parsing the JSON data.");
         }
-        readGame(gameStream);
-        mapStream.close();
-        gameStream.close();
+
     }
 
     /**
