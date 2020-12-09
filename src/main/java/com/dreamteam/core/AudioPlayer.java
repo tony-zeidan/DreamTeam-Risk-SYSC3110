@@ -3,6 +3,8 @@ package com.dreamteam.core;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,9 +29,9 @@ public class AudioPlayer {
         if (soundMap.containsKey(name)) {
             try {
                 Clip clip = AudioSystem.getClip();
-                AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-                        AudioPlayer.class.getClassLoader().getResourceAsStream(soundMap.get(name)));
-                clip.open(inputStream);
+                InputStream audioSrc = AudioPlayer.class.getClassLoader().getResourceAsStream(soundMap.get(name));
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(audioSrc));
+                clip.open(audioStream);
                 clip.start();
             } catch (Exception e) {
                 e.printStackTrace();
