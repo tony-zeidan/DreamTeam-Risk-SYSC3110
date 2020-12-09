@@ -162,6 +162,13 @@ public class Territory implements Jsonable {
         json.put("units", units+"");
         return json.toJson();
     }
+
+    /**
+     * Serialize to a JSON formatted array of strings for
+     * all of the current territory's neighbours.
+     *
+     * @return
+     */
     public JsonArray toJsonBuildMap() {
         JsonArray neighJson = new JsonArray();
         List<String> neighbourNames = new ArrayList<>();

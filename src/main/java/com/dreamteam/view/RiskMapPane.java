@@ -77,6 +77,7 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
      * Creates a new map pane (meant to be embedded within RiskFrame)
      * that uses the same RiskController.
      *
+     * @param mapImage Image of the current map
      * @param rc The risk controller that this pane listens to
      */
     public RiskMapPane(Image mapImage, RiskController rc) {
@@ -256,6 +257,11 @@ public class RiskMapPane extends JPanel implements RiskGameHandler {
         }
     }
 
+    /**
+     * Retrieves the image of the current map of this game.
+     *
+     * @return The image of the current map
+     */
     public Image getImage() {
         return finalMapImage;
     }
