@@ -180,7 +180,8 @@ public class GameSingleton implements Jsonable {
             JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
             gamePhase = GamePhase.valueOf((String)(parser).get("phase"));
             numActivePlayer=Integer.parseInt((String)(parser).get("activeNum"));
-            bonusTroops = Integer.parseInt((String)(parser).get("bonusTroops"));
+            if (gamePhase == GamePhase.BONUS_TROUPE)
+                bonusTroops = Integer.parseInt((String)(parser).get("bonusTroops"));
             JsonArray players = (JsonArray) (parser).get("players");
             System.out.println(players);
             for (Object player:players)
