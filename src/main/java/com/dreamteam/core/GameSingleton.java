@@ -63,8 +63,11 @@ public class GameSingleton implements Jsonable {
      * A list of all handlers that listen to this model.
      */
     private List<RiskGameHandler> riskHandlers;
-
+    /**
+     * Contains the bonus troops of the current player.
+     */
     private int bonusTroops;
+
     /**
      * Default constructor for instances of main.com.dreamteam.core.Game class.
      * (For now) Creates a new game with the hardcoded map and the players that
@@ -77,7 +80,7 @@ public class GameSingleton implements Jsonable {
         currentPlayerInd = 0;
         gamePhase = null;
         riskHandlers = new ArrayList<>();
-        bonusTroops =0;
+        bonusTroops = 0;
     }
 
     /**
@@ -108,30 +111,30 @@ public class GameSingleton implements Jsonable {
      * @param zf Zipfile containing contents to start new game
      */
     public void newGame(ZipFile zf) {
-            //six random colors for players
-            List<RiskColour> randomColors = new LinkedList<>();
-            randomColors.add(RiskColour.RED);
-            randomColors.add(RiskColour.GRAY);
-            randomColors.add(RiskColour.BLUE);
-            randomColors.add(RiskColour.YELLOW);
-            randomColors.add(RiskColour.BLACK);
-            randomColors.add(RiskColour.GREEN);
+        //six random colors for players
+        List<RiskColour> randomColors = new LinkedList<>();
+        randomColors.add(RiskColour.RED);
+        randomColors.add(RiskColour.GRAY);
+        randomColors.add(RiskColour.BLUE);
+        randomColors.add(RiskColour.YELLOW);
+        randomColors.add(RiskColour.BLACK);
+        randomColors.add(RiskColour.GREEN);
 
-            Random rand = new Random();
+        Random rand = new Random();
 
             /*We must get all player names and generate colours.
             Loop through players and obtain names through user input.
             Randomly assign colours.
             */
-            for (Player p : players) {
-                //get this players name
+        for (Player p : players) {
+            //get this players name
 
-                int randIndex = rand.nextInt(randomColors.size());
-                //generate and assign random colours
-                RiskColour colour = randomColors.get(randIndex);
-                p.setColour(colour);
-                randomColors.remove(randIndex);
-            }
+            int randIndex = rand.nextInt(randomColors.size());
+            //generate and assign random colours
+            RiskColour colour = randomColors.get(randIndex);
+            p.setColour(colour);
+            randomColors.remove(randIndex);
+        }
 
         try {
             ZipEntry mapData = zf.getEntry("map.json");
@@ -141,7 +144,7 @@ public class GameSingleton implements Jsonable {
             zf.close();
         } catch (RiskGameException e) {
             e.printStackTrace();
-            notifyHandlers(new RiskEvent(this,RiskEventType.INVALID_MAP_LOAD));
+            notifyHandlers(new RiskEvent(this, RiskEventType.INVALID_MAP_LOAD));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("There was a fatal IO exception.");
@@ -207,10 +210,9 @@ public class GameSingleton implements Jsonable {
                 bonusTroops = Integer.parseInt((String) (parser).get("bonusTroops"));
             JsonArray players = (JsonArray) (parser).get("players");
             System.out.println(players);
-            for (Object player:players)
-            {
-                JsonObject playerInfo= (JsonObject)((JsonObject)player).get("player");
-                RiskColour colour = RiskColour.valueOf((String)(playerInfo).get("colour"));
+            for (Object player : players) {
+                JsonObject playerInfo = (JsonObject) ((JsonObject) player).get("player");
+                RiskColour colour = RiskColour.valueOf((String) (playerInfo).get("colour"));
                 String name = (String) (playerInfo).get("name");
                 String isAI = (String) (playerInfo).get("isAI");
                 Player playerObj = (isAI.equals("true")) ? new AIPlayer(name, colour) : new Player(name, colour);
