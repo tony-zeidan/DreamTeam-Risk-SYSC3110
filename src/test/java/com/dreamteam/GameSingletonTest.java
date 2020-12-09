@@ -80,6 +80,12 @@ public class GameSingletonTest {
         wmp = gsm.getWorld();
     }
 
+    /**
+     * Tests newGame() in GameSingleton
+     *
+     * Loads a custom world into the game that contains four players and
+     * asserts that all of the countries are added to the map correctly.
+     */
     @Test
     public void testLoadGame(){
         gsm.clean();
@@ -129,7 +135,11 @@ public class GameSingletonTest {
     /**
      * Test export() in GameSingleton and then importGame() in GameSingleton.
      *
-     * Loads the custom game in setUp(), then saves the game in
+     * Loads the custom game in setUp(), then saves the game and changes the
+     * number of units in one of the territories before resetting the game and
+     * map. Once the saved game is loaded back in, the territory that was
+     * changed before the save should still contain the same number of units
+     * before that change.
      */
     @Test
     public void testExportImport(){
