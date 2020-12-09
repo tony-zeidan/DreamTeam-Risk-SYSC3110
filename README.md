@@ -74,6 +74,9 @@ Under "build" you can see the "runShadow" task which creates a JAR and runs it (
 
 You most likely will be able to run the JAR in the deployment folder we gave you through the command line though.
 
+Also note that in the directory "worlds\world_maps" we included folder containing the contents of the ".world"
+files so that it wouldn't be necessary to unzip to look at the contents.
+
 We hope that this is easy to understand and that it doesn't take much time to implement.
 
 ### How to Use:
