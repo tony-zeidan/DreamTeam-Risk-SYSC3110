@@ -3,10 +3,10 @@
 ### Team Members:
 Name | Main Contributions
 ------------ | -------------
-Tony Abou-Zeidan | Controller Refactoring, GUI Refactoring, AI Development, AI Integration
-Anthony Dooley | Controller Refactoring, AI Development, AI Integration, Testing
-Ethan Chase | Controller Refactoring, Documentation, Moving Units, Testing,
-Kyler Verge | Map Updating, Bonus Troupe, Continent Bonus, Documentation
+Tony Abou-Zeidan | Saving Features, Gradle Environment, Player Icons
+Anthony Dooley | Saving Features, Loading Features, Map Validity
+Ethan Chase | Rigorous Testing, Saving/Loading, Documentation
+Kyler Verge | Custom Maps, Map Validity, Sound Effects
 
 ### Project Description:
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
