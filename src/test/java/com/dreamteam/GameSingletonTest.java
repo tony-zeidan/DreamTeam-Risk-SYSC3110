@@ -60,6 +60,7 @@ public class GameSingletonTest {
         p2 = players.get(1);
         gsm.setPlayers(players);
 
+        //algorithm to load in a new game with a predefined map
         InputStream initialStream = null;
         try {
             initialStream = getClass().getClassLoader().getResourceAsStream("test1.world");
