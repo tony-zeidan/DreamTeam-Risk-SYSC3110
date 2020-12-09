@@ -4,7 +4,15 @@ import com.dreamteam.core.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipFile;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * JUnit Testing class, tests some of the AIs functions
@@ -89,14 +97,52 @@ public class AIPlayerTest {
      */
     @Test
     public void testPlaceUnits() {
-        this.setup();
-        assertEquals(8, t1.getUnits() + t2.getUnits() + t3.getUnits() + t4.getUnits());
-        //TODO: Fix parameters in the call to pass the model
-        //robo.placeUnits(5);
-        assertEquals(3, t6.getUnits());
-        assertEquals(1, t5.getUnits());
-        assertEquals(13, t1.getUnits() + t2.getUnits() + t3.getUnits() + t4.getUnits());
 
+        List<Player> players = new ArrayList<>();
+        players.add(robo);
+        players.add(guy);
+
+        //for this specific test we need a model
+        //assume that the test map loads in properly
+        GameSingleton gsm = GameSingleton.getGameInstance();
+        gsm.setPlayers(players);
+        InputStream initialStream = null;
+        try {
+            initialStream = getClass().getClassLoader().getResourceAsStream("test1.world");
+            byte[] buffer = new byte[initialStream.available()];
+            initialStream.read(buffer);
+
+            File targetFile = new File("src/test/resources/targetFile.tmp");
+            OutputStream outStream = new FileOutputStream(targetFile);
+            outStream.write(buffer);
+            gsm.newGame(new ZipFile(targetFile));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        /*
+        Algorithm:
+        Get the amount of units on all of the AI's territories before and after
+        placing 100 units.
+        Then check if both results are unequal.
+         */
+        Map<String,Integer> terrUnits = new HashMap<>();
+        for (Territory t : robo.getOwnedTerritories()) {
+            terrUnits.put(t.getName(),t.getUnits());
+        }
+
+        robo.placeUnits(100,gsm);
+
+        Map<String,Integer> terrUnitsAfter = new HashMap<>();
+        for (Territory t : robo.getOwnedTerritories()) {
+            terrUnitsAfter.put(t.getName(),t.getUnits());
+        }
+
+        assertNotEquals(terrUnits,terrUnitsAfter);
     }
 
     /**
