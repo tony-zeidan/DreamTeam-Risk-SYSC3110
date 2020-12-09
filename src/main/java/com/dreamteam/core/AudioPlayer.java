@@ -32,6 +32,7 @@ public class AudioPlayer {
                 clip.open(inputStream);
                 clip.start();
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("Error playing sound file.");
             }
         }
