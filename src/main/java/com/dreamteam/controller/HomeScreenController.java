@@ -122,7 +122,8 @@ public class HomeScreenController implements ActionListener {
      *
      * @param parent The parent frame
      * @param path The path of the file to be opened
-     * @return
+     * @param newLoad whether this dialog represents a new game or a load game
+     * @return The file that the user selected
      */
     public static File openFile(JFrame parent, String path, boolean newLoad) {
         //TODO: use methods to read in the game that the user wants

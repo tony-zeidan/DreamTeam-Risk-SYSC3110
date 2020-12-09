@@ -95,7 +95,6 @@ public class GameSingleton implements Jsonable {
 
     /**
      * Sets the list of players to be assigned to the current game.
-     * TODO: Someone double-check javadoc here
      *
      * @param players The list of players in the game.
      */
@@ -104,11 +103,9 @@ public class GameSingleton implements Jsonable {
     }
 
     /**
-     * Start a new game from contents in a saved zipfile.
-     * TODO: Someone double-check javadoc here
+     * Start a new game from contents in a saved zipfile (.world only).
      *
      * @param zf Zipfile containing contents to start new game
-     * @throws Exception TODO: Not sure what to put here
      */
     public void newGame(ZipFile zf) {
             //six random colors for players
@@ -173,7 +170,6 @@ public class GameSingleton implements Jsonable {
      * accordingly.
      *
      * @param zf The zipfile containing the contents of the game to be imported
-     * @throws Exception TODO: Not sure what to put here
      */
     public void importGame(ZipFile zf) {
 
@@ -201,8 +197,9 @@ public class GameSingleton implements Jsonable {
     }
 
     /**
-     * TODO: Somebody who understands what is going on here needs to finish this javadoc
-     * @param gameStream TODO: See line 184
+     * Deserializes the JSON representing game data.
+     *
+     * @param gameStream The stream of the .json file representing the game data
      */
     private void readGame(InputStream gameStream)
     {
@@ -257,6 +254,7 @@ public class GameSingleton implements Jsonable {
      *
      * @param file The file to export to (new or not)
      * @param mapImage The image representing the map
+     * @param bonus The number of bonus troops placed (retrieved from view)
      */
     public void export(File file,Image mapImage,int bonus) {
         if (file!=null) {
@@ -601,7 +599,6 @@ public class GameSingleton implements Jsonable {
 
         notifyHandlers(new RiskEvent(this, RiskEventType.ATTACK_COMMENCED,
                 attacker, defender));
-        //TODO: we could use this in order to get input of die, and check if AIs were present
 
         int[] lost = attack(attackDie, defendDie);
         attacking.removeUnits(lost[0]);
@@ -894,11 +891,5 @@ public class GameSingleton implements Jsonable {
         gamePhase = null;
         riskHandlers.clear();
         bonusTroops = 0;
-    }
-
-    public static void main(String[] args) throws Exception {
-        GameSingleton g =GameSingleton.getGameInstance();
-        g.readGame(new FileInputStream("C:/Users/Anthony/Desktop/game.json"));
-        //.out.println(g.toJson());
     }
 }

@@ -22,21 +22,21 @@ public class HomeScreenFrame extends JFrame {
      * Button to create a new game.
      */
     private JButton newGame;
-
     /**
      * Button to load up a previously saved game
      */
     private JButton loadGame;
-
     /**
      * Button to exit the menu frame of the game
      */
     private JButton exitGame;
-
+    /**
+     * The class loader for loading in files (Home Screen Image)
+     */
     private final ClassLoader LOADER = getClass().getClassLoader();
 
     /**
-     * Constructor for instances of HomeScreenFrame, constructs a new GUI
+     * Constructor for instances of HomeScreenFrame, constructs a new GUI.
      */
     public HomeScreenFrame() {
         super("Dream Team RISK!");
@@ -97,6 +97,11 @@ public class HomeScreenFrame extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * The main executable method of the game.
+     *
+     * @param args N/A
+     */
     public static void main(String[] args) {
         HomeScreenFrame hs = new HomeScreenFrame();
         hs.showFrame();

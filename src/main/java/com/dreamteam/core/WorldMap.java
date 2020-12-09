@@ -339,7 +339,7 @@ public class WorldMap implements Jsonable {
             JsonObject jsonTerr = new JsonObject();
             jsonTerr.put("name", terr.getName());
             jsonTerr.put("coordinates", getCoordinatesString(terr));
-            jsonTerr.put("neighbours", terr.toJsonBuildMap());
+            jsonTerr.put("neighbours", terr.toJsonNeighbours());
             territoriesJsonList.add(jsonTerr);
         }
         territoriesJson.addAll(territoriesJsonList);
@@ -382,11 +382,5 @@ public class WorldMap implements Jsonable {
         allTerritories.clear();
         allCoordinates.clear();
         continents.clear();
-    }
-
-
-    public static void main(String[] args) throws Exception {
-        WorldMap w = new WorldMap("world");
-        w.readMap(new FileInputStream(new File("C:/Users/Anthony/Desktop/game.json")));
     }
 }

@@ -167,9 +167,9 @@ public class Territory implements Jsonable {
      * Serialize to a JSON formatted array of strings for
      * all of the current territory's neighbours.
      *
-     * @return
+     * @return The JsonArray representing the neighbours of this territory
      */
-    public JsonArray toJsonBuildMap() {
+    public JsonArray toJsonNeighbours() {
         JsonArray neighJson = new JsonArray();
         List<String> neighbourNames = new ArrayList<>();
         for (Territory t : neighbours) {
