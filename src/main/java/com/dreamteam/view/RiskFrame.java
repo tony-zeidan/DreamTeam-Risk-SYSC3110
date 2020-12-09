@@ -417,7 +417,7 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
      * Through either the game being over, a players turn
      * beginning, or updating what territory is attakable
      *
-     * @param e The Risk Event
+     * @param e The Risk Event that was triggered
      */
     @Override
     public void handleRiskUpdate(RiskEvent e) {
@@ -491,18 +491,8 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
                 break;
             case INVALID_MAP_LOAD:
                 //popup dialog and send back to home screen
-                int result = JOptionPane.showConfirmDialog(this, "You loaded an invalid map!",
-                        "Title", JOptionPane.INFORMATION_MESSAGE);
-                if (result==JOptionPane.OK_OPTION) {
-                    //safety measures
-                    mapPane=null;
-                    eventPane=null;
-
-                    //exit
-                    HomeScreenFrame hs = new HomeScreenFrame();
-                    hs.showFrame();
-                    this.dispose();
-                }
+                JOptionPane.showMessageDialog(this,"You loaded an invalid map!","INVALID MAP LOAD",JOptionPane.ERROR_MESSAGE);
+                System.exit(0); //simply discontinue the program
         }
     }
 

@@ -54,19 +54,33 @@ task copyWorlds(type: Copy) {
     into "build/deployFull/worlds"
 }
 
+task copyReadMe(type: Copy) {
+    from "README.md"
+    into "build/deployFull"
+}
+
+task copyOtherDocs(type: Copy) {
+    from "seq.pdf","uml.pdf","manual.pdf"
+    into "build/deployFull"
+}
+
 task deployFull(type: Copy) {
     dependsOn copyWorlds
+    dependsOn copyReadMe
+    dependsOn copyOtherDocs
     dependsOn deployDocs
     dependsOn shadowJar
     from "build/libs"
     into "build/deployFull"
 }
 
-task zipDeployment(type: Zip) {
+task zipDeploy(type: Zip) {
     dependsOn deployFull
+    include 'README.md'
     from 'build/deployFull'
     include '*'
     include '*/**'
+
     archiveName 'Deployment.zip'
 }
 

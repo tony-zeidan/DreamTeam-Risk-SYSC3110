@@ -83,23 +83,29 @@ public class WorldMap implements Jsonable {
      * Reads in the map from the map.txt file (for now)
      *
      * @param is the inputstream used to read the map
-     * @throws JsonException TODO: Not sure what to put here
-     * @throws IOException TODO: Not sure what to put here
-     * @throws RiskGameException TODO: Not sure what to put here
+     * @throws RiskGameException Thrown when the map loaded is invalid
      */
-    public void readMap(InputStream is) throws JsonException, IOException, RiskGameException {
-        BufferedReader buf = new BufferedReader(new InputStreamReader(is));
-        JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
-        //JsonObject map = (JsonObject)parser.get("map");
-        name = (String)parser.get("name");
-        JsonArray territories =(JsonArray)parser.get("territories");
-        readCountries(territories);
-        JsonArray continents = (JsonArray)parser.get("continents");
-        readContinents(continents);
-        is.close();
+    public void readMap(InputStream is) throws RiskGameException {
+
+        try {
+            BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+            JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
+            //JsonObject map = (JsonObject)parser.get("map");
+            name = (String) parser.get("name");
+            JsonArray territories = (JsonArray) parser.get("territories");
+            readCountries(territories);
+            JsonArray continents = (JsonArray) parser.get("continents");
+            readContinents(continents);
+            is.close();
+        } catch (JsonException e) {
+            e.printStackTrace();
+            System.out.println("There was a fatal error when parsing the JSON.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("There was a fatal IO error during the parsing.");
+        }
 
         if (!validMap()) {
-            //TODO where this method is called, catch this exception (then throw an event to the frame)
             System.out.println("Invalid map detected");
             throw new RiskGameException("The user uploaded an invalid map.");
         }
@@ -116,7 +122,7 @@ public class WorldMap implements Jsonable {
         int numVisited = 0;
         Queue<Territory> territories = new LinkedList<>();
         Set<Territory> visited = new HashSet<>();
-        Territory start = (new ArrayList<> (allTerritories.values())).get(0);
+        Territory start = (new ArrayList<>(allTerritories.values())).get(0);
         territories.add(start);
         visited.add(start);
         while (!territories.isEmpty()) {
@@ -132,22 +138,21 @@ public class WorldMap implements Jsonable {
         return (numVisited == allTerritories.values().size());
     }
 
-    private void readCountries(JsonArray territories)
-    {
-        for(Object terr: territories)
-        {
-            String readName = (String) ((JsonObject)terr).get("name");
+    private void readCountries(JsonArray territories) {
+        for (Object terr : territories) {
+            String readName = (String) ((JsonObject) terr).get("name");
             if (!allTerritories.containsKey(readName)) {
                 allTerritories.put(readName, new Territory(readName));
             }
             Territory territory = allTerritories.get(readName);
             try {
-                String[] coord = ((String)((JsonObject)terr).get("coordinates")).split(",");
-                int xCord = (int)Double.parseDouble(coord[0]);
-                int yCord =(int)Double.parseDouble(coord[1]);
+                String[] coord = ((String) ((JsonObject) terr).get("coordinates")).split(",");
+                int xCord = (int) Double.parseDouble(coord[0]);
+                int yCord = (int) Double.parseDouble(coord[1]);
                 Point readCoordinates = new Point(xCord, yCord);
                 allCoordinates.put(territory, readCoordinates);
-                List<String> neighbourList = (List<String>) ((JsonObject)terr).get("neighbours");;
+                List<String> neighbourList = (List<String>) ((JsonObject) terr).get("neighbours");
+                ;
                 for (String s : neighbourList) {
                     if (!allTerritories.containsKey(s)) {
                         allTerritories.put(s, new Territory(s));
@@ -161,19 +166,19 @@ public class WorldMap implements Jsonable {
             }
         }
     }
+
     /**
      * reads the String line that holds the continent, the territories they hold, and bonus troops
-     *
      */
     private void readContinents(JsonArray listContinents) {
-        for(Object cont: listContinents) {
-            String readName = (String) ((JsonObject)cont).get("name");
+        for (Object cont : listContinents) {
+            String readName = (String) ((JsonObject) cont).get("name");
 
             try {
-                int bonusUnits = Integer.parseInt((String)((JsonObject)cont).get("value"));
+                int bonusUnits = Integer.parseInt((String) ((JsonObject) cont).get("value"));
                 Continent continent = new Continent(readName, bonusUnits);
                 continents.put(readName, continent);
-                List<String> territoriesWithin = (List<String>) ((JsonObject)cont).get("territories");
+                List<String> territoriesWithin = (List<String>) ((JsonObject) cont).get("territories");
                 for (String s : territoriesWithin) {
                     //if (!allTerritories.containsKey(s)) {
                     //allTerritories.put(s, new Territory(s));
@@ -223,13 +228,8 @@ public class WorldMap implements Jsonable {
      * @throws RiskGameException TODO: Not totally sure what to put here
      */
     public void assignNewMap(List<Player> players, InputStream mapData) throws RiskGameException {
-        try {
-            readMap(mapData);
-        } catch (JsonException e) {
-            e.printStackTrace(); return;
-        } catch (IOException e) {
-            e.printStackTrace(); return;
-        }
+
+        readMap(mapData);
 
         assignTerritories(players);
         //place remaining troops on each of the territories
@@ -316,10 +316,10 @@ public class WorldMap implements Jsonable {
      * @param name The name of the territory to retrieve from the current map
      * @return The territory from the map specified by a provided name
      */
-    public Territory getTerritory(String name)
-    {
+    public Territory getTerritory(String name) {
         return allTerritories.get(name);
     }
+
     /**
      * Serialize to a JSON formatted string.
      *
@@ -334,8 +334,7 @@ public class WorldMap implements Jsonable {
         json.put("continents", continentsJson);
         JsonArray territoriesJson = new JsonArray();
         ArrayList<JsonObject> territoriesJsonList = new ArrayList<>();
-        for (Territory terr: allTerritories.values())
-        {
+        for (Territory terr : allTerritories.values()) {
             JsonObject jsonTerr = new JsonObject();
             jsonTerr.put("name", terr.getName());
             jsonTerr.put("coordinates", getCoordinatesString(terr));
@@ -343,7 +342,7 @@ public class WorldMap implements Jsonable {
             territoriesJsonList.add(jsonTerr);
         }
         territoriesJson.addAll(territoriesJsonList);
-        json.put("territories",territoriesJson);
+        json.put("territories", territoriesJson);
         return json.toJson();
     }
 
@@ -368,17 +367,16 @@ public class WorldMap implements Jsonable {
      * @param terr The territory selected to retrieve coordinates from
      * @return The coordinates of the specified territory in the map
      */
-    private String getCoordinatesString(Territory terr)
-    {
+    private String getCoordinatesString(Territory terr) {
         Point terrPoint = allCoordinates.get(terr);
-        return terrPoint.getX() +","+terrPoint.getY();
+        return terrPoint.getX() + "," + terrPoint.getY();
     }
 
     /**
      * Wipe the current map so that it has no name and no territories/continents
      */
     public void clean() {
-        name=null;
+        name = null;
         allTerritories.clear();
         allCoordinates.clear();
         continents.clear();

@@ -12,60 +12,54 @@ Kyler Verge | Map Updating, Bonus Troupe, Continent Bonus, Documentation
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
 > Risk project!
 
-### Since-Milestone 2 Changes:
-- Fixed documentation
-- Added hit boxes around territories
-- Added AI players that use expected utility method
-- Added new game phase integration to keep the game running cyclical
+
  
 **Project Progress**
 
 ![99%](https://progress-bar.dev/99)
 
-milestone 3 phase
+milestone 4 phase
 
 [UML](https://lucid.app/invitations/accept/fdd00eb0-1f04-4212-8db9-c9dd045a9c40)
 
+###Changes in Milestone 4:
+* we now added support for custom maps
+* support for saving/loading maps as well as new games on any map
+* we did this through the implementing of JSON serialization
+* we now added select sound effects for the game
+* we now added player icons into the game (Among Us icons)
+
+###Custom Maps:
+* we have included a custom map in the deployment zip called "sinnoh.world"
+* this custom map should only be accessed through the "new game" button on the home screen
+* this custom map can then be saved and reloaded through the "load game" button on the home screen
+* the same procedure can be applied to the "default.world" map
+
+###JSON Serialization:
+In this Milestone we used JSON serialization throughout the entire project.
+All maps (.world) as well as all saved games (.save) have their data stored in JSON format.
+To implement this behaviour, we used an external library called "json-simple" which is included
+in Gradle as a dependency.
+The deserialization/loading game was quite custom, this was because we used the same algorithm for
+deserializing custom maps as well as deserializing non-custom maps.
+You may see this in the "build.gradle" file within our project on GitHub.
+
+###File Explanations:
+For this Milestone we created our own custom file extensions.
+We used ".world" files and ".save" files. Both of these types are actually ".zip" files and they can be renamed as such.
+The files contained within these two types of ".zip" files can be seen below.
+
+####.world:
+- map.png : an image of the map to be played on
+- map.json : map data for the loading of the map instance (only territories and coordinates)
+
+####.save:
+- map.png : an image of the map to be played on
+- map.json : map data for the loading of the map instance (only territories and coordinates)
+- game.json : game data for the loading of the game instance (contains players, owned territories, game phase, etc...)
+
 ### How to Use:
 Look at Manual PDF.
-   
-### Decision Making:
-Design Decisions:
-For classes we created :
-Territory class to have a name, with a number of units occupying it, ownership being a Player object and its neighbours. We decided to use a HashMap to implement the neighbours, because the look up time is 0(1).  Instead of a list or Binary Search Tree where searching respectively is 0(n) and 0(logn).
-
-WorldMap to hold a set of Territory objects and a name for the map. As well as preforming the random set up for the risk game. The set of Territories are implemented using a HashMap because of its quick look up time. By having the main.com.dreamteam.core.WorldMap hold a set of territories and each territory holding their neighbours, a graph can be made.
-
-Player class is to show ownership, with name, and color. As well as a list of territories to be able to check if a main.com.dreamteam.core.Player is still in the game. This is because a player loses when they have 0 territories, this list is implemented with a LinkedList because there will be a fair bit of adds and removes, and LinkedList are more efficient when removing. But, because there will not be many removes in a row between user input the efficiency will not be noticeable. Also in the main.com.dreamteam.core.Player class holds a Boolean active.
-
-GameSingleton class holds a WorldMap object and a list of Player Objects. The list of Player objects is implemented using an array list as it is more efficient to traverse and there will be no deletions. But again, this efficiency will not be noticeable. The GameSingleton class also hold attack,fortify and end turn functionalities, with the game loop. 
-    
-### Decision Making - MileStone 3:
-   From Milestone one:
-     Neighbours in Territory class was changed from a Map to a set, as there was never any look up being used and a set is a better data structure as the Territory can not have the same neighbour twice.
-     As well as in the Player's class where the owned also was changed to a set, as it should not have duplicates of the same territory.Game class was changed to a singleton class, so that only one Game can be instantiated at one time.
-     In WorldMap class the setting up of territories acts more like a parser now, reading in a text file. As well as the worldMap
-     having a Mapping of Territories to their coordinates.
-   
-   From Milestone two:
-       The GUI and risk game is implemented using a MVC approach.
-       we created a RiskFrame, which is the main com.dreamteam.view that holds two other JPanels, RiskMapPane that handles the map points and labels updates, and 
-       RiskEventPane which deals with the event descriptions updates, such as dice rolls and unit losses. Each JPanel is added to the 
-       GameSingleton class (which is our model) as a RiskGameHandler, placed in an ArrayList as it is efficient at iterating over items
-       and for our design we do not remove any items at any time. Our controller RiskController listens for territory selections, attack or end turn button clicks and 
-       passes this information to the model to perform the appropriate action.
-   
-   We now implemented an AI player as an extension of the main Player class. The AI player contains all computation methods necessary to choose the best method of approach when taking its turn.
-   The AI player not only deals with attacking, but moving bonus units and fortifying.
-   The AI player chooses the option that maximizes maximum expected utility for that phase of the game.
-   
-   The game now also runs with game phases, which go in a cyclical fashion. The first phase is the "Start Game" phase which will not be returned to again after moving on.
-   The next phase is the "Bonus Troupe" phase in which the controller only expects mouse clicks with the intention of placing a single unit on a territory that the player owns.
-   The next phase is the "Attack" phase in which the controller only expects mouse and button clicks with the intention of attacking a territory from another.
-   The next phase is the "Move Units" phase in which the controller only expects mouse and button clicks with the intention of moving only one set of units from one owned territory to another
-   along a path of other owned territories.
-   After the "Move Units" phase, the next players turn is initiated and the phase loops back to the "Bonus Troupe" phase.
-    
     
 ### Milestones:
 - [x] Milestone 1: A text-based playable version of the game, i.e., players should be able to play the game via the console using the keyboard.
@@ -115,7 +109,7 @@ GameSingleton class holds a WorldMap object and a list of Player Objects. The li
       since the last iteration, and the reason for those changes.
     - Deadline: Monday November 23rd. Weight: 30% of the overall project grade
     
-- [ ] Milestone 4: Addition of saving / loading features
+- [x] Milestone 4: Addition of saving / loading features
     > Two more things: 1- Save/load features. You may use Java Serialization to
      achieve this. 2- Custom maps. The custom map may be defined in XML or JSON format.
      Upon loading of a custom map, the program should be able to reject invalid maps, e.g.
