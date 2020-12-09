@@ -184,16 +184,12 @@ public class GameSingleton implements Jsonable {
             gameStream.close();
         } catch (RiskGameException e) {
             e.printStackTrace();
-            notifyHandlers(new RiskEvent(this,RiskEventType.INVALID_MAP_LOAD));
+            notifyHandlers(new RiskEvent(this, RiskEventType.INVALID_MAP_LOAD));
             System.exit(0); //may not be necessary
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("There was a fatal IO exception during import of game.");
-        } catch (JsonException e) {
-            e.printStackTrace();
-            System.out.println("There was a fatal exception when parsing the JSON data.");
         }
-
     }
 
     /**
@@ -201,15 +197,14 @@ public class GameSingleton implements Jsonable {
      *
      * @param gameStream The stream of the .json file representing the game data
      */
-    private void readGame(InputStream gameStream)
-    {
+    private void readGame(InputStream gameStream) {
         try {
             BufferedReader buf = new BufferedReader(new InputStreamReader(gameStream));
             JsonObject parser = (JsonObject) Jsoner.deserialize(buf);
-            gamePhase = GamePhase.valueOf((String)(parser).get("phase"));
-            numActivePlayer=Integer.parseInt((String)(parser).get("activeNum"));
+            gamePhase = GamePhase.valueOf((String) (parser).get("phase"));
+            numActivePlayer = Integer.parseInt((String) (parser).get("activeNum"));
             if (gamePhase == GamePhase.BONUS_TROUPE)
-                bonusTroops = Integer.parseInt((String)(parser).get("bonusTroops"));
+                bonusTroops = Integer.parseInt((String) (parser).get("bonusTroops"));
             JsonArray players = (JsonArray) (parser).get("players");
             System.out.println(players);
             for (Object player:players)
@@ -218,46 +213,46 @@ public class GameSingleton implements Jsonable {
                 RiskColour colour = RiskColour.valueOf((String)(playerInfo).get("colour"));
                 String name = (String) (playerInfo).get("name");
                 String isAI = (String) (playerInfo).get("isAI");
-                Player playerObj = (isAI.equals("true"))? new AIPlayer(name,colour):new Player(name,colour);
+                Player playerObj = (isAI.equals("true")) ? new AIPlayer(name, colour) : new Player(name, colour);
                 this.players.add(playerObj);
-                int dieRoll =Integer.parseInt((String)(playerInfo.get("selectedDie")));
+                int dieRoll = Integer.parseInt((String) (playerInfo.get("selectedDie")));
                 playerObj.setDiceRoll(dieRoll);
-                JsonArray territories = (JsonArray)(playerInfo.get("owned"));
-                for(Object terr:territories)
-                {
-                    String terrName = (String)((JsonObject)terr).get("name");
-                    int numUnits = Integer.parseInt((String)((JsonObject)terr).get("units"));
+                JsonArray territories = (JsonArray) (playerInfo.get("owned"));
+                for (Object terr : territories) {
+                    String terrName = (String) ((JsonObject) terr).get("name");
+                    int numUnits = Integer.parseInt((String) ((JsonObject) terr).get("units"));
                     Territory territory = world.getTerritory(terrName);
                     territory.setOwner(playerObj);
                     territory.setUnits(numUnits);
                 }
             }
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN,world.getName()));
+        notifyHandlers(new RiskEvent(this, RiskEventType.GAME_BEGAN, world.getName()));
         notifyHandlers(new RiskEvent(this, RiskEventType.PHASE_CHANGE, gamePhase));
-        if (gamePhase == GamePhase.BONUS_TROUPE)
-        {
-            notifyHandlers(new RiskEvent(this, RiskEventType.TURN_BEGAN, getCurrentPlayer(),bonusTroops));
-        }
-        else
-        {
-            notifyHandlers(new RiskEvent(this, RiskEventType.TURN_BEGAN, getCurrentPlayer(),0));
+        if (gamePhase == GamePhase.BONUS_TROUPE) {
+            notifyHandlers(new RiskEvent(this, RiskEventType.TURN_BEGAN, getCurrentPlayer(), bonusTroops));
+        } else {
+            notifyHandlers(new RiskEvent(this, RiskEventType.TURN_BEGAN, getCurrentPlayer(), 0));
         }
         notifyMapUpdateAllCoordinates();
     }
+
     /**
      * Exports the file to our custom save game format (.save).
      * This format is actually a ZIP folder containing a JSON and map image.
+     * <p>
+     * Note: We thought about using bonus troops as a field of every Player,
+     * but this would be meaningless because only one player can have bonus troops
+     * as a time.
      *
-     * @param file The file to export to (new or not)
+     * @param file     The file to export to (new or not)
      * @param mapImage The image representing the map
-     * @param bonus The number of bonus troops placed (retrieved from view)
+     * @param bonus    The number of bonus troops placed (retrieved from view)
      */
-    public void export(File file,Image mapImage,int bonus) {
-        if (file!=null) {
+    public void export(File file, Image mapImage, int bonus) {
+        if (file != null) {
             bonusTroops = bonus;
             try {
                 ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(file));
@@ -268,9 +263,9 @@ public class GameSingleton implements Jsonable {
                 zos.putNextEntry(new ZipEntry("map.json"));
                 zos.write(world.toJson().getBytes());
                 zos.closeEntry();
-                if(mapImage!=null){
+                if (mapImage != null) {
                     zos.putNextEntry(new ZipEntry("map.png"));
-                    ImageIO.write((RenderedImage) mapImage,"png",zos);
+                    ImageIO.write((RenderedImage) mapImage, "png", zos);
                     zos.closeEntry();
                 }
                 zos.close();
@@ -849,20 +844,19 @@ public class GameSingleton implements Jsonable {
         ArrayList<JsonObject> playersJsonList = new ArrayList<>();
         System.out.println(players.get(0));
         int i = 0;
-        while (i<players.size())
-        {
-            int currentIndex = (currentPlayerInd+i)%players.size();
+        while (i < players.size()) {
+            int currentIndex = (currentPlayerInd + i) % players.size();
             JsonObject playerObj = new JsonObject();
             playerObj.put("player", players.get(currentIndex));
             playersJsonList.add(playerObj);
             i++;
         }
         playersJson.addAll(playersJsonList);
-        json.put("players",playersJson);
-        json.put("activeNum",numActivePlayer+"");
+        json.put("players", playersJson);
+        json.put("activeNum", numActivePlayer + "");
         if (gamePhase == GamePhase.BONUS_TROUPE)
-            json.put("bonusTroops",bonusTroops+"");
-        json.put("phase",gamePhase.name());
+            json.put("bonusTroops", bonusTroops + "");
+        json.put("phase", gamePhase.name());
         return json.toJson();
     }
 
