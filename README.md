@@ -58,6 +58,13 @@ The files contained within these two types of ".zip" files can be seen below.
 - map.json : map data for the loading of the map instance (only territories and coordinates)
 - game.json : game data for the loading of the game instance (contains players, owned territories, game phase, etc...)
 
+###TA Notes:
+In order to run this program, you should unzip the deployment folder we sent.
+Then in order for optimal results, navigate to the extracted folder in command line and finally execute the JAR file.
+We have included a testing invalid map that will throw an error when loading.
+To save optimally make sure the extension of the file you are saving is of ".save" and that this is done in the
+"worlds/saved_games" directory.
+
 ### How to Use:
 Look at Manual PDF.
     
