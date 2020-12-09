@@ -126,10 +126,20 @@ public class GameSingletonTest {
         assertEquals(null, tempTerr);
     }
 
+    /**
+     * Test export() in GameSingleton and then importGame() in GameSingleton.
+     *
+     * Loads the custom game in setUp(), then saves the game in
+     */
     @Test
     public void testExportImport(){
+
+        wmp.getTerritory("Test2").setUnits(70);
+
         File pathToSave = new File("src/test/resources/test1.save");
         gsm.export(pathToSave, null, 0);
+
+        wmp.getTerritory("Test2").setUnits(-1);
 
         gsm.clean();
 
@@ -150,6 +160,8 @@ public class GameSingletonTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        assertEquals(70, wmp.getTerritory("Test2").getUnits());
     }
 
     /**
