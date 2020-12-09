@@ -96,10 +96,23 @@ public class GameSingleton implements Jsonable {
         return gameInstance;
     }
 
+    /**
+     * Sets the list of players to be assigned to the current game.
+     * TODO: Someone double-check javadoc here
+     *
+     * @param players The list of players in the game.
+     */
     public void setPlayers(List<Player> players) {
         this.players = players;
     }
 
+    /**
+     * Start a new game from contents in a saved zipfile.
+     * TODO: Someone double-check javadoc here
+     *
+     * @param zf Zipfile containing contents to start new game
+     * @throws Exception TODO: Not sure what to put here
+     */
     public void newGame(ZipFile zf) throws Exception {
             //six random colors for players
             List<RiskColour> randomColors = new LinkedList<>();
@@ -157,6 +170,13 @@ public class GameSingleton implements Jsonable {
         nextPhase();    //beginning should be bonus troupe
     }
 
+    /**
+     * Imports the contents of a saved game and updates the worldmap and game
+     * accordingly.
+     *
+     * @param zf The zipfile containing the contents of the game to be imported
+     * @throws Exception TODO: Not sure what to put here
+     */
     public void importGame(ZipFile zf) throws Exception {
         ZipEntry mapData = zf.getEntry("map.json");
         InputStream mapStream = zf.getInputStream(mapData);
@@ -173,6 +193,10 @@ public class GameSingleton implements Jsonable {
         gameStream.close();
     }
 
+    /**
+     * TODO: Somebody who understands what is going on here needs to finish this javadoc
+     * @param gameStream TODO: See line 184
+     */
     private void readGame(InputStream gameStream)
     {
         try {
@@ -799,6 +823,11 @@ public class GameSingleton implements Jsonable {
         }
     }
 
+    /**
+     * Retrieves the world map of the current game.
+     *
+     * @return The map associated to this current game
+     */
     public WorldMap getWorld() {
         return world;
     }
@@ -846,6 +875,9 @@ public class GameSingleton implements Jsonable {
         }
     }
 
+    /**
+     * Resets the information/status of the current game.
+     */
     public void clean() {
         players.clear();
         world.clean();
@@ -857,7 +889,6 @@ public class GameSingleton implements Jsonable {
     }
 
     public static void main(String[] args) throws Exception {
-
         GameSingleton g =GameSingleton.getGameInstance();
         g.readGame(new FileInputStream("C:/Users/Anthony/Desktop/game.json"));
         //.out.println(g.toJson());

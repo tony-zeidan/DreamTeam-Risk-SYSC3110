@@ -72,6 +72,9 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
 
     /**
      * Constructor for instances of RiskFrame, constructs a new GUI.
+     *
+     * @param gs The model that the sub components of this frame are listening to
+     * @param gameData The zipfile containing the map image (.save or .world)
      */
     public RiskFrame(GameSingleton gs,ZipFile gameData) {
         super("Dream Team RISK!");
@@ -349,6 +352,11 @@ public class RiskFrame extends JFrame implements RiskGameHandler {
         return mapPane.getScalingY();
     }
 
+    /**
+     * Retrieves the image of the current map in this frame.
+     *
+     * @return The image of the current map in the frame.
+     */
     public Image getMapImage() {
         return mapPane.getImage();
     }

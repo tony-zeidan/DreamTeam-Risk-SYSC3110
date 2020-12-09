@@ -8,22 +8,45 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * This class represents the GUI frame of the menu for the game risk.
+ *
+ * @author Tony Zeidan
+ * @author Anthony Dooley
+ * @author Kyler Verge
+ * @author Ethan Chase
+ */
 public class HomeScreenFrame extends JFrame {
 
+    /**
+     * Button to create a new game.
+     */
     private JButton newGame;
 
+    /**
+     * Button to load up a previously saved game
+     */
     private JButton loadGame;
 
+    /**
+     * Button to exit the menu frame of the game
+     */
     private JButton exitGame;
 
     private final ClassLoader LOADER = getClass().getClassLoader();
 
+    /**
+     * Constructor for instances of HomeScreenFrame, constructs a new GUI
+     */
     public HomeScreenFrame() {
         super("Dream Team RISK!");
 
         composeFrame();
     }
 
+    /**
+     * Create the frame for the Home Screen with buttons added and image icon.
+     */
     private void composeFrame() {
         setLayout(new BorderLayout());
 
@@ -64,6 +87,9 @@ public class HomeScreenFrame extends JFrame {
         setPreferredSize(new Dimension(600,600));
     }
 
+    /**
+     * Reveal the Home Screen to the user.
+     */
     public void showFrame() {
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

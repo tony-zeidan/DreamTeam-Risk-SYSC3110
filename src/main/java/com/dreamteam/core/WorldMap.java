@@ -78,8 +78,14 @@ public class WorldMap implements Jsonable {
         return name;
     }
 
+
     /**
      * Reads in the map from the map.txt file (for now)
+     *
+     * @param is the inputstream used to read the map
+     * @throws JsonException TODO: Not sure what to put here
+     * @throws IOException TODO: Not sure what to put here
+     * @throws RiskGameException TODO: Not sure what to put here
      */
     public void readMap(InputStream is) throws JsonException, IOException, RiskGameException {
         BufferedReader buf = new BufferedReader(new InputStreamReader(is));
@@ -208,10 +214,13 @@ public class WorldMap implements Jsonable {
         return allCoordinates;
     }
 
+
     /**
      * Sets up the map, by assigning territories and populating randomly territories.
      *
-     * @param players the players playing the game
+     * @param players the list of players in the game
+     * @param mapData the inputstream for the info from the map
+     * @throws RiskGameException TODO: Not totally sure what to put here
      */
     public void assignNewMap(List<Player> players, InputStream mapData) throws RiskGameException {
         try {
@@ -301,6 +310,12 @@ public class WorldMap implements Jsonable {
         for (Continent c : continents.values()) c.updateRuler();
     }
 
+    /**
+     * Retrieve the territory from the map associated with the specified name.
+     *
+     * @param name The name of the territory to retrieve from the current map
+     * @return The territory from the map specified by a provided name
+     */
     public Territory getTerritory(String name)
     {
         return allTerritories.get(name);
@@ -346,12 +361,22 @@ public class WorldMap implements Jsonable {
         }
     }
 
+    /**
+     * Retrieves the string representation of the coordinates of the
+     * specified territory in the current map.
+     *
+     * @param terr The territory selected to retrieve coordinates from
+     * @return The coordinates of the specified territory in the map
+     */
     private String getCoordinatesString(Territory terr)
     {
         Point terrPoint = allCoordinates.get(terr);
         return terrPoint.getX() +","+terrPoint.getY();
     }
 
+    /**
+     * Wipe the current map so that it has no name and no territories/continents
+     */
     public void clean() {
         name=null;
         allTerritories.clear();

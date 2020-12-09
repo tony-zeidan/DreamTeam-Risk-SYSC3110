@@ -16,10 +16,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipFile;
 
+/**
+ * This class represents the controller for the Home Screen frame.
+ *
+ * @author Tony Zeidan
+ */
 public class HomeScreenController implements ActionListener {
 
+    /**
+     * The current view representing the home screen frame
+     */
     private HomeScreenFrame homeView;
 
+    /**
+     * Constructor for the HomeScreenController
+     *
+     * @param homeView The Home Screen GUI frame
+     */
     public HomeScreenController(HomeScreenFrame homeView) {
         this.homeView = homeView;
     }
@@ -64,6 +77,13 @@ public class HomeScreenController implements ActionListener {
         }
     }
 
+    /**
+     * TODO: Okay, so saveFile() and openFile() look like the same method except one has audio, one does not
+     *
+     * @param parent
+     * @param path The path
+     * @return
+     */
     public static File saveFile(JFrame parent, String path) {
         //TODO: use methods to read in the game that the user wants
         JFileChooser chooser = new JFileChooser();
@@ -91,6 +111,13 @@ public class HomeScreenController implements ActionListener {
     }
 
 
+    /**
+     * TODO: See TODO in Javadoc for saveFile
+     *
+     * @param parent The parent frame
+     * @param path The path of the file to be opened
+     * @return
+     */
     public static File openFile(JFrame parent, String path) {
         //TODO: use methods to read in the game that the user wants
         JFileChooser chooser = new JFileChooser();
