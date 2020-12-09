@@ -65,6 +65,17 @@ We have included a testing invalid map that will throw an error when loading.
 To save optimally make sure the extension of the file you are saving is of ".save" and that this is done in the
 "worlds/saved_games" directory.
 
+Although we can't say for sure, the proper way to load this project into IntelliJ would be like any other project,
+then what you would do is the "Import Gradle Project" task that can be found using a global search (only if you have Gradle plugin).
+Then it would take a while to import all dependencies and such.
+
+From there you should see a Gradle window on the right side, in which you can run the predefined Gradle tasks we implemented.
+Under "build" you can see the "runShadow" task which creates a JAR and runs it (as described in Lab 9).
+
+You most likely will be able to run the JAR in the deployment folder we gave you through the command line though.
+
+We hope that this is easy to understand and that it doesn't take much time to implement.
+
 ### How to Use:
 Look at Manual PDF.
     
