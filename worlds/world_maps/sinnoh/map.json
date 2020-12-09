@@ -1,0 +1,340 @@
+{
+		"territories":[
+			{
+				"name":"Twinleaf Town",
+				"coordinates":"144.0,717.0",
+				"neighbours":[
+					"Lake Verity",
+					"Sandgem Town"
+				]
+			},
+			{
+				"name":"Lake Verity",
+				"coordinates":"92.0,642.0",
+				"neighbours":[
+					"Twinleaf Town",
+					"Sandgem Town"
+				]
+			},
+			{
+				"name":"Sandgem Town",
+				"coordinates":"243.0,666.0",
+				"neighbours":[
+					"Twinleaf Town",
+					"Lake Verity",
+					"Pal Park",
+					"Jubilife City"
+				]
+			},
+			{
+				"name":"Pal Park",
+				"coordinates":"381.0,726.0",
+				"neighbours":[
+					"Sandgem Town"
+				]
+			},
+			{
+				"name":"Jubilife City",
+				"coordinates":"241.0,557.0",
+				"neighbours":[
+					"Sandgem Town",
+					"Oreburgh City",
+					"Canalave City",
+					"Floaroma Town"
+				]
+			},
+			{
+				"name":"Oreburgh City",
+				"coordinates":"394.0,556.0",
+				"neighbours":[
+					"Jubilife City",
+					"Hearthrome City",
+					"Bikers Route"
+				]
+			},
+			{
+				"name":"Canalave City",
+				"coordinates":"93.0,529.0",
+				"neighbours":[
+					"Jubilife City",
+					"Iron Island"
+				]
+			},
+			{
+				"name":"Floaroma Town",
+				"coordinates":"252.0,427.0",
+				"neighbours":[
+					"Jubilife City",
+					"Eterna Forest"
+				]
+			},
+			{
+				"name":"Eterna Forest",
+				"coordinates":"291.0,325.0",
+				"neighbours":[
+					"Floaroma Town",
+					"Iron Island",
+					"Eterna City"
+				]
+			},
+			{
+				"name":"Eterna City",
+				"coordinates":"408.0,320.0",
+				"neighbours":[
+					"Eterna Forest",
+					"Biker Route",
+					"Celestic Town",
+					"Route 216"
+				]
+			},
+			{
+				"name":"Biker Route",
+				"coordinates":"397.0,419.0",
+				"neighbours":[
+					"Eterna City",
+					"Oreburgh City"
+				]
+			},
+			{
+				"name":"Iron Island",
+				"coordinates":"208.0,284.0",
+				"neighbours":[
+					"Eterna Forest",
+					"Canalave City"
+				]
+			},
+			{
+				"name":"Route 216",
+				"coordinates":"470.0,199.0",
+				"neighbours":[
+					"Route 217",
+					"Eterna City",
+					"Celestic Town"
+				]
+			},
+			{
+				"name":"Route 217",
+				"coordinates":"421.0,130.0",
+				"neighbours":[
+					"Route 216",
+					"Lake Acuity",
+					"Snowpoint City"
+				]
+			},
+			{
+				"name":"Lake Acuity",
+				"coordinates":"433.0,37.0",
+				"neighbours":[
+					"Route 217",
+					"Snowpoint City"
+				]
+			},
+			{
+				"name":"Snowpoint City",
+				"coordinates":"508.0,65.0",
+				"neighbours":[
+					"Lake Acuity",
+					"Route 217",
+					"Fight Area"
+				]
+			},
+			{
+				"name":"Celestic Town",
+				"coordinates":"587.0,310.0",
+				"neighbours":[
+					"Route 216",
+					"Eterna City",
+					"Route 210"
+				]
+			},
+			{
+				"name":"Route 210",
+				"coordinates":"697.0,337.0",
+				"neighbours":[
+					"Celestic Town",
+					"Veilstone City",
+					"Solaceon Town"
+				]
+			},
+			{
+				"name":"Solaceon Town",
+				"coordinates":"702.0,446.0",
+				"neighbours":[
+					"Hearthrome City",
+					"Route 216",
+					"Route 211"
+				]
+			},
+			{
+				"name":"Hearthrome City",
+				"coordinates":"600.0,482.0",
+				"neighbours":[
+					"Oreburgh City",
+					"Poke Mansion",
+					"Solaceon Town"
+				]
+			},
+			{
+				"name":"Poke Mansion",
+				"coordinates":"597.0,591.0",
+				"neighbours":[
+					"Hearthrome City",
+					"Pastoria Town"
+				]
+			},
+			{
+				"name":"Pastoria Town",
+				"coordinates":"753.0,642.0",
+				"neighbours":[
+					"Poke Mansion",
+					"Lake Valor"
+				]
+			},
+			{
+				"name":"Veilstone City",
+				"coordinates":"872.0,400.0",
+				"neighbours":[
+					"Route 211",
+					"Route 216"
+				]
+			},
+			{
+				"name":"Route 211",
+				"coordinates":"920.0,493.0",
+				"neighbours":[
+					"Solaceon Town",
+					"Veilstone City",
+					"Lake Valor"
+				]
+			},
+			{
+				"name":"Lake Valor",
+				"coordinates":"889.0,603.0",
+				"neighbours":[
+					"Pastoria Town",
+					"Route 211",
+					"Sunnyshore City"
+				]
+			},
+			{
+				"name":"Sunnyshore City",
+				"coordinates":"1664.0,569.0",
+				"neighbours":[
+					"Lake Valor",
+					"Poke League"
+				]
+			},
+			{
+				"name":"Poke League",
+				"coordinates":"1018.0,355.0",
+				"neighbours":[
+					"Sunnyshore City",
+					"Resort Area"
+				]
+			},
+			{
+				"name":"Fight Area",
+				"coordinates":"766.0,234.0",
+				"neighbours":[
+					"Snowpoint City",
+					"Survival Area",
+					"Resort Area"
+				]
+			},
+			{
+				"name":"Survival Area",
+				"coordinates":"777.0,138.0",
+				"neighbours":[
+					"Fight Area",
+					"Route 230"
+				]
+			},
+			{
+				"name":"Route 230",
+				"coordinates":"908.0,139.0",
+				"neighbours":[
+					"Survival Area",
+					"Resort Area"
+				]
+			},
+			{
+				"name":"Resort Area",
+				"coordinates":"960.0,266.0",
+				"neighbours":[
+					"Poke League",
+					"Fight Area",
+					"Route 230"
+				]
+			}
+		],
+		"name":"Sinnoh",
+		"continents":[
+			{
+				"territories":[
+					"Twinleaf Town",
+					"Lake Verity",
+					"Sandgem Town",
+					"Pal Park",
+					"Jubilife City",
+					"Oreburgh City",
+					"Canalave City"
+				],
+				"name":"South Sinnoh",
+				"value":"5"
+			},
+			{
+				"territories":[
+					"Floaroma Town",
+					"Eterna Forest",
+					"Eterna City",
+					"Biker Route",
+					"Iron Island"
+				],
+				"name":"Eastern Sinnoh",
+				"value":"5"
+			},
+			{
+				"territories":[
+					"Route 216",
+					"Route 217",
+					"Snowpoint City",
+					"Lake Acuity"
+				],
+				"name":"Northern Sinnoh",
+				"value":"3"
+			},
+			{
+				"territories":[
+					"Celestic Town",
+					"Route 210",
+					"Solaceon Town",
+					"Hearthrome City",
+					"Poke Mansion",
+					"Pastoria Town"
+				],
+				"name":"Central Sinnoh",
+				"value":"7"
+			},
+			{
+				"territories":[
+					"Lake Valor",
+					"Veilstone City",
+					"Route 211",
+					"Sunnyshore City",
+					"Poke League"
+				],
+				"name":"Eastern Sinnoh",
+				"value":"4"
+			},
+			{
+				"territories":[
+					"Fight Area",
+					"Route 230",
+					"Resort Area",
+					"Survival Area"
+				],
+				"name":"Post Island",
+				"value":"4"
+			}
+		]
+}
