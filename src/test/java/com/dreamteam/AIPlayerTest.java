@@ -103,7 +103,7 @@ public class AIPlayerTest {
         players.add(guy);
 
         //for this specific test we need a model
-        //assume that the test map loads in properly
+        //assume that the test map loads in properly (same as GameSingletonTest.java)
         GameSingleton gsm = GameSingleton.getGameInstance();
         gsm.setPlayers(players);
         InputStream initialStream = null;

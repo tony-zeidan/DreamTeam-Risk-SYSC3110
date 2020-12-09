@@ -154,16 +154,8 @@ public class GameSingletonTest {
 
         gsm.clean();
 
-        InputStream initialStream = null;
         try {
-            initialStream = getClass().getClassLoader().getResourceAsStream("test1.save");
-            byte[] buffer = new byte[initialStream.available()];
-            initialStream.read(buffer);
-
-            File targetFile = new File("src/test/resources/targetFile1.tmp");
-            OutputStream outStream = new FileOutputStream(targetFile);
-            outStream.write(buffer);
-            gsm.importGame(new ZipFile(targetFile));
+            gsm.importGame(new ZipFile(pathToSave));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
