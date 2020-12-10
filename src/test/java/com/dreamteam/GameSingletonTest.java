@@ -1,6 +1,7 @@
 package com.dreamteam;
 
 import com.dreamteam.core.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -71,6 +72,8 @@ public class GameSingletonTest {
             OutputStream outStream = new FileOutputStream(targetFile);
             outStream.write(buffer);
             gsm.newGame(new ZipFile(targetFile));
+            outStream.close();
+            initialStream.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -95,9 +98,9 @@ public class GameSingletonTest {
         players.add(new Player("Kyler", RiskColour.BLUE));
         players.add(new Player("Tony", RiskColour.GREEN));
 
-        InputStream initialStream = null;
+
         try {
-            initialStream = getClass().getClassLoader().getResourceAsStream("test1.world");
+            InputStream initialStream = getClass().getClassLoader().getResourceAsStream("test1.world");
             byte[] buffer = new byte[initialStream.available()];
             initialStream.read(buffer);
 
@@ -105,6 +108,9 @@ public class GameSingletonTest {
             OutputStream outStream = new FileOutputStream(targetFile);
             outStream.write(buffer);
             gsm.newGame(new ZipFile(targetFile));
+            outStream.close();
+            initialStream.close();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -384,5 +390,16 @@ public class GameSingletonTest {
 
         //Test 5, First Player IS the First Player (Looped through all players)
         assertEquals(first, gsm.getCurrentPlayer());
+    }
+
+    /**
+     * Tear down temporary files after each run.
+     */
+    @After
+    public void tearDown() {
+        File testFile = new File("src/test/resources/test1.save");
+        testFile.delete();
+        testFile = new File("src/test/resources/targetFile.tmp");
+        testFile.delete();
     }
 }

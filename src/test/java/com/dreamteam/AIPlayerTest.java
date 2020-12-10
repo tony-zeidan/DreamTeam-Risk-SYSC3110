@@ -1,6 +1,7 @@
 package com.dreamteam;
 
 import com.dreamteam.core.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -94,6 +95,8 @@ public class AIPlayerTest {
 
     /**
      * Tests the AI's capability to place units strategically.
+     * In order for this test to work as intended you must not shuffle the players
+     * in GameSingleton.java, i.e comment out the one line in newGame() that calls shufflePlayers().
      */
     @Test
     public void testPlaceUnits() {
@@ -106,9 +109,9 @@ public class AIPlayerTest {
         //assume that the test map loads in properly (same as GameSingletonTest.java)
         GameSingleton gsm = GameSingleton.getGameInstance();
         gsm.setPlayers(players);
-        InputStream initialStream = null;
+
         try {
-            initialStream = getClass().getClassLoader().getResourceAsStream("test1.world");
+            InputStream initialStream = getClass().getClassLoader().getResourceAsStream("test1.world");
             byte[] buffer = new byte[initialStream.available()];
             initialStream.read(buffer);
 
@@ -116,6 +119,8 @@ public class AIPlayerTest {
             OutputStream outStream = new FileOutputStream(targetFile);
             outStream.write(buffer);
             gsm.newGame(new ZipFile(targetFile));
+            outStream.close();
+            initialStream.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -127,7 +132,7 @@ public class AIPlayerTest {
         /*
         Algorithm:
         Get the amount of units on all of the AI's territories before and after
-        placing 100 units.
+        placing 10 units.
         Then check if both results are unequal.
          */
         Map<String,Integer> terrUnits = new HashMap<>();
@@ -135,7 +140,7 @@ public class AIPlayerTest {
             terrUnits.put(t.getName(),t.getUnits());
         }
 
-        robo.placeUnits(100,gsm);
+        robo.placeUnits(10,gsm);
 
         Map<String,Integer> terrUnitsAfter = new HashMap<>();
         for (Territory t : robo.getOwnedTerritories()) {
@@ -194,5 +199,14 @@ public class AIPlayerTest {
         robo.moveTroops();
         assertEquals(1, t1.getUnits());
         assertEquals(3, t4.getUnits());
+    }
+
+    /**
+     * Tear down temporary files after each run.
+     */
+    @After
+    public void tearDown() {
+        File testFile = new File("src/test/resources/targetFile.tmp");
+        testFile.delete();
     }
 }
