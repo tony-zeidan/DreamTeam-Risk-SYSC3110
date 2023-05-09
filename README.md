@@ -1,6 +1,6 @@
 # **Dream Team Risk Project (SYSC 3110 - Software Design Project)**
 
-### Team Members:
+### Team Members
 Name | Main Contributions
 ------------ | -------------
 Tony Abou-Zeidan | Saving Features, Gradle Environment, Player Icons
@@ -8,7 +8,7 @@ Anthony Dooley | Saving Features, Loading Features, Map Validity
 Ethan Chase | Rigorous Testing, Saving/Loading, Documentation
 Kyler Verge | Custom Maps, Map Validity, Sound Effects
 
-### Project Description:
+### Project Description
 >The goal of this team project is to reproduce a simplified version of the classic strategy game RISK.
 > Risk project!
 
@@ -16,26 +16,26 @@ Kyler Verge | Custom Maps, Map Validity, Sound Effects
  
 **Project Progress**
 
-![99%](https://progress-bar.dev/99)
+![100%](https://progress-bar.dev/100)
 
 milestone 4 phase
 
 [UML](https://lucid.app/invitations/accept/fdd00eb0-1f04-4212-8db9-c9dd045a9c40)
 
-###Changes in Milestone 4:
+### Changes in Milestone 4
 * we now added support for custom maps
 * support for saving/loading maps as well as new games on any map
 * we did this through the implementing of JSON serialization
 * we now added select sound effects for the game
 * we now added player icons into the game (Among Us icons)
 
-###Custom Maps:
+### Custom Maps
 * we have included a custom map in the deployment zip called "sinnoh.world"
 * this custom map should only be accessed through the "new game" button on the home screen
 * this custom map can then be saved and reloaded through the "load game" button on the home screen
 * the same procedure can be applied to the "default.world" map
 
-###JSON Serialization:
+### JSON Serialization
 In this Milestone we used JSON serialization throughout the entire project.
 All maps (.world) as well as all saved games (.save) have their data stored in JSON format.
 To implement this behaviour, we used an external library called "json-simple" which is included
@@ -44,21 +44,21 @@ The deserialization/loading game was quite custom, this was because we used the 
 deserializing custom maps as well as deserializing non-custom maps.
 You may see this in the "build.gradle" file within our project on GitHub.
 
-###File Explanations:
+### File Explanations
 For this Milestone we created our own custom file extensions.
 We used ".world" files and ".save" files. Both of these types are actually ".zip" files and they can be renamed as such.
 The files contained within these two types of ".zip" files can be seen below.
 
-####.world:
+#### .world
 - map.png : an image of the map to be played on
 - map.json : map data for the loading of the map instance (only territories and coordinates)
 
-####.save:
+#### .save
 - map.png : an image of the map to be played on
 - map.json : map data for the loading of the map instance (only territories and coordinates)
 - game.json : game data for the loading of the game instance (contains players, owned territories, game phase, etc...)
 
-###TA Notes:
+### TA Notes
 In order to run this program, you should unzip the deployment folder we sent.
 Then in order for optimal results, navigate to the extracted folder in command line and finally execute the JAR file.
 We have included a testing invalid map that will throw an error when loading.
@@ -79,10 +79,10 @@ files so that it wouldn't be necessary to unzip to look at the contents.
 
 We hope that this is easy to understand and that it doesn't take much time to implement.
 
-### How to Use:
+### How to Use
 Look at Manual PDF.
     
-### Milestones:
+### Milestones
 - [x] Milestone 1: A text-based playable version of the game, i.e., players should be able to play the game via the console using the keyboard.
     >A text-based playable version of the game, i.e., players should be able to
      play the game via the console using the keyboard. There should be a command to print
